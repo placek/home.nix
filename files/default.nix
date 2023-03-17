@@ -1,30 +1,45 @@
 let
   settings = import ../settings;
+  papirusPath = "/usr/share/icons/Papirus-Dark/128x128";
+  applicationsPath = "${settings.dirs.home}/.local/share/applications";
 in
 {
+  qtpass-desktop = {
+    enable = true;
+    target = "${applicationsPath}/qtpass.desktop";
+    text = ''
+      [Desktop Entry]
+      Name=Password management
+      Exec=qtpass
+      Terminal=false
+      Type=Application
+      Icon=${papirusPath}/apps/qtpass-icon.svg
+    '';
+  };
+
   qutebrowser-desktop = {
     enable = true;
-    target = "${settings.dirs.home}/.local/share/applications/qutebrowser.desktop";
+    target = "${applicationsPath}/qutebrowser.desktop";
     text = ''
       [Desktop Entry]
       Name=Web browser
       Exec=qutebrowser-gl
       Terminal=false
       Type=Application
-      Icon=/usr/share/icons/Papirus-Dark/128x128/apps/browser.svg
+      Icon=${papirusPath}/apps/browser.svg
     '';
   };
 
   kitty-desktop = {
     enable = true;
-    target = "${settings.dirs.home}/.local/share/applications/kitty.desktop";
+    target = "${applicationsPath}/kitty.desktop";
     text = ''
       [Desktop Entry]
       Name=Terminal
-      Exec=kitty
+      Exec=kitty-gl
       Terminal=false
       Type=Application
-      Icon=/usr/share/icons/Papirus-Dark/128x128/apps/org.gnome.Console.svg
+      Icon=${papirusPath}/apps/org.gnome.Console.svg
     '';
   };
 

@@ -7,6 +7,7 @@ with pkgs; [
   nixglpkgs.nixGLIntel
   (pkgs.writeShellScriptBin "qutebrowser-gl" ''${nixglpkgs.nixGLIntel}/bin/nixGLIntel qutebrowser "$@"'')
   (pkgs.writeShellScriptBin "kitty-gl" ''${nixglpkgs.nixGLIntel}/bin/nixGLIntel kitty "$@"'')
+  (nerdfonts.override { fonts = [ settings.font.name ]; })
 
   aria
   bat
@@ -24,10 +25,10 @@ with pkgs; [
   killall
   lsd
   mdcat
-  (nerdfonts.override { fonts = [ settings.font.name ]; })
   nnn
   openssl
   openvpn
+  qtpass
   ripgrep
   rlwrap
   rnix-lsp
