@@ -63,6 +63,8 @@ in
     config.unbind('<Ctrl+t>')
     config.unbind('<Ctrl+n>')
     config.unbind('<Ctrl+Shift+n>')
+    c.statusbar.padding = { 'bottom': 4, 'left': 4, 'right': 4, 'top': 4 };
+    c.tabs.padding = { 'bottom': 4, 'left': 8, 'right': 8, 'top': 4 };
   '';
   aliases = {
     "q" = "quit";
@@ -90,13 +92,11 @@ in
     };
     hints.border = "none";
     hints.radius = 4;
-    # FIXME: statusbar.padding = { bottom = 4; left = 4; right = 4; top = 4; };
     tabs = {
       favicons.show = "never";
       indicator.width = 0;
       last_close = "close";
       mousewheel_switching = false;
-      # FIXME: padding = { bottom = 4; left = 8; right = 8; top = 4; };
       show = "always";
       title.format = "{index}{audio} | {current_title}";
       tooltips = false;

@@ -15,6 +15,7 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = import ./packages { inherit pkgs; };
+  home.file = import ./files;
   programs = import ./programs { inherit pkgs; };
   services = import ./services { inherit pkgs; };
 }
