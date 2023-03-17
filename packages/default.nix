@@ -39,4 +39,5 @@ with pkgs; [
   unzip
   wget
   ydotool
+  wl-clipboard
 ]
