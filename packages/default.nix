@@ -8,6 +8,7 @@ with pkgs; [
   (pkgs.writeShellScriptBin "qutebrowser-gl" ''${nixglpkgs.nixGLIntel}/bin/nixGLIntel qutebrowser "$@"'')
   (pkgs.writeShellScriptBin "kitty-gl" ''${nixglpkgs.nixGLIntel}/bin/nixGLIntel kitty "$@"'')
   (nerdfonts.override { fonts = [ settings.font.name ]; })
+  (import ./git-ctags.nix { inherit pkgs; })
 
   aria
   bat
