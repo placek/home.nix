@@ -9,7 +9,4 @@ in
       source = settings.key.pubKey;
     }
   ];
-  scdaemonSettings = {
-    reader-port = "Yubico Yubi";
-  };
 }
