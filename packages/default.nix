@@ -1,12 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, glpkgs, ... }:
 let
   settings = import ../settings;
-  nixglpkgs = (import (builtins.fetchTarball { url = "https://github.com/guibou/nixGL/archive/main.tar.gz"; }) { });
 in
 with pkgs; [
-  nixglpkgs.nixGLIntel
-  (pkgs.writeShellScriptBin "qutebrowser-gl" ''${nixglpkgs.nixGLIntel}/bin/nixGLIntel qutebrowser "$@"'')
-  (pkgs.writeShellScriptBin "kitty-gl" ''${nixglpkgs.nixGLIntel}/bin/nixGLIntel kitty "$@"'')
+  glpkgs.nixGLIntel
+  (pkgs.writeShellScriptBin "qutebrowser-gl" ''${glpkgs.nixGLIntel}/bin/nixGLIntel qutebrowser "$@"'')
+  (pkgs.writeShellScriptBin "kitty-gl" ''${glpkgs.nixGLIntel}/bin/nixGLIntel kitty "$@"'')
   (nerdfonts.override { fonts = [ settings.font.name ]; })
   (import ./git-ctags.nix { inherit pkgs; })
 

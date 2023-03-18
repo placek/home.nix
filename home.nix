@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 let
+  sources = import ./home.lock.nix;
   settings = import ./settings;
+  inherit (sources) pkgs glpkgs;
 in
 {
   home.stateVersion = "22.11";
@@ -14,7 +16,7 @@ in
 
   fonts.fontconfig.enable = true;
 
-  home.packages = import ./packages { inherit pkgs; };
+  home.packages = import ./packages { inherit pkgs glpkgs; };
   home.file = import ./files;
   programs = import ./programs { inherit pkgs; };
   services = import ./services { inherit pkgs; };
