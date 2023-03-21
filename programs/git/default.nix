@@ -31,12 +31,7 @@ in
     ".tags"
     ".sw[op]"
     "*.key"
-    ".local.dev.env"
-    ".local.test.env"
-    ".local.compose"
-    ".local.image"
-    ".local.nix"
-    ".local.entrypoint"
+    ".local.*"
     ".remote.compose"
     ".authorized_keys"
   ];

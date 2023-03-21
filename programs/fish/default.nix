@@ -36,6 +36,16 @@ in
     lcres = "docker-compose -f .local.compose restart";
     lcps = "docker-compose -f .local.compose ps";
 
+    tcb = "docker-compose -f .local.compose.test build";
+    tcr = "docker-compose -f .local.compose.test run --rm";
+    tcrt = "docker-compose -f .local.compose.test run --rm test";
+    tcrw = "docker-compose -f .local.compose.test run --rm web";
+    tcu = "docker-compose -f .local.compose.test up -d";
+    tcl = "docker-compose -f .local.compose.test logs";
+    tcd = "docker-compose -f .local.compose.test down --remove-orphans";
+    tcres = "docker-compose -f .local.compose.test restart";
+    tcps = "docker-compose -f .local.compose.test ps";
+
     j = "journalctl";
     s = "systemctl";
     tt = "nc termbin.com 9999";
