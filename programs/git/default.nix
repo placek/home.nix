@@ -25,15 +25,16 @@ in
     stashp = "stash push -p";
   };
   ignores = [
+    "*.key"
+    "*.sql"
     "*~"
     ".DS_Store"
-    "*.sql"
-    ".tags"
-    ".sw[op]"
-    "*.key"
+    ".authorized_keys"
     ".local.*"
     ".remote.compose"
-    ".authorized_keys"
+    ".sw[op]"
+    ".tags"
+    "nohup.out"
   ];
   extraConfig = {
     github.user = settings.user.name;
