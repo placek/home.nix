@@ -20,7 +20,7 @@
 
     mainnet0 = {
       user = "byron";
-      host = "51.89.218.19";
+      hostname = "51.89.218.19";
     };
 
     dev = {
