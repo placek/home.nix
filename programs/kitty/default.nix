@@ -2,6 +2,7 @@ let
   settings = import ../../settings;
   shell = "fish";
   editor = "vim";
+  hintsSettings = "--alphabet 'asdfghjkl' --hints-foreground-color black --hints-background-color yellow --hints-text-color blue";
 in
 {
   enable = true;
@@ -10,30 +11,40 @@ in
     size = settings.font.size.int;
   };
   keybindings = {
-    "kitty_mod+c" = "copy_to_clipboard";
-    "kitty_mod+v" = "paste_from_clipboard";
-    "kitty_mod+x" = "pass_selection_to_program";
-    "kitty_mod+h" = "change_font_size all -2.0";
+    "super+c" = "copy_to_clipboard";
+    "super+v" = "paste_from_clipboard";
+    "super+x" = "paste_from_selection";
+    "shift+insert" = "paste_from_clipboard";
+
     "kitty_mod+k" = "scroll_line_up";
     "kitty_mod+j" = "scroll_line_down";
+
+    "kitty_mod+h" = "change_font_size all -2.0";
     "kitty_mod+l" = "change_font_size all +2.0";
+
     "kitty_mod+alt+k" = "scroll_to_prompt -1";
     "kitty_mod+alt+j" = "scroll_to_prompt +1";
+
     "kitty_mod+." = "show_scrollback";
     "kitty_mod+," = "show_last_command_output";
+
     "kitty_mod+z" = "next_layout";
+
     "kitty_mod+enter" = "launch --type=window --cwd=current --title current";
     "kitty_mod+space" = "launch --type=tab --cwd=current --title current";
+
     "kitty_mod+right" = "next_window";
     "kitty_mod+left" = "previous_window";
     "kitty_mod+up" = "next_tab";
     "kitty_mod+down" = "previous_tab";
+
     "kitty_mod+t" = "set_tab_title";
-    "kitty_mod+f" = "kitten hints --alphabet 'asdfghjkl' --type hyperlink";
-    "kitty_mod+d" = "kitten hints --alphabet 'asdfghjkl' --regex '([0-9a-fA-F-]+)' --type regex --program -";
-    "kitty_mod+s" = "kitten hints --alphabet 'asdfghjkl' --type hash --program -";
-    "kitty_mod+a" = "kitten hints --alphabet 'asdfghjkl' --type path --program -";
-    "kitty_mod+e" = "kitten unicode_input";
+    "kitty_mod+a" = "kitten hints ${hintsSettings} --window-title 'choose path' --type path --program -";
+    "kitty_mod+s" = "kitten hints ${hintsSettings} --window-title 'choose hash' --type hash --program -";
+    "kitty_mod+d" = "kitten hints ${hintsSettings} --window-title 'choose hash' --regex '([0-9a-fA-F-]+)' --type regex --program -";
+    "kitty_mod+f" = "kitten hints ${hintsSettings} --window-title 'choose hyperlink' --type hyperlink";
+    "kitty_mod+g" = "kitten unicode_input";
+
     "kitty_mod+alt+left" = "resize_window narrower";
     "kitty_mod+alt+right" = "resize_window wider";
     "kitty_mod+alt+up" = "resize_window taller";
@@ -58,7 +69,7 @@ in
     touch_scroll_multiplier = "1.0";
 
     # Mouse
-    mouse_hide_wait = "3.0";
+    mouse_hide_wait = "0";
     url_style = "curly";
     open_url_with = "default";
     url_prefixes = "file ftp ftps gemini git gopher http https irc ircs kitty mailto news sftp ssh";
@@ -90,7 +101,7 @@ in
     window_margin_width = "0";
     window_padding_width = "4";
     placement_strategy = "center";
-    inactive_text_alpha = "0.6";
+    inactive_text_alpha = "0.8";
     hide_window_decorations = "yes";
     resize_debounce_time = "0.1";
     resize_draw_strategy = "static";
