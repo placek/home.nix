@@ -15,6 +15,8 @@
         keymap("n", "[h", "<cmd>lua require('gitsigns').prev_hunk()<cr>", opts)
         keymap("o", "ih", ":<C-U>Gitsigns select_hunk<cr>", opts)
         keymap("x", "ih", ":<C-U>Gitsigns select_hunk<cr>", opts)
+        keymap("n", "gb", "<cmd>lua require('gitsigns').blame_line{full=true}<cr>", opts)
+        keymap("n", "gh", "<cmd>lua require('gitsigns').preview_hunk()<cr>", opts)
       end
     }
   '';

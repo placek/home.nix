@@ -11,18 +11,47 @@ in
     key = settings.key.sign;
   };
   aliases = {
-    adi = "add -i";
-    amend = "commit --amend --no-edit";
-    co = "checkout";
-    com = "commit -m";
-    diffc = "diff --cached";
-    info = "for-each-ref --format='%(color:yellow)%(committerdate:iso8601) %(color:blue)%(objectname:short) %(color:magenta)%(authorname) %(color:green)%(refname:short) %(color:reset)%(contents:subject)' --sort -committerdate";
-    l = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-    pu = "push --tags origin";
-    purge = "reset --hard";
     root = "rev-parse --show-toplevel";
     st = "status -sb";
-    stashp = "stash push -p";
+    pu = "push --tags origin";
+    cp = "cherry-pick";
+
+    # add & commit
+    a = "add";
+    c = "commit";
+    adi = "add -i";
+    com = "commit -m";
+    coi = "commit -p";
+    con = "commit -n";
+    amend = "commit --amend --no-edit";
+
+    # diff
+    diffc = "diff --cached";
+    diffw = "diff --word-diff=color";
+    diffwc = "diff --cached --word-diff=color";
+    difft = "difftool";
+
+    # checkout
+    co = "checkout";
+    cob = "checkout -B";
+
+    # log
+    l = "log --pretty=format:'%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]' --decorate";
+    ls = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+    ll = "log --pretty=format:'%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]' --decorate --numstat";
+    info = "for-each-ref --format='%(color:yellow)%(committerdate:iso8601) %(color:blue)%(objectname:short) %(color:magenta)%(authorname) %(color:green)%(refname:short) %(color:reset)%(contents:subject)' --sort -committerdate";
+
+    # restore
+    r = "restore";
+    rs = "restore --staged";
+
+    # reset
+    r1 = "reset --soft @~1";
+    r2 = "reset --soft @~2";
+    r3 = "reset --soft @~3";
+    rh1 = "reset --hard @~1";
+    rh2 = "reset --hard @~2";
+    rh3 = "reset --hard @~3";
   };
   ignores = [
     "*.key"
@@ -37,10 +66,10 @@ in
     "nohup.out"
   ];
   extraConfig = {
+    commit.verbose = true;
     github.user = settings.user.name;
     apply.whitespace = "nowarn";
     rerere.enabled = 1;
-    format.pretty = "%C(yellow)%h%Creset %C(magenta)%cd%Creset %d %s";
     merge.tool = "vimdiff";
     difftool.prompt = false;
     mergetool.trustExitCode = true;

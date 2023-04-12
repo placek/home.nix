@@ -50,11 +50,28 @@ in
     s = "systemctl";
     tt = "nc termbin.com 9999";
     tf = "nc oshi.at 7777";
+
+    ":q" = "read_confirm && exit";
+    ":w" = "git commit -p";
   };
   functions = {
     fish_greeting = {
-      description = "Greeting to show when starting a fish shell";
+      description = "Greeting to show when starting a fish shell.";
       body = "";
+    };
+    read_confirm = {
+      description = "Confirm action.";
+      body = ''
+        while true
+          read -l -P "Are you sure? [y/N] " confirm
+          switch $confirm
+            case Y y T t
+              return 0
+            case "*"
+              return 1
+          end
+        end
+      '';
     };
   };
 
