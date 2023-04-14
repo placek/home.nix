@@ -2,6 +2,7 @@
 let
   sources = import ./home.lock.nix;
   settings = import ./settings;
+  secrets = import ./secrets;
   inherit (sources) pkgs glpkgs;
 in
 {
@@ -12,6 +13,7 @@ in
     EDITOR = "vim";
     SHELL = "fish";
     SSH_AUTH_SOCK = settings.key.sshAuthSocket;
+    OPENAI_API_KEY = secrets.chatGPT;
   };
 
   fonts.fontconfig.enable = true;
