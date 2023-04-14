@@ -15,6 +15,7 @@ in
     st = "status -sb";
     pu = "push --tags origin";
     cp = "cherry-pick";
+    wip = "!bash -c 'git commit -m \"wip: \$(curl -Ls whatthecommit.com/index.txt)\"'";
 
     # add & commit
     a = "add";

@@ -45,4 +45,5 @@ with pkgs.vimPlugins; [
   (import ./lualine.nix { inherit (pkgs) vimPlugins; inherit runLua; })
   (import ./telescope-file-browser.nix { inherit (pkgs) vimPlugins; inherit runLua; })
   (import ./which-key.nix { inherit (pkgs) vimPlugins; inherit runLua; })
+  (import ./chat-gpt.nix { inherit (pkgs) vimPlugins; inherit runLua; })
 ]

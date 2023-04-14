@@ -10,7 +10,8 @@ in
   enable = true;
   loadAutoconfig = false;
   searchEngines = {
-    DEFAULT = "https://www.google.com/search?q={}";
+    DEFAULT = "https://phind.com/search?q={}";
+    g = "https://www.google.com/search?q={}";
     allegro = "https://allegro.pl/listing?string={}";
     alpha = "http://www.wolframalpha.com/input/?i={}";
     ang = "https://context.reverso.net/t%C5%82umaczenie/polski-angielski/{}";
