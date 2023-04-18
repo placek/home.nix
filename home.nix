@@ -6,7 +6,7 @@ let
   inherit (sources) pkgs glpkgs;
 in
 {
-  home.stateVersion = "22.11";
+  home.stateVersion = "23.05";
   home.username = settings.user.name;
   home.homeDirectory = settings.dirs.home;
   home.sessionVariables = {
@@ -16,12 +16,21 @@ in
     OPENAI_API_KEY = secrets.chatGPT;
   };
 
+  nix = {
+    package = pkgs.nix;
+    settings = {
+      system-features = [ "big-parallel" "kvm" "benchmark" ];
+      access-tokens = secrets.accessTokens;
+    };
+  };
+
   fonts.fontconfig.enable = true;
 
   home.packages = import ./packages { inherit pkgs glpkgs; };
   home.file = import ./files;
   programs = import ./programs { inherit pkgs; };
   services = import ./services { inherit pkgs; };
+  accounts.email = import ./accounts/email { inherit pkgs; };
 
   systemd.user.services = {
     ydotoold = {

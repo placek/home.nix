@@ -59,6 +59,12 @@ in
       description = "Greeting to show when starting a fish shell.";
       body = "";
     };
+    fish_right_prompt = {
+      description = "Right prompt.";
+      body = ''
+        printf "%s%s %s" (_pure_set_color $pure_color_git_branch) $pure_symbol_reverse_prompt $IN_NIX_SHELL
+      '';
+    };
     read_confirm = {
       description = "Confirm action.";
       body = ''
@@ -86,15 +92,6 @@ in
       };
     }
     {
-      name = "fzf";
-      src = fetchFromGitHub {
-        owner = "PatrickF1";
-        repo = "fzf.fish";
-        rev = "63c8f8e65761295da51029c5b6c9e601571837a1";
-        sha256 = "sha256-i9FcuQdmNlJnMWQp7myF3N0tMD/2I0CaMs/PlD8o1gw=";
-      };
-    }
-    {
       name = "pure";
       src = fetchFromGitHub {
         owner = "pure-fish";
@@ -106,10 +103,10 @@ in
   ];
 
   interactiveShellInit = ''
-    eval (direnv hook fish)
-
-    bind \ec echo\ -n\ \(clear\ \|\ string\ replace\ \\e\\\[3J\ \"\"\)\;\ commandline\ -f\ repaint
-    bind \cl '__fish_list_current_token'
+    bind \ex echo\ -n\ \(clear\ \|\ string\ replace\ \\e\\\[3J\ \"\"\)\;\ commandline\ -f\ repaint
+    bind \ec fzf-cd-widget
+    bind \ef fzf-file-widget
+    bind \er fzf-history-widget
 
     set --universal pure_enable_single_line_prompt true
     set --universal pure_show_system_time true

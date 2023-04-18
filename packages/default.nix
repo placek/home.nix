@@ -42,30 +42,19 @@ with pkgs; [
   (nerdfonts.override { fonts = [ settings.font.name ]; })
   (import ./git-ctags.nix { inherit pkgs; })
 
-  aria
-  bat
   curl
-  direnv
   fd
   file
-  fish
-  fzf
   git-crypt
-  htop
   imagemagick
-  inxi
-  jq
   killall
-  lsd
   mdcat
-  nnn
   openssl
   openvpn
   qtpass
   ripgrep
   rlwrap
   rnix-lsp
-  tig
   universal-ctags
   unrar
   unzip
