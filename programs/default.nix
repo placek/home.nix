@@ -67,4 +67,26 @@
   nnn = {
     enable = true;
   };
+
+  mbsync = {
+    enable = true;
+  };
+
+  notmuch = {
+    enable = true;
+  };
+
+  astroid = {
+    enable = true;
+    externalEditor = "vim";
+    extraConfig = {
+      startup.queries.inbox_silquenarmo = "folder:silquenarmo/Inbox";
+      startup.queries.inbox_placzynski-pawel = "folder:placzynski-pawel/Inbox";
+      startup.queries.inbox_p-placzynski-binarapps = "folder:p-placzynski-binarapps/Inbox";
+    };
+  };
+
+  msmtp = {
+    enable = true;
+  };
 }
