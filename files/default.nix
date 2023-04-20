@@ -140,13 +140,4 @@ in
       xprompt.geometry 0x32+0+0
     '';
   };
-
-  "bin/msync" = {
-    text = ''
-      #!${pkgs.stdenv.shell}
-      ${pkgs.libnotify}/bin/notify-send "Syncing mails 📫️"
-      systemctl --user start mbsync
-    '';
-    executable = true;
-  };
 }

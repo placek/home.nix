@@ -74,42 +74,26 @@
 
   notmuch = {
     enable = true;
+    hooks.postNew = ''
+      ${pkgs.notmuch}/bin/notmuch tag -inbox -- tag:inbox
+      ${pkgs.notmuch}/bin/notmuch tag -Inbox -- not folder:placzynski/Inbox and not folder:silquenarmo/Inbox and not folder:binarapps/Inbox and not folder:byron/Inbox and not folder:futurelearn/Inbox and tag:Inbox
+    '';
   };
 
   astroid = {
     enable = true;
-    externalEditor = "${pkgs.neovide}/bin/neovide";
+    externalEditor = ''
+      kitty vim "+set ft=mail" "+set fileencoding=utf-8" "+set ff=unix" "+set enc=utf-8" "+set fo+=w" %1
+    '';
     extraConfig = {
       startup.queries = {
-        placzynski-pawel_gmail-com = "folder:placzynski-pawel/Inbox";
-        silquenarmo_gmail-com = "folder:silquenarmo/Inbox";
-        p-placzynski_binarapps-com = "folder:p-placzynski-binarapps/Inbox";
-        pawel-placzynski_byron-network = "folder:pawel-placzynski-byron/Inbox";
-        pawel-placzynski_futurelearn-com = "folder:pawel-placzynski_futurelearn-com/Inbox";
+        placzynski = "folder:placzynski/Inbox";
+        silquenarmo = "folder:silquenarmo/Inbox";
+        binarapps = "folder:binarapps/Inbox";
+        byron = "folder:byron/Inbox";
+        futurelearn = "folder:futurelearn/Inbox";
       };
     };
-  };
-
-  afew = {
-    enable = true;
-    extraConfig = ''
-      [SpamFilter]
-      [KillThreadsFilter]
-      [ListMailsFilter]
-      [ArchiveSentMailsFilter]
-      [FolderNameFilter]
-      maildir_separator = /
-
-      [MailMover]
-      folders = placzynski-pawel/Inbox silquenarmo/Inbox p-placzynski-binarapps/Inbox pawel-placzynski-byron/Inbox pawel-placzynski_futurelearn-com/Inbox
-      rename = true
-
-      placzynski-pawel/Inbox = 'NOT tag:Inbox':"placzynski-pawel/[Gmail]/All Mail"
-      silquenarmo/Inbox = 'NOT tag:Inbox':"silquenarmo/[Gmail]/All Mail"
-      p-placzynski-binarapps/Inbox = 'NOT tag:Inbox':"p-placzynski-binarapps/[Gmail]/All Mail"
-      pawel-placzynski-byron/Inbox = 'NOT tag:Inbox':"pawel-placzynski-byron/[Gmail]/All Mail"
-      pawel-placzynski_futurelearn-com/Inbox = 'NOT tag:Inbox':"pawel-placzynski_futurelearn-com/[Gmail]/All Mail"
-    '';
   };
 
   msmtp = {

@@ -20,29 +20,15 @@ in
   xdg.configFile."mbsync/preExec" = {
     text = ''
       #!${pkgs.stdenv.shell}
-
-      export NOTMUCH_CONFIG=${config.xdg.configHome}/notmuch/notmuchrc
-      export NMBGIT=${config.xdg.dataHome}/notmuch/nmbug
-
-      ${pkgs.coreutils}/bin/mkdir -p ${config.home.homeDirectory}/desktop/mails/redhat ${config.home.homeDirectory}/desktop/mails/perso
-      ${pkgs.afew}/bin/afew -C  ${config.xdg.configHome}/notmuch/notmuchrc -m -v
+      ${pkgs.libnotify}/bin/notify-send "Mail" "Syncing…"
     '';
     executable = true;
   };
   xdg.configFile."mbsync/postExec" = {
     text = ''
       #!${pkgs.stdenv.shell}
-
-      export NOTMUCH_CONFIG=${config.xdg.configHome}/notmuch/notmuchrc
-      export NMBGIT=${config.xdg.dataHome}/notmuch/nmbug
-
       ${pkgs.notmuch}/bin/notmuch new
-      ${pkgs.afew}/bin/afew -C ${config.xdg.configHome}/notmuch/notmuchrc --tag --new -v
-      # Remove inbox (lower-case)
-      ${pkgs.notmuch}/bin/notmuch tag -inbox -- tag:inbox
-      # Remove Inbox tagged message that are not in an Inbox
-      ${pkgs.notmuch}/bin/notmuch tag -Inbox -- not folder:redhat/Inbox and not folder:perso/Inbox and tag:Inbox
-      ${pkgs.libnotify}/bin/notify-send "Mails synced 📬"
+      ${pkgs.libnotify}/bin/notify-send "Mail" "Synced!"
     '';
     executable = true;
   };
