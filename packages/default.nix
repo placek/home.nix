@@ -4,7 +4,10 @@ let
 in
 with pkgs; [
   glpkgs.nixGLIntel
-  (writeShellScriptBin "qutebrowser-gl" ''${glpkgs.nixGLIntel}/bin/nixGLIntel qutebrowser "$@"'')
+  (writeShellScriptBin "qutebrowser-gl" ''
+    export ALSA_PLUGIN_DIR=${pkgs.pipewire.lib}/lib/alsa-lib
+    ${glpkgs.nixGLIntel}/bin/nixGLIntel qutebrowser "$@"
+  '')
   (writeShellScriptBin "kitty-gl" ''${glpkgs.nixGLIntel}/bin/nixGLIntel kitty "$@"'')
   (writeShellScriptBin "xpass" ''
     case "$1" in
