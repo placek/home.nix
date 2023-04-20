@@ -78,12 +78,38 @@
 
   astroid = {
     enable = true;
-    externalEditor = "vim";
+    externalEditor = "${pkgs.neovide}/bin/neovide";
     extraConfig = {
-      startup.queries.inbox_silquenarmo = "folder:silquenarmo/Inbox";
-      startup.queries.inbox_placzynski-pawel = "folder:placzynski-pawel/Inbox";
-      startup.queries.inbox_p-placzynski-binarapps = "folder:p-placzynski-binarapps/Inbox";
+      startup.queries = {
+        placzynski-pawel_gmail-com = "folder:placzynski-pawel/Inbox";
+        silquenarmo_gmail-com = "folder:silquenarmo/Inbox";
+        p-placzynski_binarapps-com = "folder:p-placzynski-binarapps/Inbox";
+        pawel-placzynski_byron-network = "folder:pawel-placzynski-byron/Inbox";
+        pawel-placzynski_futurelearn-com = "folder:pawel-placzynski_futurelearn-com/Inbox";
+      };
     };
+  };
+
+  afew = {
+    enable = true;
+    extraConfig = ''
+      [SpamFilter]
+      [KillThreadsFilter]
+      [ListMailsFilter]
+      [ArchiveSentMailsFilter]
+      [FolderNameFilter]
+      maildir_separator = /
+
+      [MailMover]
+      folders = placzynski-pawel/Inbox silquenarmo/Inbox p-placzynski-binarapps/Inbox pawel-placzynski-byron/Inbox pawel-placzynski_futurelearn-com/Inbox
+      rename = true
+
+      placzynski-pawel/Inbox = 'NOT tag:Inbox':"placzynski-pawel/[Gmail]/All Mail"
+      silquenarmo/Inbox = 'NOT tag:Inbox':"silquenarmo/[Gmail]/All Mail"
+      p-placzynski-binarapps/Inbox = 'NOT tag:Inbox':"p-placzynski-binarapps/[Gmail]/All Mail"
+      pawel-placzynski-byron/Inbox = 'NOT tag:Inbox':"pawel-placzynski-byron/[Gmail]/All Mail"
+      pawel-placzynski_futurelearn-com/Inbox = 'NOT tag:Inbox':"pawel-placzynski_futurelearn-com/[Gmail]/All Mail"
+    '';
   };
 
   msmtp = {

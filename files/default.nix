@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 let
   settings = import ../settings;
   papirusPath = "/usr/share/icons/Papirus-Dark/128x128";
@@ -138,5 +139,14 @@ in
       xprompt.font:    ${settings.font.fullName}
       xprompt.geometry 0x32+0+0
     '';
+  };
+
+  "bin/msync" = {
+    text = ''
+      #!${pkgs.stdenv.shell}
+      ${pkgs.libnotify}/bin/notify-send "Syncing mails 📫️"
+      systemctl --user start mbsync
+    '';
+    executable = true;
   };
 }
