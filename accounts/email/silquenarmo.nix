@@ -3,7 +3,7 @@
   address = "silquenarmo@gmail.com";
   userName = "silquenarmo@gmail.com";
   realName = "Paweł Placzyński";
-  passwordCommand = "${pkgs.pass}/bin/pass mail/silquenarmo@gmail.com";
+  passwordCommand = "${pkgs.pass}/bin/pass MAIL/silquenarmo@gmail.com";
   imap.host = "imap.gmail.com";
   smtp.host = "smtp.gmail.com";
   mbsync = {

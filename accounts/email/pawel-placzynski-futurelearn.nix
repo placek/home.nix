@@ -3,7 +3,7 @@
   address = "pawel.placzynski@futurelearn.com";
   userName = "pawel.placzynski@futurelearn.com";
   realName = "Paweł Placzyński";
-  passwordCommand = "${pkgs.pass}/bin/pass mail/pawel.placzynski@futurelearn.com";
+  passwordCommand = "${pkgs.pass}/bin/pass MAIL/pawel.placzynski@futurelearn.com";
   imap.host = "imap.gmail.com";
   smtp.host = "smtp.gmail.com";
   mbsync = {

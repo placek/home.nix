@@ -4,7 +4,7 @@
   address = "placzynski.pawel@gmail.com";
   userName = "placzynski.pawel@gmail.com";
   realName = "Paweł Placzyński";
-  passwordCommand = "${pkgs.pass}/bin/pass mail/placzynski.pawel@gmail.com";
+  passwordCommand = "${pkgs.pass}/bin/pass MAIL/placzynski.pawel@gmail.com";
   imap.host = "imap.gmail.com";
   smtp.host = "smtp.gmail.com";
   mbsync = {
