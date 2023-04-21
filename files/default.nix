@@ -52,9 +52,7 @@ in
         let ad = [...document.querySelectorAll('.ad-showing')][0];
         if (ad) {
           let btn = document.querySelector('.videoAdUiSkipButton,.ytp-ad-skip-button')
-          if (btn) {
-            btn.click()
-          }
+          if (btn) { btn.click() }
         }
       })
       main.observe(document.querySelector('.videoAdUiSkipButton,.ytp-ad-skip-button'), {attributes: true, characterData: true, childList: true})
