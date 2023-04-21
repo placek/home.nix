@@ -44,6 +44,19 @@ in
     '';
   };
 
+  astroid-desktop = {
+    enable = true;
+    target = "${applicationsPath}/astroid.desktop";
+    text = ''
+      [Desktop Entry]
+      Name=Astroid
+      Exec=astroid
+      Terminal=false
+      Type=Application
+      Icon=${papirusPath}/apps/claws-mail.svg
+    '';
+  };
+
   qutebrowser-youtube = {
     enable = true;
     target = "${settings.dirs.home}/.config/qutebrowser/greasemonkey/youtube.js";
