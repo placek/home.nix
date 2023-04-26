@@ -2,7 +2,9 @@
 {
   home-manager.enable = true;
 
+  astroid = import ./astroid;
   fish = import ./fish { inherit (pkgs) fetchFromGitHub; };
+  gh = import ./gh;
   git = import ./git;
   gpg = import ./gpg;
   kitty = import ./kitty;
@@ -11,9 +13,14 @@
   qutebrowser = import ./qutebrowser;
   ssh = import ./ssh;
 
-  aria2 = {
-    enable = true;
-  };
+  aria2 = { enable = true; };
+  direnv = { enable = true; };
+  htop = { enable = true; };
+  jq = { enable = true; };
+  lsd = { enable = true; };
+  mbsync = { enable = true; };
+  msmtp = { enable = true; };
+  nnn = { enable = true; };
 
   bat = {
     enable = true;
@@ -25,51 +32,14 @@
     enableFishIntegration = true;
   };
 
-  direnv = {
-    enable = true;
-  };
-
   fzf = {
     enable = true;
     enableFishIntegration = true;
   };
 
-  gh = {
-    enable = true;
-    settings = {
-      git_protocol = "ssh";
-      editor = "vim";
-      prompt = "enabled";
-      aliases = {
-        co = "pr checkout";
-        pv = "pr view";
-      };
-    };
-  };
-
-  htop = {
-    enable = true;
-  };
-
-  jq = {
-    enable = true;
-  };
-
-  lsd = {
-    enable = true;
-  };
-
   nix-index = {
     enable = true;
     enableFishIntegration = true;
-  };
-
-  nnn = {
-    enable = true;
-  };
-
-  mbsync = {
-    enable = true;
   };
 
   notmuch = {
@@ -78,25 +48,5 @@
       ${pkgs.notmuch}/bin/notmuch tag -inbox -- tag:inbox
       ${pkgs.notmuch}/bin/notmuch tag -Inbox -- not folder:placzynski/Inbox and not folder:silquenarmo/Inbox and not folder:binarapps/Inbox and not folder:byron/Inbox and not folder:futurelearn/Inbox and tag:Inbox
     '';
-  };
-
-  astroid = {
-    enable = true;
-    externalEditor = ''
-      kitty vim "+set ft=mail" "+set fileencoding=utf-8" "+set ff=unix" "+set enc=utf-8" "+set fo+=w" %1
-    '';
-    extraConfig = {
-      startup.queries = {
-        placzynski = "folder:placzynski/Inbox";
-        silquenarmo = "folder:silquenarmo/Inbox";
-        binarapps = "folder:binarapps/Inbox";
-        byron = "folder:byron/Inbox";
-        futurelearn = "folder:futurelearn/Inbox";
-      };
-    };
-  };
-
-  msmtp = {
-    enable = true;
   };
 }

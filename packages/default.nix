@@ -3,7 +3,6 @@ let
   git-ctags = import ./git-ctags.nix { inherit pkgs; };
   qutebrowser-gl = import ./qutebrowser-gl.nix { inherit pkgs glpkgs; };
   kitty-gl = import ./kitty-gl.nix { inherit pkgs glpkgs; };
-  xpass = import ./xpass.nix { inherit pkgs; };
   custom-nerdfonts = import ./custom-nerdfonts.nix { inherit pkgs; };
 in
 with pkgs; [
@@ -13,7 +12,6 @@ with pkgs; [
   git-ctags
   kitty-gl
   qutebrowser-gl
-  xpass
 
   curl
   fd
@@ -32,7 +30,6 @@ with pkgs; [
   unrar
   unzip
   wget
-  ydotool
   yq
   wl-clipboard
 ]

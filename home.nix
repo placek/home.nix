@@ -16,23 +16,6 @@ in
     OPENAI_API_KEY = secrets.chatGPT;
   };
 
-  xdg.enable = true;
-  xdg.configFile."mbsync/preExec" = {
-    text = ''
-      #!${pkgs.stdenv.shell}
-      ${pkgs.libnotify}/bin/notify-send "Mail" "Syncing…"
-    '';
-    executable = true;
-  };
-  xdg.configFile."mbsync/postExec" = {
-    text = ''
-      #!${pkgs.stdenv.shell}
-      ${pkgs.notmuch}/bin/notmuch new
-      ${pkgs.libnotify}/bin/notify-send "Mail" "Synced!"
-    '';
-    executable = true;
-  };
-
   nix = {
     package = pkgs.nix;
     settings = {
@@ -42,25 +25,10 @@ in
   };
 
   fonts.fontconfig.enable = true;
-
   home.packages = import ./packages { inherit pkgs glpkgs; };
   home.file = import ./files { inherit pkgs; };
   programs = import ./programs { inherit pkgs; };
   services = import ./services { inherit config pkgs; };
   accounts.email = import ./accounts/email { inherit pkgs; };
-
-  systemd.user.services = {
-    ydotoold = {
-      Unit = {
-        Description = "ydotool daemon with keyboard only";
-        Documentation = [ "man:ydotoold(1)" ];
-      };
-      Service = {
-        ExecStart = "${pkgs.ydotool}/bin/ydotoold --mouse-off --touch-off";
-      };
-      Install = {
-        WantedBy = [ "gnome-session.target" ];
-      };
-    };
-  };
+  xdg = import ./xdg { inherit config pkgs; };
 }
