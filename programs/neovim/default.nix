@@ -89,6 +89,11 @@
     let g:maplocalleader = ","
 
     " mappings
+    nnoremap <leader><up> <c-w><up>
+    nnoremap <leader><down> <c-w><down>
+    nnoremap <leader><left> <c-w><left>
+    nnoremap <leader><right> <c-w><right>
+
     nnoremap <leader>1 :set relativenumber!<CR>
     nnoremap <leader>2 :call MakeFolds()<CR>
     nnoremap <leader>3 :set spell!<CR>
