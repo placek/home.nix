@@ -1,7 +1,4 @@
-{ pkgs, ... }:
-let
-  settings = import ../../settings;
-in
+{ pkgs, settings, ... }:
 {
   maildirBasePath = "${settings.dirs.home}/.mail";
   accounts = {

@@ -1,6 +1,4 @@
-let
-  settings = import ../../settings;
-in
+{ settings, ... }:
 {
   enable = true;
   publicKeys = [

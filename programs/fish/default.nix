@@ -1,6 +1,5 @@
-{ fetchFromGitHub, ... }:
+{ fetchFromGitHub, settings, ... }:
 let
-  settings = import ../../settings;
   editor = "vim";
 in
 {

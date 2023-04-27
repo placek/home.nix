@@ -1,5 +1,5 @@
+{ pkgs, settings, ... }:
 let
-  settings = import ../../settings;
   term = "kitty";
   editor = "vim";
   fileManager = "nnn";
@@ -8,6 +8,13 @@ let
 in
 {
   enable = true;
+  package = pkgs.qutebrowser.overrideAttrs (oldAttrs: {
+    postInstall = (oldAttrs.postInstall or "") + ''
+      substituteInPlace $out/share/applications/org.qutebrowser.qutebrowser.desktop \
+        --replace "Exec=qutebrowser" "Exec=qutebrowser-gl" \
+        --replace "Icon=qutebrowser" "Icon=browser" \
+    '';
+  });
   loadAutoconfig = false;
   searchEngines = {
     DEFAULT = "https://www.google.com/search?q={}";

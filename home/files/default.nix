@@ -1,7 +1,4 @@
-{ pkgs, ... }:
-let
-  settings = import ../settings;
-in
+{ pkgs, settings, ... }:
 {
   qutebrowser-youtube = {
     enable = true;

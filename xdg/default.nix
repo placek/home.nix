@@ -1,10 +1,11 @@
-{ config, pkgs, ... }:
+{ config, pkgs, settings, ... }:
 let
   papirusPath = "${pkgs.papirus-icon-theme}/share/icons/ePapirus-Dark/128x128";
 in
 {
   enable = true;
-  systemDirs.data = [ "/home/placek/.nix-profile/share" ];
+
+  systemDirs.data = [ "${settings.dirs.home}/.nix-profile/share" ];
 
   mimeApps.defaultApplications = {
     "text/html" = [ "qutebrowser.desktop" ];
@@ -22,17 +23,6 @@ in
   };
 
   desktopEntries = {
-    qutebrowser = {
-      name = "Web browser";
-      genericName = "Web browser";
-      exec = "qutebrowser-gl %U";
-      terminal = false;
-      type = "Application";
-      icon = "${papirusPath}/apps/browser.svg";
-      categories = [ "Application" "Network" "WebBrowser" ];
-      mimeType = [ "text/html" "text/xml" "application/xhtml+xml" "text/mml" "x-scheme-handler/http" "x-scheme-handler/https" ];
-    };
-
     kitty = {
       name = "Terminal";
       genericName = "Terminal";

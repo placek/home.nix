@@ -1,9 +1,9 @@
-{ pkgs, glpkgs, ... }:
+{ pkgs, glpkgs, settings, ... }:
 let
   git-ctags = import ./git-ctags.nix { inherit pkgs; };
   qutebrowser-gl = import ./qutebrowser-gl.nix { inherit pkgs glpkgs; };
   kitty-gl = import ./kitty-gl.nix { inherit pkgs glpkgs; };
-  custom-nerdfonts = import ./custom-nerdfonts.nix { inherit pkgs; };
+  custom-nerdfonts = import ./custom-nerdfonts.nix { inherit pkgs settings; };
 in
 with pkgs; [
   glpkgs.nixGLIntel

@@ -1,5 +1,5 @@
-{ config, pkgs, ... }:
+{ config, settings, ... }:
 {
-  gpg-agent = import ./gpg-agent;
+  gpg-agent = import ./gpg-agent { inherit settings; };
   mbsync = import ./mbsync { inherit config; };
 }

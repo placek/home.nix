@@ -1,7 +1,4 @@
-{ pass, ... }:
-let
-  settings = import ../../settings;
-in
+{ pass, settings, ... }:
 {
   enable = true;
   package = pass.withExtensions (exts: [ exts.pass-otp ]);

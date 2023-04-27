@@ -1,16 +1,16 @@
-{ pkgs, ... }:
+{ pkgs, settings, ... }:
 {
   home-manager.enable = true;
 
   astroid = import ./astroid;
-  fish = import ./fish { inherit (pkgs) fetchFromGitHub; };
+  fish = import ./fish { inherit (pkgs) fetchFromGitHub; inherit settings; };
   gh = import ./gh;
-  git = import ./git;
-  gpg = import ./gpg;
+  git = import ./git { inherit settings; };
+  gpg = import ./gpg { inherit settings; };
   kitty = import ./kitty;
   neovim = import ./neovim { inherit pkgs; };
-  password-store = import ./password-store { inherit (pkgs) pass; };
-  qutebrowser = import ./qutebrowser;
+  password-store = import ./password-store { inherit (pkgs) pass; inherit settings; };
+  qutebrowser = import ./qutebrowser { inherit pkgs settings; };
   ssh = import ./ssh;
 
   aria2 = { enable = true; };
