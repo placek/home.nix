@@ -17,7 +17,10 @@ in
     text = ''
       #!${pkgs.stdenv.shell}
       ${pkgs.notmuch}/bin/notmuch new
-      ${pkgs.libnotify}/bin/notify-send "Mail" "Synced!"
+      unread=''$(${pkgs.notmuch}/bin/notmuch search --format=json tag:unread | ${pkgs.jq}/bin/jq "[.[].matched] | add // 0")
+      if [ ''${unread} -gt 0 ]; then
+        ${pkgs.libnotify}/bin/notify-send -a astroid "Mail" "''${unread} new messages!"
+      fi
     '';
     executable = true;
   };
