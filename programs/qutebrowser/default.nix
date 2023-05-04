@@ -48,6 +48,12 @@ in
     ",pL" = "spawn --userscript qute-pass --dmenu-invocation xprompt --no-insert-mode --username-only --username-pattern \"user: (.+)\"";
     ",pO" = "spawn --userscript qute-pass --dmenu-invocation xprompt --no-insert-mode --otp-only";
     ",pS" = "spawn --userscript qute-pass --dmenu-invocation xprompt --no-insert-mode --password-only --password-pattern \"secret: (.+)\"";
+    "<Super-c>" = "yank selection";
+    "<Super-v>" = "insert-text -- {clipboard}";
+  };
+  keyBindings.insert = {
+    "<Super-c>" = "yank selection";
+    "<Super-v>" = "insert-text -- {clipboard}";
   };
   quickmarks = {
     "Gmail" = "https://mail.google.com/";

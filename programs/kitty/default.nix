@@ -14,7 +14,7 @@ in
     "super+c" = "copy_to_clipboard";
     "super+v" = "paste_from_clipboard";
     "super+x" = "paste_from_selection";
-    "shift+insert" = "paste_from_clipboard";
+    "shift+insert" = "paste_from_clipboard"; # because clipboard manager on gnome shell uses this shortcut to paste from clipboard
 
     "kitty_mod+k" = "scroll_line_up";
     "kitty_mod+j" = "scroll_line_down";
