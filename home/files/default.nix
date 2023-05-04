@@ -3,16 +3,7 @@
   qutebrowser-youtube = {
     enable = true;
     target = "${settings.dirs.home}/.config/qutebrowser/greasemonkey/youtube.js";
-    text = ''
-      let main = new MutationObserver(() => {
-        let ad = [...document.querySelectorAll('.ad-showing')][0];
-        if (ad) {
-          let btn = document.querySelector('.videoAdUiSkipButton,.ytp-ad-skip-button')
-          if (btn) { btn.click() }
-        }
-      })
-      main.observe(document.querySelector('.videoAdUiSkipButton,.ytp-ad-skip-button'), {attributes: true, characterData: true, childList: true})
-    '';
+    source = builtins.fetchurl { url = "https://greasyfork.org/scripts/458827-youtube-ad-skipper-and-speed-changer/code/YouTube%20ad%20skipper%20and%20speed%20changer.user.js"; name = "ytadskip"; };
   };
 
   qutebrowser-bookmarks = {

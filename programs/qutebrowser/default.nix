@@ -47,6 +47,7 @@ in
     ",pP" = "spawn --userscript qute-pass --dmenu-invocation xprompt --no-insert-mode --password-only";
     ",pL" = "spawn --userscript qute-pass --dmenu-invocation xprompt --no-insert-mode --username-only --username-pattern \"user: (.+)\"";
     ",pO" = "spawn --userscript qute-pass --dmenu-invocation xprompt --no-insert-mode --otp-only";
+    ",pS" = "spawn --userscript qute-pass --dmenu-invocation xprompt --no-insert-mode --password-only --password-pattern \"secret: (.+)\"";
   };
   quickmarks = {
     "Gmail" = "https://mail.google.com/";
@@ -58,7 +59,6 @@ in
     "BA::Confluence" = "https://confluence.binarapps.com/";
     "BA::GitLab" = "https://gitlab.binarapps.com/dashboard/groups";
     "BA::Traffit" = "https://binarapps.traffit.com/";
-    "Byron::Jira" = "https://byron-network.atlassian.net/jira/software/c/projects/BN/boards/4";
     "SMS" = "https://messages.google.com/web/conversations";
     "WhatsApp" = "https://web.whatsapp.com/";
     "Messenger" = "https://www.messenger.com/";
