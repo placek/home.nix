@@ -30,6 +30,7 @@ with pkgs; [
   unrar
   unzip
   wget
+  xprompt
   yq
   wl-clipboard
 ]

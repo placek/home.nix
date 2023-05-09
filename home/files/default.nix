@@ -3,21 +3,40 @@
   qutebrowser-youtube = {
     enable = true;
     target = "${settings.dirs.home}/.config/qutebrowser/greasemonkey/youtube.js";
-    source = builtins.fetchurl { url = "https://greasyfork.org/scripts/458827-youtube-ad-skipper-and-speed-changer/code/YouTube%20ad%20skipper%20and%20speed%20changer.user.js"; name = "ytadskip"; };
+    text = ''
+      // ==UserScript==
+      // @name         Auto Skip YouTube Ads
+      // @version      1.0.0
+      // @description  Speed up and skip YouTube ads automatically
+      // @author       jso8910
+      // @match        *://*.youtube.com/*
+      // @exclude      *://*.youtube.com/subscribe_embed?*
+      // ==/UserScript==
+      setInterval(() => {
+          const btn = document.querySelector('.videoAdUiSkipButton,.ytp-ad-skip-button')
+          if (btn) {
+              btn.click()
+          }
+          const ad = [...document.querySelectorAll('.ad-showing')][0];
+          if (ad) {
+              document.querySelector('video').playbackRate = 10;
+          }
+      }, 50)
+    '';
   };
 
   qutebrowser-bookmarks = {
     enable = true;
     target = "${settings.dirs.home}/.config/qutebrowser/bookmarks/urls";
     text = ''
-      https://docs.servant.dev/en/stable/ Servant documentation
-      https://nixos.org/manual/nix/unstable/introduction.html Nix reference
+      https://docs.servant.dev/en/stable/ Servant docs
+      https://nixos.org/manual/nix/unstable/introduction.html Nix refs
       https://nixos.wiki/wiki/Cheatsheet NixOS cheatsheet
-      https://nixos.org/manual/nixos/stable/index.html NixOS - NixOS 21.05 manual
-      https://learnvimscriptthehardway.stevelosh.com/ Vimscript tutorial
+      https://nixos.org/manual/nixos/stable/index.html NixOS man
+      https://learnvimscriptthehardway.stevelosh.com/ Vimscript tutor
       https://www.stephendiehl.com/ Shephen Diehl homepage
-      https://haskell-at-work.com/episodes.html Episodes | Haskell at Work
-      https://crypto.stanford.edu/~blynn/haskell/ Haskell - Haskell Fan Site
+      https://haskell-at-work.com/episodes.html Haskell at Work
+      https://crypto.stanford.edu/~blynn/haskell/ Haskell Fan Site
       http://www.ultramontes.pl/index.htm Ultra montes
       https://bibles-online.net/1550/ Stephanus Greek New Testament
       https://spotlight.vatlib.it/greek-paleography/feature/1-majuscule-bookhands Greek paleography
