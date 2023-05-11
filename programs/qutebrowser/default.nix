@@ -8,7 +8,8 @@ let
 in
 {
   enable = true;
-  package = pkgs.qutebrowser.overrideAttrs (oldAttrs: {
+  package = pkgs.qutebrowser-qt6.overrideAttrs (oldAttrs: {
+    buildInputs = (oldAttrs.buildInputs or []) ++ [ pkgs.qt6.qtwebengine ];
     postInstall = (oldAttrs.postInstall or "") + ''
       substituteInPlace $out/share/applications/org.qutebrowser.qutebrowser.desktop \
         --replace "Exec=qutebrowser" "Exec=qutebrowser-gl" \
