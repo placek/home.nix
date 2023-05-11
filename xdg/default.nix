@@ -17,6 +17,7 @@ in
     text = ''
       #!${pkgs.stdenv.shell}
       ${pkgs.notmuch}/bin/notmuch new
+      ${pkgs.notmuch}/bin/notmuch tag +github -- from:noreply@github.com or from:notifications@github.com
       unread=''$(${pkgs.notmuch}/bin/notmuch search --format=json tag:unread | ${pkgs.jq}/bin/jq "[.[].matched] | add // 0")
       if [ ''${unread} -gt 0 ]; then
         ${pkgs.libnotify}/bin/notify-send -a astroid "Mail" "''${unread} new messages!"
