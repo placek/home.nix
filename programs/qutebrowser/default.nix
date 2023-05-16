@@ -58,6 +58,7 @@ in
   };
   quickmarks = {
     "Gmail" = "https://mail.google.com/";
+    "Drive" = "https://drive.google.com/";
     "Calendar" = "https://calendar.google.com/";
     "Meet" = "https://meet.google.com/";
     "Keep" = "https://keep.google.com/u/0/";
