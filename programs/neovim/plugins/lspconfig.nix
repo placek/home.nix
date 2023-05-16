@@ -85,5 +85,11 @@
         flags     = flags,
         handlers  = handlers,
       }
+
+      lsp.tsserver.setup {
+        autostart = true,
+        flags     = flags,
+        handlers  = handlers,
+      }
     '';
   }

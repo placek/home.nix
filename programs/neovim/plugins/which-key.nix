@@ -53,6 +53,7 @@
       ["<leader>gs"]      = { "<cmd>lua require('telescope.builtin').git_status()<cr>",               "Status" },
       ["<localleader>,"]  = { "<cmd>lua vim.lsp.buf.hover()<cr>",                                     "Show documentation" },
       ["<localleader>."]  = { "<cmd>lua vim.diagnostic.open_float({ border = 'rounded' })<cr>",       "Show diagnostic" },
+      ["<localleader><space>"]  = { "<cmd>A<cr>",                                                     "Alternative file" },
       ["<localleader>a"]  = { "<cmd>lua vim.lsp.buf.code_action()<cr>",                               "Code actions" },
       ["<localleader>l"]  = { "<cmd>lua vim.lsp.codelens.refresh()<cr>",                              "Code lens" },
       ["<localleader>d"]  = { "<cmd>lua require('telescope.builtin').diagnostics()<cr>",              "Diagnostics" },

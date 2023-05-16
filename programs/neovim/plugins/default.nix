@@ -32,6 +32,7 @@ with pkgs.vimPlugins; [
   vim-jinja
   vim-nix
   vim-ruby
+  vim-rails
   vim-signature
   vim-surround
 
