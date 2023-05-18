@@ -17,33 +17,14 @@ in
     dsp = "docker system prune";
     dspv = "docker system prune --volumes";
     dspa = "docker system prune --volumes --all";
-    dcb = "docker-compose build";
-    dcr = "docker-compose run --rm";
-    dcu = "docker-compose up -d";
-    dcl = "docker-compose logs";
-    dcd = "docker-compose down --remove-orphans";
-    dcres = "docker-compose restart";
-    dcps = "docker-compose ps";
 
-    lcb = "docker-compose -f .local.compose build";
-    lcr = "docker-compose -f .local.compose run --rm";
-    lcrt = "docker-compose -f .local.compose run --rm test";
-    lcrw = "docker-compose -f .local.compose run --rm web";
-    lcu = "docker-compose -f .local.compose up -d";
-    lcl = "docker-compose -f .local.compose logs";
-    lcd = "docker-compose -f .local.compose down --remove-orphans";
-    lcres = "docker-compose -f .local.compose restart";
-    lcps = "docker-compose -f .local.compose ps";
-
-    tcb = "docker-compose -f .local.compose.test build";
-    tcr = "docker-compose -f .local.compose.test run --rm";
-    tcrt = "docker-compose -f .local.compose.test run --rm test";
-    tcrw = "docker-compose -f .local.compose.test run --rm web";
-    tcu = "docker-compose -f .local.compose.test up -d";
-    tcl = "docker-compose -f .local.compose.test logs";
-    tcd = "docker-compose -f .local.compose.test down --remove-orphans";
-    tcres = "docker-compose -f .local.compose.test restart";
-    tcps = "docker-compose -f .local.compose.test ps";
+    dcb = "docker-compose -f .local.compose build";
+    dcr = "docker-compose -f .local.compose run --rm";
+    dcu = "docker-compose -f .local.compose up -d";
+    dcl = "docker-compose -f .local.compose logs";
+    dcd = "docker-compose -f .local.compose down --remove-orphans";
+    dcres = "docker-compose -f .local.compose restart";
+    dcps = "docker-compose -f .local.compose ps";
 
     j = "journalctl";
     s = "systemctl";
@@ -51,6 +32,7 @@ in
     tf = "nc oshi.at 7777";
 
     ":q" = "read_confirm && exit";
+    ":q!" = "exit";
     ":w" = "git commit -p";
   };
   functions = {
