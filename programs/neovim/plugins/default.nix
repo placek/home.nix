@@ -31,8 +31,9 @@ with pkgs.vimPlugins; [
   vim-fish
   vim-jinja
   vim-nix
-  vim-ruby
+  vim-polyglot
   vim-rails
+  vim-ruby
   vim-signature
   vim-surround
 

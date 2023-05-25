@@ -101,7 +101,7 @@ in
     window_margin_width = "0";
     window_padding_width = "4";
     placement_strategy = "center";
-    inactive_text_alpha = "0.8";
+    inactive_text_alpha = "0.9";
     hide_window_decorations = "yes";
     resize_debounce_time = "0.1";
     resize_draw_strategy = "static";
@@ -140,6 +140,7 @@ in
     foreground = settings.colors.base0F;
     selection_background = settings.colors.base04;
     selection_foreground = settings.colors.base0F;
+    background_opacity = "0.9";
     url_color = settings.colors.base04;
     cursor = settings.colors.base0F;
     color0  = settings.colors.base00;

@@ -26,6 +26,7 @@ with pkgs; [
   ripgrep
   rlwrap
   rnix-lsp
+  sox
   universal-ctags
   unrar
   unzip
