@@ -4,6 +4,7 @@ let
   qutebrowser-gl = import ./qutebrowser-gl.nix { inherit pkgs glpkgs; };
   kitty-gl = import ./kitty-gl.nix { inherit pkgs glpkgs; };
   custom-nerdfonts = import ./custom-nerdfonts.nix { inherit pkgs settings; };
+  speak = import ./speak.nix { inherit pkgs; };
 in
 with pkgs; [
   glpkgs.nixGLIntel
@@ -12,6 +13,7 @@ with pkgs; [
   git-ctags
   kitty-gl
   qutebrowser-gl
+  speak
 
   curl
   fd
@@ -31,7 +33,7 @@ with pkgs; [
   unrar
   unzip
   wget
+  wl-clipboard
   xprompt
   yq
-  wl-clipboard
 ]
