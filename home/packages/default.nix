@@ -15,6 +15,8 @@ with pkgs; [
   qutebrowser-gl
   speak
 
+  ubuntu_font_family google-fonts font-awesome
+
   curl
   fd
   file
