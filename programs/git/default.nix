@@ -16,6 +16,7 @@ in
     pu = "push --tags origin";
     cp = "cherry-pick";
     wip = "!bash -c 'git commit -m \"wip: \$(curl -Ls whatthecommit.com/index.txt)\"'";
+    pushwip = "!bash -c 'git commit -p -m \"wip: \$(curl -Ls whatthecommit.com/index.txt)\"; git push -f; git reset --mixed @~1'";
 
     # add & commit
     a = "add";
