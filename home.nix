@@ -12,6 +12,7 @@ in
   programs = import ./programs { inherit pkgs settings; };
   services = import ./services { inherit config settings; };
   xdg = import ./xdg { inherit config pkgs settings; };
+  xresources = import ./xresources { inherit settings; };
 
   fonts.fontconfig.enable = true;
 }
