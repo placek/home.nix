@@ -21,6 +21,8 @@ with pkgs; [
   git-crypt
   imagemagick
   killall
+  libinput
+  xf86_input_wacom
   mdcat
   openssl
   openvpn
