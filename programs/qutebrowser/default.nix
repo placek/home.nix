@@ -51,6 +51,7 @@ in
     ",pS" = "spawn --userscript qute-pass --dmenu-invocation xprompt --no-insert-mode --password-only --password-pattern \"secret: (.+)\"";
     "<Super-c>" = "yank selection";
     "<Super-v>" = "insert-text -- {clipboard}";
+    "<Ctrl+h>" = "open -t https://start.duckduckgo.com/";
   };
   keyBindings.insert = {
     "<Super-c>" = "yank selection";
