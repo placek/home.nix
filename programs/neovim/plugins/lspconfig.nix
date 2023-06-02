@@ -91,5 +91,11 @@
         flags     = flags,
         handlers  = handlers,
       }
+
+      lsp.purescriptls.setup {
+        autostart = true,
+        flags     = flags,
+        handlers  = handlers,
+      }
     '';
   }

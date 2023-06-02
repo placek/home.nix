@@ -18,6 +18,7 @@ with pkgs.vimPlugins; [
   harpoon
   haskell-vim
   luasnip
+  nvim-dap
   nvim-lint
   nvim-treesitter
   tabular
