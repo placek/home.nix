@@ -41,7 +41,7 @@
         flags     = flags,
         on_attach = on_attach,
         handlers  = handlers,
-        cmd       = { "haskell-language-server", "--lsp" },
+        cmd       = { "haskell-language-server-wrapper", "--lsp" },
         settings  = {
           haskell = {
             formattingProvider = "stylish-haskell",
