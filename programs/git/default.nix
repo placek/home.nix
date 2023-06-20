@@ -86,6 +86,7 @@ in
     mergetool.conflictstyle = "diff3";
     mergetool.trustExitCode = true;
     pull.ff = "only";
+    push.autoSetupRemote = true;
     rebase.autosquash = true;
     rerere.enabled = 1;
     status.submoduleSummary = true;
