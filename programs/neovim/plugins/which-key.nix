@@ -84,7 +84,10 @@
       ["<leader>a:"]      = { "<cmd>Tab /^[^:]*\\zs:/l1c0l0<cr>",                                     "Align to first symbol" },
       ["<leader>as"]      = { "<cmd>Tab /::<cr>",                                                     "Align to '::'" },
       ["<leader>a;"]      = { "<cmd>Tab /^[^:]*:\zs/l1l0<cr>",                                        "Align to key in hash" },
-      ["<leader>at"]      = { ":Tabularize /",                                                        "Custom alignment", silent = false }
+      ["<leader>at"]      = { ":Tabularize /",                                                        "Custom alignment", silent = false },
+      ["<leader>f"]       = { "\"sy:Telescope grep_string<cr><super-v>",                              "Search for phrase in project" },
+      ["<leader>\\"]      = { "\"sy:Telescope git_files<cr><super-v>",                                "Search for phrase in git repo file names" },
+      ["<leader>t"]       = { "\"sy:Telescope tags<cr><super-v>",                                     "Search for tag symbol in project" }
     }, { mode = "v" })
   '';
 }
