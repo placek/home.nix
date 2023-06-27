@@ -3,6 +3,15 @@ let
   settings = import ../settings;
 in
 {
+  xdg.desktopEntries.qtpass = {
+    name = "QtPass";
+    genericName = "QtPass";
+    type = "Application";
+    exec = "qtpass";
+    terminal = false;
+    icon = "${pkgs.papirus-icon-theme}/share/icons/ePapirus-Dark/128x128/apps/qtpass-icon.svg";
+  };
+
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;

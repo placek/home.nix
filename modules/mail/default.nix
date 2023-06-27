@@ -9,7 +9,7 @@ in
     type = "Application";
     exec = "astroid";
     terminal = false;
-    icon = "${papirusPath}/apps/claws-mail.svg";
+    icon = "${pkgs.papirus-icon-theme}/share/icons/ePapirus-Dark/128x128/apps/claws-mail.svg";
   };
 
   programs.astroid = {

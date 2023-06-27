@@ -9,7 +9,10 @@ in
   home = import ./home { inherit glpkgs pkgs settings secrets; };
   nix = import ./nix { inherit pkgs secrets; };
   programs = import ./programs { inherit pkgs settings; };
-  xdg = import ./xdg { inherit config pkgs settings; };
+
+  xdg.enable = true;
+  xdg.systemDirs.data = [ "${settings.dirs.home}/.nix-profile/share" ];
+
   xresources = import ./xresources { inherit settings; };
 
   fonts.fontconfig.enable = true;
