@@ -62,11 +62,11 @@ in
   accounts.email = {
     maildirBasePath = "${settings.dirs.home}/.mail";
     accounts = {
-      silquenarmo = import ./silquenarmo.nix { inherit pkgs; };
-      placzynski = import ./placzynski-pawel.nix { inherit pkgs; };
-      binarapps = import ./p-placzynski-binarapps.nix { inherit pkgs; };
-      futurelearn = import ./pawel-placzynski-futurelearn.nix { inherit pkgs; };
-      byron = import ./pawel-placzynski-byron.nix { inherit pkgs; };
+      silquenarmo = import ./accounts/silquenarmo.nix { inherit pkgs; };
+      placzynski = import ./accounts/placzynski-pawel.nix { inherit pkgs; };
+      binarapps = import ./accounts/p-placzynski-binarapps.nix { inherit pkgs; };
+      futurelearn = import ./accounts/pawel-placzynski-futurelearn.nix { inherit pkgs; };
+      byron = import ./accounts/pawel-placzynski-byron.nix { inherit pkgs; };
     };
   };
 }
