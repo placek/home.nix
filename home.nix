@@ -6,11 +6,9 @@ let
   inherit (sources) pkgs glpkgs;
 in
 {
-  accounts = import ./accounts { inherit pkgs settings; };
   home = import ./home { inherit glpkgs pkgs settings secrets; };
   nix = import ./nix { inherit pkgs secrets; };
   programs = import ./programs { inherit pkgs settings; };
-  services = import ./services { inherit config settings; };
   xdg = import ./xdg { inherit config pkgs settings; };
   xresources = import ./xresources { inherit settings; };
 
@@ -23,5 +21,8 @@ in
     ./modules/shell.nix
     ./modules/editor
     ./modules/vcs.nix
+    ./modules/security.nix
+    ./modules/ssh.nix
+    ./modules/mail
   ];
 }

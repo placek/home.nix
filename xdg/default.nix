@@ -7,18 +7,6 @@ in
 
   systemDirs.data = [ "${settings.dirs.home}/.nix-profile/share" ];
 
-  configFile."mbsync/postExec" = {
-    text = ''
-      #!${pkgs.stdenv.shell}
-      ${pkgs.notmuch}/bin/notmuch new
-      unread=''$(${pkgs.notmuch}/bin/notmuch search --format=json tag:unread | ${pkgs.jq}/bin/jq "[.[].matched] | add // 0")
-      if [ ''${unread} -gt 0 ]; then
-        ${pkgs.libnotify}/bin/notify-send -a astroid "Mail" "''${unread} new messages!"
-      fi
-    '';
-    executable = true;
-  };
-
   desktopEntries = {
     qtpass = {
       name = "QtPass";
@@ -27,15 +15,6 @@ in
       exec = "qtpass";
       terminal = false;
       icon = "${papirusPath}/apps/qtpass-icon.svg";
-    };
-
-    astroid = {
-      name = "Astroid";
-      genericName = "Astroid";
-      type = "Application";
-      exec = "astroid";
-      terminal = false;
-      icon = "${papirusPath}/apps/claws-mail.svg";
     };
   };
 }
