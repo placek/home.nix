@@ -3,8 +3,6 @@
   home-manager.enable = true;
 
   astroid = import ./astroid { inherit settings; };
-  gpg = import ./gpg { inherit settings; };
-  password-store = import ./password-store { inherit (pkgs) pass; inherit settings; };
   ssh = import ./ssh;
 
   aria2.enable = true;
