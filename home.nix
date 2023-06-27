@@ -6,13 +6,26 @@ let
   inherit (sources) pkgs glpkgs;
 in
 {
-  accounts = import ./accounts { inherit pkgs settings; };
   home = import ./home { inherit glpkgs pkgs settings secrets; };
   nix = import ./nix { inherit pkgs secrets; };
   programs = import ./programs { inherit pkgs settings; };
-  services = import ./services { inherit config settings; };
-  xdg = import ./xdg { inherit config pkgs settings; };
+
+  xdg.enable = true;
+  xdg.systemDirs.data = [ "${settings.dirs.home}/.nix-profile/share" ];
+
   xresources = import ./xresources { inherit settings; };
 
   fonts.fontconfig.enable = true;
+
+  imports = [
+    # ./modules/xmonad.nix
+    ./modules/browser.nix
+    ./modules/terminal.nix
+    ./modules/shell.nix
+    ./modules/editor
+    ./modules/vcs.nix
+    ./modules/security.nix
+    ./modules/ssh.nix
+    ./modules/mail
+  ];
 }

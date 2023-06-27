@@ -5,12 +5,8 @@
   homeDirectory = settings.dirs.home;
 
   packages = import ./packages { inherit pkgs glpkgs settings; };
-  file = import ./files { inherit pkgs settings; };
 
   sessionVariables = {
-    EDITOR = "vim";
-    SHELL = "fish";
-    SSH_AUTH_SOCK = settings.key.sshAuthSocket;
     OPENAI_API_KEY = secrets.chatGPT;
   };
 }

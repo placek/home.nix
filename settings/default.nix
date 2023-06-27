@@ -35,4 +35,12 @@
 
   # color scheme
   colors = import ./colors.nix;
+
+  # defaults
+  defaults = {
+    terminal = "kitty";
+    editor = "vim";
+    shell = "fish";
+    difftool = "vimdiff";
+  };
 }
