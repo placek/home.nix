@@ -3,7 +3,6 @@
   home-manager.enable = true;
 
   astroid = import ./astroid { inherit settings; };
-  ssh = import ./ssh;
 
   aria2.enable = true;
   broot.enable = true;

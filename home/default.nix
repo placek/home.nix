@@ -7,7 +7,6 @@
   packages = import ./packages { inherit pkgs glpkgs settings; };
 
   sessionVariables = {
-    SSH_AUTH_SOCK = settings.key.sshAuthSocket;
     OPENAI_API_KEY = secrets.chatGPT;
   };
 }
