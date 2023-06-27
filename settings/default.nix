@@ -41,5 +41,6 @@
     terminal = "kitty";
     editor = "vim";
     shell = "fish";
+    difftool = "vimdiff";
   };
 }

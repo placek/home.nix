@@ -22,5 +22,6 @@ in
     ./modules/terminal.nix
     ./modules/shell.nix
     ./modules/editor
+    ./modules/vcs.nix
   ];
 }
