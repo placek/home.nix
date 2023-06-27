@@ -5,7 +5,6 @@
   homeDirectory = settings.dirs.home;
 
   packages = import ./packages { inherit pkgs glpkgs settings; };
-  file = import ./files { inherit pkgs settings; };
 
   sessionVariables = {
     EDITOR = "vim";

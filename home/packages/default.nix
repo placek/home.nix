@@ -1,7 +1,6 @@
 { pkgs, glpkgs, settings, ... }:
 let
   git-ctags = import ./git-ctags.nix { inherit pkgs; };
-  qutebrowser-gl = import ./qutebrowser-gl.nix { inherit pkgs glpkgs; };
   custom-nerdfonts = import ./custom-nerdfonts.nix { inherit pkgs settings; };
   speak = import ./speak.nix { inherit pkgs; };
 in
@@ -10,7 +9,6 @@ with pkgs; [
 
   custom-nerdfonts
   git-ctags
-  qutebrowser-gl
   speak
 
   ubuntu_font_family google-fonts font-awesome
@@ -36,6 +34,5 @@ with pkgs; [
   unzip
   wget
   wl-clipboard
-  xprompt
   yq
 ]

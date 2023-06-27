@@ -9,7 +9,6 @@
   gpg = import ./gpg { inherit settings; };
   neovim = import ./neovim { inherit pkgs; };
   password-store = import ./password-store { inherit (pkgs) pass; inherit settings; };
-  qutebrowser = import ./qutebrowser { inherit pkgs settings; };
   ssh = import ./ssh;
 
   aria2 = { enable = true; };

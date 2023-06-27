@@ -7,12 +7,6 @@ in
 
   systemDirs.data = [ "${settings.dirs.home}/.nix-profile/share" ];
 
-  mimeApps.defaultApplications = {
-    "text/html" = [ "qutebrowser.desktop" ];
-    "x-scheme-handler/http" = [ "qutebrowser.desktop" ];
-    "x-scheme-handler/https" = [ "qutebrowser.desktop" ];
-  };
-
   configFile."mbsync/postExec" = {
     text = ''
       #!${pkgs.stdenv.shell}

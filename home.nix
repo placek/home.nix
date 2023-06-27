@@ -18,6 +18,7 @@ in
 
   imports = [
     # ./modules/xmonad.nix
+    ./modules/browser.nix
     ./modules/terminal.nix
   ];
 }
