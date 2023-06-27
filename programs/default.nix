@@ -3,7 +3,6 @@
   home-manager.enable = true;
 
   astroid = import ./astroid { inherit settings; };
-  fish = import ./fish { inherit (pkgs) fetchFromGitHub; inherit settings; };
   gh = import ./gh;
   git = import ./git { inherit settings; };
   gpg = import ./gpg { inherit settings; };
@@ -11,33 +10,21 @@
   password-store = import ./password-store { inherit (pkgs) pass; inherit settings; };
   ssh = import ./ssh;
 
-  aria2 = { enable = true; };
-  direnv = { enable = true; };
-  htop = { enable = true; };
-  jq = { enable = true; };
-  lsd = { enable = true; };
-  mbsync = { enable = true; };
-  msmtp = { enable = true; };
-  nnn = { enable = true; };
+  aria2.enable = true;
+  broot.enable = true;
+  direnv.enable = true;
+  fzf.enable = true;
+  htop.enable = true;
+  jq.enable = true;
+  lsd.enable = true;
+  mbsync.enable = true;
+  msmtp.enable = true;
+  nix-index.enable = true;
+  nnn.enable = true;
 
   bat = {
     enable = true;
     config.theme = "gruvbox-dark";
-  };
-
-  broot = {
-    enable = true;
-    enableFishIntegration = true;
-  };
-
-  fzf = {
-    enable = true;
-    enableFishIntegration = true;
-  };
-
-  nix-index = {
-    enable = true;
-    enableFishIntegration = true;
   };
 
   notmuch = {

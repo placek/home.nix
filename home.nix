@@ -20,5 +20,6 @@ in
     # ./modules/xmonad.nix
     ./modules/browser.nix
     ./modules/terminal.nix
+    ./modules/shell.nix
   ];
 }

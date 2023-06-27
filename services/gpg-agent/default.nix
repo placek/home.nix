@@ -2,7 +2,6 @@
 {
   enable = true;
   enableSshSupport = true;
-  enableFishIntegration = true;
   pinentryFlavor = "gnome3";
   enableScDaemon = true;
   defaultCacheTtl = 1800;

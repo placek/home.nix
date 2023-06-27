@@ -8,7 +8,6 @@
 
   sessionVariables = {
     EDITOR = "vim";
-    SHELL = "fish";
     SSH_AUTH_SOCK = settings.key.sshAuthSocket;
     OPENAI_API_KEY = secrets.chatGPT;
   };
