@@ -35,4 +35,12 @@
 
   # color scheme
   colors = import ./colors.nix;
+
+  # defaults
+  defaults = {
+    terminal = {
+      name = "kitty";
+      executable = "kitty-gl";
+    };
+  };
 }

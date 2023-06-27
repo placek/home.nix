@@ -2,12 +2,11 @@
 {
   home-manager.enable = true;
 
-  astroid = import ./astroid;
+  astroid = import ./astroid { inherit settings; };
   fish = import ./fish { inherit (pkgs) fetchFromGitHub; inherit settings; };
   gh = import ./gh;
   git = import ./git { inherit settings; };
   gpg = import ./gpg { inherit settings; };
-  kitty = import ./kitty;
   neovim = import ./neovim { inherit pkgs; };
   password-store = import ./password-store { inherit (pkgs) pass; inherit settings; };
   qutebrowser = import ./qutebrowser { inherit pkgs settings; };

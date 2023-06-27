@@ -26,15 +26,6 @@ in
   };
 
   desktopEntries = {
-    kitty = {
-      name = "Terminal";
-      genericName = "Terminal";
-      type = "Application";
-      exec = "kitty-gl";
-      terminal = false;
-      icon = "${papirusPath}/apps/terminal.svg";
-    };
-
     qtpass = {
       name = "QtPass";
       genericName = "QtPass";

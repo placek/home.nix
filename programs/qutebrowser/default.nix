@@ -1,6 +1,6 @@
 { pkgs, settings, ... }:
 let
-  term = "kitty";
+  term = settings.defaults.terminal.executable;
   editor = "vim";
   fileManager = "nnn";
   downloader = "aria2c";

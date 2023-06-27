@@ -10,7 +10,6 @@ in
     tree = "lsd --icon-theme unicode --tree --hyperlink auto";
     sshh = "TERM=xterm-256color ssh";
     cdt = "cd (mktemp -d)";
-    icat = "kitty +kitten icat";
   };
 
   shellAbbrs = {

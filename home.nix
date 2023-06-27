@@ -15,4 +15,9 @@ in
   xresources = import ./xresources { inherit settings; };
 
   fonts.fontconfig.enable = true;
+
+  imports = [
+    # ./modules/xmonad.nix
+    ./modules/terminal.nix
+  ];
 }

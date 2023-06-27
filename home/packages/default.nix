@@ -2,7 +2,6 @@
 let
   git-ctags = import ./git-ctags.nix { inherit pkgs; };
   qutebrowser-gl = import ./qutebrowser-gl.nix { inherit pkgs glpkgs; };
-  kitty-gl = import ./kitty-gl.nix { inherit pkgs glpkgs; };
   custom-nerdfonts = import ./custom-nerdfonts.nix { inherit pkgs settings; };
   speak = import ./speak.nix { inherit pkgs; };
 in
@@ -11,7 +10,6 @@ with pkgs; [
 
   custom-nerdfonts
   git-ctags
-  kitty-gl
   qutebrowser-gl
   speak
 
