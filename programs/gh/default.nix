@@ -1,8 +1,12 @@
+let
+  settings = import ../../settings;
+  inherit (settings.defaults) editor;
+in
 {
   enable = true;
   settings = {
     git_protocol = "ssh";
-    editor = "vim";
+    editor = editor;
     prompt = "enabled";
     aliases = {
       co = "pr checkout";

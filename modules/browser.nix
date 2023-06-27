@@ -2,8 +2,7 @@
 let
   sources = import ../home.lock.nix;
   settings = import ../settings;
-  term = settings.defaults.terminal.executable;
-  editor = "vim";
+  inherit (settings.defaults) terminal editor;
   fileManager = "nnn";
   downloader = "aria2c";
   ytdownloader = "youtube-dl";
@@ -109,9 +108,9 @@ in
       yt = "https://www.youtube.com/results?search_query={}";
     };
     keyBindings.normal = {
-      ";D" = "hint links spawn ${term} -e ${downloader} {hint-url} -d ${settings.dirs.downloads}";
-      ";m" = "hint links spawn ${term} -e ${ytdownloader} -x {hint-url} -o ${settings.dirs.downloads}/%(title)s.%(ext)s";
-      ";v" = "hint links spawn ${term} -e ${ytdownloader} {hint-url} -o ${settings.dirs.downloads}/%(title)s.%(ext)s";
+      ";D" = "hint links spawn ${terminal} -e ${downloader} {hint-url} -d ${settings.dirs.downloads}";
+      ";m" = "hint links spawn ${terminal} -e ${ytdownloader} -x {hint-url} -o ${settings.dirs.downloads}/%(title)s.%(ext)s";
+      ";v" = "hint links spawn ${terminal} -e ${ytdownloader} {hint-url} -o ${settings.dirs.downloads}/%(title)s.%(ext)s";
       "<Ctrl+w>" = "mode-enter passthrough";
       "I" = "hint inputs";
       ",s" = "open -t https://getpocket.com/edit?url={url}";
@@ -176,11 +175,11 @@ in
         };
       };
       downloads.location.directory = settings.dirs.downloads;
-      editor.command = [ term "-e" editor "-f" "{file}" "-c" "normal" "{line}G{column0}l" ];
+      editor.command = [ terminal "-e" editor "-f" "{file}" "-c" "normal" "{line}G{column0}l" ];
       fileselect = {
         handler = "external";
-        multiple_files.command = [ term "-e" fileManager "-p" "{}" ];
-        single_file.command = [ term "-e" fileManager "-p" "{}" ];
+        multiple_files.command = [ terminal "-e" fileManager "-p" "{}" ];
+        single_file.command = [ terminal "-e" fileManager "-p" "{}" ];
       };
       hints.border = "none";
       hints.radius = 4;

@@ -21,5 +21,6 @@ in
     ./modules/browser.nix
     ./modules/terminal.nix
     ./modules/shell.nix
+    ./modules/editor
   ];
 }

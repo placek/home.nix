@@ -1,6 +1,6 @@
 { settings, ... }:
 let
-  editor = "vim";
+  inherit (settings.defaults) editor;
 in
 {
   enable = true;

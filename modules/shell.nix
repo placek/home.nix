@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 let
-  editor = "vim";
+  settings = import ../settings;
+  inherit (settings.defaults) editor;
 in
 {
   home.sessionVariables.SHELL = "fish";

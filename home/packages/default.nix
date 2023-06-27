@@ -14,7 +14,6 @@ with pkgs; [
   ubuntu_font_family google-fonts font-awesome
 
   curl
-  fd
   file
   git-crypt
   imagemagick
@@ -25,11 +24,9 @@ with pkgs; [
   openssl
   openvpn
   qtpass
-  ripgrep
   rlwrap
   rnix-lsp
   sox
-  universal-ctags
   unrar
   unzip
   wget

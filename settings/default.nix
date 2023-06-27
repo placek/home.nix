@@ -38,9 +38,8 @@
 
   # defaults
   defaults = {
-    terminal = {
-      name = "kitty";
-      executable = "kitty-gl";
-    };
+    terminal = "kitty";
+    editor = "vim";
+    shell = "fish";
   };
 }

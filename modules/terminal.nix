@@ -2,8 +2,7 @@
 let
   sources = import ../home.lock.nix;
   settings = import ../settings;
-  shell = "fish";
-  editor = "vim";
+  inherit (settings.defaults) shell editor;
   hintsSettings = "--alphabet 'asdfghjkl' --hints-foreground-color black --hints-background-color yellow --hints-text-color blue";
 in
 {

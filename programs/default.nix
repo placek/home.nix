@@ -6,7 +6,6 @@
   gh = import ./gh;
   git = import ./git { inherit settings; };
   gpg = import ./gpg { inherit settings; };
-  neovim = import ./neovim { inherit pkgs; };
   password-store = import ./password-store { inherit (pkgs) pass; inherit settings; };
   ssh = import ./ssh;
 
