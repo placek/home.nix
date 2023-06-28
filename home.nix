@@ -55,12 +55,20 @@ in
     };
   };
 
+  # modules settings
+  editor = "vim";
+  difftool = "vimdiff";
+
+  vcs.email = settings.user.email;
+  vcs.login = settings.user.name;
+  vcs.signKey = settings.key.sign;
+
   imports = [
     ./modules/browser.nix
     ./modules/terminal.nix
     ./modules/shell.nix
     ./modules/editor
-    ./modules/vcs.nix
+    ./modules/vcs
     ./modules/security.nix
     ./modules/ssh.nix
     ./modules/mail
