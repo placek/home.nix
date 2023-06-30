@@ -63,8 +63,11 @@ in
   vcs.login = settings.user.name;
   vcs.signKey = settings.key.sign;
 
+  browser.downloadsDirectory = settings.dirs.downloads;
+  browser.theme = settings.colors;
+
   imports = [
-    ./modules/browser.nix
+    ./modules/browser
     ./modules/terminal.nix
     ./modules/shell.nix
     ./modules/editor
