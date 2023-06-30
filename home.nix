@@ -56,9 +56,6 @@ in
   };
 
   # modules settings
-  editor = "vim";
-  difftool = "vimdiff";
-
   vcs.email = settings.user.email;
   vcs.login = settings.user.name;
   vcs.signKey = settings.key.sign;
@@ -66,15 +63,19 @@ in
   browser.downloadsDirectory = settings.dirs.downloads;
   browser.theme = settings.colors;
 
+  terminal.theme = settings.colors;
+
+  ssh.authSocket = settings.key.sshAuthSocket;
+
   imports = [
     ./modules/browser
-    ./modules/terminal.nix
-    ./modules/shell.nix
+    ./modules/terminal
+    ./modules/shell
     ./modules/editor
     ./modules/vcs
     ./modules/security.nix
-    ./modules/ssh.nix
+    ./modules/ssh
     ./modules/mail
-    ./modules/utils.nix
+    ./modules/utils
   ];
 }

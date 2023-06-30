@@ -1,10 +1,20 @@
-{ config, lib, ... }:
+{ config
+, lib
+, ...
+}:
 let
   sources = import ../../home.lock.nix;
   inherit (sources) pkgs;
 in
 {
   options = with lib; {
+    vcsExec = mkOption {
+      type = types.str;
+      default = "${pkgs.git}/bin/git";
+      description = mdDoc "VCS executable.";
+      readOnly = true;
+    };
+
     vcs.name = mkOption {
       type = types.str;
       default = config.home.username;
@@ -36,20 +46,6 @@ in
       example = "${config.home.homeDirectory}/.gitattributes_global";
       description = mdDoc "A path to git attributes file.";
     };
-
-    editor = mkOption {
-      type = types.str;
-      default = "vim";
-      example = "vim";
-      description = mdDoc "Editor binary name.";
-    };
-
-    difftool = mkOption {
-      type = types.str;
-      default = "vimdiff";
-      example = "vimdiff";
-      description = mdDoc "Diff tool binary name.";
-    };
   };
 
   config = {
@@ -62,7 +58,7 @@ in
       enable = true;
       settings = {
         git_protocol = "ssh";
-        editor = config.editor;
+        editor = config.editorExec;
         prompt = "enabled";
         aliases.co = "pr checkout";
         aliases.pv = "pr view";
@@ -81,13 +77,13 @@ in
         apply.whitespace = "nowarn";
         commit.verbose = true;
         core.attributesfile = config.vcs.gitAttributesFilePath;
-        core.editor = config.editor;
+        core.editor = config.editorExec;
         core.whitespace = "fix,-indent-with-non-tab,trailing-space,cr-at-eol";
         difftool.prompt = false;
         difftool.trustExitCode = true;
         fetch.prune = true;
         github.user = config.vcs.login;
-        merge.tool = config.difftool;
+        merge.tool = config.difftoolExec;
         mergetool.conflictstyle = "diff3";
         mergetool.trustExitCode = true;
         pull.ff = "only";

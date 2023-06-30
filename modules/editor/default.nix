@@ -1,19 +1,41 @@
-{ config, pkgs, ... }:
+{ config
+, lib
+, pkgs
+, ...
+}:
 {
-  home.sessionVariables.EDITOR = "vim";
-  home.sessionVariables.OPENAI_API_KEY = (import ../../secrets).chatGPT;
+  options = with lib; {
+    editorExec = mkOption {
+      type = types.str;
+      default = "${config.programs.neovim.finalPackage}/bin/nvim";
+      description = mdDoc "Editor executable.";
+      readOnly = true;
+    };
 
-  home.packages = with pkgs; [
-    fd
-    ripgrep
-    universal-ctags
-  ];
+    difftoolExec = mkOption {
+      type = types.str;
+      default = "${config.programs.neovim.finalPackage}/bin/nvim";
+      description = mdDoc "Editor executable.";
+      readOnly = true;
+    };
+  };
 
-  programs.neovim = {
-    enable = true;
-    vimAlias = true;
-    vimdiffAlias = true;
-    plugins = import ./plugins { inherit pkgs; };
-    extraConfig = builtins.readFile ./vimrc;
+  config = {
+    home.sessionVariables.EDITOR = "vim";
+    home.sessionVariables.OPENAI_API_KEY = (import ../../secrets).chatGPT;
+
+    home.packages = with pkgs; [
+      fd
+      ripgrep
+      universal-ctags
+    ];
+
+    programs.neovim = {
+      enable = true;
+      vimAlias = true;
+      vimdiffAlias = true;
+      plugins = import ./plugins { inherit pkgs; };
+      extraConfig = builtins.readFile ./vimrc;
+    };
   };
 }

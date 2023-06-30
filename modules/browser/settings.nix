@@ -1,7 +1,7 @@
 { downloadsDirectory
-, terminal
-, editor
-, fileManager
+, terminalExec
+, editorExec
+, fileManagerExec
 , font
 , theme
 }:
@@ -11,45 +11,42 @@ let
 in
 {
   confirm_quit = [ "multiple-tabs" "downloads" ];
-  content = {
-    default_encoding = "utf-8";
-    tls.certificate_errors = "load-insecurely";
-    notifications.enabled = true;
-    media = {
-      audio_capture = true;
-      audio_video_capture = true;
-      video_capture = true;
-    };
-  };
+
+  content.default_encoding = "utf-8";
+  content.tls.certificate_errors = "load-insecurely";
+  content.notifications.enabled = true;
+  content.media.audio_capture = true;
+  content.media.audio_video_capture = true;
+  content.media.video_capture = true;
+
   downloads.location.directory = downloadsDirectory;
-  editor.command = [ terminal "-e" editor "-f" "{file}" "-c" "normal" "{line}G{column0}l" ];
-  fileselect = {
-    handler = "external";
-    multiple_files.command = [ terminal "-e" fileManager "-p" "{}" ];
-    single_file.command = [ terminal "-e" fileManager "-p" "{}" ];
-  };
+
+  editor.command = [ terminalExec "-e" editorExec "-f" "{file}" "-c" "normal" "{line}G{column0}l" ];
+
+  fileselect.handler = "external";
+  fileselect.multiple_files.command = [ terminalExec "-e" fileManagerExec "-p" "{}" ];
+  fileselect.single_file.command = [ terminalExec "-e" fileManagerExec "-p" "{}" ];
+
   hints.border = "none";
   hints.radius = 4;
-  tabs = {
-    favicons.show = "never";
-    indicator.width = 0;
-    last_close = "close";
-    mousewheel_switching = false;
-    show = "always";
-    title.format = "{index}{audio} | {current_title}";
-    tooltips = false;
-  };
+
+  tabs.favicons.show = "never";
+  tabs.indicator.width = 0;
+  tabs.last_close = "close";
+  tabs.mousewheel_switching = false;
+  tabs.show = "always";
+  tabs.title.format = "{index}{audio} | {current_title}";
+  tabs.tooltips = false;
+
   window.title_format = "{current_title}";
 
-  fonts = {
-    default_family = font.name;
-    default_size = fontSizePt;
-    completion.entry = fontSetting;
-    contextmenu = fontSetting;
-    debug_console = fontSetting;
-    prompts = fontSetting;
-    statusbar = fontSetting;
-  };
+  fonts.default_family = font.name;
+  fonts.default_size = fontSizePt;
+  fonts.completion.entry = fontSetting;
+  fonts.contextmenu = fontSetting;
+  fonts.debug_console = fontSetting;
+  fonts.prompts = fontSetting;
+  fonts.statusbar = fontSetting;
 
   colors = with theme; {
     completion.fg = base0F;
@@ -67,24 +64,29 @@ in
     completion.match.fg = base03;
     completion.scrollbar.fg = base0F;
     completion.scrollbar.bg = base00;
+
     contextmenu.disabled.bg = base00;
     contextmenu.disabled.fg = base08;
     contextmenu.menu.bg = base00;
     contextmenu.menu.fg = base0F;
     contextmenu.selected.bg = base0B;
     contextmenu.selected.fg = base00;
+
     downloads.bar.bg = base00;
     downloads.start.fg = base00;
     downloads.start.bg = base04;
     downloads.stop.fg = base00;
     downloads.stop.bg = base02;
     downloads.error.fg = base01;
+
     hints.fg = base00;
     hints.bg = base0B;
     hints.match.fg = base05;
+
     keyhint.fg = base07;
     keyhint.suffix.fg = base0F;
     keyhint.bg = base00;
+
     messages.error.fg = base00;
     messages.error.bg = base01;
     messages.error.border = base00;
@@ -94,11 +96,13 @@ in
     messages.info.fg = base00;
     messages.info.bg = base04;
     messages.info.border = base00;
+
     prompts.fg = base0F;
     prompts.border = base00;
     prompts.bg = base00;
     prompts.selected.fg = base00;
     prompts.selected.bg = base0B;
+
     statusbar.normal.fg = base0B;
     statusbar.normal.bg = base00;
     statusbar.insert.fg = base00;
@@ -122,6 +126,7 @@ in
     statusbar.url.success.http.fg = base0C;
     statusbar.url.success.https.fg = base0B;
     statusbar.url.warn.fg = base0E;
+
     tabs.bar.bg = base00;
     tabs.indicator.start = base0D;
     tabs.indicator.stop = base0C;

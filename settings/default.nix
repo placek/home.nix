@@ -20,7 +20,6 @@
   dirs = rec{
     home = "/home/placek";
     downloads = "${home}/Pobrane";
-    projects = "${home}/Projekty";
   };
 
   # font settings
@@ -35,12 +34,4 @@
 
   # color scheme
   colors = import ./colors.nix;
-
-  # defaults
-  defaults = {
-    terminal = "kitty";
-    editor = "vim";
-    shell = "fish";
-    difftool = "vimdiff";
-  };
 }
