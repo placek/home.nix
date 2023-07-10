@@ -22,44 +22,6 @@ in
         default = "${config.home.homeDirectory}/Downloads";
         description = mdDoc "A path to downloads directory.";
       };
-
-      theme = mkOption {
-        type = with types; submodule {
-          options = {
-            base00 = mkOption { type = str; };
-            base01 = mkOption { type = str; };
-            base02 = mkOption { type = str; };
-            base03 = mkOption { type = str; };
-            base04 = mkOption { type = str; };
-            base05 = mkOption { type = str; };
-            base06 = mkOption { type = str; };
-            base07 = mkOption { type = str; };
-            base08 = mkOption { type = str; };
-            base09 = mkOption { type = str; };
-            base0A = mkOption { type = str; };
-            base0B = mkOption { type = str; };
-            base0C = mkOption { type = str; };
-            base0D = mkOption { type = str; };
-            base0E = mkOption { type = str; };
-            base0F = mkOption { type = str; };
-          };
-        };
-        description = mdDoc "A color scheme.";
-      };
-
-      font.name = mkOption {
-        type = types.str;
-        default = "Iosevka Nerd Font";
-        example = "Iosevka Nerd Font";
-        description = mdDoc "A name of TTF font.";
-      };
-
-      font.size = mkOption {
-        type = types.int;
-        default = 12;
-        example = 12;
-        description = mdDoc "A font size.";
-      };
     };
   };
 
@@ -93,7 +55,7 @@ in
       quickmarks = import ./quickmarks.nix;
       extraConfig = builtins.readFile ./extraConfig;
       aliases = import ./aliases.nix;
-      settings = import ./settings.nix { inherit (config) terminalExec editorExec fileManagerExec; inherit (config.browser) downloadsDirectory font theme; };
+      settings = import ./settings.nix { inherit (config) terminalExec editorExec fileManagerExec; inherit (config.browser) downloadsDirectory; inherit (config.gui) theme font; };
     };
   };
 }

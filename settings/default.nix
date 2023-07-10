@@ -1,37 +1,42 @@
+{ config
+, lib
+, ...
+}:
+let
+  sources = import ../home.lock.nix;
+  theme = import ./theme.nix;
+in
 {
-  # user settings
-  user = {
-    fullName = "Paweł Placzyński";
-    email = "placzynski.pawel@gmail.com";
-    name = "placek";
-  };
+  config = {
+    home.stateVersion = "23.05";
+    home.username = "placek";
+    home.homeDirectory = "/home/placek";
 
-  # encription settings
-  key = {
-    sign = "1D95E554315BC053";
-    ssh = "D75BFE7D95CB0CB4B3FE0B64E624230BAE5B5299";
-    store = "/home/placek/.password-store";
-    pubKey = ./placek.asc;
-    # FIXME: the SSH_AUTH_SOCK should point to pinned data
-    sshAuthSocket = "/run/user/1000/gnupg/S.gpg-agent.ssh";
-  };
+    fonts.fontconfig.enable = true;
 
-  # directories
-  dirs = rec{
-    home = "/home/placek";
-    downloads = "${home}/Pobrane";
-  };
+    nix.package = sources.pkgs.nix;
+    nix.settings.system-features = [ "big-parallel" "kvm" "benchmark" ];
 
-  # font settings
-  font = {
-    name = "Iosevka";
-    fullName = "Iosevka Nerd Font";
-    size = rec {
-      int = 12;
-      pt = "${builtins.toString int}pt";
-    };
-  };
+    programs.home-manager.enable = true;
 
-  # color scheme
-  colors = import ./colors.nix;
+    xdg.enable = true;
+    xdg.systemDirs.data = [ "/home/placek/.nix-profile/share" ];
+
+    # modules settings
+    gui.theme = theme;
+    gui.font.name = "Iosevka Nerd Font";
+    gui.font.size = 12;
+
+    vcs.email = "placzynski.pawel@gmail.com";
+    vcs.login = "placek";
+    vcs.signKey = "1D95E554315BC053";
+
+    browser.downloadsDirectory = "/home/placek/Pobrane";
+
+    ssh.authSocket = "/run/user/1000/gnupg/S.gpg-agent.ssh"; # FIXME: the SSH_AUTH_SOCK should point to pinned data
+    ssh.secretKeyID = "D75BFE7D95CB0CB4B3FE0B64E624230BAE5B5299";
+    ssh.publicKey = ./placek.asc;
+
+    security.passwordStore = "/home/placek/.password-store";
+  };
 }
