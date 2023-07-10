@@ -1,4 +1,6 @@
-{ config, ... }:
+{ config
+, ...
+}:
 let
   sources = import ./home.lock.nix;
   settings = import ./settings;
@@ -67,13 +69,15 @@ in
 
   ssh.authSocket = settings.key.sshAuthSocket;
 
+  # modules
   imports = [
+    # TODO ./modules/gui
     ./modules/browser
     ./modules/terminal
     ./modules/shell
     ./modules/editor
     ./modules/vcs
-    ./modules/security.nix
+    ./modules/security.nix # TODO
     ./modules/ssh
     ./modules/mail
     ./modules/utils
