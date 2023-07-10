@@ -2,9 +2,12 @@
 , lib
 , ...
 }:
+let
+  sources = import ../../home.lock.nix;
+in
 {
-  options.gui = with lib; {
-    theme = mkOption {
+  options = with lib; {
+    gui.theme = mkOption {
       type = with types; submodule {
         options = {
           base00 = mkOption { type = str; };
@@ -28,20 +31,41 @@
       description = mdDoc "A color scheme.";
     };
 
-    font.name = mkOption {
+    gui.font.name = mkOption {
       type = types.str;
       example = "Iosevka Nerd Font";
       description = mdDoc "A name of TTF font.";
     };
 
-    font.size = mkOption {
+    gui.font.size = mkOption {
       type = types.int;
       example = 12;
       description = mdDoc "A font size.";
     };
+
+    menuExec = mkOption {
+      type = types.str;
+      default = "${sources.pkgs.xprompt}/bin/xprompt";
+      description = mdDoc "GUI menu executable.";
+      readOnly = true;
+    };
   };
 
   config = {
+    home.packages = with sources.pkgs; [
+      sources.glpkgs.nixGLIntel
+
+      (sources.pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; })
+
+      ubuntu_font_family
+      google-fonts
+      font-awesome
+
+      xf86_input_wacom
+      qtpass
+      wl-clipboard
+    ];
+
     xresources = {
       properties = with config.gui.theme; {
         "*foreground" = base0F;

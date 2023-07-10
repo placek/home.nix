@@ -1,40 +1,31 @@
 { config
 , lib
-, pkgs
 , ...
 }:
 let
   sources = import ../../home.lock.nix;
-  custom-nerdfonts = pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; };
-  speak = import ./speak.nix { inherit pkgs; };
+  speak = import ./speak.nix { inherit (sources) pkgs; };
 in
 {
   options = with lib; {
     fileManagerExec = mkOption {
       type = types.str;
-      default = "${pkgs.nnn}/bin/nnn";
+      default = "${sources.pkgs.nnn}/bin/nnn";
       description = mdDoc "File manager executable.";
       readOnly = true;
     };
 
     downloaderExec = mkOption {
       type = types.str;
-      default = "${pkgs.aria}/bin/aria2c";
+      default = "${sources.pkgs.aria}/bin/aria2c";
       description = mdDoc "Downloader executable.";
       readOnly = true;
     };
 
     ytDownloaderExec = mkOption {
       type = types.str;
-      default = "${pkgs.yt-dlp}/bin/yt-dlp";
+      default = "${sources.pkgs.yt-dlp}/bin/yt-dlp";
       description = mdDoc "YouTube downloader executable.";
-      readOnly = true;
-    };
-
-    menuExec = mkOption {
-      type = types.str;
-      default = "${pkgs.xprompt}/bin/xprompt";
-      description = mdDoc "GUI menu executable.";
       readOnly = true;
     };
   };
@@ -54,33 +45,23 @@ in
       config.theme = "gruvbox-dark";
     };
 
-    home.packages = with pkgs; [
-      sources.glpkgs.nixGLIntel
-
-      custom-nerdfonts
+    home.packages = with sources.pkgs; [
       speak
-
-      ubuntu_font_family
-      google-fonts
-      font-awesome
 
       curl
       file
       imagemagick
       killall
       libinput
-      xf86_input_wacom
       mdcat
       openssl
       openvpn
-      qtpass
       rlwrap
       rnix-lsp
       sox
       unrar
       unzip
       wget
-      wl-clipboard
       yq
     ];
   };
