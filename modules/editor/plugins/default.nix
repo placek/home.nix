@@ -27,6 +27,7 @@ with pkgs.vimPlugins; [
   telescope-nvim
   todo-comments-nvim
   undotree
+  vim-abolish
   vim-css-color
   vim-expand-region
   vim-fish
