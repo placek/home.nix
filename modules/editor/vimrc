@@ -90,7 +90,9 @@ nnoremap <leader><right> <c-w><right>
 nnoremap <leader>1 :set relativenumber!<CR>
 nnoremap <leader>2 :call MakeFolds()<CR>
 nnoremap <leader>3 :set spell!<CR>
-nnoremap <leader>' :make %:t:r<CR>
+nnoremap <leader>" :make %:t:r<CR>
+nnoremap <leader>' :make %<CR>
+nnoremap <leader>y :let @+ = expand("%")<CR>
 
 nmap <silent>      [a :previous<CR>
 nmap <silent>      ]a :next<CR>
@@ -155,22 +157,30 @@ hi FloatBorder                          ctermbg=0
 hi Pmenu                                ctermbg=0   ctermfg=7
 hi PmenuSbar                            ctermbg=0   ctermfg=7
 hi PmenuSel                             ctermbg=4   ctermfg=0  cterm=bold
-hi Search                                                      cterm=bold
+hi Search                               ctermbg=3   ctermfg=0  cterm=none
 hi SignColumn                           ctermbg=0
 hi TabLine                              ctermbg=8   ctermfg=7  cterm=bold
 hi TabLineFill                          ctermbg=0   ctermfg=0
 hi TabLineSel                           ctermbg=7   ctermfg=0  cterm=bold
 hi VertSplit                            ctermbg=8   ctermfg=8
 hi Visual                               ctermbg=7   ctermfg=0
-hi TelescopeSelection                   ctermbg=4   ctermfg=0  cterm=bold
+hi TelescopeSelection                   ctermbg=8   ctermfg=15 cterm=bold
 hi TelescopeMatch                                              cterm=bold,underline
+hi String                               ctermfg=3
+hi Boolean                              ctermfg=13             cterm=bold
 
 " autocommands
-autocmd! BufWritePost *        :silent! MakeTags
-autocmd! BufWritePre  *        :%s/\s\+$//e
-autocmd! FileType     ansible  setlocal syntax=yaml
+autocmd! BufWritePost *         :silent! MakeTags
+autocmd! BufWritePre  *         :%s/\s\+$//e
+autocmd! FileType     ansible   setlocal syntax=yaml
+autocmd! BufEnter     *_spec.rb setlocal makeprg=rspec
+autocmd! BufEnter     *.rb      setlocal formatprg="bundle exec rubocop -A -fq --stderr --stdin %"
 
 " undo sequence for space, dot and newline
 inoremap <space> <C-G>u<space>
 inoremap . <C-G>u.
 inoremap <cr> <C-G>u<cr>
+
+" <C-p> like paste, but not change register
+vnoremap <C-p> "pdp
+vnoremap <C-P> "pdP
