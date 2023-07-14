@@ -1,53 +1,49 @@
 { pkgs, ... }:
 let
-  runLua = script: ''
-    lua << EOF
-    ${script}
-    EOF
-  '';
+  luaFile = path: "luafile ${pkgs.writeText (builtins.baseNameOf path) (builtins.readFile path)}";
 in
 with pkgs.vimPlugins; [
-  cmp-buffer
-  cmp-nvim-lsp
-  cmp-path
-  cmp-tabnine
-  cmp_luasnip
-  direnv-vim
-  dressing-nvim
-  friendly-snippets
-  harpoon
-  haskell-vim
-  luasnip
-  nvim-dap
-  nvim-lint
-  nvim-treesitter
-  tabular
-  targets-vim
-  telescope-fzy-native-nvim
-  telescope-nvim
-  todo-comments-nvim
-  undotree
-  vim-abolish
-  vim-css-color
-  vim-expand-region
-  vim-fish
-  vim-jinja
-  vim-nix
-  vim-polyglot
-  vim-rails
-  vim-ruby
-  vim-signature
-  vim-surround
+  { plugin = cmp-buffer; }
+  { plugin = cmp-nvim-lsp; }
+  { plugin = cmp-path; }
+  { plugin = cmp-tabnine; }
+  { plugin = cmp_luasnip; }
+  { plugin = direnv-vim; }
+  { plugin = dressing-nvim; }
+  { plugin = friendly-snippets; }
+  { plugin = harpoon; }
+  { plugin = haskell-vim; }
+  { plugin = luasnip; }
+  { plugin = nvim-dap; }
+  { plugin = nvim-lint; }
+  { plugin = nvim-treesitter; }
+  { plugin = tabular; }
+  { plugin = targets-vim; }
+  { plugin = telescope-fzy-native-nvim; }
+  { plugin = telescope-nvim; }
+  { plugin = todo-comments-nvim; }
+  { plugin = undotree; }
+  { plugin = vim-abolish; }
+  { plugin = vim-css-color; }
+  { plugin = vim-expand-region; }
+  { plugin = vim-fish; }
+  { plugin = vim-jinja; }
+  { plugin = vim-nix; }
+  { plugin = vim-polyglot; }
+  { plugin = vim-rails; }
+  { plugin = vim-ruby; }
+  { plugin = vim-signature; }
+  { plugin = vim-surround; }
 
-  (import ./aerial.nix { inherit (pkgs) vimPlugins; inherit runLua; })
-  (import ./cmp.nix { inherit (pkgs) vimPlugins; inherit runLua; })
-  (import ./comment.nix { inherit (pkgs) vimPlugins; inherit runLua; })
-  (import ./fidget.nix { inherit (pkgs) vimPlugins; inherit runLua; })
-  (import ./fugitive.nix { inherit (pkgs) vimPlugins; inherit runLua; })
-  (import ./gitsigns.nix { inherit (pkgs) vimPlugins; inherit runLua; })
-  (import ./lspconfig.nix { inherit (pkgs) vimPlugins; inherit runLua; })
-  (import ./lualine.nix { inherit (pkgs) vimPlugins; inherit runLua; })
-  (import ./telescope-file-browser.nix { inherit (pkgs) vimPlugins; inherit runLua; })
-  (import ./which-key.nix { inherit (pkgs) vimPlugins; inherit runLua; })
-  (import ./chat-gpt.nix { inherit (pkgs) vimPlugins; inherit runLua; })
+  { plugin = ChatGPT-nvim; config = luaFile ./chat-gpt.lua; }
+  { plugin = aerial-nvim; config = luaFile ./aerial.lua; }
+  { plugin = comment-nvim; config = luaFile ./comment.lua; }
+  { plugin = fidget-nvim; config = luaFile ./fidget.lua; }
+  { plugin = gitsigns-nvim; config = luaFile ./gitsigns.lua; }
+  { plugin = lualine-nvim; config = luaFile ./lualine.lua; }
+  { plugin = nvim-cmp; config = luaFile ./cmp.lua; }
+  { plugin = nvim-lspconfig; config = luaFile ./lspconfig.lua; }
+  { plugin = telescope-file-browser-nvim; config = luaFile ./telescope-file-browser.lua; }
+  { plugin = vim-fugitive; config = luaFile ./fugitive.lua; }
+  { plugin = which-key-nvim; config = luaFile ./which-key.lua; }
 ]
