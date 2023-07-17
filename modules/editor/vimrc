@@ -27,6 +27,14 @@ function! MakeTagsResult(job, status, event)
   endif
 endfunction
 
+function! ToggleLocList()
+  if empty(filter(getwininfo(), 'v:val.loclist'))
+    lopen
+  else
+    lclose
+  endif
+endfunction
+
 " settings
 set autowrite
 set backspace=indent,eol,start
@@ -91,9 +99,9 @@ nnoremap <leader><right> <c-w><right>
 nnoremap <leader>1 :set relativenumber!<CR>
 nnoremap <leader>2 :call MakeFolds()<CR>
 nnoremap <leader>3 :set spell!<CR>
-nnoremap <leader>" :make %:t:r<CR>
-nnoremap <leader>' :make %<CR>
-nnoremap <leader>y :let @+ = expand("%")<CR>
+nnoremap <leader>" :lmake %:t:r<CR>
+nnoremap <leader>' :lmake %<CR>
+nnoremap <silent><leader>l :call ToggleLocList()<cr>
 
 nmap <silent>      [a :previous<CR>
 nmap <silent>      ]a :next<CR>
