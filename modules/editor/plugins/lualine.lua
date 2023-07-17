@@ -7,23 +7,12 @@ require("lualine").setup {
     always_divide_middle = true,
   },
   sections = {
-    lualine_a = { { 'mode', fmt = function(str) return str:sub(1,1) end } },
+    lualine_a = {
+      { 'mode',
+        fmt = function(str) return string.sub(str, 1, 1) end },
+      },
     lualine_b = {
-      "branch",
       "diff",
-      { "diagnostics",
-        sources = { "nvim_lsp" },
-        sections = { "error", "warn", "info", "hint" },
-        symbols = {
-          error = " ",
-          warn  = " ",
-          info  = " ",
-          hint  = " "
-        },
-        update_in_insert = false,
-        always_visible = false,
-        colored = true,
-      }
     },
     lualine_c = {
       { "filename",
@@ -34,12 +23,35 @@ require("lualine").setup {
           modified = " +",
           readonly = " -",
           unnamed = "¯\\_(ツ)_/¯",
-        }
-      }
+        },
+      },
     },
-    lualine_x = {"encoding", { "fileformat", symbols = { unix = "unix", dos = "dos", mac = "mac" } } },
-    lualine_y = {"filetype"},
-    lualine_z = {"progress", "location"}
+    lualine_x = {
+      "encoding",
+      { "fileformat",
+        symbols = { unix = "unix", dos = "dos", mac = "mac" },
+      },
+    },
+    lualine_y = {
+      { "diagnostics",
+        sources = { "nvim_lsp" },
+        sections = { "error", "warn", "info", "hint" },
+        symbols = {
+          error = " ",
+          warn  = " ",
+          info  = " ",
+          hint  = " ",
+        },
+        update_in_insert = false,
+        always_visible = false,
+        colored = true,
+      },
+      "filetype",
+    },
+    lualine_z = {
+      "progress",
+      "location",
+    },
   },
   inactive_sections = {
     lualine_a = {},
@@ -47,8 +59,8 @@ require("lualine").setup {
     lualine_c = {"filename"},
     lualine_x = {"location"},
     lualine_y = {},
-    lualine_z = {}
+    lualine_z = {},
   },
   tabline = {},
-  extensions = {"quickfix"}
+  extensions = { "quickfix" },
 }
