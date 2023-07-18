@@ -50,6 +50,7 @@ in
 
       curl
       file
+      go-jira
       imagemagick
       killall
       libinput
