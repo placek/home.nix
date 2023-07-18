@@ -81,16 +81,16 @@ wk.register({
 }, { mode = "n" })
 
 wk.register({
-    ["<leader>a"]               = { name = "Tabularize" },
-    ["<leader>a="]              = { "<cmd>Tab /^[^=]*\\zs=/l1c1l0<cr>",                                   "Align to '=' symbol" },
-    ["<leader>a<bar>"]          = { "<cmd>Tab /|<cr>",                                                    "Align markdown table" },
-    ["<leader>a:"]              = { "<cmd>Tab /^[^:]*\\zs:/l1c0l0<cr>",                                   "Align to first symbol" },
-    ["<leader>as"]              = { "<cmd>Tab /::<cr>",                                                   "Align to '::'" },
-    ["<leader>a;"]              = { "<cmd>Tab /^[^:]*:\zs/l1l0<cr>",                                      "Align to key in hash" },
-    ["<leader>at"]              = { ":Tabularize /",                                                      "Custom alignment", silent = false },
+  ["<leader>a"]               = { name = "Tabularize" },
+  ["<leader>a="]              = { "<cmd>Tab /^[^=]*\\zs=/l1c1l0<cr>",                                     "Align to '=' symbol" },
+  ["<leader>a<bar>"]          = { "<cmd>Tab /|<cr>",                                                      "Align markdown table" },
+  ["<leader>a:"]              = { "<cmd>Tab /^[^:]*\\zs:/l1c0l0<cr>",                                     "Align to first symbol" },
+  ["<leader>as"]              = { "<cmd>Tab /::<cr>",                                                     "Align to '::'" },
+  ["<leader>a;"]              = { "<cmd>Tab /^[^:]*:\zs/l1l0<cr>",                                        "Align to key in hash" },
+  ["<leader>at"]              = { ":Tabularize /",                                                        "Custom alignment", silent = false },
 
-    ["<leader>f"]               = { "\"sy:Telescope grep_string<cr><C-r>s",                               "Search for phrase in project" },
-    ["<leader>\\"]              = { "\"sy:Telescope git_files<cr><C-r>s",                                 "Search for phrase in git repo file names" },
-    ["<leader>t"]               = { "\"sy:Telescope tags<cr><C-r>s",                                      "Search for tag symbol in project" },
-    ["<leader>gG"]              = { "\"sy:G log -p -G <C-r>s<cr>",                                        "Pickaxe (fugitive)" }
+  ["<leader>f"]               = { "\"sy:Telescope grep_string<cr><C-r>s",                                 "Search for phrase in project" },
+  ["<leader>\\"]              = { "\"sy:Telescope git_files<cr><C-r>s",                                   "Search for phrase in git repo file names" },
+  ["<leader>t"]               = { "\"sy:Telescope tags<cr><C-r>s",                                        "Search for tag symbol in project" },
+  ["<leader>gG"]              = { "\"sy:G log -p -G <C-r>s<cr>",                                          "Pickaxe (fugitive)" }
 }, { mode = "v" })
