@@ -27,6 +27,14 @@ function! MakeTagsResult(job, status, event)
   endif
 endfunction
 
+function! ToggleQuickFix()
+  if empty(filter(getwininfo(), 'v:val.quickfix'))
+    copen
+  else
+    cclose
+  endif
+endfunction
+
 function! ToggleLocList()
   if empty(filter(getwininfo(), 'v:val.loclist'))
     lopen
@@ -101,7 +109,8 @@ nnoremap <leader>2 :call MakeFolds()<CR>
 nnoremap <leader>3 :set spell!<CR>
 nnoremap <leader>" :lmake %:t:r<CR>
 nnoremap <leader>' :lmake %<CR>
-nnoremap <silent><leader>l :call ToggleLocList()<cr>
+nnoremap <silent><leader>q :call ToggleQuickFix()<cr>
+nnoremap <silent><leader>Q :call ToggleLocList()<cr>
 
 nmap <silent>      [a :previous<CR>
 nmap <silent>      ]a :next<CR>

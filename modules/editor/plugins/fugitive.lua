@@ -31,3 +31,11 @@ open_on_other_branch = function()
     end
   end)
 end
+
+git_pickaxe = function()
+  vim.ui.input({ prompt = 'Git pickaxe: ', completion = "-complete=tag" }, function(input)
+    if input then
+      vim.cmd(":G log -p -G " .. input)
+    end
+  end)
+end

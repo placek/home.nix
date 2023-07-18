@@ -1,49 +1,20 @@
 local wk = require("which-key")
 local cth = require("telescope.themes").get_cursor()
 
-function git_commits()
-  require("telescope.builtin").git_commits({
-    attach_mappings = function(_, map)
-      map("i", "<c-f>", function(_)
-        local commit = require("telescope.actions.state").get_selected_entry().value
-        local files = vim.split(vim.api.nvim_exec("G diff-tree --no-commit-id --name-only " .. commit .. " -r", true), '\n')
-        require("telescope.pickers").new({}, {
-          prompt_title = commit .. " commit files",
-          finder = require("telescope.finders").new_table({ results = files }),
-          sorter = require("telescope.config").values.generic_sorter(),
-          previewer = require("telescope.previewers").new_buffer_previewer {
-            define_preview = function(self, entry, status)
-              -- Execute another command using the highlighted entry
-              return require('telescope.previewers.utils').job_maker(
-                { "cat", entry.value },
-                self.state.bufnr,
-                {
-                  callback = function(bufnr, content)
-                    if content ~= nil then
-                      require('telescope.previewers.utils').regex_highlighter(bufnr)
-                    end
-                  end,
-                }
-              )
-            end
-          },
-        }):find()
-      end)
-      map("i", "<cr>", function(_)
-        local commit = require("telescope.actions.state").get_selected_entry().value
-        vim.api.nvim_exec("G show " .. commit, true)
-      end)
-      return true
-    end
-  })
-end
-
 wk.register({
   ["<leader>/"]               = { "<cmd>lua require('telescope').extensions.file_browser.file_browser({ path = '%:p:h', grouped = true, hidden = true, respect_gitignore = true, display_stat = { date = true }})<cr>", "Browse files" },
   ["<leader><esc>"]           = { "<cmd>lua require('telescope.builtin').resume()<cr>",                   "Last search" },
   ["<leader><space>"]         = { "<cmd>lua require('telescope.builtin').builtin()<cr>",                  "Other search options" },
   ["<leader>\\"]              = { "<cmd>lua require('telescope.builtin').git_files({hidden=true})<cr>",   "Search git files only" },
   ["<leader>b"]               = { "<cmd>lua require('telescope.builtin').buffers()<cr>",                  "Search buffers" },
+  ["<leader>t"]               = { "<cmd>lua require('telescope.builtin').tags()<cr>",                     "Search tags" },
+  ["<leader>u"]               = { "<cmd>UndotreeToggle<cr>",                                              "Undo tree" },
+  ["<leader>f"]               = { "<cmd>lua require('telescope.builtin').live_grep()<cr>",                "Grep files" },
+  ["<leader>F"]               = { "<cmd>lua require('telescope.builtin').find_files()<cr>",               "Search files" },
+  ["<leader>H"]               = { "<cmd>lua require('telescope.builtin').jumplist()<cr>",                 "Search history" },
+  ["<leader>m"]               = { "<cmd>lua require('telescope.builtin').marks()<cr>",                    "Search marks" },
+  ["<leader>r"]               = { "<cmd>lua require('telescope.builtin').registers()<cr>",                "Search registers" },
+
   ["<leader>c"]               = { name = "ChatGPT" },
   ["<leader>cc"]              = { "<cmd>ChatGPT<cr>",                                                     "Ask anything" },
   ["<leader>ca"]              = { "<cmd>ChatGPTActAs<cr>",                                                "Act as…" },
@@ -51,9 +22,7 @@ wk.register({
   ["<leader>cf"]              = { "<cmd>ChatGPTRu fix_bugs<cr>",                                          "Fix bugs" },
   ["<leader>co"]              = { "<cmd>ChatGPTRu optimize_code<cr>",                                     "Optimize code" },
   ["<leader>cd"]              = { "<cmd>ChatGPTRu docstring<cr>",                                         "Docstring" },
-  ["<leader>F"]               = { "<cmd>lua require('telescope.builtin').find_files()<cr>",               "Search files" },
-  ["<leader>f"]               = { "<cmd>lua require('telescope.builtin').live_grep()<cr>",                "Grep files" },
-  ["<leader>H"]               = { "<cmd>lua require('telescope.builtin').jumplist()<cr>",                 "Search history" },
+
   ["<leader>h"]               = { name = "Git hunk" },
   ["<leader>hp"]              = { "<cmd>lua require('gitsigns').preview_hunk()<cr>",                      "Preview" },
   ["<leader>hr"]              = { "<cmd>lua require('gitsigns').reset_hunk()<cr>",                        "Reset" },
@@ -61,29 +30,28 @@ wk.register({
   ["<leader>hs"]              = { "<cmd>lua require('gitsigns').stage_hunk()<cr>",                        "Stage" },
   ["<leader>hS"]              = { "<cmd>lua require('gitsigns').stage_buffer()<cr>",                      "Stage buffer" },
   ["<leader>hu"]              = { "<cmd>lua require('gitsigns').undo_stage_hunk()<cr>",                   "Undo stage" },
-  ["<leader>m"]               = { "<cmd>lua require('telescope.builtin').marks()<cr>",                    "Search marks" },
-  ["<leader>r"]               = { "<cmd>lua require('telescope.builtin').registers()<cr>",                "Search registers" },
-  ["<leader>t"]               = { "<cmd>lua require('telescope.builtin').tags()<cr>",                     "Search tags" },
-  ["<leader>u"]               = { "<cmd>UndotreeToggle<cr>",                                              "Undo tree" },
+
   ["<leader>g"]               = { name = "Git" },
   ["<leader>gB"]              = { "<cmd>Git blame<cr>",                                                   "Blame" },
   ["<leader>gb"]              = { "<cmd>lua require('telescope.builtin').git_branches()<cr>",             "Branches" },
   ["<leader>gd"]              = { "<cmd>lua require('gitsigns').diffthis()<cr>",                          "Diff this" },
-  ["<leader>gc"]              = { "<cmd>Git commit<cr>",                                                  "Commit" },
-  ["<leader>gC"]              = { "<cmd>lua open_on_other_branch()<cr>",                                  "Open on other branch" },
-  ["<leader>gg"]              = { "<cmd>lua toggle_fugitive()<cr>",                                       "Git status" },
+  ["<leader>gc"]              = { "<cmd>lua open_on_other_branch()<cr>",                                  "Open from other branch" },
+  ["<leader>gg"]              = { "<cmd>lua toggle_fugitive()<cr>",                                       "Status (fugitive)" },
+  ["<leader>gG"]              = { "<cmd>lua git_pickaxe()<cr>",                                           "Pickaxe (fugitive)" },
+  ["<leader>gl"]              = { "<cmd>lua better_git_commits()<cr>",                                    "Commits" },
+  ["<leader>g<M-l>"]          = { "<cmd>GcLog<cr>",                                                       "Commits (fugitive)" },
   ["<leader>gL"]              = { "<cmd>lua require('telescope.builtin').git_bcommits()<cr>",             "Commits for buffer" },
-  ["<leader>gl"]              = { "<cmd>lua git_commits()<cr>",                                           "Commits" },
+  ["<leader>g<M-L>"]          = { "<cmd>0GlLog<cr>",                                                      "Commits for buffer (fugitive)" },
   ["<leader>gp"]              = { "<cmd>G pull<cr>",                                                      "Pull" },
+  ["<leader>g<M-p>"]          = { "<cmd>G pull -f<cr>",                                                   "Force pull" },
   ["<leader>gP"]              = { "<cmd>G push<cr>",                                                      "Push" },
-  ["<leader>gf"]              = { "<cmd>G pull -f<cr>",                                                   "Force pull" },
-  ["<leader>gF"]              = { "<cmd>G push -f<cr>",                                                   "Force push" },
-  ["<leader>ga"]              = { "<cmd>G commit --amend<cr>",                                            "Amend with new message" },
-  ["<leader>gA"]              = { "<cmd>G amend<cr>",                                                     "Amend" },
-  ["<leader>gQ"]              = { "<cmd>lua require('gitsigns').setloclist()<cr>",                        "Local list" },
+  ["<leader>g<M-P>"]          = { "<cmd>G push -f<cr>",                                                   "Force push" },
+  ["<leader>gf"]              = { "<cmd>G fetch",                                                         "Fetch" },
   ["<leader>gq"]              = { "<cmd>lua require('gitsigns').setqflist()<cr>",                         "Quickfix list" },
-  ["<leader>gS"]              = { "<cmd>lua require('telescope.builtin').git_stash()<cr>",                "Stash" },
+  ["<leader>gQ"]              = { "<cmd>lua require('gitsigns').setloclist()<cr>",                        "Local list" },
   ["<leader>gs"]              = { "<cmd>lua require('telescope.builtin').git_status()<cr>",               "Status" },
+  ["<leader>gS"]              = { "<cmd>lua require('telescope.builtin').git_stash()<cr>",                "Stash" },
+
   ["<localleader>,"]          = { "<cmd>lua vim.lsp.buf.hover()<cr>",                                     "Show documentation" },
   ["<localleader>."]          = { "<cmd>lua vim.diagnostic.open_float({ border = 'rounded' })<cr>",       "Show diagnostic" },
   ["<localleader>a"]          = { "<cmd>lua vim.lsp.buf.code_action()<cr>",                               "Code actions" },
@@ -97,9 +65,9 @@ wk.register({
   ["<localleader>s"]          = { "<cmd>AerialToggle<cr>",                                                "Symbols outline" },
   ["<localleader>S"]          = { "<cmd>lua require('telescope.builtin').lsp_workspace_symbols()<cr>",    "Workspace symbols" },
   ["<localleader>I"]          = { "<cmd>LspInfo<cr>",                                                     "LSP info" },
-  ["<localleader>H"]          = { "<cmd>LspStart hls<cr>",                                                "LSP start HLS" },
   ["<localleader><space>"]    = { "<cmd>AV<cr>",                                                          "Alternative file (vertical)" },
-  ["<localleader><C-space>"]  = { "<cmd>A<cr>",                                                           "Alternative file" },
+  ["<localleader><M-space>"]  = { "<cmd>A<cr>",                                                           "Alternative file" },
+
   ["<space>"]                 = { name = "Harpoon" },
   ["<space><space>"]          = { "<cmd>Telescope harpoon marks<cr>",                                     "List" },
   ["<space><cr>"]             = { "<cmd>lua require('harpoon.mark').toggle_file()<cr>",                   "Add or reomove file" },
@@ -111,15 +79,18 @@ wk.register({
   ["<space>r"]                = { "<cmd>lua require('harpoon.ui').nav_file(4)<cr>",                       "File 4" },
   ["<space>t"]                = { "<cmd>lua require('harpoon.ui').nav_file(5)<cr>",                       "File 5" }
 }, { mode = "n" })
+
 wk.register({
-  ["<leader>a"]               = { name = "Tabularize" },
-  ["<leader>a="]              = { "<cmd>Tab /^[^=]*\\zs=/l1c1l0<cr>",                                     "Align to '=' symbol" },
-  ["<leader>a<bar>"]          = { "<cmd>Tab /|<cr>",                                                      "Align markdown table" },
-  ["<leader>a:"]              = { "<cmd>Tab /^[^:]*\\zs:/l1c0l0<cr>",                                     "Align to first symbol" },
-  ["<leader>as"]              = { "<cmd>Tab /::<cr>",                                                     "Align to '::'" },
-  ["<leader>a;"]              = { "<cmd>Tab /^[^:]*:\zs/l1l0<cr>",                                        "Align to key in hash" },
-  ["<leader>at"]              = { ":Tabularize /",                                                        "Custom alignment", silent = false },
-  ["<leader>f"]               = { "\"sy:Telescope grep_string<cr><super-v>",                              "Search for phrase in project" },
-  ["<leader>\\"]              = { "\"sy:Telescope git_files<cr><super-v>",                                "Search for phrase in git repo file names" },
-  ["<leader>t"]               = { "\"sy:Telescope tags<cr><super-v>",                                     "Search for tag symbol in project" }
+    ["<leader>a"]               = { name = "Tabularize" },
+    ["<leader>a="]              = { "<cmd>Tab /^[^=]*\\zs=/l1c1l0<cr>",                                   "Align to '=' symbol" },
+    ["<leader>a<bar>"]          = { "<cmd>Tab /|<cr>",                                                    "Align markdown table" },
+    ["<leader>a:"]              = { "<cmd>Tab /^[^:]*\\zs:/l1c0l0<cr>",                                   "Align to first symbol" },
+    ["<leader>as"]              = { "<cmd>Tab /::<cr>",                                                   "Align to '::'" },
+    ["<leader>a;"]              = { "<cmd>Tab /^[^:]*:\zs/l1l0<cr>",                                      "Align to key in hash" },
+    ["<leader>at"]              = { ":Tabularize /",                                                      "Custom alignment", silent = false },
+
+    ["<leader>f"]               = { "\"sy:Telescope grep_string<cr><C-r>s",                               "Search for phrase in project" },
+    ["<leader>\\"]              = { "\"sy:Telescope git_files<cr><C-r>s",                                 "Search for phrase in git repo file names" },
+    ["<leader>t"]               = { "\"sy:Telescope tags<cr><C-r>s",                                      "Search for tag symbol in project" },
+    ["<leader>gG"]              = { "\"sy:G log -p -G <C-r>s<cr>",                                        "Pickaxe (fugitive)" }
 }, { mode = "v" })
