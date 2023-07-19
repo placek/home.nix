@@ -6,6 +6,7 @@
   d = "https://hub.docker.com/search?q={}&type=image";
   duck = "https://duckduckgo.com/?q={}";
   h = "https://hoogle.haskell.org/?hoogle={}";
+  hm = "https://mipmip.github.io/home-manager-option-search/?query={}";
   m = "http://maps.google.com/maps?q={}";
   nm = "https://nixos.org/manual/nix/stable/introduction.html?search={}";
   np = "https://search.nixos.org/packages?query={}";

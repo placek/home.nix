@@ -13,6 +13,8 @@
     "<Ctrl+w>" = "mode-enter passthrough";
     "I" = "hint inputs";
     ",s" = "open -t https://getpocket.com/edit?url={url}";
+    ",re" = "spawn speak -len {primary}";
+    ",rp" = "spawn speak -lpl {primary}";
     ",pp" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --username-target secret --username-pattern \"user: (.+)\"";
     ",pP" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --password-only";
     ",pL" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --username-only --username-pattern \"user: (.+)\"";
