@@ -5,6 +5,7 @@
 let
   sources = import ../../home.lock.nix;
   speak = import ./speak.nix { inherit (sources) pkgs; };
+  summarize = import ./summarize.nix { inherit (sources) pkgs; };
 in
 {
   options = with lib; {
@@ -31,6 +32,8 @@ in
   };
 
   config = {
+    home.sessionVariables.EDENAI_API_KEY = (import ../../secrets).edenAI;
+
     programs.aria2.enable = true;
     programs.direnv.enable = true;
     programs.fzf.enable = true;
@@ -47,6 +50,7 @@ in
 
     home.packages = with sources.pkgs; [
       speak
+      summarize
 
       curl
       file
