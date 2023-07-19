@@ -43,6 +43,8 @@ in
       description = mdDoc "A font size.";
     };
 
+    gui.enableGL = mkEnableOption "Enable GL engine support for some wayland applications.";
+
     menuExec = mkOption {
       type = types.str;
       default = "${sources.pkgs.xprompt}/bin/xprompt";

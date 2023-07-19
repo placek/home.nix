@@ -6,13 +6,20 @@ let
   sources = import ../../home.lock.nix;
   inherit (sources) pkgs glpkgs;
   qutebrowser-gl = import ./qutebrowser-gl.nix { inherit pkgs glpkgs; };
+  mkIfElse = p: yes: no: lib.mkMerge [
+    (lib.mkIf p yes)
+    (lib.mkIf (!p) no)
+  ];
 in
 {
   options = with lib; {
     browserExec = mkOption {
       type = types.str;
-      default = "${qutebrowser-gl}/bin/qutebrowser-gl";
-      description = mdDoc "Terminal executable.";
+      default =
+        if config.gui.enableGL
+        then "${qutebrowser-gl}/bin/qutebrowser-gl"
+        else "${sources.pkgs.qutebrowser}/bin/qutebrowser";
+      description = mdDoc "Browser executable.";
       readOnly = true;
     };
 
@@ -26,8 +33,9 @@ in
   };
 
   config = {
-    home.packages = [
-      qutebrowser-gl
+    home.packages = lib.mkMerge [
+      (lib.mkIf config.gui.enableGL [ qutebrowser-gl ])
+      (lib.mkIf (!config.gui.enableGL) [ sources.pkgs.qutebrowser ])
     ];
 
     xdg.mimeApps.defaultApplications = {
@@ -45,7 +53,7 @@ in
         buildInputs = (oldAttrs.buildInputs or [ ]) ++ [ pkgs.qt6.qtwebengine ];
         postInstall = (oldAttrs.postInstall or "") + ''
           substituteInPlace $out/share/applications/org.qutebrowser.qutebrowser.desktop \
-            --replace "Exec=qutebrowser" "Exec=qutebrowser-gl" \
+            --replace "Exec=qutebrowser" "Exec=${config.browserExec}" \
             --replace "Icon=qutebrowser" "Icon=browser" \
         '';
       });

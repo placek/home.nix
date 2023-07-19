@@ -23,6 +23,7 @@ in
     xdg.systemDirs.data = [ "/home/placek/.nix-profile/share" ];
 
     # modules settings
+    gui.enableGL = true;
     gui.theme = theme;
     gui.font.name = "Iosevka Nerd Font";
     gui.font.size = 12;

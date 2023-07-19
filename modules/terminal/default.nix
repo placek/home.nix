@@ -10,22 +10,26 @@ in
   options = with lib; {
     terminalExec = mkOption {
       type = types.str;
-      default = "${kitty-gl}/bin/kitty-gl";
+      default =
+        if config.gui.enableGL
+        then "${kitty-gl}/bin/kitty-gl"
+        else "${sources.pkgs.kitty}/bin/kitty";
       description = mdDoc "Terminal executable.";
       readOnly = true;
     };
   };
 
   config = {
-    home.packages = [
-      kitty-gl
+    home.packages = lib.mkMerge [
+      (lib.mkIf config.gui.enableGL [ kitty-gl ])
+      (lib.mkIf (!config.gui.enableGL) [ sources.pkgs.kitty ])
     ];
 
     xdg.desktopEntries.kitty = {
       name = "Terminal";
       genericName = "Terminal";
       type = "Application";
-      exec = "kitty-gl";
+      exec = config.terminalExec;
       terminal = false;
       icon = "terminal";
     };
