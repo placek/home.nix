@@ -4,6 +4,21 @@
 }:
 let
   sources = import ../../home.lock.nix;
+  customFonts = sources.pkgs.stdenv.mkDerivation rec {
+    name = "custom-fonts-${version}";
+    version = builtins.substring 0 6 src.rev;
+    src = sources.pkgs.fetchFromGitHub {
+      owner = "placek";
+      repo = "custom-fonts";
+      rev = "f4e774280cf9f887fc69552a81cced5c12f9103c";
+      sha256 = "sha256-rp4gJuUQz7+ss4zmE8E2RT/C9x7zWs3s9w7Pzs1W7z0=";
+    };
+    phases = [ "installPhase" ];
+    installPhase = ''
+      mkdir -p $out
+      cp -r * $out
+    '';
+  };
 in
 {
   options = with lib; {
@@ -58,6 +73,7 @@ in
       sources.glpkgs.nixGLIntel
 
       (sources.pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; })
+      customFonts
 
       ubuntu_font_family
       google-fonts
