@@ -28,6 +28,7 @@ in
     gui.font.name = "Iosevka Nerd Font";
     gui.font.size = 12;
 
+    vcs.name = "Paweł Placzyński";
     vcs.email = "placzynski.pawel@gmail.com";
     vcs.login = "placek";
     vcs.signKey = "1D95E554315BC053";
