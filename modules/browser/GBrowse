@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export project=$(echo "$QUTE_URL" | sed -En 's@https://github.com/[^/]+/([^/]+)/.*@\1@p')
+export object=$(echo "$QUTE_URL" | sed -En 's@https://github.com/[^/]+/[^/]+/.*/([[:xdigit:]]{40}).*@\1@p')
+
+if [ -n "$project" ] && [ -n "$object" ]; then
+  nvr --servername "/tmp/$project" --remote-send ":G show $object<cr>"
+fi

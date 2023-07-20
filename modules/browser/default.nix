@@ -46,6 +46,10 @@ in
 
     xdg.configFile."qutebrowser/greasemonkey/youtube.js".source = ./youtube.js;
     xdg.configFile."qutebrowser/bookmarks/urls".source = ./bookmarks;
+    xdg.configFile."qutebrowser/userscripts/GBrowse" = {
+      source = ./GBrowse;
+      executable = true;
+    };
 
     programs.qutebrowser = {
       enable = true;

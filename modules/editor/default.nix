@@ -31,6 +31,8 @@
       universal-ctags
     ];
 
+    programs.fish.shellAliases.editor = "nvim --listen /tmp/(basename (git root))";
+
     programs.neovim = {
       enable = true;
       vimAlias = true;
