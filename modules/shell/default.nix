@@ -22,6 +22,10 @@
 
     services.gpg-agent.enableFishIntegration = true;
 
+    programs.fzf.enable = true;
+    programs.lsd.enable = true;
+    programs.nnn.enable = true;
+
     programs.fish = {
       enable = true;
       shellAliases = import ./aliases.nix;

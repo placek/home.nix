@@ -36,12 +36,9 @@ in
 
     programs.aria2.enable = true;
     programs.direnv.enable = true;
-    programs.fzf.enable = true;
     programs.htop.enable = true;
     programs.jq.enable = true;
-    programs.lsd.enable = true;
     programs.nix-index.enable = true;
-    programs.nnn.enable = true;
 
     programs.bat = {
       enable = true;
