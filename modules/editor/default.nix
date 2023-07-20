@@ -26,6 +26,7 @@
 
     home.packages = with pkgs; [
       fd
+      neovim-remote
       ripgrep
       universal-ctags
     ];
