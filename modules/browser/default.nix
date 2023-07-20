@@ -46,10 +46,6 @@ in
 
     xdg.configFile."qutebrowser/greasemonkey/youtube.js".source = ./youtube.js;
     xdg.configFile."qutebrowser/bookmarks/urls".source = ./bookmarks;
-    xdg.configFile."qutebrowser/userscripts/speak-summary" = {
-      source = ./speak-summary;
-      executable = true;
-    };
 
     programs.qutebrowser = {
       enable = true;
