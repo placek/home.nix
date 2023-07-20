@@ -10,6 +10,7 @@
     ";D" = "hint links spawn ${terminalExec} -e ${downloaderExec} {hint-url} -d ${downloadsDirectory}";
     ";m" = "hint links spawn ${terminalExec} -e ${ytDownloaderExec} -x {hint-url} -o ${downloadsDirectory}/%(title)s.%(ext)s";
     ";v" = "hint links spawn ${terminalExec} -e ${ytDownloaderExec} {hint-url} -o ${downloadsDirectory}/%(title)s.%(ext)s";
+    ";g" = "hint links userscript GBrowse";
     "<Ctrl+w>" = "mode-enter passthrough";
     "I" = "hint inputs";
     ",s" = "open -t https://getpocket.com/edit?url={url}";

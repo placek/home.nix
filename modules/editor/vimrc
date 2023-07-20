@@ -202,3 +202,7 @@ inoremap <cr> <C-G>u<cr>
 " <C-p> like paste, but not change register
 vnoremap <C-p> "pdp
 vnoremap <C-P> "pdP
+
+" create a file when not present
+noremap gF :e <cfile><cr>
+noremap <C-w>gF :vert <cfile><cr>
