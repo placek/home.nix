@@ -58,8 +58,7 @@ set encoding=utf-8
 set expandtab
 set foldcolumn=1
 set foldmethod=manual
-set grepformat=%f:%l:%c:%m
-set grepprg=rg\ --vimgrep\ $*
+set grepprg=git\ \grep\ --no-color\ --line-number\ --column\ --extended-regexp\ $*
 set hidden
 set hlsearch
 set incsearch
