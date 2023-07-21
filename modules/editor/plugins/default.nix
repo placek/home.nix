@@ -22,7 +22,7 @@ with pkgs.vimPlugins; [
   { plugin = telescope-fzy-native-nvim; }
   { plugin = telescope-nvim; }
   { plugin = todo-comments-nvim; }
-  { plugin = undotree; }
+  { plugin = undotree; config = builtins.readFile ./undotree.vim; }
   { plugin = vim-abolish; }
   { plugin = vim-css-color; }
   { plugin = vim-expand-region; config = builtins.readFile ./expand-region.vim; }
