@@ -121,8 +121,8 @@ nmap <silent>      [w <C-w>W
 nmap <silent>      ]w <C-w>w
 nmap <silent>      [t :tabprevious<CR>
 nmap <silent>      ]t :tabnext<CR>
-nmap <silent>      [e :cprevious<CR>
-nmap <silent>      ]e :cnext<CR>
+nmap <silent>      [c :cprevious<CR>
+nmap <silent>      ]c :cnext<CR>
 nmap <silent>      [l :lprevious<CR>
 nmap <silent>      ]l :lnext<CR>
 
