@@ -52,8 +52,8 @@ wk.register({
   ["<leader>gs"]              = { "<cmd>lua require('telescope.builtin').git_status()<cr>",               "Status" },
   ["<leader>gS"]              = { "<cmd>lua require('telescope.builtin').git_stash()<cr>",                "Stash" },
 
-  ["<localleader>,"]          = { "<cmd>lua vim.lsp.buf.hover()<cr>",                                     "Show documentation" },
-  ["<localleader>."]          = { "<cmd>lua vim.diagnostic.open_float({ border = 'rounded' })<cr>",       "Show diagnostic" },
+  ["K"]                       = { "<cmd>lua vim.lsp.buf.hover()<cr>",                                     "Show documentation" },
+  ["<localleader>,"]          = { "<cmd>lua vim.diagnostic.open_float({ border = 'rounded' })<cr>",       "Show diagnostic" },
   ["<localleader>a"]          = { "<cmd>lua vim.lsp.buf.code_action()<cr>",                               "Code actions" },
   ["<localleader>l"]          = { "<cmd>lua vim.lsp.codelens.refresh()<cr>",                              "Code lens" },
   ["<localleader>d"]          = { "<cmd>lua require('telescope.builtin').diagnostics()<cr>",              "Diagnostics" },
@@ -65,8 +65,8 @@ wk.register({
   ["<localleader>s"]          = { "<cmd>AerialToggle<cr>",                                                "Symbols outline" },
   ["<localleader>S"]          = { "<cmd>lua require('telescope.builtin').lsp_workspace_symbols()<cr>",    "Workspace symbols" },
   ["<localleader>I"]          = { "<cmd>LspInfo<cr>",                                                     "LSP info" },
-  ["<localleader><space>"]    = { "<cmd>AV<cr>",                                                          "Alternative file (vertical)" },
-  ["<localleader><M-space>"]  = { "<cmd>A<cr>",                                                           "Alternative file" },
+  ["<localleader><space>"]    = { "<cmd>AV<cr>",                                                          "Alternative file (vertical)" }, -- FIXME: this is rails only!
+  ["<localleader><M-space>"]  = { "<cmd>A<cr>",                                                           "Alternative file" }, -- FIXME: this is rails only!
 
   ["<space>"]                 = { name = "Harpoon" },
   ["<space><space>"]          = { "<cmd>Telescope harpoon marks<cr>",                                     "List" },
