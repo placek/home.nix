@@ -25,7 +25,7 @@ with pkgs.vimPlugins; [
   { plugin = undotree; }
   { plugin = vim-abolish; }
   { plugin = vim-css-color; }
-  { plugin = vim-expand-region; }
+  { plugin = vim-expand-region; config = builtins.readFile ./expand-region.vim; }
   { plugin = vim-fish; }
   { plugin = vim-jinja; }
   { plugin = vim-nix; }

@@ -129,8 +129,6 @@ nmap <silent>      ]l :lnext<CR>
 
 vnoremap <silent>* :<C-u>call setreg("/\V", escape(GetSelectedText(), '/\'))<CR>n
 vnoremap <silent># :<C-u>call setreg("?\V", escape(GetSelectedText(), '/\'))<CR>n
-vmap     v         <Plug>(expand_region_expand)
-vmap     <C-v>     <Plug>(expand_region_shrink)
 
 tnoremap <Esc>     <C-\><C-n>
 
