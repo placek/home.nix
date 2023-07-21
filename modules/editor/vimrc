@@ -97,6 +97,8 @@ set wildmenu
 let g:mapleader      = "\\"
 let g:maplocalleader = ","
 let g:undotree_WindowLayout = 4
+let g:loaded_netrwPlugin = 1
+let g:loaded_netrw = 1
 
 " mappings
 nnoremap <leader><up> <c-w><up>

@@ -34,6 +34,7 @@ with pkgs.vimPlugins; [
   { plugin = vim-rhubarb; }
   { plugin = vim-ruby; }
   { plugin = vim-signature; }
+  { plugin = vim-dirvish; }
   { plugin = vim-surround; }
 
   { plugin = ChatGPT-nvim; config = luaFile ./chat-gpt.lua; }
