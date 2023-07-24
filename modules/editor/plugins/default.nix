@@ -21,11 +21,9 @@ with pkgs.vimPlugins; [
   { plugin = targets-vim; }
   { plugin = telescope-fzy-native-nvim; }
   { plugin = telescope-nvim; }
-  { plugin = todo-comments-nvim; }
-  { plugin = undotree; config = builtins.readFile ./undotree.vim; }
   { plugin = vim-abolish; }
   { plugin = vim-css-color; }
-  { plugin = vim-expand-region; config = builtins.readFile ./expand-region.vim; }
+  { plugin = vim-dirvish; }
   { plugin = vim-fish; }
   { plugin = vim-jinja; }
   { plugin = vim-nix; }
@@ -34,8 +32,10 @@ with pkgs.vimPlugins; [
   { plugin = vim-rhubarb; }
   { plugin = vim-ruby; }
   { plugin = vim-signature; }
-  { plugin = vim-dirvish; }
   { plugin = vim-surround; }
+
+  { plugin = undotree; config = builtins.readFile ./undotree.vim; }
+  { plugin = vim-expand-region; config = builtins.readFile ./expand-region.vim; }
 
   { plugin = ChatGPT-nvim; config = luaFile ./chat-gpt.lua; }
   { plugin = aerial-nvim; config = luaFile ./aerial.lua; }
@@ -46,6 +46,7 @@ with pkgs.vimPlugins; [
   { plugin = nvim-cmp; config = luaFile ./cmp.lua; }
   { plugin = nvim-lspconfig; config = luaFile ./lspconfig.lua; }
   { plugin = telescope-file-browser-nvim; config = luaFile ./telescope-file-browser.lua; }
+  { plugin = todo-comments-nvim; config = luaFile ./todo-comments.lua; }
   { plugin = vim-fugitive; config = luaFile ./fugitive.lua; }
   { plugin = which-key-nvim; config = luaFile ./which-key.lua; }
 ]

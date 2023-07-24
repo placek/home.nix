@@ -8,6 +8,7 @@ wk.register({
   ["<leader>\\"]              = { "<cmd>lua require('telescope.builtin').git_files({hidden=true})<cr>",   "Search git files only" },
   ["<leader>b"]               = { "<cmd>lua require('telescope.builtin').buffers()<cr>",                  "Search buffers" },
   ["<leader>t"]               = { "<cmd>lua require('telescope.builtin').tags()<cr>",                     "Search tags" },
+  ["<leader>T"]               = { "<cmd>TodoTelescope<cr>",                                               "Search todos" },
   ["<leader>u"]               = { "<cmd>UndotreeToggle<cr>",                                              "Undo tree" },
   ["<leader>f"]               = { "<cmd>lua require('telescope.builtin').live_grep()<cr>",                "Grep files" },
   ["<leader>F"]               = { "<cmd>lua require('telescope.builtin').find_files()<cr>",               "Search files" },
