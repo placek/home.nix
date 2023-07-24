@@ -1,6 +1,16 @@
 { pkgs, ... }:
 let
   luaFile = path: "luafile ${pkgs.writeText (builtins.baseNameOf path) (builtins.readFile path)}";
+  xit-vim = pkgs.vimUtils.buildVimPlugin {
+    pname = "xit-vim";
+    version = "v0.1.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "sadotsoy";
+      repo = "vim-xit";
+      rev = "9b2c60b5da69670e1b8066c3e96bedbe6067699b";
+      sha256 = "sha256-edAFJMxIpvkWqRoYB17E7jERyN40heFCBjpeliazRYg=";
+    };
+  };
 in
 with pkgs.vimPlugins; [
   { plugin = cmp-buffer; }
@@ -33,6 +43,8 @@ with pkgs.vimPlugins; [
   { plugin = vim-ruby; }
   { plugin = vim-signature; }
   { plugin = vim-surround; }
+
+  { plugin = xit-vim; }
 
   { plugin = undotree; config = builtins.readFile ./undotree.vim; }
   { plugin = vim-expand-region; config = builtins.readFile ./expand-region.vim; }
