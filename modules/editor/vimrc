@@ -231,6 +231,23 @@ autocmd! BufEnter *.rb setlocal formatprg=bundle\ exec\ rubocop\ -A\ -fq\ --stde
 " use `rspec` as a make command for ruby spec files
 autocmd! BufEnter *_spec.rb setlocal makeprg=rspec
 
+" use xit file as a todo list drawer
+function! ToggleXit()
+  if executable("git")
+    let l:file = system("git config xit.file | tr -d \"\\n\"")
+    if filereadable(l:file)
+      let l:winid = bufwinid(l:file)
+      if winid < 0
+        execute 'split '.l:file
+        execute 'resize 10'
+      else
+        call win_gotoid(l:winid)
+      endif
+    endif
+  endif
+endfunction
+nnoremap <leader>x :call ToggleXit()<cr>
+
 """""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""""""
 hi ColorColumn                          ctermbg=8
 hi Comment                                          ctermfg=7
