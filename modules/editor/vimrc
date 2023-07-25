@@ -226,7 +226,7 @@ vnoremap <C-P> "pdP
 """""""""""""""""""""""""""""""" FILES RELATED """""""""""""""""""""""""""""""""
 
 " use `rubocop` to (kinda) format ruby file
-autocmd! BufEnter *.rb setlocal formatprg="bundle exec rubocop -A -fq --stderr --stdin %"
+autocmd! BufEnter *.rb setlocal formatprg=bundle\ exec\ rubocop\ -A\ -fq\ --stderr\ --stdin\ %
 
 " use `rspec` as a make command for ruby spec files
 autocmd! BufEnter *_spec.rb setlocal makeprg=rspec
