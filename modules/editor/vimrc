@@ -223,6 +223,23 @@ inoremap <cr> <C-G>u<cr>
 vnoremap <C-p> "pdp
 vnoremap <C-P> "pdP
 
+" use xit file as a todo list drawer
+function! ToggleTodoFile()
+  if executable("git")
+    let l:file = system("git config todo.file | tr -d \"\\n\"")
+    if filereadable(l:file)
+      let l:winid = bufwinid(l:file)
+      if winid < 0
+        execute 'split '.l:file
+        execute 'resize 10'
+      else
+        call win_gotoid(l:winid)
+      endif
+    endif
+  endif
+endfunction
+nnoremap <silent><leader>x :call ToggleTodoFile()<cr>
+
 """""""""""""""""""""""""""""""" FILES RELATED """""""""""""""""""""""""""""""""
 
 " use `rubocop` to (kinda) format ruby file
@@ -236,23 +253,6 @@ autocmd! BufEnter *.test.js setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%
 autocmd! BufEnter *.test.ts setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
 autocmd! BufEnter *.test.jsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
 autocmd! BufEnter *.test.tsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
-
-" use xit file as a todo list drawer
-function! ToggleXit()
-  if executable("git")
-    let l:file = system("git config xit.file | tr -d \"\\n\"")
-    if filereadable(l:file)
-      let l:winid = bufwinid(l:file)
-      if winid < 0
-        execute 'split '.l:file
-        execute 'resize 10'
-      else
-        call win_gotoid(l:winid)
-      endif
-    endif
-  endif
-endfunction
-nnoremap <leader>x :call ToggleXit()<cr>
 
 """""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""""""
 hi ColorColumn                          ctermbg=8
