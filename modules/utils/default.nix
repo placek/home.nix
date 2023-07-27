@@ -58,6 +58,7 @@ in
       mdcat
       openssl
       openvpn
+      orca-c
       rlwrap
       rnix-lsp
       sox
