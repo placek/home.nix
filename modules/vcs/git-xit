@@ -90,10 +90,10 @@ function post_commit_hook {
         echo "           git xit remove"
       elif [ "$unresolved" -eq 1 ]; then
         echo "         …one item to go:"
-        sed -n '/\[[ ?]\] /s/.*/           &/p' "$todo_file"
+        sed -n -e '/\[[ ?]\] /s/.*/             &/p' -e '/^[^\[ ]/s/.*/           &/p' "$todo_file"
       else
         echo "         …$unresolved unresolved issues left:"
-        sed -n '/\[[ ?]\] /s/.*/           &/p' "$todo_file"
+        sed -n -e '/\[[ ?]\] /s/.*/             &/p' -e '/^[^\[ ]/s/.*/           &/p' "$todo_file"
       fi
     else
       echo "git xit: todo file '$todo_file' does not exist."
