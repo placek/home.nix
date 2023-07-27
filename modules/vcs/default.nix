@@ -51,6 +51,7 @@ in
   config = {
     home.packages = with pkgs; [
       (import ./git-ctags.nix { inherit pkgs; })
+      (pkgs.writeShellScriptBin "git-xit" (builtins.readFile ./git-xit))
       git-crypt
     ];
 
