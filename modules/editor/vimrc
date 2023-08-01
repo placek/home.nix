@@ -254,6 +254,11 @@ autocmd! BufEnter *.test.ts setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%
 autocmd! BufEnter *.test.jsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
 autocmd! BufEnter *.test.tsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
 
+function! s:SquashArgument(...) abort
+  return matchstr(getline('.'), '^\%(\%(\x\x\x\)\@!\l\+\s\+\)\=\zs[0-9a-f]\{4,\}\ze \|^\%(Merge\|Rebase\|Upstream\|Pull\|Push\): \zs\S\+')
+endfunction
+autocmd! FileType fugitive nnoremap cE :<c-u>Git commit --edit --allow-empty --squash=<c-r>=<sid>SquashArgument()<cr>
+
 """""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""""""
 hi ColorColumn                          ctermbg=8
 hi Comment                                          ctermfg=7
