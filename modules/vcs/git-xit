@@ -15,7 +15,7 @@ export main_branch
 current_branch_origin=$(git merge-base "$main_branch" "$current_branch")
 export current_branch_origin
 
-commits_count=$(git rev-list "$current_branch_origin".. --count)
+commits_count=$(git rev-list --count "$current_branch_origin..HEAD")
 export commits_count
 
 function show_help {
@@ -24,13 +24,13 @@ function show_help {
 
 function rebase {
   >&2 echo "git xit: rebasing to $current_branch_origin…"
-  git rebase -i "$current_branch_origin"
+  git rebase --interactive "$current_branch_origin"
   >&2 echo "         …done"
 }
 
 function remove_todo {
   >&2 echo "git xit: removing $todo_file from history…"
-  git filter-branch --tree-filter "rm -f $todo_file" "$current_branch"
+  git filter-branch --prune-empty --tree-filter "rm -f $todo_file" "$current_branch_origin..$current_branch"
   >&2 echo "         …done"
 }
 
