@@ -1,4 +1,7 @@
-{ config, ... }:
+{ config
+, pkgs
+, ...
+}:
 {
   imports = [
     ./modules/gui

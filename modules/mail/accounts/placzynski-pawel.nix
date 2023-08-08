@@ -1,4 +1,6 @@
-{ pkgs, ... }:
+{ pkgs
+, ...
+}:
 {
   primary = true;
   address = "placzynski.pawel@gmail.com";

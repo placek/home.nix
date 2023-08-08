@@ -1,31 +1,39 @@
 { config
 , lib
+, pkgs
 , ...
 }:
 let
-  sources = import ../../home.lock.nix;
-  speak = import ./speak.nix { inherit (sources) pkgs; };
-  summarize = import ./summarize.nix { inherit (sources) pkgs; };
+  speak = import ./speak.nix { inherit pkgs; };
+  summarize = import ./summarize.nix { inherit pkgs; };
+  image = import ./image.nix { inherit pkgs; };
+  video = import ./video.nix { inherit pkgs; };
+  audio = import ./audio.nix { inherit pkgs; };
+  pbcopy = import ./pbcopy.nix { inherit pkgs; };
+  pbpaste = import ./pbpaste.nix { inherit pkgs; };
+  vasm = import ./vasm.nix { inherit pkgs; };
+  dcc6502 = import ./dcc6502.nix { inherit pkgs; };
+  minipro = import ./minipro.nix { inherit pkgs; };
 in
 {
   options = with lib; {
     fileManagerExec = mkOption {
       type = types.str;
-      default = "${sources.pkgs.nnn}/bin/nnn";
+      default = "${pkgs.nnn}/bin/nnn";
       description = mdDoc "File manager executable.";
       readOnly = true;
     };
 
     downloaderExec = mkOption {
       type = types.str;
-      default = "${sources.pkgs.aria}/bin/aria2c";
+      default = "${pkgs.aria}/bin/aria2c";
       description = mdDoc "Downloader executable.";
       readOnly = true;
     };
 
     ytDownloaderExec = mkOption {
       type = types.str;
-      default = "${sources.pkgs.yt-dlp}/bin/yt-dlp";
+      default = "${pkgs.yt-dlp}/bin/yt-dlp";
       description = mdDoc "YouTube downloader executable.";
       readOnly = true;
     };
@@ -45,26 +53,66 @@ in
       config.theme = "gruvbox-dark";
     };
 
-    home.packages = with sources.pkgs; [
+    home.packages = with pkgs; [
+      audio
+      image
+      pbcopy
+      pbpaste
       speak
       summarize
+      video
 
+      dcc6502
+      minipro
+      vasm
+      # pkgsCross.avr.buildPackages.gcc
+
+      ansible
+      avrdude
+      bash
+      bind
+      cbqn
+      croc
+      cryptsetup
       curl
+      docker-compose
+      entr
+      ffmpeg-full
       file
+      ghostscript
       go-jira
       imagemagick
+      jmespath
+      jmtpfs
       killall
       libinput
       mdcat
+      netpbm
+      ngrep
+      ngrok
+      niv
+      nix-direnv-flakes
+      nix-prefetch-git
       openssl
       openvpn
       orca-c
+      qmk
+      rclone
       rlwrap
       rnix-lsp
+      rpi-imager
+      rsync
       sox
+      sshfs
+      timidity
+      tiv
       unrar
       unzip
+      usbutils
+      vagrant
+      wally-cli
       wget
+      wrk2
       yq
     ];
   };

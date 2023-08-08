@@ -4,30 +4,21 @@
 }:
 {
   config = {
-    xdg.desktopEntries.astroid = {
-      name = "Astroid";
-      genericName = "Astroid";
-      type = "Application";
-      exec = "astroid";
-      terminal = false;
-      icon = "claws-mail";
+    home.file.mailcap = {
+      enable = true;
+      target = ".mailcap";
+      text = ''
+        text/html; ${pkgs.w3m}/bin/w3m -dump -o document_charset=%{charset} -o display_link_number=1 '%s'; nametemplate=%s.html; copiousoutput
+      '';
     };
 
-    programs.astroid = {
-      enable = true;
-      externalEditor = ''
-        ${config.terminalExec} ${config.editorExec} "+set ft=mail" "+set fileencoding=utf-8" "+set ff=unix" "+set enc=utf-8" "+set fo+=w" %1
-      '';
-      extraConfig = {
-        startup.queries = {
-          placzynski = "folder:placzynski/Inbox";
-          silquenarmo = "folder:silquenarmo/Inbox";
-          binarapps = "folder:binarapps/Inbox";
-          byron = "folder:byron/Inbox";
-          futurelearn = "folder:futurelearn/Inbox";
-        };
-      };
-    };
+    programs.alot.enable = true;
+    # TODO: add those search tags:
+    # placzynski = "folder:placzynski/Inbox";
+    # silquenarmo = "folder:silquenarmo/Inbox";
+    # binarapps = "folder:binarapps/Inbox";
+    # byron = "folder:byron/Inbox";
+    # futurelearn = "folder:futurelearn/Inbox";
 
     programs.notmuch = {
       enable = true;
@@ -46,10 +37,6 @@
       text = ''
         #!${pkgs.stdenv.shell}
         ${pkgs.notmuch}/bin/notmuch new
-        unread=''$(${pkgs.notmuch}/bin/notmuch search --format=json tag:unread | ${pkgs.jq}/bin/jq "[.[].matched] | add // 0")
-        if [ ''${unread} -gt 0 ]; then
-          ${pkgs.libnotify}/bin/notify-send -a astroid "Mail" "''${unread} new messages!"
-        fi
       '';
       executable = true;
     };
@@ -57,7 +44,7 @@
     services.mbsync = {
       enable = true;
       postExec = "${config.xdg.configHome}/mbsync/postExec";
-      frequency = "*:0/30";
+      frequency = "*:0/10";
     };
 
     accounts.email = {

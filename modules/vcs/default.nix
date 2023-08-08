@@ -1,11 +1,8 @@
 { config
 , lib
+, pkgs
 , ...
 }:
-let
-  sources = import ../../home.lock.nix;
-  inherit (sources) pkgs;
-in
 {
   options = with lib; {
     vcsExec = mkOption {

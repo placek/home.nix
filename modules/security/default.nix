@@ -1,11 +1,8 @@
 { config
 , lib
+, pkgs
 , ...
 }:
-let
-  sources = import ../../home.lock.nix;
-  inherit (sources) pkgs;
-in
 {
   options = with lib; {
     ssh.secretKeyID = mkOption {
@@ -25,19 +22,15 @@ in
   };
 
   config = {
-    xdg.desktopEntries.qtpass = {
-      name = "QtPass";
-      genericName = "QtPass";
-      type = "Application";
-      exec = "qtpass";
-      terminal = false;
-      icon = "qtpass-icon";
-    };
+    home.packages = with pkgs; [
+      pinentry-gnome
+      qtpass
+    ];
 
     services.gpg-agent = {
       enable = true;
       enableSshSupport = true;
-      pinentryFlavor = "gnome3";
+      pinentryFlavor = "qt";
       enableScDaemon = true;
       defaultCacheTtl = 1800;
       defaultCacheTtlSsh = 1800;

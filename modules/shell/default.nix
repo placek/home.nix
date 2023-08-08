@@ -25,6 +25,7 @@
     programs.fzf.enable = true;
     programs.lsd.enable = true;
     programs.nnn.enable = true;
+    programs.zoxide.enable = true;
 
     programs.fish = {
       enable = true;

@@ -1,4 +1,6 @@
-{ pkgs, ... }:
+{ pkgs
+, ...
+}:
 {
   address = "pawel.placzynski@futurelearn.com";
   userName = "pawel.placzynski@futurelearn.com";

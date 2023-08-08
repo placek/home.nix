@@ -1,4 +1,6 @@
-{ pkgs, ... }:
+{ pkgs
+, ...
+}:
 {
   address = "p.placzynski@binarapps.com";
   userName = "p.placzynski@binarapps.com";
