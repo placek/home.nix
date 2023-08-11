@@ -5,7 +5,6 @@
 }:
 let
   speak = import ./speak.nix { inherit pkgs; };
-  summarize = import ./summarize.nix { inherit pkgs; };
   image = import ./image.nix { inherit pkgs; };
   video = import ./video.nix { inherit pkgs; };
   audio = import ./audio.nix { inherit pkgs; };
@@ -40,8 +39,6 @@ in
   };
 
   config = {
-    home.sessionVariables.EDENAI_API_KEY = (import ../../secrets).edenAI;
-
     programs.aria2.enable = true;
     programs.direnv.enable = true;
     programs.htop.enable = true;
@@ -59,7 +56,6 @@ in
       pbcopy
       pbpaste
       speak
-      summarize
       video
 
       dcc6502

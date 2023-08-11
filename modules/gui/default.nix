@@ -66,6 +66,7 @@
       arduino
       blender
       discord
+      dzen2
       gimp
       eagle
       firefox

@@ -22,7 +22,6 @@
 
   config = {
     home.sessionVariables.EDITOR = "vim";
-    home.sessionVariables.OPENAI_API_KEY = (import ../../secrets).chatGPT;
 
     home.packages = with pkgs; [
       fd

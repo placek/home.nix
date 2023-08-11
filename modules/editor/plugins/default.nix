@@ -51,7 +51,6 @@ with pkgs.vimPlugins; [
   { plugin = undotree; config = builtins.readFile ./undotree.vim; }
   { plugin = vim-expand-region; config = builtins.readFile ./expand-region.vim; }
 
-  { plugin = ChatGPT-nvim; config = luaFile ./chat-gpt.lua; }
   { plugin = aerial-nvim; config = luaFile ./aerial.lua; }
   { plugin = comment-nvim; config = luaFile ./comment.lua; }
   { plugin = fidget-nvim; config = luaFile ./fidget.lua; }
