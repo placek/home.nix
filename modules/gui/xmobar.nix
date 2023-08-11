@@ -35,6 +35,7 @@ in
   };
 
   config = {
+    home.packages = [ statuses ];
     programs.xmobar.enable = true;
     programs.xmobar.extraConfig = ''
       Config { font            = "${config.gui.font.name} ${builtins.toString config.gui.font.size}"
