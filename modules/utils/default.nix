@@ -58,9 +58,9 @@ in
       speak
       video
 
-      dcc6502
-      minipro
-      vasm
+      # dcc6502
+      # minipro
+      # vasm
       # pkgsCross.avr.buildPackages.gcc
 
       ansible
