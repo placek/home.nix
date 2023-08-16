@@ -4,6 +4,7 @@
 , ...
 }:
 let
+  toggleAudioCmd = "${pkgs.alsa-utils}/bin/amixer set Master toggle";
   statuses = pkgs.writeShellScriptBin "statuses" ''
     #!${pkgs.stdenv.shell}
 
@@ -74,14 +75,14 @@ in
                                                                   , "-h", "${config.gui.theme.base01}"
                                                                   ] 100
 
-                                 , Run Volume "default" "Capture" [ "-t", "\xE0B3 <fn=1><status></fn> "
+                                 , Run Volume "default" "Capture" [ "-t", "\xE0B3 <action=`${pkgs.alsa-utils}/bin/amixer set Capture toggle`><fn=1><status></fn></action> "
                                                                   , "--"
                                                                   , "-C", "${config.gui.theme.base0F}"
                                                                   , "-c", "${config.gui.theme.base0F}"
                                                                   , "-O", "\xf130", "-o", "\xf131"
                                                                   ] 10
 
-                                 , Run Volume "default" "Master"  [ "-t", "<fn=1><status></fn> <volumevbar> "
+                                 , Run Volume "default" "Master"  [ "-t", "<action=`${pkgs.alsa-utils}/bin/amixer set Master toggle`><fn=1><status></fn></action> <volumevbar> "
                                                                   , "--"
                                                                   , "-C", "${config.gui.theme.base0F}"
                                                                   , "-c", "${config.gui.theme.base0F}"

@@ -7,7 +7,6 @@ let
   fehbg = import ./fehbg.nix { inherit config pkgs; };
   sshot = import ./sshot.nix { inherit config pkgs; };
   rotate-displays = import ./rotate-displays.nix { inherit config pkgs; };
-  playCmd = "";
 in
 {
   imports = [
