@@ -12,14 +12,14 @@ let
 
     # playerctl status
     case $(${pkgs.playerctl}/bin/playerctl status) in
-      Playing) printf "<fn=1>\\uf04c</fn> $(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,20) }}: {{ trunc(title,30) }}") " ;;
-      Paused)  printf "<fn=1>\\uf04b</fn> $(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,20) }}: {{ trunc(title,30) }}") " ;;
+      Playing) printf "<action=\`${pkgs.playerctl}/bin/playerctl pause\` button=1><fn=1>\\uf04c</fn> $(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,20) }}: {{ trunc(title,30) }}")</action> " ;;
+      Paused)  printf "<action=\`${pkgs.playerctl}/bin/playerctl play\` button=1><fn=1>\\uf04b</fn> $(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,20) }}: {{ trunc(title,30) }}") </action>" ;;
     esac
 
     # dunst notifications status
     if [ $(${pkgs.dunst}/bin/dunstctl is-paused) == "true" ]; then
       count=$(${pkgs.dunst}/bin/dunstctl count waiting)
-      [ "$count" != "0" ] && printf "<fc=${config.gui.theme.base01}><fn=1>\\uf0f3</fn> $count</fc> "
+      [ "$count" != "0" ] && printf "<action=\`${pkgs.playerctl}/bin/playerctl pause\` button=1><fc=${config.gui.theme.base01}><fn=1>\\uf0f3</fn> $count</fc></action> "
     else
       count=$(${pkgs.dunst}/bin/dunstctl count displayed)
       [ "$count" != "0" ] && printf "<fn=1>\\uf0f3</fn> $count "
