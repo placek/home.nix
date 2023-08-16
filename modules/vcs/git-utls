@@ -9,6 +9,8 @@ export main_branch
 current_branch_origin=$(git merge-base "$main_branch" "$current_branch")
 export current_branch_origin
 
+git rebase --interactive "$(git merge-base @ @{u})"
+
 function show_help {
   >&2 echo "Usage: git utls [changes|root|remove|rebase|wip]"
 }
@@ -23,23 +25,12 @@ function remove_file {
   git filter-branch --prune-empty --tree-filter "rm -f $1" "$current_branch_origin..$current_branch"
 }
 
-function root {
-  git rev-parse --show-toplevel
-}
-
-function wip {
-  git commit --no-verify -m "wip: $(curl -Ls whatthecommit.com/index.txt)"
-}
-
-function changes {
-  git log --pretty=oneline $current_branch_origin..
+function branch_origin {
+  printf "$current_branch_origin"
 }
 
 case "$1" in
-  changes) changes ;;
-  root)    root ;;
   remove)  remove_file ;;
   rebase)  rebase ;;
-  wip)     wip ;;
   *)       show_help ;;
 esac

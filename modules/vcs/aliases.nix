@@ -1,5 +1,7 @@
 {
-  root = "utls root";
+  root = "rev-parse --show-toplevel";
+  changes = "log origin/HEAD..";
+  ch = "l origin/HEAD..";
   st = "status -sb";
   pu = "push --tags origin";
   cp = "cherry-pick";
@@ -27,10 +29,9 @@
   cob = "checkout -B";
 
   # log
-  l = "log --pretty=format:'%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]' --decorate";
-  ls = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-  ll = "log --pretty=format:'%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]' --decorate --numstat";
-  info = "for-each-ref --format='%(color:yellow)%(committerdate:iso8601) %(color:blue)%(objectname:short) %(color:magenta)%(authorname) %(color:green)%(refname:short) %(color:reset)%(contents:subject)' --sort -committerdate";
+  l = "log --graph --pretty=format:'%C(yellow)%h %C(red)%d%C(reset) %s %C(green)%cr %C(blue)%an%C(reset)' --abbrev-commit";
+  ll = "log --pretty=format:'%C(yellow)%h %C(red)%d%C(reset) %s %C(green)%cr %C(blue)%an%C(reset)' --decorate --numstat";
+  info = "for-each-ref --format='%C(green)%(committerdate:iso8601) %C(yellow)%(objectname:short) %C(blue)%(authorname) %C(red)%(refname:short) %C(reset)%(contents:subject)' --sort -committerdate";
 
   # restore
   undo = "restore";

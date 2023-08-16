@@ -206,10 +206,10 @@ vnoremap gd g<c-]>
 autocmd! BufWritePost * :silent! MakeTags
 
 " use `open` command to open a current buffer
-command! -count Open !open %
+command! -nargs=0 Open !open %
 
 " leave only the current buffer - delete others
-command! BufOnly execute '%bdelete|edit #|normal `"'
+command! -nargs=0 BufOnly execute '%bdelete|edit #|normal `"'
 
 " remove trailing whitespaces after saving a file
 autocmd! BufWritePre * :%s/\s\+$//e
@@ -254,10 +254,14 @@ autocmd! BufEnter *.test.ts setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%
 autocmd! BufEnter *.test.jsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
 autocmd! BufEnter *.test.tsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
 
+""""""""""""""""""""""""""""""""""" FUGITIVE """""""""""""""""""""""""""""""""""
+
 function! s:SquashArgument(...) abort
   return matchstr(getline('.'), '^\%(\%(\x\x\x\)\@!\l\+\s\+\)\=\zs[0-9a-f]\{4,\}\ze \|^\%(Merge\|Rebase\|Upstream\|Pull\|Push\): \zs\S\+')
 endfunction
 autocmd! FileType fugitive nnoremap cE :<c-u>Git commit --edit --allow-empty --squash=<c-r>=<sid>SquashArgument()<cr>
+autocmd! FileType fugitive nnoremap cW :<c-u>Git commit --no-verify --message "WIP <c-r>=trim(system('curl -Ls whatthecommit.com/index.txt'))<cr>"
+command! -nargs=0 Gchanges G log --pretty=oneline origin/HEAD.. | resize 10
 
 """""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""""""
 hi ColorColumn                          ctermbg=8
