@@ -7,6 +7,7 @@ let
   fehbg = import ./fehbg.nix { inherit config pkgs; };
   sshot = import ./sshot.nix { inherit config pkgs; };
   rotate-displays = import ./rotate-displays.nix { inherit config pkgs; };
+  playCmd = "";
 in
 {
   imports = [
@@ -215,7 +216,8 @@ in
                                                    }
         where noNSP "NSP" = xmobarAction "${pkgs.xdotool}/bin/xdotool key super+BackSpace" "1" "\xF198"
               noNSP s     = s
-              layout a    = case a of
+              layout a    = xmobarAction "${pkgs.xdotool}/bin/xdotool key super+n" "1" $ icon a
+              icon a      = case a of
                 "Spacing Full"        -> "<fn=1>\xf31e</fn>"
                 "Spacing Tall"        -> "<fn=1>\xf338</fn>"
                 "Spacing Mirror Tall" -> "<fn=1>\xf337</fn>"
