@@ -23,14 +23,14 @@
 
   config = {
     home.packages = with pkgs; [
-      pinentry-gnome
+      pinentry-gtk2
       qtpass
     ];
 
     services.gpg-agent = {
       enable = true;
       enableSshSupport = true;
-      pinentryFlavor = "qt";
+      pinentryFlavor = "gtk2";
       enableScDaemon = true;
       defaultCacheTtl = 1800;
       defaultCacheTtlSsh = 1800;
@@ -39,7 +39,7 @@
 
     programs.password-store = {
       enable = true;
-      package = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
+      package = lib.hiPrio (pkgs.pass.withExtensions (exts: [ exts.pass-otp ]));
       settings = {
         PASSWORD_STORE_DIR = config.security.passwordStore;
       };
