@@ -4,7 +4,6 @@
 , ...
 }:
 let
-  fehbg = import ./fehbg.nix { inherit config pkgs; };
   sshot = import ./sshot.nix { inherit config pkgs; };
   rotate-displays = import ./rotate-displays.nix { inherit config pkgs; };
 in
@@ -12,14 +11,6 @@ in
   imports = [
     ./prompts
   ];
-
-  options = with lib; {
-    gui.wallpapersDirectory = mkOption {
-      type = types.str;
-      default = "${config.home.homeDirectory}/.wall";
-      description = mdDoc "A path to wallpapers directory.";
-    };
-  };
 
   config = {
     xsession.windowManager.xmonad.enable = true;
@@ -112,7 +103,6 @@ in
           , ((modm              , xK_m         ), windows focusMaster  )                                                                                       -- move focus to the master window
           , ((modm              , xK_n         ), sendMessage NextLayout)                                                                                      -- rotate through the available layouts
           , ((modm              , xK_b         ), sendMessage ToggleStruts)                                                                                    -- toggle the status bar gap
-          , ((modm .|. shiftMask, xK_b         ), spawn "${fehbg}/bin/fehbg")                                                                                  -- change background
           , ((modm              , xK_f         ), withFocused $ windows . sink)                                                                                -- push window back into tiling
           , ((modm .|. shiftMask, xK_f         ), refresh)                                                                                                     -- resize viewed windows to the correct size
           , ((modm              , xK_BackSpace ), namedScratchpadAction myScratchPads "slack")                                                                 -- spawn slack
@@ -225,8 +215,7 @@ in
       myStartupHook = do
         setDefaultCursor xC_left_ptr
         setDefaultKeyRemap macMap [macMap, emptyKeyRemap]
-        spawnOnce "exec ${fehbg}/bin/fehbg &"
-        -- spawnOnce "xinput set-prop 11 'libinput Natural Scrolling Enabled' 1 &"
+        spawnOnce "exec xsetroot -solid '${config.gui.theme.base00}' &"
 
       defaults xmproc = desktopConfig { terminal           = myTerminal
                                       , focusFollowsMouse  = myFocusFollowsMouse
