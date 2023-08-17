@@ -13,12 +13,6 @@
     };
 
     programs.alot.enable = true;
-    # TODO: add those search tags:
-    # placzynski = "folder:placzynski/Inbox";
-    # silquenarmo = "folder:silquenarmo/Inbox";
-    # binarapps = "folder:binarapps/Inbox";
-    # byron = "folder:byron/Inbox";
-    # futurelearn = "folder:futurelearn/Inbox";
 
     programs.notmuch = {
       enable = true;
