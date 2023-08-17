@@ -36,6 +36,7 @@ with pkgs.vimPlugins; [
   { plugin = vim-abolish; }
   { plugin = vim-css-color; }
   { plugin = vim-dirvish; }
+  { plugin = vim-eunuch; }
   { plugin = vim-fish; }
   { plugin = vim-jinja; }
   { plugin = vim-nix; }
