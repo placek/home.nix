@@ -3,8 +3,6 @@
 , ...
 }:
 pkgs.writeShellScriptBin "rotate-displays" ''
-  #!${pkgs.stdenv.shell}
-
   displays=($(ls ${config.home.homeDirectory}/.screenlayout/*.sh))
   [ ! -f ${config.home.homeDirectory}/.screenlayout/.current ] && echo ${config.home.homeDirectory}/.screenlayout/default.sh > ${config.home.homeDirectory}/.screenlayout/.current
   current=$(cat ${config.home.homeDirectory}/.screenlayout/.current)
