@@ -4,23 +4,29 @@
 , ...
 }:
 let
-  toggleAudioCmd = "${pkgs.alsa-utils}/bin/amixer set Master toggle";
-  statuses = pkgs.writeShellScriptBin "statuses" ''
-    #!${pkgs.stdenv.shell}
+  actionCmd = action: button: text: "<action=`${action}` button=${builtins.toString button}>${text}</action>";
+  actionCmdEsc = action: button: text: "<action=\\`${action}\\` button=${builtins.toString button}>${text}</action>";
 
+  toggleAudioCmd = "${pkgs.alsa-utils}/bin/amixer set Master toggle";
+  toggleMicCmd = "${pkgs.alsa-utils}/bin/amixer set Capture toggle";
+  openUrlCmd = url: "${pkgs.qutebrowser}/bin/qutebrowser ${url}";
+  pauseCmd = "${pkgs.playerctl}/bin/playerctl pause";
+  playCmd = "${pkgs.playerctl}/bin/playerctl play";
+
+  statuses = pkgs.writeShellScriptBin "statuses" ''
     # right separator
     printf " "
 
     # playerctl status
     case $(${pkgs.playerctl}/bin/playerctl status) in
-      Playing) printf "<action=\`${pkgs.playerctl}/bin/playerctl pause\` button=1><fn=1>\\uf04c</fn> $(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,20) }}: {{ trunc(title,30) }}")</action> " ;;
-      Paused)  printf "<action=\`${pkgs.playerctl}/bin/playerctl play\` button=1><fn=1>\\uf04b</fn> $(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,20) }}: {{ trunc(title,30) }}") </action>" ;;
+      Playing) printf "${actionCmdEsc pauseCmd 1 "<fn=1>\\uf04c</fn> %s "}" "$(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,10) }}: {{ trunc(title,30) }}")" ;;
+      Paused)  printf "${actionCmdEsc playCmd 1  "<fn=1>\\uf04b</fn> %s "}" "$(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,10) }}: {{ trunc(title,30) }}")" ;;
     esac
 
     # dunst notifications status
     if [ $(${pkgs.dunst}/bin/dunstctl is-paused) == "true" ]; then
       count=$(${pkgs.dunst}/bin/dunstctl count waiting)
-      [ "$count" != "0" ] && printf "<action=\`${pkgs.playerctl}/bin/playerctl pause\` button=1><fc=${config.gui.theme.base01}><fn=1>\\uf0f3</fn> $count</fc></action> "
+      [ "$count" != "0" ] && printf "<fc=${config.gui.theme.base01}><fn=1>\\uf0f3</fn> $count</fc> "
     else
       count=$(${pkgs.dunst}/bin/dunstctl count displayed)
       [ "$count" != "0" ] && printf "<fn=1>\\uf0f3</fn> $count "
@@ -47,8 +53,7 @@ in
              , lowerOnStart    = True
              , sepChar         = "%"
              , alignSep        = "}{"
-             , template        =
-             "%UnsafeStdinReader%}{%mail%%statuses%%multicpu%%memory%%disku%%default:Capture%%default:Master%${if config.gui.showBattery then "%battery%" else ""}%dynnetwork%${if config.gui.showWiFi then "%wlan0wi%" else ""}%EPLL%%date%"
+             , template        = "%UnsafeStdinReader%}{%mail%%statuses%%multicpu%%memory%%disku%%default:Capture%%default:Master%${if config.gui.showBattery then "%battery%" else ""}%dynnetwork%${if config.gui.showWiFi then "%wlan0wi%" else ""}%EPLL%%date%"
              , commands        = [ Run NotmuchMail "mail"         [ MailItem "\xf0e0  " "" "tag:unread"
                                                                   ] 50
 
@@ -75,14 +80,14 @@ in
                                                                   , "-h", "${config.gui.theme.base01}"
                                                                   ] 100
 
-                                 , Run Volume "default" "Capture" [ "-t", "\xE0B3 <action=`${pkgs.alsa-utils}/bin/amixer set Capture toggle`><fn=1><status></fn></action> "
+                                 , Run Volume "default" "Capture" [ "-t", "\xE0B3 ${actionCmd toggleMicCmd 1 "<fn=1><status></fn>"} "
                                                                   , "--"
                                                                   , "-C", "${config.gui.theme.base0F}"
                                                                   , "-c", "${config.gui.theme.base0F}"
                                                                   , "-O", "\xf130", "-o", "\xf131"
                                                                   ] 10
 
-                                 , Run Volume "default" "Master"  [ "-t", "<action=`${pkgs.alsa-utils}/bin/amixer set Master toggle`><fn=1><status></fn></action> <volumevbar> "
+                                 , Run Volume "default" "Master"  [ "-t", "${actionCmd toggleAudioCmd 1 "<fn=1><status></fn>"} <volumevbar> "
                                                                   , "--"
                                                                   , "-C", "${config.gui.theme.base0F}"
                                                                   , "-c", "${config.gui.theme.base0F}"
@@ -116,10 +121,10 @@ in
                                                                   , ("obscured",                "overcast")
                                                                   , ("overcast",                "overcast")
                                                                   , ("mostly cloudy",           "overcast")
-                                                                  , ("considerable cloudiness", "overcast")]
-                                                                  [ "-t",
-                                                                  "<fc=${config.gui.theme.base07},${config.gui.theme.base08}>\xE0B2</fc><fc=${config.gui.theme.base00},${config.gui.theme.base07}> <skyConditionS> <tempC>\x2103 <rh>% <windKnots>kn <windCardinal></fc>" ]
-                                                                  18000
+                                                                  , ("considerable cloudiness", "overcast")
+                                                                  ]
+                                                                  [ "-t", "<fc=${config.gui.theme.base07},${config.gui.theme.base08}>\xE0B2</fc><fc=${config.gui.theme.base00},${config.gui.theme.base07}> ${actionCmd (openUrlCmd "https://m.meteo.pl/brojce/60/lodzki-wschodni") 1 "<skyConditionS> <tempC>\\x2103 <rh>% <windKnots>kn <windCardinal>"} </fc>"
+                                                                  ] 18000
 
                                  , Run UnsafeStdinReader
                                  ]
