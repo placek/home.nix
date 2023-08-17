@@ -259,8 +259,8 @@ autocmd! BufEnter *.test.tsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,
 function! s:SquashArgument(...) abort
   return matchstr(getline('.'), '^\%(\%(\x\x\x\)\@!\l\+\s\+\)\=\zs[0-9a-f]\{4,\}\ze \|^\%(Merge\|Rebase\|Upstream\|Pull\|Push\): \zs\S\+')
 endfunction
-autocmd! FileType fugitive nnoremap cE :<c-u>Git commit --edit --allow-empty --squash=<c-r>=<sid>SquashArgument()<cr>
 autocmd! FileType fugitive nnoremap cW :<c-u>Git commit --no-verify --message "WIP <c-r>=trim(system('curl -Ls whatthecommit.com/index.txt'))<cr>"
+autocmd! FileType fugitive nnoremap rI :<c-u>Git rebase --interactive <c-r>=trim(system('git merge-base origin/HEAD HEAD'))<cr>
 command! -nargs=0 Gchanges G log --pretty=oneline origin/HEAD.. | resize 10
 
 """""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""""""
