@@ -16,14 +16,6 @@ wk.register({
   ["<leader>m"]               = { "<cmd>lua require('telescope.builtin').marks()<cr>",                    "Search marks" },
   ["<leader>r"]               = { "<cmd>lua require('telescope.builtin').registers()<cr>",                "Search registers" },
 
-  ["<leader>c"]               = { name = "ChatGPT" },
-  ["<leader>cc"]              = { "<cmd>ChatGPT<cr>",                                                     "Ask anything" },
-  ["<leader>ca"]              = { "<cmd>ChatGPTActAs<cr>",                                                "Act as…" },
-  ["<leader>ce"]              = { "<cmd>ChatGPTEditWithInstructions<cr>",                                 "Edit with instructions…" },
-  ["<leader>cf"]              = { "<cmd>ChatGPTRu fix_bugs<cr>",                                          "Fix bugs" },
-  ["<leader>co"]              = { "<cmd>ChatGPTRu optimize_code<cr>",                                     "Optimize code" },
-  ["<leader>cd"]              = { "<cmd>ChatGPTRu docstring<cr>",                                         "Docstring" },
-
   ["<leader>h"]               = { name = "Git hunk" },
   ["<leader>hp"]              = { "<cmd>lua require('gitsigns').preview_hunk()<cr>",                      "Preview" },
   ["<leader>hr"]              = { "<cmd>lua require('gitsigns').reset_hunk()<cr>",                        "Reset" },

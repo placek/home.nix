@@ -268,23 +268,6 @@ inoremap <cr> <C-G>u<cr>
 vnoremap <C-p> "pdp
 vnoremap <C-P> "pdP
 
-" use xit file as a todo list drawer
-function! ToggleTodoFile()
-  if executable("git")
-    let l:file = system("git config todo.file | tr -d \"\\n\"")
-    if filereadable(l:file)
-      let l:winid = bufwinid(l:file)
-      if winid < 0
-        execute 'split '.l:file
-        execute 'resize 10'
-      else
-        call win_gotoid(l:winid)
-      endif
-    endif
-  endif
-endfunction
-nnoremap <silent><leader>x :call ToggleTodoFile()<cr>
-
 """""""""""""""""""""""""""""""" FILES RELATED """""""""""""""""""""""""""""""""
 
 " use `rubocop` to (kinda) format ruby file
