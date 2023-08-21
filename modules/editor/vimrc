@@ -164,13 +164,11 @@ tnoremap <esc> <c-\><c-n>
 nnoremap <space><cr>    :argadd %<cr>
 nnoremap <space><left>  :previous<cr>
 nnoremap <space><right> :next<cr>
-nnoremap <space><space> :argglobal<cr>
 nnoremap <space><esc>   :argdelete %<cr>
 nnoremap <space><up>    :bprevious<cr>
 nnoremap <space><down>  :bnext<cr>
 
 " fugitive
-
 function! s:toggleFugitive()
   if buflisted(bufname('fugitive:///*/.git//$'))
     execute ":bdelete" bufname('fugitive:///*/.git//$')
@@ -189,6 +187,11 @@ function! s:gitPickaxe(query)
     call setreg("/", "\\V" . a:query)
   endif
 endfunction
+
+autocmd! FileType fugitive nnoremap cW :<c-u>Git commit --no-verify --message "WIP <c-r>=trim(system('curl -Ls whatthecommit.com/index.txt'))<cr>"
+autocmd! FileType fugitive nnoremap rI :<c-u>Git rebase --interactive <c-r>=trim(system('git merge-base origin/HEAD HEAD'))<cr>
+
+command! -nargs=0 Gchanges G log --pretty=oneline origin/HEAD.. | resize 10
 
 nnoremap <leader>gg :call <sid>toggleFugitive()<cr>
 nnoremap <leader>gG :Gchanges<cr>
@@ -282,15 +285,6 @@ autocmd! BufEnter *.test.js setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%
 autocmd! BufEnter *.test.ts setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
 autocmd! BufEnter *.test.jsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
 autocmd! BufEnter *.test.tsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
-
-""""""""""""""""""""""""""""""""""" FUGITIVE """""""""""""""""""""""""""""""""""
-
-function! s:SquashArgument(...) abort
-  return matchstr(getline('.'), '^\%(\%(\x\x\x\)\@!\l\+\s\+\)\=\zs[0-9a-f]\{4,\}\ze \|^\%(Merge\|Rebase\|Upstream\|Pull\|Push\): \zs\S\+')
-endfunction
-autocmd! FileType fugitive nnoremap cW :<c-u>Git commit --no-verify --message "WIP <c-r>=trim(system('curl -Ls whatthecommit.com/index.txt'))<cr>"
-autocmd! FileType fugitive nnoremap rI :<c-u>Git rebase --interactive <c-r>=trim(system('git merge-base origin/HEAD HEAD'))<cr>
-command! -nargs=0 Gchanges G log --pretty=oneline origin/HEAD.. | resize 10
 
 """""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""""""
 hi ColorColumn                          ctermbg=8

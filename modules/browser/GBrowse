@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
-export project=$(echo "$QUTE_URL" | sed -En 's@https://git[^/]+/[^/]+/([^/]+)/.*@\1@p')
-export object=$(echo "$QUTE_URL" | sed -En 's@https://git[^/]+/[^/]+/[^/]+/.*[^[:xdigit:]]([[:xdigit:]]{40}).*@\1@p')
+export project=$(echo "$QUTE_URL" | sed -En 's@https://github.com/[^/]+/([^/]+)/.*@\1@p')
+export object=$(echo "$QUTE_URL" | sed -En 's@https://github.com/.*/commits?/([[:xdigit:]]{40}).*@\1@p')
+export name="$QUTE_SELECTED_TEXT"
 
-if [ -n "$project" ] && [ -n "$object" ]; then
-  nvr --servername "/tmp/$project" --remote-send ":G fetch|G show $object<cr>"
+if [ -n "$project" ]; then
+  if [ -n "$object" ]; then
+    nvr --servername "/tmp/$project" --remote-send ":<c-u>G show $object<cr>"
+  else
+    nvr --servername "/tmp/$project" --remote-send ":<c-u>edit $name<cr>"
+  fi
 fi
