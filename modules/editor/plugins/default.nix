@@ -23,7 +23,6 @@ with pkgs.vimPlugins; [
   { plugin = direnv-vim; }
   { plugin = dressing-nvim; }
   { plugin = friendly-snippets; }
-  { plugin = harpoon; }
   { plugin = haskell-vim; }
   { plugin = luasnip; }
   { plugin = nvim-dap; }

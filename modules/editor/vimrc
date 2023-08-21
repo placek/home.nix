@@ -157,6 +157,15 @@ nnoremap <silent>]c :cnext<cr>
 nnoremap <silent>[l :lprevious<cr>
 nnoremap <silent>]l :lnext<cr>
 
+" poor Harpoon™
+nnoremap <space><cr>    :argadd %<cr>
+nnoremap <space><left>  :previous<cr>
+nnoremap <space><right> :next<cr>
+nnoremap <space><space> :argglobal<cr>
+nnoremap <space><esc>   :argdelete %<cr>
+nnoremap <space><up>    :bprevious<cr>
+nnoremap <space><down>  :bnext<cr>
+
 " toggle loclist list
 function! ToggleLocList()
   if empty(filter(getwininfo(), 'v:val.loclist'))

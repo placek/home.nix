@@ -69,17 +69,6 @@ wk.register({
   ["<localleader>I"]          = { "<cmd>LspInfo<cr>",                                                     "LSP info" },
   ["<localleader><space>"]    = { "<cmd>AV<cr>",                                                          "Alternative file (vertical)" }, -- FIXME: this is rails only!
   ["<localleader><M-space>"]  = { "<cmd>A<cr>",                                                           "Alternative file" }, -- FIXME: this is rails only!
-
-  ["<space>"]                 = { name = "Harpoon" },
-  ["<space><space>"]          = { "<cmd>Telescope harpoon marks<cr>",                                     "List" },
-  ["<space><cr>"]             = { "<cmd>lua require('harpoon.mark').toggle_file()<cr>",                   "Add or reomove file" },
-  ["<space><left>"]           = { "<cmd>lua require('harpoon.ui').nav_prev() <cr>",                       "Previous file" },
-  ["<space><right>"]          = { "<cmd>lua require('harpoon.ui').nav_next() <cr>",                       "Next file" },
-  ["<space>q"]                = { "<cmd>lua require('harpoon.ui').nav_file(1)<cr>",                       "File 1" },
-  ["<space>w"]                = { "<cmd>lua require('harpoon.ui').nav_file(2)<cr>",                       "File 2" },
-  ["<space>e"]                = { "<cmd>lua require('harpoon.ui').nav_file(3)<cr>",                       "File 3" },
-  ["<space>r"]                = { "<cmd>lua require('harpoon.ui').nav_file(4)<cr>",                       "File 4" },
-  ["<space>t"]                = { "<cmd>lua require('harpoon.ui').nav_file(5)<cr>",                       "File 5" }
 }, { mode = "n" })
 
 wk.register({
