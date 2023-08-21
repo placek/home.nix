@@ -174,7 +174,7 @@ in
         where
           spawnSlack   = "${pkgs.slack}/bin/slack"
           findSlack    = resource =? "slack"
-          spawnSpotify = "${pkgs.spotify}/bin/spotify"
+          spawnSpotify = "spotify"
           findSpotify  = resource =? "spotify"
           manageWindow = customFloating $ RationalRect (1/16) (1/16) (7/8) (7/8)
 
