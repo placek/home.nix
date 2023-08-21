@@ -94,8 +94,22 @@ endfunction
 
 " triggers a grep on query and opens quickfix list
 function! s:findTextInPwd(query)
+  if executable('git') && isdirectory(".git")
+    set grepprg=git\ grep\ --no-color\ --line-number\ --column\ -E\ $*         " git grep as search engine
+  endif
   if len(a:query) != 0
     execute "silent grep \"" . a:query . "\" | copen"
+  endif
+endfunction
+
+" finds a file using git ls-files or find command
+function! s:find(query)
+  if len(a:query) != 0
+    if executable('git') && isdirectory(".git")
+      execute "silent cexpr system('git ls-files \"**" . a:query . "*\" | sed \"s/.*/&:1:1/\"') | copen"
+    else
+      execute "silent cexpr system('find . -type f -printf \"%p:1:1\\n\" \"*" . a:query . "*\"') | copen"
+    endif
   endif
 endfunction
 
@@ -110,12 +124,9 @@ let g:loaded_netrw = 1
 
 """"""""""""""""""""""""""""""""""" MAPPINGS """""""""""""""""""""""""""""""""""
 
-
-" fast grepping through git project
-if executable('git') && isdirectory(".git")
-  set grepprg=git\ grep\ --no-color\ --line-number\ --column\ -E\ $*           " git grep as search engine
-endif
+" fast finding in project
 command! -nargs=1 -complete=buffer Grep call <sid>findTextInPwd(<q-args>)      " grep and open quickfix
+command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)               " grep and open quickfix
 
 " move around windows with leader key
 nnoremap <leader><up> <c-w><up>
