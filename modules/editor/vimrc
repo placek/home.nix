@@ -169,6 +169,39 @@ nnoremap <space><esc>   :argdelete %<cr>
 nnoremap <space><up>    :bprevious<cr>
 nnoremap <space><down>  :bnext<cr>
 
+" fugitive
+
+function! s:ToggleFugitive()
+  if buflisted(bufname('fugitive:///*/.git//$'))
+    execute ":bdelete" bufname('fugitive:///*/.git//$')
+  else
+    Git
+    resize 10
+    setlocal winfixheight
+    setlocal nonumber
+    setlocal norelativenumber
+  endif
+endfunction
+
+function! s:GitPickaxe()
+  let l:query = input("/")
+  if !empty(l:query)
+    execute ":G log -p -G " l:query
+  endif
+endfunction
+
+nnoremap <leader>gg :call <sid>ToggleFugitive()<cr>
+nnoremap <leader>gG :Gchanges<cr>
+nnoremap <leader>gl :GcLog<cr>
+nnoremap <leader>gL :0GlLog<cr>
+nnoremap <leader>gp :G pull<cr>
+nnoremap <leader>gf :G pull -f<cr>
+nnoremap <leader>gP :G push<cr>
+nnoremap <leader>gF :G push -f<cr>
+nnoremap <leader>gB :G branch<cr>
+nnoremap <leader>gb :Git blame<cr>
+nnoremap <leader>g/ :call <sid>GitPickaxe()<cr>
+
 " toggle loclist list
 function! ToggleLocList()
   if empty(filter(getwininfo(), 'v:val.loclist'))

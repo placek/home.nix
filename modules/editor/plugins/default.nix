@@ -15,6 +15,10 @@ let
   };
 in
 with pkgs.vimPlugins; [
+  { plugin = vim-fugitive; }
+  { plugin = vim-dirvish; }
+  { plugin = vim-eunuch; }
+
   { plugin = cmp-buffer; }
   { plugin = cmp-nvim-lsp; }
   { plugin = cmp-path; }
@@ -34,8 +38,6 @@ with pkgs.vimPlugins; [
   { plugin = telescope-nvim; }
   { plugin = vim-abolish; }
   { plugin = vim-css-color; }
-  { plugin = vim-dirvish; }
-  { plugin = vim-eunuch; }
   { plugin = vim-fish; }
   { plugin = vim-jinja; }
   { plugin = vim-nix; }
@@ -58,6 +60,5 @@ with pkgs.vimPlugins; [
   { plugin = todo-comments-nvim; config = luaFile ./todo-comments.lua; }
   { plugin = undotree; config = builtins.readFile ./undotree.vim; }
   { plugin = vim-expand-region; config = builtins.readFile ./expand-region.vim; }
-  { plugin = vim-fugitive; config = luaFile ./fugitive.lua; }
   { plugin = which-key-nvim; config = luaFile ./which-key.lua; }
 ]
