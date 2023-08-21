@@ -157,6 +157,9 @@ nnoremap <silent>]c :cnext<cr>
 nnoremap <silent>[l :lprevious<cr>
 nnoremap <silent>]l :lnext<cr>
 
+" exit terminal-mode
+tnoremap <esc> <c-\><c-n>
+
 " poor Harpoon™
 nnoremap <space><cr>    :argadd %<cr>
 nnoremap <space><left>  :previous<cr>
