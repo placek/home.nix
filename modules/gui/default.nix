@@ -62,6 +62,7 @@
       spotify
       xclip
       xf86_input_wacom
+      steam
 
       arduino
       blender
