@@ -75,6 +75,10 @@ set wildmenu                                                                   "
 set wildignore+=.git/,**/node_modules/**                                       " ignore files from unwanted directories
 set wildmode=longest:full,full                                                 " match longest path fully matching pattern
 
+" status line
+set statusline=%1*·%{toupper(mode())}·%2*\ %{FugitiveStatusline()}\ %F:%l:%c%=
+set statusline+=\ %1*·%m%r[%n]·%{strlen(&fenc)?&fenc:'none'}·
+
 """"""""""""""""""""""""""""""""""" FUNCTIONS """"""""""""""""""""""""""""""""""
 " returns a text under visual selection
 function! s:selectedText()
@@ -138,6 +142,9 @@ nnoremap <leader><right> <c-w><right>
 nnoremap <leader>1 :set relativenumber!<cr>
 nnoremap <leader>2 :set hlsearch!<cr>
 nnoremap <leader>3 :set spell!<cr>
+
+nnoremap <leader>\ :Grep
+nnoremap <leader>/ :Find
 
 " `:make` command that passes the file as an argument
 nnoremap <leader>" :lmake %:t:r<cr>
@@ -298,6 +305,7 @@ autocmd! BufEnter *.test.jsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,
 autocmd! BufEnter *.test.tsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
 
 """""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""""""
+hi Boolean                              ctermfg=13             cterm=bold
 hi ColorColumn                          ctermbg=8
 hi Comment                                          ctermfg=7
 hi DiffAdd                              ctermbg=8   ctermfg=10 cterm=none
@@ -305,6 +313,7 @@ hi DiffChange                           ctermbg=8   ctermfg=3  cterm=none
 hi DiffDelete                           ctermbg=8   ctermfg=9  cterm=none
 hi DiffText                             ctermbg=8   ctermfg=11 cterm=underline
 hi Directory                                        ctermfg=4
+hi FloatBorder                          ctermbg=0
 hi FoldColumn                           ctermbg=0   ctermfg=7
 hi Folded                               ctermbg=0   ctermfg=15 cterm=bold
 hi GitSignsAdd                          ctermbg=0   ctermfg=10
@@ -312,37 +321,37 @@ hi GitSignsChange                       ctermbg=0   ctermfg=11
 hi GitSignsCurrentLineBlame                         ctermfg=8
 hi GitSignsDelete                       ctermbg=0   ctermfg=9
 hi LeapLabelPrimary                     ctermbg=11  ctermfg=8  cterm=bold
+hi LspCodeLens                          ctermfg=22  ctermbg=0
 hi LspDiagnosticsSignError              ctermbg=0   ctermfg=1
 hi LspDiagnosticsSignHint               ctermbg=0   ctermfg=7
 hi LspDiagnosticsSignInfo               ctermbg=0   ctermfg=4
-hi LspDiagnosticsSignWarning            ctermbg=0   ctermfg=16
 hi LspDiagnosticsSignInformation        ctermbg=0   ctermfg=8
-hi LspDiagnosticsVirtualTextError       ctermbg=0   ctermfg=1
-hi LspDiagnosticsVirtualTextHint        ctermbg=0   ctermfg=7
-hi LspDiagnosticsVirtualTextInfo        ctermbg=0   ctermfg=4
-hi LspDiagnosticsVirtualTextWarning     ctermbg=0   ctermfg=16
-hi LspDiagnosticsVirtualTextInformation ctermbg=0   ctermfg=8
+hi LspDiagnosticsSignWarning            ctermbg=0   ctermfg=16
 hi LspDiagnosticsUnderlineError         ctermbg=0   ctermfg=1  cterm=underline
 hi LspDiagnosticsUnderlineHint          ctermbg=0   ctermfg=7  cterm=underline
 hi LspDiagnosticsUnderlineInfo          ctermbg=0   ctermfg=4  cterm=underline
-hi LspDiagnosticsUnderlineWarning       ctermbg=0   ctermfg=16 cterm=underline
 hi LspDiagnosticsUnderlineInformation   ctermbg=0   ctermfg=8  cterm=underline
+hi LspDiagnosticsUnderlineWarning       ctermbg=0   ctermfg=16 cterm=underline
+hi LspDiagnosticsVirtualTextError       ctermbg=0   ctermfg=1
+hi LspDiagnosticsVirtualTextHint        ctermbg=0   ctermfg=7
+hi LspDiagnosticsVirtualTextInfo        ctermbg=0   ctermfg=4
+hi LspDiagnosticsVirtualTextInformation ctermbg=0   ctermfg=8
+hi LspDiagnosticsVirtualTextWarning     ctermbg=0   ctermfg=16
 hi LspReferenceRead                                 ctermfg=15 cterm=bold
 hi LspReferenceWrite                                ctermfg=15 cterm=bold,underline
-hi LspCodeLens                          ctermfg=22  ctermbg=0
 hi NormalFloat                          ctermbg=0
-hi FloatBorder                          ctermbg=0
 hi Pmenu                                ctermbg=0   ctermfg=7
 hi PmenuSbar                            ctermbg=0   ctermfg=7
 hi PmenuSel                             ctermbg=4   ctermfg=0  cterm=bold
 hi Search                               ctermbg=3   ctermfg=0  cterm=none
 hi SignColumn                           ctermbg=0
+hi String                               ctermfg=3
 hi TabLine                              ctermbg=8   ctermfg=7  cterm=bold
 hi TabLineFill                          ctermbg=0   ctermfg=0
 hi TabLineSel                           ctermbg=7   ctermfg=0  cterm=bold
+hi TelescopeMatch                                              cterm=bold,underline
+hi TelescopeSelection                   ctermbg=8   ctermfg=15 cterm=bold
+hi User1                                ctermbg=6   ctermfg=0  cterm=bold
+hi User2                                ctermbg=0   ctermfg=15 cterm=bold
 hi VertSplit                            ctermbg=8   ctermfg=8
 hi Visual                               ctermbg=7   ctermfg=0
-hi TelescopeSelection                   ctermbg=8   ctermfg=15 cterm=bold
-hi TelescopeMatch                                              cterm=bold,underline
-hi String                               ctermfg=3
-hi Boolean                              ctermfg=13             cterm=bold

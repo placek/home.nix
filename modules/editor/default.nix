@@ -34,9 +34,17 @@
 
     programs.neovim = {
       enable = true;
-      vimAlias = true;
-      vimdiffAlias = true;
       plugins = import ./plugins { inherit pkgs; };
+      extraConfig = builtins.readFile ./vimrc;
+    };
+
+    programs.vim = {
+      enable = true;
+      plugins = with pkgs.vimPlugins; [
+        vim-fugitive
+        vim-dirvish
+        vim-eunuch
+      ];
       extraConfig = builtins.readFile ./vimrc;
     };
   };
