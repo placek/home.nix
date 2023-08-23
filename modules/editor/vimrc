@@ -75,6 +75,9 @@ set wildmenu                                                                   "
 set wildignore+=.git/,**/node_modules/**                                       " ignore files from unwanted directories
 set wildmode=longest:full,full                                                 " match longest path fully matching pattern
 
+" ctags
+set tags+=.git/tags                                                            " add .git/tags file to scope
+
 " status line
 set statusline=%1*·%{toupper(mode())}·%2*\ %{FugitiveStatusline()}\ %F:%l:%c%=
 set statusline+=\ %1*·%m%r[%n]·%{strlen(&fenc)?&fenc:'none'}·
@@ -97,23 +100,31 @@ function! s:findTextInBuffer(register, query)
 endfunction
 
 " triggers a grep on query and opens quickfix list
-function! s:findTextInPwd(query)
-  if executable('git') && isdirectory(".git")
-    set grepprg=git\ grep\ --no-color\ --line-number\ --column\ -E\ $*         " git grep as search engine
-  endif
-  if len(a:query) != 0
+function! s:grep(query)
+  if !empty(a:query)
+    if isdirectory(".git")
+      set grepprg=git\ grep\ --no-color\ --line-number\ --column\ -E\ $*         " git grep as search engine
+    endif
     execute "silent grep \"" . a:query . "\" | copen"
   endif
 endfunction
 
 " finds a file using git ls-files or find command
 function! s:find(query)
-  if len(a:query) != 0
-    if executable('git') && isdirectory(".git")
+  if !empty(a:query)
+    if isdirectory(".git")
       execute "silent cexpr system('git ls-files \"**" . a:query . "*\" | sed \"s/.*/&:1:1/\"') | copen"
     else
       execute "silent cexpr system('find . -type f -printf \"%p:1:1\\n\" \"*" . a:query . "*\"') | copen"
     endif
+  endif
+endfunction
+
+" finds expression in git history
+function! s:pickaxe(query)
+  if !empty(a:query)
+    execute ":G log -p -G " a:query
+    call setreg("/", "\\V" . a:query)
   endif
 endfunction
 
@@ -128,10 +139,6 @@ let g:loaded_netrw = 1
 
 """"""""""""""""""""""""""""""""""" MAPPINGS """""""""""""""""""""""""""""""""""
 
-" fast finding in project
-command! -nargs=1 -complete=buffer Grep call <sid>findTextInPwd(<q-args>)      " grep and open quickfix
-command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)               " grep and open quickfix
-
 " move around windows with leader key
 nnoremap <leader><up> <c-w><up>
 nnoremap <leader><down> <c-w><down>
@@ -143,13 +150,10 @@ nnoremap <leader>1 :set relativenumber!<cr>
 nnoremap <leader>2 :set hlsearch!<cr>
 nnoremap <leader>3 :set spell!<cr>
 
-nnoremap <leader>\ :Grep
-nnoremap <leader>/ :Find
-
 " `:make` command that passes the file as an argument
-nnoremap <leader>" :lmake %:t:r<cr>
+nnoremap <leader><M-'> :lmake %:t:r<cr>
 nnoremap <leader>' :lmake %:.<cr>
-nnoremap <leader><M-'> :lmake %:.:<c-r>=line('.')<cr><cr>
+nnoremap <leader>" :lmake %:.:<c-r>=line('.')<cr><cr>
 
 " make folds and return to manual foldmethod
 function! MakeFolds()
@@ -180,11 +184,31 @@ tnoremap <esc> <c-\><c-n>
 
 " poor Harpoon™
 nnoremap <space><cr>    :argadd %<cr>
+nnoremap <space><esc>   :argdelete %<cr>
 nnoremap <space><left>  :previous<cr>
 nnoremap <space><right> :next<cr>
-nnoremap <space><esc>   :argdelete %<cr>
 nnoremap <space><up>    :bprevious<cr>
 nnoremap <space><down>  :bnext<cr>
+
+nnoremap <space>-       :e %:h<cr>
+
+nnoremap <space>\       :call <sid>find(input("find /", "", "file_in_path"))<cr>
+nnoremap <space>/       :call <sid>grep(input("grep /", "", "tag"))<cr>
+nnoremap <space>S       :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
+
+vnoremap <space>\ :<c-u>call <sid>find(<sid>selectedText())<cr>
+vnoremap <space>/ :<c-u>call <sid>grep(<sid>selectedText())<cr>
+vnoremap <space>S :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
+
+vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
+vnoremap <silent># :<c-u>call <sid>findTextInBuffer("#"), <sid>selectedText())<cr>n
+
+nnoremap gd g<c-]>
+vnoremap gd g<c-]>
+
+command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
+command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
+command! -nargs=1 -complete=buffer Pickaxe call <sid>pickaxe(<q-args>)
 
 " fugitive
 function! s:toggleFugitive()
@@ -196,13 +220,6 @@ function! s:toggleFugitive()
     setlocal winfixheight
     setlocal nonumber
     setlocal norelativenumber
-  endif
-endfunction
-
-function! s:gitPickaxe(query)
-  if !empty(a:query)
-    execute ":G log -p -G " a:query
-    call setreg("/", "\\V" . a:query)
   endif
 endfunction
 
@@ -221,8 +238,6 @@ nnoremap <leader>gP :G push<cr>
 nnoremap <leader>gF :G push -f<cr>
 nnoremap <leader>gB :G branch<cr>
 nnoremap <leader>gb :Git blame<cr>
-nnoremap <leader>g/ :call <sid>gitPickaxe(input("/"))<cr>
-vnoremap <leader>g/ :<c-u>call <sid>gitPickaxe(<sid>selectedText())<cr>
 
 " toggle loclist list
 function! ToggleLocList()
@@ -246,30 +261,18 @@ endfunction
 
 nnoremap <silent><leader>q :call ToggleQuickFix()<cr>
 
-" `*` and `#` in visual mode!
-vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
-vnoremap <silent># :<c-u>call <sid>findTextInBuffer("#"), <sid>selectedText())<cr>n
-
 " MakeTags - use a `git ctags` command to generate tagfile
 function! MakeTags()
   call jobstart("git ctags", { "on_exit": function('MakeTagsResult') })
 endfunction
 
 function! MakeTagsResult(job, status, event)
-  if a:status == 0
-    echom "MakeTags: done"
-  else
+  if a:status != 0
     echom "MakeTags: tags generation failed"
   endif
 endfunction
-"   add .git/tags file to scope
-set tags+=.git/tags
 "   generate tags in working directory
 command! -nargs=0 MakeTags call MakeTags()
-"   go to a tag under a cursor
-nnoremap gd g<c-]>
-"   go to a tag
-vnoremap gd g<c-]>
 autocmd! BufWritePost * :silent! MakeTags
 
 " use `open` command to open a current buffer
