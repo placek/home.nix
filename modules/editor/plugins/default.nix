@@ -18,6 +18,7 @@ with pkgs.vimPlugins; [
   { plugin = vim-fugitive; }
   { plugin = vim-dirvish; }
   { plugin = vim-eunuch; }
+  { plugin = ale; }
 
   { plugin = cmp-buffer; }
   { plugin = cmp-nvim-lsp; }

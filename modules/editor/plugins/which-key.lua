@@ -24,19 +24,12 @@ wk.register({
   ["<leader>hS"]              = { "<cmd>lua require('gitsigns').stage_buffer()<cr>",                      "Stage buffer" },
   ["<leader>hu"]              = { "<cmd>lua require('gitsigns').undo_stage_hunk()<cr>",                   "Undo stage" },
 
-  ["K"]                       = { "<cmd>lua vim.lsp.buf.hover()<cr>",                                     "Show documentation" },
-  ["<localleader>,"]          = { "<cmd>lua vim.diagnostic.open_float({ border = 'rounded' })<cr>",       "Show diagnostic" },
-  ["<localleader>a"]          = { "<cmd>lua vim.lsp.buf.code_action()<cr>",                               "Code actions" },
   ["<localleader>l"]          = { "<cmd>lua vim.lsp.codelens.refresh()<cr>",                              "Code lens" },
-  ["<localleader>d"]          = { "<cmd>lua require('telescope.builtin').diagnostics()<cr>",              "Diagnostics" },
-  ["<localleader>D"]          = { "<cmd>lua vim.diagnostic.setloclist({ open_loclist = false })<cr>",     "Diagnostics in loclist" },
   ["<localleader>f"]          = { "<cmd>lua vim.lsp.buf.format({ async = true })<cr>",                    "Format" },
   ["<localleader>i"]          = { "<cmd>lua require('telescope.builtin').lsp_incoming_calls(cth)<cr>",    "Incoming calls" },
   ["<localleader>o"]          = { "<cmd>lua require('telescope.builtin').lsp_outgoing_calls(cth)<cr>",    "Outgoing calls" },
-  ["<localleader>r"]          = { "<cmd>lua require('telescope.builtin').lsp_references(cth)<cr>",        "References" },
   ["<localleader>s"]          = { "<cmd>AerialToggle<cr>",                                                "Symbols outline" },
   ["<localleader>S"]          = { "<cmd>lua require('telescope.builtin').lsp_workspace_symbols()<cr>",    "Workspace symbols" },
-  ["<localleader>I"]          = { "<cmd>LspInfo<cr>",                                                     "LSP info" },
   ["<localleader><space>"]    = { "<cmd>AV<cr>",                                                          "Alternative file (vertical)" }, -- FIXME: this is rails only!
   ["<localleader><M-space>"]  = { "<cmd>A<cr>",                                                           "Alternative file" }, -- FIXME: this is rails only!
 }, { mode = "n" })

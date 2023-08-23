@@ -210,35 +210,6 @@ command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
 command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
 command! -nargs=1 -complete=buffer Pickaxe call <sid>pickaxe(<q-args>)
 
-" fugitive
-function! s:toggleFugitive()
-  if buflisted(bufname('fugitive:///*/.git//$'))
-    execute ":bdelete" bufname('fugitive:///*/.git//$')
-  else
-    Git
-    resize 10
-    setlocal winfixheight
-    setlocal nonumber
-    setlocal norelativenumber
-  endif
-endfunction
-
-autocmd! FileType fugitive nnoremap cW :<c-u>Git commit --no-verify --message "WIP <c-r>=trim(system('curl -Ls whatthecommit.com/index.txt'))<cr>"
-autocmd! FileType fugitive nnoremap rI :<c-u>Git rebase --interactive <c-r>=trim(system('git merge-base origin/HEAD HEAD'))<cr>
-
-command! -nargs=0 Gchanges G log --pretty=oneline origin/HEAD.. | resize 10
-
-nnoremap <leader>gg :call <sid>toggleFugitive()<cr>
-nnoremap <leader>gG :Gchanges<cr>
-nnoremap <leader>gl :GcLog<cr>
-nnoremap <leader>gL :0GlLog<cr>
-nnoremap <leader>gp :G pull<cr>
-nnoremap <leader>gf :G pull -f<cr>
-nnoremap <leader>gP :G push<cr>
-nnoremap <leader>gF :G push -f<cr>
-nnoremap <leader>gB :G branch<cr>
-nnoremap <leader>gb :Git blame<cr>
-
 " toggle loclist list
 function! ToggleLocList()
   if empty(filter(getwininfo(), 'v:val.loclist'))
@@ -292,6 +263,55 @@ inoremap <cr> <C-G>u<cr>
 " `<C-p>` that acts like `p`, but not change the `+` register
 vnoremap <C-p> "pdp
 vnoremap <C-P> "pdP
+
+""""""""""""""""""""""""""""""""""""" ALE """"""""""""""""""""""""""""""""""""""
+
+let g:ale_completion_enabled = 1
+let g:ale_sign_column_always = 1
+let g:ale_close_preview_on_insert = 1
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+set omnifunc=ale#completion#OmniFunc
+inoremap <tab> <c-x><c-o>
+
+nnoremap <localleader>i :ALEToggle<cr>
+nnoremap <localleader>I :ALEInfo<cr>
+nnoremap K              :ALEHover<cr>
+nnoremap <localleader>, :ALEDetail<cr>
+nnoremap <localleader>a :ALECodeAction<cr>
+nnoremap <localleader>d :ALEPopulateLocList<cr>
+nnoremap <localleader>r :ALEFindReferences<cr>
+nnoremap <localleader>f :ALEFix<cr>
+
+""""""""""""""""""""""""""""""""""" FUGITIVE """""""""""""""""""""""""""""""""""
+function! s:toggleFugitive()
+  if buflisted(bufname('fugitive:///*/.git//$'))
+    execute ":bdelete" bufname('fugitive:///*/.git//$')
+  else
+    Git
+    resize 10
+    setlocal winfixheight
+    setlocal nonumber
+    setlocal norelativenumber
+  endif
+endfunction
+
+autocmd! FileType fugitive nnoremap cW :<c-u>Git commit --no-verify --message "WIP <c-r>=trim(system('curl -Ls whatthecommit.com/index.txt'))<cr>"
+autocmd! FileType fugitive nnoremap rI :<c-u>Git rebase --interactive <c-r>=trim(system('git merge-base origin/HEAD HEAD'))<cr>
+
+command! -nargs=0 Gchanges G log --pretty=oneline origin/HEAD.. | resize 10
+
+nnoremap <leader>gg :call <sid>toggleFugitive()<cr>
+nnoremap <leader>gG :Gchanges<cr>
+nnoremap <leader>gl :GcLog<cr>
+nnoremap <leader>gL :0GlLog<cr>
+nnoremap <leader>gp :G pull<cr>
+nnoremap <leader>gf :G pull -f<cr>
+nnoremap <leader>gP :G push<cr>
+nnoremap <leader>gF :G push -f<cr>
+nnoremap <leader>gB :G branch<cr>
+nnoremap <leader>gb :Git blame<cr>
 
 """""""""""""""""""""""""""""""" FILES RELATED """""""""""""""""""""""""""""""""
 
