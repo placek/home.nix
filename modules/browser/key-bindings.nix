@@ -7,12 +7,13 @@
 }:
 {
   normal = {
+    "I" = "hint inputs";
+
     ";D" = "hint links spawn ${terminalExec} -e ${downloaderExec} {hint-url} -d ${downloadsDirectory}";
     ";m" = "hint links spawn ${terminalExec} -e ${ytDownloaderExec} -x {hint-url} -o ${downloadsDirectory}/%(title)s.%(ext)s";
     ";v" = "hint links spawn ${terminalExec} -e ${ytDownloaderExec} {hint-url} -o ${downloadsDirectory}/%(title)s.%(ext)s";
     ";g" = "hint links userscript GBrowse";
-    "<Ctrl+w>" = "mode-enter passthrough";
-    "I" = "hint inputs";
+
     ",s" = "open -t https://getpocket.com/edit?url={url}";
     ",re" = "spawn speak -len {primary}";
     ",rp" = "spawn speak -lpl {primary}";
@@ -23,12 +24,8 @@
     ",pO" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --otp-only";
     ",pS" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --password-only --password-pattern \"secret: (.+)\"";
     ",g" = "spawn --userscript GBrowse";
-    "<Super-c>" = "yank selection";
-    "<Super-v>" = "insert-text -- {clipboard}";
+
+    "<Ctrl+w>" = "mode-enter passthrough";
     "<Ctrl+h>" = "open -t https://start.duckduckgo.com/";
-  };
-  insert = {
-    "<Super-c>" = "yank selection";
-    "<Super-v>" = "insert-text -- {clipboard}";
   };
 }
