@@ -22,6 +22,7 @@
     ",pL" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --username-only --username-pattern \"user: (.+)\"";
     ",pO" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --otp-only";
     ",pS" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --password-only --password-pattern \"secret: (.+)\"";
+    ",g" = "spawn --userscript GBrowse";
     "<Super-c>" = "yank selection";
     "<Super-v>" = "insert-text -- {clipboard}";
     "<Ctrl+h>" = "open -t https://start.duckduckgo.com/";

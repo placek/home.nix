@@ -1,13 +1,27 @@
 #!/usr/bin/env bash
 
-export project=$(echo "$QUTE_URL" | sed -En 's@https://github.com/[^/]+/([^/]+)/.*@\1@p')
-export object=$(echo "$QUTE_URL" | sed -En 's@https://github.com/.*/commits?/([[:xdigit:]]{40}).*@\1@p')
-export name="$QUTE_SELECTED_TEXT"
+export project
+export object
+export name
+project=$(echo "$QUTE_URL" | sed -En 's@https://github.com/[^/]+/([^/]+)/.*@\1@p')
+
+case "$QUTE_MODE" in
+  hints)
+    object=$(echo "$QUTE_URL" | sed -En 's@https://github.com/.*/commits?/([[:xdigit:]]{40}).*@\1@p')
+    name="$QUTE_SELECTED_TEXT"
+    ;;
+
+  command)
+    object=$(echo "$QUTE_URL" | sed -En 's@https://github.com/.*/blob/([[:xdigit:]]{40}).*@\1@p')
+    ;;
+esac
 
 if [ -n "$project" ]; then
   if [ -n "$object" ]; then
     nvr --servername "/tmp/$project" --remote-send ":<c-u>G show $object<cr>"
-  else
+  elif [ -n "$name" ]; then
     nvr --servername "/tmp/$project" --remote-send ":<c-u>edit $name<cr>"
+  else
+    exit 1
   fi
 fi
