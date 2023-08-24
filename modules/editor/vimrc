@@ -221,19 +221,9 @@ endfunction
 
 nnoremap <silent><leader>q :call ToggleQuickFix()<cr>
 
-" MakeTags - use a `git ctags` command to generate tagfile
-function! MakeTags()
-  call jobstart("git ctags", { "on_exit": function('MakeTagsResult') })
-endfunction
-
-function! MakeTagsResult(job, status, event)
-  if a:status != 0
-    echom "MakeTags: tags generation failed"
-  endif
-endfunction
-"   generate tags in working directory
-command! -nargs=0 MakeTags call MakeTags()
-autocmd! BufWritePost * :silent! MakeTags
+" generate tags in working directory
+command! -nargs=0 MakeTags silent execute "!git ctags"
+autocmd! BufWritePost * MakeTags
 
 " use `open` command to open a current buffer
 command! -nargs=0 Open !open %
