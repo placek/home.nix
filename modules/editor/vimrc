@@ -240,6 +240,19 @@ inoremap <cr> <C-G>u<cr>
 vnoremap <C-p> "pdp
 vnoremap <C-P> "pdP
 
+""""""""""""""""""""""""""""""""""" ALTFILE """"""""""""""""""""""""""""""""""""
+
+function! s:altFile()
+  if exists("b:altfile")
+    if bufwinid(b:altfile) > -1
+      call win_gotoid(bufwinid(b:altfile))
+    else
+      silent execute ":vs" b:altfile
+    endif
+  endif
+endfunction
+nnoremap <localleader><space> :call <sid>altFile()<cr>
+
 """"""""""""""""""""""""""""""""""""" ALE """"""""""""""""""""""""""""""""""""""
 
 let g:ale_completion_enabled = 1
@@ -300,6 +313,21 @@ nnoremap <leader>gB :G branch<cr>
 nnoremap <leader>gb :Git blame<cr>
 
 """""""""""""""""""""""""""""""" AUTOCOMMANDS """"""""""""""""""""""""""""""""""
+
+" set alternative file
+augroup AltFile
+  autocmd BufReadPost *.rb call setbufvar(expand('%'), 'altfile', expand('%:.:s/^app/spec/:s/\.rb$/_spec.rb/'))
+  autocmd BufReadPost *_spec.rb call setbufvar(expand('%'), 'altfile', expand('%:.:s/^spec/app/:s/_spec\.rb$/.rb/'))
+
+  autocmd BufReadPost *.js  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.js$/.test.js/'))
+  autocmd BufReadPost *.ts  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.ts$/.test.ts/'))
+  autocmd BufReadPost *.jsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.jsx$/.test.jsx/'))
+  autocmd BufReadPost *.tsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.tsx$/.test.tsx/'))
+  autocmd BufReadPost *.test.js  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.js$/.js/'))
+  autocmd BufReadPost *.test.ts  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.ts$/.ts/'))
+  autocmd BufReadPost *.test.jsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.jsx$/.jsx/'))
+  autocmd BufReadPost *.test.tsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.tsx$/.tsx/'))
+augroup END
 
 " set makeprg per file
 augroup MakePrg

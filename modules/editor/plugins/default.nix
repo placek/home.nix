@@ -43,7 +43,6 @@ with pkgs.vimPlugins; [
   { plugin = vim-jinja; }
   { plugin = vim-nix; }
   { plugin = vim-polyglot; }
-  { plugin = vim-rails; }
   { plugin = vim-rhubarb; }
   { plugin = vim-ruby; }
   { plugin = vim-signature; }

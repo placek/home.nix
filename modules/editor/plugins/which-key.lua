@@ -30,8 +30,6 @@ wk.register({
   ["<localleader>o"]          = { "<cmd>lua require('telescope.builtin').lsp_outgoing_calls(cth)<cr>",    "Outgoing calls" },
   ["<localleader>s"]          = { "<cmd>AerialToggle<cr>",                                                "Symbols outline" },
   ["<localleader>S"]          = { "<cmd>lua require('telescope.builtin').lsp_workspace_symbols()<cr>",    "Workspace symbols" },
-  ["<localleader><space>"]    = { "<cmd>AV<cr>",                                                          "Alternative file (vertical)" }, -- FIXME: this is rails only!
-  ["<localleader><M-space>"]  = { "<cmd>A<cr>",                                                           "Alternative file" }, -- FIXME: this is rails only!
 }, { mode = "n" })
 
 wk.register({
