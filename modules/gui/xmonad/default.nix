@@ -106,7 +106,6 @@ in
           , ((modm              , xK_f         ), withFocused $ windows . sink)                                                                                -- push window back into tiling
           , ((modm .|. shiftMask, xK_f         ), refresh)                                                                                                     -- resize viewed windows to the correct size
           , ((modm              , xK_BackSpace ), namedScratchpadAction myScratchPads "slack")                                                                 -- spawn slack
-          , ((modm              , xK_Delete    ), namedScratchpadAction myScratchPads "spotify")                                                               -- spawn spotify
           -- utils submap
           , ((modm, xK_space                   ), submapDefault (runPrompt myXPConfig) . Map.fromList $                                                        -- run application prompt
             [ ((0,    xK_Return                ), spawn $ XMonad.terminal conf)                                                                                -- launch a terminal
@@ -168,14 +167,10 @@ in
         where clickable (k, w) = xmobarAction ("${pkgs.xdotool}/bin/xdotool key super+" ++ show k) "1" w
 
       myScratchPads :: [NamedScratchpad]
-      myScratchPads = [ NS "slack" spawnSlack findSlack manageWindow
-                      , NS "spotify" spawnSpotify findSpotify manageWindow
-                      ]
+      myScratchPads = [ NS "slack" spawnSlack findSlack manageWindow ]
         where
           spawnSlack   = "${pkgs.slack}/bin/slack"
           findSlack    = resource =? "slack"
-          spawnSpotify = "spotify"
-          findSpotify  = resource =? "spotify"
           manageWindow = customFloating $ RationalRect (1/16) (1/16) (7/8) (7/8)
 
       myLayout = avoidStruts . spacingRaw True border True border True . smartBorders $ t ||| m ||| f
