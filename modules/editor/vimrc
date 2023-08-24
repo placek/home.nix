@@ -231,9 +231,6 @@ command! -nargs=0 Open !open %
 " leave only the current buffer - delete others
 command! -nargs=0 BufOnly execute '%bdelete|edit #|normal `"'
 
-" remove trailing whitespaces after saving a file
-autocmd! BufWritePre * :%s/\s\+$//e
-
 " undo sequence for space, dot and newline
 inoremap <space> <C-G>u<space>
 inoremap . <C-G>u.
