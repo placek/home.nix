@@ -18,6 +18,13 @@
         default = "${config.home.homeDirectory}/Downloads";
         description = mdDoc "A path to downloads directory.";
       };
+
+      searchEngines = mkOption {
+        type = types.attrs;
+        default = import ./search-engines.nix;
+        description = mdDoc "Browser search engines.";
+        readOnly = true;
+      };
     };
   };
 
@@ -51,7 +58,7 @@
     programs.qutebrowser = {
       enable = true;
       loadAutoconfig = false;
-      searchEngines = import ./search-engines.nix;
+      searchEngines = config.browser.searchEngines;
       keyBindings = import ./key-bindings.nix { inherit (config) terminalExec downloaderExec ytDownloaderExec menuExec; inherit (config.browser) downloadsDirectory; };
       quickmarks = import ./quickmarks.nix;
       extraConfig = builtins.readFile ./extraConfig;

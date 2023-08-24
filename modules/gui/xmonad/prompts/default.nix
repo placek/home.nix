@@ -13,6 +13,11 @@
       "UDisksDevice.hs" = import ./udisks_device.nix { inherit pkgs; };
       "PassCredential.hs" = import ./pass_credential.nix { inherit pkgs; };
       "PassPrompt.hs" = import ./pass_prompt.nix { inherit pkgs; };
+      "SearchPrompt.hs" = import ./search_prompt.nix {
+        inherit pkgs;
+        inherit (config) browserExec;
+        inherit (config.browser) searchEngines;
+      };
     };
   };
 }

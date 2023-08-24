@@ -43,6 +43,7 @@ in
       import           ClipboardPrompt
       import           PhrasePrompt
       import           PassPrompt
+      import           SearchPrompt
       import           RunPrompt
       import           UDisksPrompt
 
@@ -111,6 +112,7 @@ in
             , ((0,    xK_c                     ), clipboardPrompt myXPConfig)                                                                                  -- clipboard history prompt
             , ((0,    xK_a                     ), phrasePrompt myXPConfig)                                                                                     -- abbreviations prompt
             , ((0,    xK_p                     ), passPrompt myXPConfig)                                                                                       -- pass prompt
+            , ((0,    xK_s                     ), searchPrompt myXPConfig)                                                                                     -- search prompt
             , ((0,    xK_m                     ), udisksPrompt myXPConfig)                                                                                     -- udisks prompt
             ])
           -- quit submap
