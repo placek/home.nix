@@ -105,7 +105,6 @@ in
           , ((modm              , xK_b         ), sendMessage ToggleStruts)                                                                                    -- toggle the status bar gap
           , ((modm              , xK_f         ), withFocused $ windows . sink)                                                                                -- push window back into tiling
           , ((modm .|. shiftMask, xK_f         ), refresh)                                                                                                     -- resize viewed windows to the correct size
-          , ((modm              , xK_BackSpace ), namedScratchpadAction myScratchPads "slack")                                                                 -- spawn slack
           -- utils submap
           , ((modm, xK_space                   ), submapDefault (runPrompt myXPConfig) . Map.fromList $                                                        -- run application prompt
             [ ((0,    xK_Return                ), spawn $ XMonad.terminal conf)                                                                                -- launch a terminal
@@ -166,13 +165,6 @@ in
       myWorkspaces = fmap clickable (zip [1..] workspaceNames)
         where clickable (k, w) = xmobarAction ("${pkgs.xdotool}/bin/xdotool key super+" ++ show k) "1" w
 
-      myScratchPads :: [NamedScratchpad]
-      myScratchPads = [ NS "slack" spawnSlack findSlack manageWindow ]
-        where
-          spawnSlack   = "${pkgs.slack}/bin/slack"
-          findSlack    = resource =? "slack"
-          manageWindow = customFloating $ RationalRect (1/16) (1/16) (7/8) (7/8)
-
       myLayout = avoidStruts . spacingRaw True border True border True . smartBorders $ t ||| m ||| f
         where
           borderSize = ${builtins.toString config.gui.border.size}
@@ -184,7 +176,7 @@ in
       myManageHook = composeAll [ className =? "pinentry" --> doCenterFloat
                                 , isDialog                --> doCenterFloat
                                 , isFullscreen            --> doFullFloat
-                                ] <+> namedScratchpadManageHook myScratchPads
+                                ]
 
       myLogHook xmproc = dynamicLogWithPP xmobarPP { ppOutput          = hPutStrLn xmproc
                                                    , ppHiddenNoWindows = xmobarColor "${config.gui.theme.base08}" "" . wrap " <fn=1>" "</fn> " . noNSP
