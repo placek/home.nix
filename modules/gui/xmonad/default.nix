@@ -36,13 +36,13 @@ in
       import           XMonad.Prompt.ConfirmPrompt          (confirmPrompt)
       import           XMonad.Prompt.FuzzyMatch             (fuzzyMatch, fuzzySort)
       import           XMonad.Util.Cursor                   (setDefaultCursor)
-      import           XMonad.Util.NamedScratchpad
       import           XMonad.Util.Run                      (safeSpawn, spawnPipe, hPutStrLn)
       import           XMonad.Util.SpawnOnce                (spawnOnce)
       import           XMonad.StackSet                      (focusUp, focusDown, focusMaster, shift, sink, greedyView, view, shiftMaster, workspace, stack, integrate', current, RationalRect(..))
 
       import           ClipboardPrompt
       import           PhrasePrompt
+      import           PassPrompt
       import           RunPrompt
       import           UDisksPrompt
 
@@ -110,6 +110,7 @@ in
             [ ((0,    xK_Return                ), spawn $ XMonad.terminal conf)                                                                                -- launch a terminal
             , ((0,    xK_c                     ), clipboardPrompt myXPConfig)                                                                                  -- clipboard history prompt
             , ((0,    xK_a                     ), phrasePrompt myXPConfig)                                                                                     -- abbreviations prompt
+            , ((0,    xK_p                     ), passPrompt myXPConfig)                                                                                       -- pass prompt
             , ((0,    xK_m                     ), udisksPrompt myXPConfig)                                                                                     -- udisks prompt
             ])
           -- quit submap
