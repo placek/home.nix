@@ -120,14 +120,6 @@ function! s:find(query)
   endif
 endfunction
 
-" finds expression in git history
-function! s:pickaxe(query)
-  if !empty(a:query)
-    execute ":G log -p -G " a:query
-    call setreg("/", "\\V" . a:query)
-  endif
-endfunction
-
 """""""""""""""""""""""""""""""""" VARIABLES """""""""""""""""""""""""""""""""""
 " set leader keys
 let g:mapleader      = "\\"                                                    " main leader set to backslash
@@ -194,11 +186,9 @@ nnoremap <space>-       :e %:h<cr>
 
 nnoremap <space>\       :call <sid>find(input("find /", "", "file_in_path"))<cr>
 nnoremap <space>/       :call <sid>grep(input("grep /", "", "tag"))<cr>
-nnoremap <space>S       :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
 
 vnoremap <space>\ :<c-u>call <sid>find(<sid>selectedText())<cr>
 vnoremap <space>/ :<c-u>call <sid>grep(<sid>selectedText())<cr>
-vnoremap <space>S :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
 
 vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
 vnoremap <silent># :<c-u>call <sid>findTextInBuffer("#"), <sid>selectedText())<cr>n
@@ -208,7 +198,6 @@ vnoremap gd g<c-]>
 
 command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
 command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
-command! -nargs=1 -complete=buffer Pickaxe call <sid>pickaxe(<q-args>)
 
 " toggle loclist list
 function! ToggleLocList()
@@ -297,11 +286,21 @@ function! s:toggleFugitive()
   endif
 endfunction
 
+function! s:pickaxe(query)
+  if !empty(a:query)
+    execute ":G log -p -G " a:query
+    call setreg("/", "\\V" . a:query)
+  endif
+endfunction
+
 autocmd! FileType fugitive nnoremap cW :<c-u>Git commit --no-verify --message "WIP <c-r>=trim(system('curl -Ls whatthecommit.com/index.txt'))<cr>"
 autocmd! FileType fugitive nnoremap rI :<c-u>Git rebase --interactive <c-r>=trim(system('git merge-base origin/HEAD HEAD'))<cr>
 
 command! -nargs=0 Gchanges G log --pretty=oneline origin/HEAD.. | resize 10
+command! -nargs=1 -complete=buffer Pickaxe call <sid>pickaxe(<q-args>)
 
+nnoremap <space>s   :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
+vnoremap <space>s   :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
 nnoremap <leader>gg :call <sid>toggleFugitive()<cr>
 nnoremap <leader>gG :Gchanges<cr>
 nnoremap <leader>gl :GcLog<cr>
