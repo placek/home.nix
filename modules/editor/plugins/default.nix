@@ -33,7 +33,6 @@ with pkgs.vimPlugins; [
   { plugin = nvim-dap; }
   { plugin = nvim-lint; }
   { plugin = nvim-treesitter; }
-  { plugin = tabular; }
   { plugin = targets-vim; }
   { plugin = telescope-fzy-native-nvim; }
   { plugin = telescope-nvim; }
