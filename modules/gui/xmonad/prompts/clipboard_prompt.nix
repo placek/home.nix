@@ -1,6 +1,9 @@
 { pkgs
 , ...
 }:
+let
+  greenclip = "${pkgs.haskellPackages.greenclip}/bin/greenclip";
+in
 pkgs.writeText "ClipboardPrompt.hs" ''
   module ClipboardPrompt (clipboardPrompt) where
 
@@ -18,10 +21,10 @@ pkgs.writeText "ClipboardPrompt.hs" ''
     nextCompletion _ = getNextCompletion
 
     completionFunction (Clipboard c) s = do
-      clips <- runProcessWithInput "greenclip" ["print"] []
+      clips <- runProcessWithInput "${greenclip}" ["print"] []
       return $ filter ((searchPredicate c) s) (lines clips)
 
-    modeAction _ a _ = io . spawn $ "greenclip print \"" ++ escapeQuote a ++ "\""
+    modeAction _ a _ = io . spawn $ "${greenclip} print \"" ++ escapeQuote a ++ "\""
 
   clipboardPrompt :: XPConfig -> X ()
   clipboardPrompt xpconfig = mkXPromptWithModes [XPT $ Clipboard xpconfig] xpconfig

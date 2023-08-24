@@ -1,6 +1,10 @@
 { pkgs
 , ...
 }:
+let
+  udisksctl = "${pkgs.udisks}/bin/udisksctl";
+  notifySend = "${pkgs.libnotify}/bin/notify-send";
+in
 pkgs.writeText "UDisksPrompt.hs" ''
   module UDisksPrompt (udisksPrompt) where
 
@@ -115,13 +119,13 @@ pkgs.writeText "UDisksPrompt.hs" ''
   compgenFiles s = runProcessWithInput "bash" [] $ "bind 'set completion-ignore-case on'; compgen -A file -- " ++ s ++ "\n"
 
   notify :: String -> String -> X ()
-  notify prefix output = safeSpawn "notify-send" ["-u", kind, "-i", "/run/current-system/sw/share/icons/Paper/scalable/devices/drive-harddisk-usb-symbolic.svg", "UDisks", output]
+  notify prefix output = safeSpawn "${notifySend}" ["-u", kind, "-i", "/run/current-system/sw/share/icons/Paper/scalable/devices/drive-harddisk-usb-symbolic.svg", "UDisks", output]
     where kind = if isPrefixOf prefix output
                  then "normal"
                  else "critical"
 
   runUDiskCtl :: [String] -> X String
-  runUDiskCtl args = io $ runProcessWithInput "udisksctl" args []
+  runUDiskCtl args = io $ runProcessWithInput "${udisksctl}" args []
 
   parseDevice :: String -> Either String Device
   parseDevice input = either (Left . show) Right (parse input input)

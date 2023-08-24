@@ -1,6 +1,9 @@
 { pkgs
 , ...
 }:
+let
+  xdotool = "${pkgs.xdotool}/bin/xdotool";
+in
 pkgs.writeText "PhrasePrompt.hs" ''
   module PhrasePrompt (phrasePrompt) where
 
@@ -23,7 +26,7 @@ pkgs.writeText "PhrasePrompt.hs" ''
       phrases <- readFile $ combine home ".abbr"
       return $ filter ((searchPredicate c) s) (lines phrases)
 
-    modeAction _ a _ = spawn $ "echo -n \"" ++ escapeQuote a ++ "\" | ${pkgs.xdotool}/bin/xdotool type --clearmodifiers --file -"
+    modeAction _ a _ = spawn $ "echo -n \"" ++ escapeQuote a ++ "\" | ${xdotool} type --clearmodifiers --file -"
 
   phrasePrompt :: XPConfig -> X ()
   phrasePrompt xpconfig = mkXPromptWithModes [XPT $ Phrase xpconfig] xpconfig
