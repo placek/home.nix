@@ -99,6 +99,17 @@ function! s:findTextInBuffer(register, query)
   normal n
 endfunction
 
+""""""""""""""""""""""""""""""""""" LEADERS """"""""""""""""""""""""""""""""""""
+let g:mapleader      = "\\"                                                    " main leader set to backslash
+let g:maplocalleader = ","                                                     " local leader set to comma
+
+"""""""""""""""""""""""""""""""""""" NETRW """""""""""""""""""""""""""""""""""""
+" do not load shitty netrw
+let g:loaded_netrwPlugin = 1
+let g:loaded_netrw = 1
+
+"""""""""""""""""""""""""""""""""" NAVIGATION """"""""""""""""""""""""""""""""""
+
 " triggers a grep on query and opens quickfix list
 function! s:grep(query)
   if !empty(a:query)
@@ -120,59 +131,11 @@ function! s:find(query)
   endif
 endfunction
 
-"""""""""""""""""""""""""""""""""" VARIABLES """""""""""""""""""""""""""""""""""
-" set leader keys
-let g:mapleader      = "\\"                                                    " main leader set to backslash
-let g:maplocalleader = ","                                                     " local leader set to comma
-
-" do not load shitty netrw
-let g:loaded_netrwPlugin = 1
-let g:loaded_netrw = 1
-
-""""""""""""""""""""""""""""""""""" MAPPINGS """""""""""""""""""""""""""""""""""
-
 " move around windows with leader key
 nnoremap <leader><up> <c-w><up>
 nnoremap <leader><down> <c-w><down>
 nnoremap <leader><left> <c-w><left>
 nnoremap <leader><right> <c-w><right>
-
-" some appearance togglable settings
-nnoremap <leader>1 :set relativenumber!<cr>
-nnoremap <leader>2 :set hlsearch!<cr>
-nnoremap <leader>3 :set spell!<cr>
-
-" `:make` command that passes the file as an argument
-nnoremap <leader><M-'> :lmake %:t:r<cr>
-nnoremap <leader>' :lmake %:.<cr>
-nnoremap <leader>" :lmake %:.:<c-r>=line('.')<cr><cr>
-
-" make folds and return to manual foldmethod
-function! MakeFolds()
-  setlocal foldmethod=indent
-  norm zR
-  setlocal foldmethod=manual
-endfunction
-
-set foldmethod=manual
-nnoremap <leader>z :call MakeFolds()<cr>
-
-" intuitive jumps
-nnoremap <silent>[a :previous<cr>
-nnoremap <silent>]a :next<cr>
-nnoremap <silent>[b :bprevious<cr>
-nnoremap <silent>]b :bnext<cr>
-nnoremap <silent>[w <c-w>W
-nnoremap <silent>]w <c-w>w
-nnoremap <silent>[t :tabprevious<cr>
-nnoremap <silent>]t :tabnext<cr>
-nnoremap <silent>[c :cprevious<cr>
-nnoremap <silent>]c :cnext<cr>
-nnoremap <silent>[l :lprevious<cr>
-nnoremap <silent>]l :lnext<cr>
-
-" exit terminal-mode
-tnoremap <esc> <c-\><c-n>
 
 " poor Harpoon™
 nnoremap <space><cr>    :argadd %<cr>
@@ -182,63 +145,43 @@ nnoremap <space><right> :next<cr>
 nnoremap <space><up>    :bprevious<cr>
 nnoremap <space><down>  :bnext<cr>
 
+" do to parent directory
 nnoremap <space>-       :e %:h<cr>
 
+" lookup
 nnoremap <space>\       :call <sid>find(input("find /", "", "file_in_path"))<cr>
 nnoremap <space>/       :call <sid>grep(input("grep /", "", "tag"))<cr>
 
-vnoremap <space>\ :<c-u>call <sid>find(<sid>selectedText())<cr>
-vnoremap <space>/ :<c-u>call <sid>grep(<sid>selectedText())<cr>
+vnoremap <space>\       :<c-u>call <sid>find(<sid>selectedText())<cr>
+vnoremap <space>/       :<c-u>call <sid>grep(<sid>selectedText())<cr>
 
-vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
-vnoremap <silent># :<c-u>call <sid>findTextInBuffer("#"), <sid>selectedText())<cr>n
-
-nnoremap gd g<c-]>
-vnoremap gd g<c-]>
+vnoremap <silent>*      :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
+vnoremap <silent>#      :<c-u>call <sid>findTextInBuffer("#"), <sid>selectedText())<cr>n
 
 command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
 command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
 
-" toggle loclist list
-function! ToggleLocList()
-  if empty(filter(getwininfo(), 'v:val.loclist'))
-    lopen
-  else
-    lclose
-  endif
-endfunction
-
-nnoremap <silent><leader>Q :call ToggleLocList()<cr>
-
-" toggle quickfix list
-function! ToggleQuickFix()
-  if empty(filter(getwininfo(), 'v:val.quickfix'))
-    copen
-  else
-    cclose
-  endif
-endfunction
-
-nnoremap <silent><leader>q :call ToggleQuickFix()<cr>
-
-" generate tags in working directory
+""""""""""""""""""""""""""""""""""""" TAGS """""""""""""""""""""""""""""""""""""
 command! -nargs=0 MakeTags silent execute "!git ctags"
+
 autocmd! BufWritePost * MakeTags
 
-" use `open` command to open a current buffer
-command! -nargs=0 Open !open %
+nnoremap gd g<c-]>
+vnoremap gd g<c-]>
 
-" leave only the current buffer - delete others
-command! -nargs=0 BufOnly execute '%bdelete|edit #|normal `"'
+""""""""""""""""""""""""""""""""""""" MAKE """""""""""""""""""""""""""""""""""""
+nnoremap <leader><M-'> :lmake %:t:r<cr>
+nnoremap <leader>' :lmake %:.<cr>
+nnoremap <leader>" :lmake %:.:<c-r>=line('.')<cr><cr>
 
-" undo sequence for space, dot and newline
-inoremap <space> <C-G>u<space>
-inoremap . <C-G>u.
-inoremap <cr> <C-G>u<cr>
+augroup MakePrg
+  autocmd BufEnter *_spec.rb setlocal makeprg=rspec
 
-" `<C-p>` that acts like `p`, but not change the `+` register
-vnoremap <C-p> "pdp
-vnoremap <C-P> "pdP
+  autocmd BufEnter *.test.js setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
+  autocmd BufEnter *.test.ts setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
+  autocmd BufEnter *.test.jsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
+  autocmd BufEnter *.test.tsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
+augroup END
 
 """"""""""""""""""""""""""""""""""" ALTFILE """"""""""""""""""""""""""""""""""""
 
@@ -251,7 +194,22 @@ function! s:altFile()
     endif
   endif
 endfunction
+
 nnoremap <localleader><space> :call <sid>altFile()<cr>
+
+augroup AltFile
+  autocmd BufReadPost *.rb call setbufvar(expand('%'), 'altfile', expand('%:.:s/^app/spec/:s/\.rb$/_spec.rb/'))
+  autocmd BufReadPost *_spec.rb call setbufvar(expand('%'), 'altfile', expand('%:.:s/^spec/app/:s/_spec\.rb$/.rb/'))
+
+  autocmd BufReadPost *.js  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.js$/.test.js/'))
+  autocmd BufReadPost *.ts  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.ts$/.test.ts/'))
+  autocmd BufReadPost *.jsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.jsx$/.test.jsx/'))
+  autocmd BufReadPost *.tsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.tsx$/.test.tsx/'))
+  autocmd BufReadPost *.test.js  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.js$/.js/'))
+  autocmd BufReadPost *.test.ts  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.ts$/.ts/'))
+  autocmd BufReadPost *.test.jsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.jsx$/.jsx/'))
+  autocmd BufReadPost *.test.tsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.tsx$/.tsx/'))
+augroup END
 
 """"""""""""""""""""""""""""""""""""" ALE """"""""""""""""""""""""""""""""""""""
 
@@ -312,32 +270,62 @@ nnoremap <leader>gF :G push -f<cr>
 nnoremap <leader>gB :G branch<cr>
 nnoremap <leader>gb :Git blame<cr>
 
-"""""""""""""""""""""""""""""""" AUTOCOMMANDS """"""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""" UTILS """""""""""""""""""""""""""""""""""""
 
-" set alternative file
-augroup AltFile
-  autocmd BufReadPost *.rb call setbufvar(expand('%'), 'altfile', expand('%:.:s/^app/spec/:s/\.rb$/_spec.rb/'))
-  autocmd BufReadPost *_spec.rb call setbufvar(expand('%'), 'altfile', expand('%:.:s/^spec/app/:s/_spec\.rb$/.rb/'))
+" some appearance togglable settings
+nnoremap <leader>1 :set relativenumber!<cr>
+nnoremap <leader>2 :set hlsearch!<cr>
+nnoremap <leader>3 :set spell!<cr>
 
-  autocmd BufReadPost *.js  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.js$/.test.js/'))
-  autocmd BufReadPost *.ts  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.ts$/.test.ts/'))
-  autocmd BufReadPost *.jsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.jsx$/.test.jsx/'))
-  autocmd BufReadPost *.tsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.tsx$/.test.tsx/'))
-  autocmd BufReadPost *.test.js  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.js$/.js/'))
-  autocmd BufReadPost *.test.ts  call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.ts$/.ts/'))
-  autocmd BufReadPost *.test.jsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.jsx$/.jsx/'))
-  autocmd BufReadPost *.test.tsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.tsx$/.tsx/'))
-augroup END
+" make folds and return to manual foldmethod
+function! s:makeFolds()
+  setlocal foldmethod=indent
+  norm zR
+  setlocal foldmethod=manual
+endfunction
 
-" set makeprg per file
-augroup MakePrg
-  autocmd BufEnter *_spec.rb setlocal makeprg=rspec
+set foldmethod=manual
+nnoremap <leader>z :call <sid>makeFolds()<cr>
 
-  autocmd BufEnter *.test.js setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
-  autocmd BufEnter *.test.ts setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
-  autocmd BufEnter *.test.jsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
-  autocmd BufEnter *.test.tsx setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
-augroup END
+" exit terminal-mode
+tnoremap <esc> <c-\><c-n>
+
+" toggle loclist list
+function! s:toggleLocList()
+  if empty(filter(getwininfo(), 'v:val.loclist'))
+    lopen
+  else
+    lclose
+  endif
+endfunction
+
+nnoremap <silent><leader>Q :call <sid>toggleLocList()<cr>
+
+" toggle quickfix list
+function! s:toggleQuickFix()
+  if empty(filter(getwininfo(), 'v:val.quickfix'))
+    copen
+  else
+    cclose
+  endif
+endfunction
+
+nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
+
+" use `open` command to open a current buffer
+command! -nargs=0 Open !open %
+
+" leave only the current buffer - delete others
+command! -nargs=0 BufOnly execute '%bdelete|edit #|normal `"'
+
+" undo sequence for space, dot and newline
+inoremap <space> <C-G>u<space>
+inoremap . <C-G>u.
+inoremap <cr> <C-G>u<cr>
+
+" `<C-p>` that acts like `p`, but not change the `+` register
+vnoremap <C-p> "pdp
+vnoremap <C-P> "pdP
 
 """""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""""""
 hi Boolean                              ctermfg=13             cterm=bold
