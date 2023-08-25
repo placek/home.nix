@@ -102,6 +102,7 @@ in
       sshfs
       timidity
       tiv
+      tmate
       unrar
       unzip
       usbutils
