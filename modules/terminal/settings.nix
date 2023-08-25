@@ -69,7 +69,7 @@ with theme; {
   tab_bar_min_tabs = "2";
   tab_bar_style = "powerline";
   tab_switch_strategy = "previous";
-  tab_title_template = "{fmt.fg.yellow}{bell_symbol}{activity_symbol}{fmt.fg.tab}{title}";
+  tab_title_template = "{fmt.fg.yellow}{bell_symbol}{activity_symbol}{fmt.fg.tab}{tab.active_exe}";
   shell = shellExec;
   editor = editorExec;
   close_on_child_death = "yes";
