@@ -270,6 +270,14 @@ nnoremap <leader>gF :G push -f<cr>
 nnoremap <leader>gB :G branch<cr>
 nnoremap <leader>gb :Git blame<cr>
 
+"""""""""""""""""""""""""""""""""" GITGUTTER """""""""""""""""""""""""""""""""""
+
+nnoremap ]h         :GitGutterNextHunk<cr>
+nnoremap [h         :GitGutterPrevHunk<cr>
+nnoremap <leader>gh :GitGutterPreviewHunk<cr>
+nnoremap <leader>gs :GitGutterStageHunk<cr>
+nnoremap <leader>gr :GitGutterUndoHunk<cr>
+
 """""""""""""""""""""""""""""""""""" UTILS """""""""""""""""""""""""""""""""""""
 
 " some appearance togglable settings
@@ -339,10 +347,6 @@ hi Directory                                        ctermfg=4
 hi FloatBorder                          ctermbg=0
 hi FoldColumn                           ctermbg=0   ctermfg=7
 hi Folded                               ctermbg=0   ctermfg=15 cterm=bold
-hi GitSignsAdd                          ctermbg=0   ctermfg=10
-hi GitSignsChange                       ctermbg=0   ctermfg=11
-hi GitSignsCurrentLineBlame                         ctermfg=8
-hi GitSignsDelete                       ctermbg=0   ctermfg=9
 hi LeapLabelPrimary                     ctermbg=11  ctermfg=8  cterm=bold
 hi LspCodeLens                          ctermfg=22  ctermbg=0
 hi LspDiagnosticsSignError              ctermbg=0   ctermfg=1

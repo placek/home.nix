@@ -19,6 +19,7 @@ with pkgs.vimPlugins; [
   { plugin = vim-dirvish; }
   { plugin = vim-eunuch; }
   { plugin = ale; }
+  { plugin = vim-gitgutter; }
 
   { plugin = cmp-buffer; }
   { plugin = cmp-nvim-lsp; }
@@ -51,7 +52,6 @@ with pkgs.vimPlugins; [
   { plugin = aerial-nvim; config = luaFile ./aerial.lua; }
   { plugin = comment-nvim; config = luaFile ./comment.lua; }
   { plugin = fidget-nvim; config = luaFile ./fidget.lua; }
-  { plugin = gitsigns-nvim; config = luaFile ./gitsigns.lua; }
   { plugin = lualine-nvim; config = luaFile ./lualine.lua; }
   { plugin = nvim-cmp; config = luaFile ./cmp.lua; }
   { plugin = nvim-lspconfig; config = luaFile ./lspconfig.lua; }

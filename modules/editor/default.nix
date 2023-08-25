@@ -44,7 +44,9 @@
         vim-fugitive
         vim-dirvish
         vim-eunuch
+
         ale
+        vim-gitgutter
       ];
       extraConfig = builtins.readFile ./vimrc;
     };

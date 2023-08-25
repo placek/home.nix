@@ -16,14 +16,6 @@ wk.register({
   ["<leader>m"]               = { "<cmd>lua require('telescope.builtin').marks()<cr>",                    "Search marks" },
   ["<leader>r"]               = { "<cmd>lua require('telescope.builtin').registers()<cr>",                "Search registers" },
 
-  ["<leader>h"]               = { name = "Git hunk" },
-  ["<leader>hp"]              = { "<cmd>lua require('gitsigns').preview_hunk()<cr>",                      "Preview" },
-  ["<leader>hr"]              = { "<cmd>lua require('gitsigns').reset_hunk()<cr>",                        "Reset" },
-  ["<leader>hR"]              = { "<cmd>lua require('gitsigns').reset_buffer()<cr>",                      "Reset buffer" },
-  ["<leader>hs"]              = { "<cmd>lua require('gitsigns').stage_hunk()<cr>",                        "Stage" },
-  ["<leader>hS"]              = { "<cmd>lua require('gitsigns').stage_buffer()<cr>",                      "Stage buffer" },
-  ["<leader>hu"]              = { "<cmd>lua require('gitsigns').undo_stage_hunk()<cr>",                   "Undo stage" },
-
   ["<localleader>l"]          = { "<cmd>lua vim.lsp.codelens.refresh()<cr>",                              "Code lens" },
   ["<localleader>f"]          = { "<cmd>lua vim.lsp.buf.format({ async = true })<cr>",                    "Format" },
   ["<localleader>i"]          = { "<cmd>lua require('telescope.builtin').lsp_incoming_calls(cth)<cr>",    "Incoming calls" },
