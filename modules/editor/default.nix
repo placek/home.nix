@@ -47,6 +47,7 @@
 
         ale
         vim-gitgutter
+        ctrlp-vim
       ];
       extraConfig = builtins.readFile ./vimrc;
     };

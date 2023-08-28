@@ -79,8 +79,8 @@ set wildmode=longest:full,full                                                 "
 set tags+=.git/tags                                                            " add .git/tags file to scope
 
 " status line
-set statusline=%1*·%{toupper(mode())}·%2*\ %{FugitiveStatusline()}\ %F:%l:%c%=
-set statusline+=\ %1*·%m%r[%n]·%{strlen(&fenc)?&fenc:'none'}·
+set statusline=%1*\ %{toupper(mode())}\ %2*\ %{FugitiveStatusline()}\ %F:%l:%c%=
+set statusline+=\ %1*\ %m%r[%n]\ %{strlen(&fenc)?&fenc:'none'}\ 
 
 """"""""""""""""""""""""""""""""""" FUNCTIONS """"""""""""""""""""""""""""""""""
 " returns a text under visual selection
@@ -145,9 +145,6 @@ nnoremap <space><right> :next<cr>
 nnoremap <space><up>    :bprevious<cr>
 nnoremap <space><down>  :bnext<cr>
 
-" do to parent directory
-nnoremap <space>-       :e %:h<cr>
-
 " lookup
 nnoremap <space>\       :call <sid>find(input("find /", "", "file_in_path"))<cr>
 nnoremap <space>/       :call <sid>grep(input("grep /", "", "tag"))<cr>
@@ -160,6 +157,13 @@ vnoremap <silent>#      :<c-u>call <sid>findTextInBuffer("#"), <sid>selectedText
 
 command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
 command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
+
+"""""""""""""""""""""""""""""""""""" CTRLP """""""""""""""""""""""""""""""""""""
+
+nnoremap <space><space> :CtrlP<cr>
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:50'
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
 
 """"""""""""""""""""""""""""""""""""" TAGS """""""""""""""""""""""""""""""""""""
 command! -nargs=0 MakeTags silent execute "!git ctags"
