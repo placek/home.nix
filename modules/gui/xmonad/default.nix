@@ -109,6 +109,7 @@ in
           -- utils submap
           , ((modm, xK_space                   ), submapDefault (runPrompt myXPConfig) . Map.fromList $                                                        -- run application prompt
             [ ((0,    xK_Return                ), spawn $ XMonad.terminal conf)                                                                                -- launch a terminal
+            , ((modm, xK_Return                ), spawn $ XMonad.terminal conf)                                                                                -- launch a terminal
             , ((0,    xK_c                     ), clipboardPrompt myXPConfig)                                                                                  -- clipboard history prompt
             , ((0,    xK_a                     ), phrasePrompt myXPConfig)                                                                                     -- abbreviations prompt
             , ((0,    xK_p                     ), passPrompt myXPConfig)                                                                                       -- pass prompt
