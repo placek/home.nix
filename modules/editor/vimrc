@@ -284,16 +284,17 @@ autocmd! FileType fugitive nnoremap rI :<c-u>Git rebase --interactive <c-r>=trim
 command! -nargs=0 Gchanges G log --pretty=oneline origin/HEAD.. | resize 10
 command! -nargs=1 -complete=buffer Pickaxe call <sid>pickaxe(<q-args>)
 
+nnoremap <leader>b :Git blame<cr>
 nnoremap <leader>B :G branch<cr>
+nnoremap <leader>e :Gedit<cr>
+nnoremap <leader>g :call <sid>toggleFugitive()<cr>
+nnoremap <leader>f :G pull -f<cr>
 nnoremap <leader>F :G push -f<cr>
 nnoremap <leader>G :Gchanges<cr>
-nnoremap <leader>L :0GlLog<cr>
-nnoremap <leader>P :G push<cr>
-nnoremap <leader>b :Git blame<cr>
-nnoremap <leader>f :G pull -f<cr>
-nnoremap <leader>g :call <sid>toggleFugitive()<cr>
 nnoremap <leader>l :GcLog<cr>
+nnoremap <leader>L :0GlLog<cr>
 nnoremap <leader>p :G pull<cr>
+nnoremap <leader>P :G push<cr>
 nnoremap <leader>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
 vnoremap <leader>s :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
 
