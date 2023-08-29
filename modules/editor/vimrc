@@ -219,10 +219,10 @@ augroup END
 """"""""""""""""""""""""""""""""""""" ALE """"""""""""""""""""""""""""""""""""""
 
 function! LinterStatus() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
-    return l:counts.total == 0 ? 'OK' : printf('%dW %dE', all_non_errors, all_errors)
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? 'OK' : printf('%dW %dE', all_non_errors, all_errors)
 endfunction
 
 let g:ale_completion_enabled = 1
@@ -231,6 +231,7 @@ let g:ale_close_preview_on_insert = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
 set omnifunc=ale#completion#OmniFunc
 inoremap <tab> <c-x><c-o>
 
@@ -313,7 +314,7 @@ vmap <C-v> <Plug>(expand_region_shrink)
 
 if !has("nvim")
   hi BlameLine ctermfg=8
-  call prop_type_add('blame_line', { 'highlight': 'BlameLine'})
+  call prop_type_add('blame_line', { 'highlight': 'BlameLine' })
 
   function! BlameLineHandler(channel, msg)
     let text = substitute(trim(a:msg), '^\(\w\+\)\s\+(\(.\{-}\)).*', '\1 \2', 'g')
