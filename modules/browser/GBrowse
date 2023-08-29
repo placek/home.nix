@@ -3,12 +3,13 @@
 export project
 export object
 export name
+
 project=$(echo "$QUTE_URL" | sed -En 's@https://github.com/[^/]+/([^/]+)/.*@\1@p')
 
 case "$QUTE_MODE" in
   hints)
     object=$(echo "$QUTE_URL" | sed -En 's@https://github.com/.*/commits?/([[:xdigit:]]{40}).*@\1@p')
-    name="$QUTE_SELECTED_TEXT"
+    name=$(echo "$QUTE_SELECTED_HTML" | sed -En 's@.*title="([^"]+)".*@\1@p')
     ;;
 
   command)
@@ -18,9 +19,9 @@ esac
 
 if [ -n "$project" ]; then
   if [ -n "$object" ]; then
-    nvr --servername "/tmp/$project" --remote-send ":<c-u>G show $object<cr>"
+    vim --servername "$project" --remote-send ":<c-u>G show $object<cr>"
   elif [ -n "$name" ]; then
-    nvr --servername "/tmp/$project" --remote-send ":<c-u>edit $name<cr>"
+    vim --servername "$project" --remote-send ":<c-u>edit $name<cr>"
   else
     exit 1
   fi
