@@ -133,10 +133,10 @@ function! s:find(query)
 endfunction
 
 " move around windows with leader key
-nnoremap <leader><up> <c-w><up>
-nnoremap <leader><down> <c-w><down>
-nnoremap <leader><left> <c-w><left>
-nnoremap <leader><right> <c-w><right>
+nnoremap <localleader><up> <c-w><up>
+nnoremap <localleader><down> <c-w><down>
+nnoremap <localleader><left> <c-w><left>
+nnoremap <localleader><right> <c-w><right>
 
 " poor Harpoon™
 nnoremap <space><cr>    :argadd %<cr>
