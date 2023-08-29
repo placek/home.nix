@@ -7,15 +7,15 @@
   options = with lib; {
     editorExec = mkOption {
       type = types.str;
-      default = "${config.programs.neovim.finalPackage}/bin/nvim";
+      default = "${config.programs.vim.package}/bin/vim";
       description = mdDoc "Editor executable.";
       readOnly = true;
     };
 
     difftoolExec = mkOption {
       type = types.str;
-      default = "${config.programs.neovim.finalPackage}/bin/nvim";
-      description = mdDoc "Editor executable.";
+      default = "${config.programs.vim.package}/bin/vim";
+      description = mdDoc "Diff editor executable.";
       readOnly = true;
     };
   };
@@ -31,12 +31,6 @@
     ];
 
     programs.fish.shellAliases.editor = "vim --servername (basename (git root))";
-
-    programs.neovim = {
-      enable = true;
-      plugins = import ./plugins { inherit pkgs; };
-      extraConfig = builtins.readFile ./vimrc;
-    };
 
     programs.vim = {
       enable = true;
