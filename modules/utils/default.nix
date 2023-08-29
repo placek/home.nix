@@ -77,6 +77,7 @@ in
       file
       ghostscript
       go-jira
+      htmlq
       imagemagick
       jmespath
       jmtpfs
