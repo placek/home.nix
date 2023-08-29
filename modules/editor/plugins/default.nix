@@ -20,6 +20,7 @@ with pkgs.vimPlugins; [
   { plugin = vim-eunuch; }
   { plugin = ale; }
   { plugin = vim-gitgutter; }
+  { plugin = vim-expand-region; }
 
   { plugin = cmp-buffer; }
   { plugin = cmp-nvim-lsp; }
@@ -58,6 +59,5 @@ with pkgs.vimPlugins; [
   { plugin = telescope-file-browser-nvim; config = luaFile ./telescope-file-browser.lua; }
   { plugin = todo-comments-nvim; config = luaFile ./todo-comments.lua; }
   { plugin = undotree; config = builtins.readFile ./undotree.vim; }
-  { plugin = vim-expand-region; config = builtins.readFile ./expand-region.vim; }
   { plugin = which-key-nvim; config = luaFile ./which-key.lua; }
 ]

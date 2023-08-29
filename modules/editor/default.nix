@@ -46,8 +46,9 @@
         vim-eunuch
 
         ale
-        vim-gitgutter
         ctrlp-vim
+        vim-expand-region
+        vim-gitgutter
       ];
       extraConfig = builtins.readFile ./vimrc;
     };

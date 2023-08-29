@@ -290,6 +290,11 @@ nnoremap <space>h :GitGutterPreviewHunk<cr>
 nnoremap <space>r :GitGutterUndoHunk<cr>
 nnoremap <space>R :GitGutterStageHunk<cr>
 
+"""""""""""""""""""""""""""""""" EXPAND REGION """""""""""""""""""""""""""""""""
+
+vmap v     <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
+
 """""""""""""""""""""""""""""""""" BLAMELINE """""""""""""""""""""""""""""""""""
 
 if !has("nvim")
