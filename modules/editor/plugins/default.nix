@@ -20,6 +20,7 @@ with pkgs.vimPlugins; [
   { plugin = vim-eunuch; }
   { plugin = ale; }
   { plugin = vim-gitgutter; }
+  { plugin = ctrlp-vim; }
   { plugin = vim-expand-region; }
 
   { plugin = cmp-buffer; }
