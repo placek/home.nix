@@ -93,10 +93,10 @@ in
           , ((modm .|. shiftMask, xK_Right     ), shiftToNext)                                                                                                 -- move to next workspace
           , ((modm .|. mod1Mask , xK_Left      ), prevScreen)                                                                                                  -- move to previous screen
           , ((modm .|. mod1Mask , xK_Right     ), nextScreen)                                                                                                  -- move to next screen
-          , ((modm              , xK_k         ), windows focusUp  )                                                                                           -- move focus to the previous window
-          , ((modm              , xK_j         ), windows focusDown)                                                                                           -- move focus to the next window
-          , ((modm .|. shiftMask, xK_k         ), rotAllUp    )                                                                                                -- swap the focused window with the previous window
-          , ((modm .|. shiftMask, xK_j         ), rotAllDown  )                                                                                                -- swap the focused window with the next window
+          , ((modm              , xK_Up        ), windows focusUp  )                                                                                           -- move focus to the previous window
+          , ((modm              , xK_Down      ), windows focusDown)                                                                                           -- move focus to the next window
+          , ((modm .|. shiftMask, xK_Up        ), rotAllUp    )                                                                                                -- swap the focused window with the previous window
+          , ((modm .|. shiftMask, xK_Down      ), rotAllDown  )                                                                                                -- swap the focused window with the next window
           , ((modm              , xK_h         ), sendMessage Shrink)                                                                                          -- shrink the master area
           , ((modm              , xK_l         ), sendMessage Expand)                                                                                          -- expand the master area
           , ((modm .|. shiftMask, xK_h         ), sendMessage (IncMasterN 1))                                                                                  -- increment the number of windows in the master area
