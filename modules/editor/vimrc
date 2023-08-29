@@ -78,8 +78,8 @@ set wildmode=longest:full,full                                                 "
 set tags+=.git/tags                                                            " add .git/tags file to scope
 
 " status line
-set statusline=%1*\ %{toupper(mode())}\ %2*\ %{FugitiveStatusline()}\ %F:%l:%c%=
-set statusline+=\ %1*\ %m%r[%n]\ %{strlen(&fenc)?&fenc:'none'}\ 
+set statusline=%1*\ %{toupper(mode())}\ %2*\ %F:%l:%c%=
+set statusline+=\ %{LinterStatus()}\ %1*\ %m%r[%n]\ %{strlen(&fenc)?&fenc:'none'}\ 
 
 autocmd InsertEnter,InsertLeave * set cul!
 
@@ -217,6 +217,13 @@ augroup AltFile
 augroup END
 
 """"""""""""""""""""""""""""""""""""" ALE """"""""""""""""""""""""""""""""""""""
+
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+    return l:counts.total == 0 ? 'OK' : printf('%dW %dE', all_non_errors, all_errors)
+endfunction
 
 let g:ale_completion_enabled = 1
 let g:ale_sign_column_always = 1
