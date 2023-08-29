@@ -23,12 +23,7 @@
   config = {
     home.sessionVariables.EDITOR = "vim";
 
-    home.packages = with pkgs; [
-      fd
-      neovim-remote
-      ripgrep
-      universal-ctags
-    ];
+    home.packages = with pkgs; [ universal-ctags ];
 
     programs.fish.shellAliases.editor = "vim --servername (basename (git root))";
 
@@ -37,13 +32,12 @@
       plugins = with pkgs.vimPlugins; [
         vim-fugitive
         vim-dirvish
-        vim-eunuch
 
         ale
+        copilot-vim
         ctrlp-vim
         vim-expand-region
         vim-gitgutter
-        copilot-vim
       ];
       extraConfig = builtins.readFile ./vimrc;
     };

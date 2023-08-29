@@ -73,6 +73,7 @@ in
       curl
       docker-compose
       entr
+      fd
       ffmpeg-full
       file
       ghostscript
@@ -95,6 +96,7 @@ in
       orca-c
       qmk
       rclone
+      ripgrep
       rlwrap
       rnix-lsp
       rpi-imager
