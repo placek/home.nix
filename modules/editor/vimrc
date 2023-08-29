@@ -79,7 +79,7 @@ set tags+=.git/tags                                                            "
 
 " status line
 set statusline=%1*\ %{toupper(mode())}\ %2*\ %F:%l:%c%=
-set statusline+=\ %{LinterStatus()}\ %1*\ %m%r[%n]\ %{strlen(&fenc)?&fenc:'none'}\ 
+set statusline+=\ %Y\ %{LinterStatus()}\ %1*\ %m%r[%n]\ %{strlen(&fenc)?&fenc:'none'}\ 
 
 autocmd InsertEnter,InsertLeave * set cul!
 
