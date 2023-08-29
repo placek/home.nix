@@ -175,9 +175,9 @@ nnoremap gd g<c-]>
 vnoremap gd g<c-]>
 
 """"""""""""""""""""""""""""""""""""" MAKE """""""""""""""""""""""""""""""""""""
-nnoremap <leader><M-'> :lmake %:t:r<cr>
-nnoremap <leader>' :lmake %:.<cr>
-nnoremap <leader>" :lmake %:.:<c-r>=line('.')<cr><cr>
+nnoremap <space><M-'> :lmake %:t:r<cr>
+nnoremap <space>' :lmake %:.<cr>
+nnoremap <space>" :lmake %:.:<c-r>=line('.')<cr><cr>
 
 augroup MakePrg
   autocmd BufEnter *_spec.rb setlocal makeprg=rspec
@@ -269,26 +269,26 @@ autocmd! FileType fugitive nnoremap rI :<c-u>Git rebase --interactive <c-r>=trim
 command! -nargs=0 Gchanges G log --pretty=oneline origin/HEAD.. | resize 10
 command! -nargs=1 -complete=buffer Pickaxe call <sid>pickaxe(<q-args>)
 
-nnoremap <space>s   :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
-vnoremap <space>s   :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
-nnoremap <leader>gg :call <sid>toggleFugitive()<cr>
-nnoremap <leader>gG :Gchanges<cr>
-nnoremap <leader>gl :GcLog<cr>
-nnoremap <leader>gL :0GlLog<cr>
-nnoremap <leader>gp :G pull<cr>
-nnoremap <leader>gf :G pull -f<cr>
-nnoremap <leader>gP :G push<cr>
-nnoremap <leader>gF :G push -f<cr>
-nnoremap <leader>gB :G branch<cr>
-nnoremap <leader>gb :Git blame<cr>
+nnoremap <space>B :G branch<cr>
+nnoremap <space>F :G push -f<cr>
+nnoremap <space>G :Gchanges<cr>
+nnoremap <space>L :0GlLog<cr>
+nnoremap <space>P :G push<cr>
+nnoremap <space>b :Git blame<cr>
+nnoremap <space>f :G pull -f<cr>
+nnoremap <space>g :call <sid>toggleFugitive()<cr>
+nnoremap <space>l :GcLog<cr>
+nnoremap <space>p :G pull<cr>
+nnoremap <space>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
+vnoremap <space>s :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
 
 """""""""""""""""""""""""""""""""" GITGUTTER """""""""""""""""""""""""""""""""""
 
-nnoremap ]h         :GitGutterNextHunk<cr>
-nnoremap [h         :GitGutterPrevHunk<cr>
-nnoremap <leader>gh :GitGutterPreviewHunk<cr>
-nnoremap <leader>gs :GitGutterStageHunk<cr>
-nnoremap <leader>gr :GitGutterUndoHunk<cr>
+nnoremap ]h       :GitGutterNextHunk<cr>
+nnoremap [h       :GitGutterPrevHunk<cr>
+nnoremap <space>h :GitGutterPreviewHunk<cr>
+nnoremap <space>r :GitGutterUndoHunk<cr>
+nnoremap <space>R :GitGutterStageHunk<cr>
 
 """""""""""""""""""""""""""""""""" BLAMELINE """""""""""""""""""""""""""""""""""
 
@@ -317,9 +317,9 @@ endif
 """""""""""""""""""""""""""""""""""" UTILS """""""""""""""""""""""""""""""""""""
 
 " some appearance togglable settings
-nnoremap <leader>1 :set relativenumber!<cr>
-nnoremap <leader>2 :set hlsearch!<cr>
-nnoremap <leader>3 :set spell!<cr>
+nnoremap <space>1 :set relativenumber!<cr>
+nnoremap <space>2 :set hlsearch!<cr>
+nnoremap <space>3 :set spell!<cr>
 
 " make folds and return to manual foldmethod
 function! s:makeFolds()
@@ -329,7 +329,7 @@ function! s:makeFolds()
 endfunction
 
 set foldmethod=manual
-nnoremap <leader>z :call <sid>makeFolds()<cr>
+nnoremap <space>4 :call <sid>makeFolds()<cr>
 
 " exit terminal-mode
 tnoremap <esc> <c-\><c-n>
@@ -343,7 +343,7 @@ function! s:toggleLocList()
   endif
 endfunction
 
-nnoremap <silent><leader>Q :call <sid>toggleLocList()<cr>
+nnoremap <silent><space>Q :call <sid>toggleLocList()<cr>
 
 " toggle quickfix list
 function! s:toggleQuickFix()
@@ -354,7 +354,7 @@ function! s:toggleQuickFix()
   endif
 endfunction
 
-nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
+nnoremap <silent><space>q :call <sid>toggleQuickFix()<cr>
 
 " use `open` command to open a current buffer
 command! -nargs=0 Open !open %
