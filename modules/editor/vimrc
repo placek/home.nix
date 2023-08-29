@@ -101,7 +101,7 @@ function! s:findTextInBuffer(register, query)
 endfunction
 
 """"""""""""""""""""""""""""""""""" LEADERS """"""""""""""""""""""""""""""""""""
-let g:mapleader      = "\\"                                                    " main leader set to backslash
+let g:mapleader      = "\<space>"                                              " main leader set to space
 let g:maplocalleader = ","                                                     " local leader set to comma
 
 """""""""""""""""""""""""""""""""""" NETRW """""""""""""""""""""""""""""""""""""
@@ -139,19 +139,19 @@ nnoremap <localleader><left> <c-w><left>
 nnoremap <localleader><right> <c-w><right>
 
 " poor Harpoon™
-nnoremap <space><cr>    :argadd %<cr>
-nnoremap <space><esc>   :argdelete %<cr>
-nnoremap <space><left>  :previous<cr>
-nnoremap <space><right> :next<cr>
-nnoremap <space><up>    :bprevious<cr>
-nnoremap <space><down>  :bnext<cr>
+nnoremap <leader><cr>    :argadd %<cr>
+nnoremap <leader><esc>   :argdelete %<cr>
+nnoremap <leader><left>  :previous<cr>
+nnoremap <leader><right> :next<cr>
+nnoremap <leader><up>    :bprevious<cr>
+nnoremap <leader><down>  :bnext<cr>
 
 " lookup
-nnoremap <space>\       :call <sid>find(input("find /", "", "file_in_path"))<cr>
-nnoremap <space>/       :call <sid>grep(input("grep /", "", "tag"))<cr>
+nnoremap <leader>\       :call <sid>find(input("find /", "", "file_in_path"))<cr>
+nnoremap <leader>/       :call <sid>grep(input("grep /", "", "tag"))<cr>
 
-vnoremap <space>\       :<c-u>call <sid>find(<sid>selectedText())<cr>
-vnoremap <space>/       :<c-u>call <sid>grep(<sid>selectedText())<cr>
+vnoremap <leader>\       :<c-u>call <sid>find(<sid>selectedText())<cr>
+vnoremap <leader>/       :<c-u>call <sid>grep(<sid>selectedText())<cr>
 
 vnoremap <silent>*      :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
 vnoremap <silent>#      :<c-u>call <sid>findTextInBuffer("#"), <sid>selectedText())<cr>n
@@ -161,7 +161,7 @@ command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
 
 """""""""""""""""""""""""""""""""""" CTRLP """""""""""""""""""""""""""""""""""""
 
-nnoremap <space><space> :CtrlP<cr>
+nnoremap <leader><leader> :CtrlP<cr>
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:50'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
@@ -175,9 +175,9 @@ nnoremap gd g<c-]>
 vnoremap gd g<c-]>
 
 """"""""""""""""""""""""""""""""""""" MAKE """""""""""""""""""""""""""""""""""""
-nnoremap <space><M-'> :lmake %:t:r<cr>
-nnoremap <space>' :lmake %:.<cr>
-nnoremap <space>" :lmake %:.:<c-r>=line('.')<cr><cr>
+nnoremap <leader><M-'> :lmake %:t:r<cr>
+nnoremap <leader>' :lmake %:.<cr>
+nnoremap <leader>" :lmake %:.:<c-r>=line('.')<cr><cr>
 
 augroup MakePrg
   autocmd BufEnter *_spec.rb setlocal makeprg=rspec
@@ -200,7 +200,7 @@ function! s:altFile()
   endif
 endfunction
 
-nnoremap <localleader><space> :call <sid>altFile()<cr>
+nnoremap <localleader><leader> :call <sid>altFile()<cr>
 
 augroup AltFile
   autocmd BufReadPost *.rb call setbufvar(expand('%'), 'altfile', expand('%:.:s/^app/spec/:s/\.rb$/_spec.rb/'))
@@ -269,26 +269,26 @@ autocmd! FileType fugitive nnoremap rI :<c-u>Git rebase --interactive <c-r>=trim
 command! -nargs=0 Gchanges G log --pretty=oneline origin/HEAD.. | resize 10
 command! -nargs=1 -complete=buffer Pickaxe call <sid>pickaxe(<q-args>)
 
-nnoremap <space>B :G branch<cr>
-nnoremap <space>F :G push -f<cr>
-nnoremap <space>G :Gchanges<cr>
-nnoremap <space>L :0GlLog<cr>
-nnoremap <space>P :G push<cr>
-nnoremap <space>b :Git blame<cr>
-nnoremap <space>f :G pull -f<cr>
-nnoremap <space>g :call <sid>toggleFugitive()<cr>
-nnoremap <space>l :GcLog<cr>
-nnoremap <space>p :G pull<cr>
-nnoremap <space>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
-vnoremap <space>s :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
+nnoremap <leader>B :G branch<cr>
+nnoremap <leader>F :G push -f<cr>
+nnoremap <leader>G :Gchanges<cr>
+nnoremap <leader>L :0GlLog<cr>
+nnoremap <leader>P :G push<cr>
+nnoremap <leader>b :Git blame<cr>
+nnoremap <leader>f :G pull -f<cr>
+nnoremap <leader>g :call <sid>toggleFugitive()<cr>
+nnoremap <leader>l :GcLog<cr>
+nnoremap <leader>p :G pull<cr>
+nnoremap <leader>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
+vnoremap <leader>s :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
 
 """""""""""""""""""""""""""""""""" GITGUTTER """""""""""""""""""""""""""""""""""
 
 nnoremap ]h       :GitGutterNextHunk<cr>
 nnoremap [h       :GitGutterPrevHunk<cr>
-nnoremap <space>h :GitGutterPreviewHunk<cr>
-nnoremap <space>r :GitGutterUndoHunk<cr>
-nnoremap <space>R :GitGutterStageHunk<cr>
+nnoremap <leader>h :GitGutterPreviewHunk<cr>
+nnoremap <leader>r :GitGutterUndoHunk<cr>
+nnoremap <leader>R :GitGutterStageHunk<cr>
 
 """""""""""""""""""""""""""""""" EXPAND REGION """""""""""""""""""""""""""""""""
 
@@ -322,9 +322,9 @@ endif
 """""""""""""""""""""""""""""""""""" UTILS """""""""""""""""""""""""""""""""""""
 
 " some appearance togglable settings
-nnoremap <space>1 :set relativenumber!<cr>
-nnoremap <space>2 :set hlsearch!<cr>
-nnoremap <space>3 :set spell!<cr>
+nnoremap <leader>1 :set relativenumber!<cr>
+nnoremap <leader>2 :set hlsearch!<cr>
+nnoremap <leader>3 :set spell!<cr>
 
 " make folds and return to manual foldmethod
 function! s:makeFolds()
@@ -334,7 +334,7 @@ function! s:makeFolds()
 endfunction
 
 set foldmethod=manual
-nnoremap <space>4 :call <sid>makeFolds()<cr>
+nnoremap <leader>4 :call <sid>makeFolds()<cr>
 
 " exit terminal-mode
 tnoremap <esc> <c-\><c-n>
@@ -348,7 +348,7 @@ function! s:toggleLocList()
   endif
 endfunction
 
-nnoremap <silent><space>Q :call <sid>toggleLocList()<cr>
+nnoremap <silent><leader>Q :call <sid>toggleLocList()<cr>
 
 " toggle quickfix list
 function! s:toggleQuickFix()
@@ -359,7 +359,7 @@ function! s:toggleQuickFix()
   endif
 endfunction
 
-nnoremap <silent><space>q :call <sid>toggleQuickFix()<cr>
+nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
 
 " use `open` command to open a current buffer
 command! -nargs=0 Open !open %
