@@ -243,6 +243,20 @@ nnoremap <localleader>d :ALEPopulateLocList<cr>
 nnoremap <localleader>r :ALEFindReferences<cr>
 nnoremap <localleader>f :ALEFix<cr>
 
+""""""""""""""""""""""""""""""""""" COMMENT """"""""""""""""""""""""""""""""""""
+function! CommentToggle()
+  let line = getline('.')
+  if match(l:line, '^\s*'.substitute(&commentstring, '%s', '.*', '')) >= 0
+    let l:target = substitute(l:line, '^\s*\zs'.substitute(&commentstring, '%s', '', ''), '', '')
+  else
+    let l:target = printf(&commentstring, l:line)
+  endif
+  s/^.*$/\=l:target/
+endfunction
+
+nnoremap <silent>gc :call CommentToggle()<cr>
+vnoremap <silent>gc :call CommentToggle()<cr>
+
 """"""""""""""""""""""""""""""""""" FUGITIVE """""""""""""""""""""""""""""""""""
 function! s:toggleFugitive()
   if buflisted(bufname('fugitive:///*/.git//$'))
