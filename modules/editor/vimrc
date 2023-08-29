@@ -6,7 +6,6 @@ set nocompatible                                                               "
 """""""""""""""""""""""""""""""""" SETTINGS """"""""""""""""""""""""""""""""""""
 " interface
 set cmdheight=1                                                                " set command line height
-set cursorline                                                                 " line at current cursor position
 set foldcolumn=1                                                               " always show at least one cahr in fold column
 set hlsearch                                                                   " highlight search
 set laststatus=2                                                               " always show last status
@@ -81,6 +80,8 @@ set tags+=.git/tags                                                            "
 " status line
 set statusline=%1*\ %{toupper(mode())}\ %2*\ %{FugitiveStatusline()}\ %F:%l:%c%=
 set statusline+=\ %1*\ %m%r[%n]\ %{strlen(&fenc)?&fenc:'none'}\ 
+
+autocmd InsertEnter,InsertLeave * set cul!
 
 """"""""""""""""""""""""""""""""""" FUNCTIONS """"""""""""""""""""""""""""""""""
 " returns a text under visual selection
