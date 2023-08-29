@@ -159,6 +159,15 @@ vnoremap <silent>#      :<c-u>call <sid>findTextInBuffer("#"), <sid>selectedText
 command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
 command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
 
+""""""""""""""""""""""""""""""""""" COPILOT """"""""""""""""""""""""""""""""""""
+
+inoremap <c-up>   <Plug>(copilot-previous)
+inoremap <c-down> <Plug>(copilot-next)
+inoremap <c-left> <Plug>(copilot-dismiss)
+inoremap <c-cr>   <Plug>(copilot-suggest)
+imap <silent><script><expr> <c-right> copilot#Accept("\<cr>")
+let g:copilot_no_tab_map = v:true
+
 """""""""""""""""""""""""""""""""""" CTRLP """""""""""""""""""""""""""""""""""""
 
 nnoremap <leader><leader> :CtrlP<cr>

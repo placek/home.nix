@@ -49,6 +49,7 @@
         ctrlp-vim
         vim-expand-region
         vim-gitgutter
+        copilot-vim
       ];
       extraConfig = builtins.readFile ./vimrc;
     };
