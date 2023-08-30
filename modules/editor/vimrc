@@ -431,7 +431,7 @@ hi PmenuSel                             ctermbg=4   ctermfg=0  cterm=bold
 hi Search                               ctermbg=3   ctermfg=0  cterm=none
 hi SignColumn                           ctermbg=0
 hi StatusLine                                                  cterm=bold
-hi StatusLineNC                                                cterm=none
+hi StatusLineNC                                     ctermfg=0  cterm=none
 hi String                               ctermfg=3
 hi TabLine                              ctermbg=8   ctermfg=7  cterm=bold
 hi TabLineFill                          ctermbg=0   ctermfg=0
