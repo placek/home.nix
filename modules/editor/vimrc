@@ -109,56 +109,6 @@ let g:maplocalleader = ","                                                     "
 let g:loaded_netrwPlugin = 1
 let g:loaded_netrw = 1
 
-"""""""""""""""""""""""""""""""""" NAVIGATION """"""""""""""""""""""""""""""""""
-
-" triggers a grep on query and opens quickfix list
-function! s:grep(query)
-  if !empty(a:query)
-    if isdirectory(".git")
-      set grepprg=git\ grep\ --no-color\ --line-number\ --column\ -E\ $*         " git grep as search engine
-    endif
-    execute "silent grep \"" . a:query . "\" | copen"
-  endif
-endfunction
-
-" finds a file using git ls-files or find command
-function! s:find(query)
-  if !empty(a:query)
-    if isdirectory(".git")
-      execute "silent cexpr system('git ls-files \"**" . a:query . "*\" | sed \"s/.*/&:1:1/\"') | copen"
-    else
-      execute "silent cexpr system('find . -type f -printf \"%p:1:1\\n\" \"*" . a:query . "*\"') | copen"
-    endif
-  endif
-endfunction
-
-" move around windows with leader key
-nnoremap <localleader><up> <c-w><up>
-nnoremap <localleader><down> <c-w><down>
-nnoremap <localleader><left> <c-w><left>
-nnoremap <localleader><right> <c-w><right>
-
-" poor Harpoon™
-nnoremap <leader><cr>    :argadd %<cr>
-nnoremap <leader><esc>   :argdelete %<cr>
-nnoremap <leader><left>  :previous<cr>
-nnoremap <leader><right> :next<cr>
-nnoremap <leader><up>    :bprevious<cr>
-nnoremap <leader><down>  :bnext<cr>
-
-" lookup
-nnoremap <leader>\       :call <sid>find(input("find /", "", "file_in_path"))<cr>
-nnoremap <leader>/       :call <sid>grep(input("grep /", "", "tag"))<cr>
-
-vnoremap <leader>\       :<c-u>call <sid>find(<sid>selectedText())<cr>
-vnoremap <leader>/       :<c-u>call <sid>grep(<sid>selectedText())<cr>
-
-vnoremap <silent>*      :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
-vnoremap <silent>#      :<c-u>call <sid>findTextInBuffer("#"), <sid>selectedText())<cr>n
-
-command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
-command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
-
 """"""""""""""""""""""""""""""""""" COPILOT """"""""""""""""""""""""""""""""""""
 
 inoremap <c-up>   <Plug>(copilot-previous)
@@ -398,6 +348,57 @@ inoremap <cr> <C-G>u<cr>
 " `<C-p>` that acts like `p`, but not change the `+` register
 vnoremap <C-p> "pdp
 vnoremap <C-P> "pdP
+
+"""""""""""""""""""""""""""""""""" NAVIGATION """"""""""""""""""""""""""""""""""
+
+" triggers a grep on query and opens quickfix list
+function! s:grep(query)
+  if !empty(a:query)
+    execute "silent Ggrep \"" . a:query . "\" | copen"
+  endif
+endfunction
+
+" finds a file using git ls-files or find command
+function! s:find(query)
+  if !empty(a:query)
+    if isdirectory(".git")
+      execute "silent cexpr system('git ls-files \"**" . a:query . "*\" | sed \"s/.*/&:1:1/\"') | copen"
+    else
+      execute "silent cexpr system('find . -type f -printf \"%p:1:1\\n\" \"*" . a:query . "*\"') | copen"
+    endif
+  endif
+endfunction
+
+" simple jump commands
+nnoremap <silent>]a :next<cr>
+nnoremap <silent>[a :previous<cr>
+nnoremap <silent>]b :bnext<cr>
+nnoremap <silent>[b :bprevious<cr>
+nnoremap <silent>]c :cnext<cr>
+nnoremap <silent>[c :cprevious<cr>
+nnoremap <silent>]l :lnext<cr>
+nnoremap <silent>[l :lprevious<cr>
+nnoremap <silent>]t :tabnext<cr>
+nnoremap <silent>[t :tabprevious<cr>
+
+" move around windows with leader key
+nnoremap <silent><leader><up>    <c-w><up>
+nnoremap <silent><leader><down>  <c-w><down>
+nnoremap <silent><leader><left>  <c-w><left>
+nnoremap <silent><leader><right> <c-w><right>
+
+" lookup
+nnoremap <leader>\ :call <sid>find(input("find /", "", "file_in_path"))<cr>
+nnoremap <leader>/ :call <sid>grep(input("grep /", "", "tag"))<cr>
+
+vnoremap <leader>\ :<c-u>call <sid>find(<sid>selectedText())<cr>
+vnoremap <leader>/ :<c-u>call <sid>grep(<sid>selectedText())<cr>
+
+vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
+vnoremap <silent># :<c-u>call <sid>findTextInBuffer("#"), <sid>selectedText())<cr>n
+
+command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
+command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
 
 """""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""""""
 hi Boolean                              ctermfg=13             cterm=bold
