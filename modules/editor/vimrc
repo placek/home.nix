@@ -317,7 +317,8 @@ endfunction
 set foldmethod=manual
 nnoremap <leader>4 :call <sid>makeFolds()<cr>
 
-" exit terminal-mode
+" terminal-mode
+nnoremap <leader>t :vertical terminal<cr>
 tnoremap <esc> <c-\><c-n>
 
 " toggle loclist list
