@@ -201,14 +201,16 @@ let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
 set omnifunc=ale#completion#OmniFunc
-inoremap <tab> <c-x><c-o>
+inoremap <tab> <c-n>
+inoremap <c-tab> <c-x><c-o>
 
 nnoremap <localleader>i :ALEToggle<cr>
 nnoremap <localleader>I :ALEInfo<cr>
 nnoremap K              :ALEHover<cr>
 nnoremap <localleader>, :ALEDetail<cr>
 nnoremap <localleader>a :ALECodeAction<cr>
-nnoremap <localleader>d :ALEPopulateLocList<cr>
+nnoremap <localleader>d :ALEGoToDefinition<cr>
+nnoremap <localleader>l :ALEPopulateLocList<cr>
 nnoremap <localleader>r :ALEFindReferences<cr>
 nnoremap <localleader>f :ALEFix<cr>
 
