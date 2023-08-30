@@ -112,7 +112,6 @@ let g:loaded_netrwPlugin = 1
 let g:loaded_netrw = 1
 
 """"""""""""""""""""""""""""""""""" COPILOT """"""""""""""""""""""""""""""""""""
-
 inoremap <c-up>   <Plug>(copilot-previous)
 inoremap <c-down> <Plug>(copilot-next)
 inoremap <c-left> <Plug>(copilot-dismiss)
@@ -121,7 +120,6 @@ imap <silent><script><expr> <c-right> copilot#Accept("\<cr>")
 let g:copilot_no_tab_map = v:true
 
 """""""""""""""""""""""""""""""""""" CTRLP """""""""""""""""""""""""""""""""""""
-
 nnoremap <leader><leader> :CtrlP<cr>
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:50'
 let g:ctrlp_show_hidden = 1
@@ -159,7 +157,6 @@ augroup MakePrg
 augroup END
 
 """"""""""""""""""""""""""""""""""" ALTFILE """"""""""""""""""""""""""""""""""""
-
 function! s:altFile()
   if exists("b:altfile")
     if bufwinid(b:altfile) > -1
@@ -187,7 +184,6 @@ augroup AltFile
 augroup END
 
 """"""""""""""""""""""""""""""""""""" ALE """"""""""""""""""""""""""""""""""""""
-
 function! LinterStatus() abort
   let l:counts = ale#statusline#Count(bufnr(''))
   let l:all_errors = l:counts.error + l:counts.style_error
@@ -271,17 +267,14 @@ nnoremap <leader>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
 vnoremap <leader>s :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
 
 """""""""""""""""""""""""""""""""" GITGUTTER """""""""""""""""""""""""""""""""""
-
 nnoremap ]h :GitGutterNextHunk<cr>
 nnoremap [h :GitGutterPrevHunk<cr>
 
 """""""""""""""""""""""""""""""" EXPAND REGION """""""""""""""""""""""""""""""""
-
 vmap v     <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
 
 """""""""""""""""""""""""""""""""" BLAMELINE """""""""""""""""""""""""""""""""""
-
 hi BlameLine ctermfg=8
 call prop_type_add('blame_line', { 'highlight': 'BlameLine' })
 
@@ -303,7 +296,6 @@ endfunction
 autocmd CursorHold * call <sid>blameLine()
 
 """""""""""""""""""""""""""""""""""" UTILS """""""""""""""""""""""""""""""""""""
-
 " some appearance togglable settings
 nnoremap <leader>1 :set relativenumber!<cr>
 nnoremap <leader>2 :set hlsearch!<cr>
@@ -361,7 +353,6 @@ vnoremap <C-p> "pdp
 vnoremap <C-P> "pdP
 
 """""""""""""""""""""""""""""""""" NAVIGATION """"""""""""""""""""""""""""""""""
-
 " triggers a grep on query and opens quickfix list
 function! s:grep(query)
   if !empty(a:query)
