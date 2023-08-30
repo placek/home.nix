@@ -270,11 +270,8 @@ vnoremap <leader>s :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
 
 """""""""""""""""""""""""""""""""" GITGUTTER """""""""""""""""""""""""""""""""""
 
-nnoremap ]h       :GitGutterNextHunk<cr>
-nnoremap [h       :GitGutterPrevHunk<cr>
-nnoremap <leader>h :GitGutterPreviewHunk<cr>
-nnoremap <leader>r :GitGutterUndoHunk<cr>
-nnoremap <leader>R :GitGutterStageHunk<cr>
+nnoremap ]h :GitGutterNextHunk<cr>
+nnoremap [h :GitGutterPrevHunk<cr>
 
 """""""""""""""""""""""""""""""" EXPAND REGION """""""""""""""""""""""""""""""""
 
