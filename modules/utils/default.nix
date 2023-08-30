@@ -84,6 +84,7 @@ in
       jmtpfs
       killall
       libinput
+      lightburn
       mdcat
       netpbm
       ngrep
