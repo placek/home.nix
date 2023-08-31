@@ -290,6 +290,10 @@ nnoremap <leader>P :G push<cr>
 nnoremap <leader>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
 vnoremap <leader>s :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
 
+cnoremap W Gwrite
+cnoremap E Gedit
+cnoremap D GDelete
+
 """""""""""""""""""""""""""""""""" GITGUTTER """""""""""""""""""""""""""""""""""
 nnoremap ]h :GitGutterNextHunk<cr>
 nnoremap [h :GitGutterPrevHunk<cr>
