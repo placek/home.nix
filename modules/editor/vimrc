@@ -81,8 +81,6 @@ set tags+=.git/tags                                                            "
 set statusline=%1*\ %{toupper(mode())}\ %2*\ %F:%l:%c%=
 set statusline+=\ %Y\ %{LinterStatus()}\ %1*\ %m%r[%n]\ %{strlen(&fenc)?&fenc:'none'}\ 
 
-autocmd Filetype qf setlocal statusline=%1*%f%2*
-
 autocmd InsertEnter,InsertLeave * set cul!
 
 """"""""""""""""""""""""""""""""""" FUNCTIONS """"""""""""""""""""""""""""""""""
@@ -225,6 +223,18 @@ endfunction
 
 nnoremap <silent>gc :call CommentToggle()<cr>
 vnoremap <silent>gc :call CommentToggle()<cr>
+
+""""""""""""""""""""""""""""""""""" QUICKFIX """""""""""""""""""""""""""""""""""
+function! s:openQuickfix(new_split_cmd)
+  let l:qf_idx = line('.')
+  wincmd p
+  execute a:new_split_cmd
+  execute l:qf_idx . 'cc'
+endfunction
+
+autocmd FileType qf nnoremap <buffer> <c-v> :call <sid>openQuickfix("vnew")<cr>
+autocmd FileType qf nnoremap <buffer> <c-x> :call <sid>openQuickfix("split")<cr>
+autocmd Filetype qf setlocal statusline=%1*%f%2*
 
 """"""""""""""""""""""""""""""""""""" TODO """""""""""""""""""""""""""""""""""""
 function! s:toggleTodoFile()
