@@ -226,6 +226,20 @@ endfunction
 nnoremap <silent>gc :call CommentToggle()<cr>
 vnoremap <silent>gc :call CommentToggle()<cr>
 
+""""""""""""""""""""""""""""""""""""" TODO """""""""""""""""""""""""""""""""""""
+function! s:toggleTodoFile()
+  let file = trim(system('git config todo.file'))
+  if buflisted(bufname(l:file))
+    if !win_gotoid(bufwinid(l:file))
+      execute ":split " l:file
+    endif
+  else
+    execute ":split " l:file
+  endif
+endfunction
+
+nnoremap <leader>x :call <sid>toggleTodoFile()<cr>
+
 """"""""""""""""""""""""""""""""""" FUGITIVE """""""""""""""""""""""""""""""""""
 function! s:toggleFugitive()
   if buflisted(bufname('fugitive:///*/.git//$'))
