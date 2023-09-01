@@ -290,9 +290,17 @@ nnoremap <leader>P :G push<cr>
 nnoremap <leader>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
 vnoremap <leader>s :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
 
-cnoremap W Gwrite
-cnoremap E Gedit
-cnoremap D GDelete
+command! -nargs=0 W Gwrite
+command! -nargs=0 E Gedit
+command! -nargs=0 D GDelete
+
+function! s:gitPruneFile()
+  let file = expand('%')
+  let branch_base = trim(system('git merge-base origin/HEAD HEAD'))
+  execute "!git filter-branch --prune-empty --force --tree-filter 'rm -f " . l:file . "' " . l:branch_base . "..HEAD"
+endfunction
+
+command! -nargs=0 GPrune :call <sid>gitPruneFile()
 
 """""""""""""""""""""""""""""""""" GITGUTTER """""""""""""""""""""""""""""""""""
 nnoremap ]h :GitGutterNextHunk<cr>
