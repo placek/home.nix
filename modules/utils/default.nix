@@ -86,6 +86,7 @@ in
       libinput
       lightburn
       mdcat
+      nap
       netpbm
       ngrep
       ngrok
