@@ -448,24 +448,25 @@ hi DiffChange                           ctermbg=8   ctermfg=3  cterm=none
 hi DiffDelete                           ctermbg=8   ctermfg=9  cterm=none
 hi DiffText                             ctermbg=8   ctermfg=11 cterm=underline
 hi Directory                                        ctermfg=4
-hi FloatBorder                          ctermbg=0
 hi FoldColumn                           ctermbg=0   ctermfg=7
-hi Folded                               ctermbg=0   ctermfg=15 cterm=bold
+hi Folded                               ctermbg=0   ctermfg=7  cterm=bold
 hi NormalFloat                          ctermbg=0
 hi Pmenu                                ctermbg=0   ctermfg=7
 hi PmenuSbar                            ctermbg=0   ctermfg=7
-hi PmenuSel                             ctermbg=4   ctermfg=0  cterm=bold
-hi Search                               ctermbg=3   ctermfg=0  cterm=none
+hi PmenuSel                             ctermbg=8   ctermfg=15
+hi QuickFixLine                         ctermbg=8
+hi Search                               ctermbg=8   ctermfg=11 cterm=bold
 hi SignColumn                           ctermbg=0
+hi SpellBad                             ctermbg=8
 hi StatusLine                                                  cterm=bold
-hi StatusLineNC                                     ctermfg=0  cterm=none
+hi StatusLineNC                         ctermbg=0   ctermfg=0  cterm=none
 hi String                               ctermfg=3
-hi TabLine                              ctermbg=8   ctermfg=7  cterm=bold
-hi TabLineFill                          ctermbg=0   ctermfg=0
-hi TabLineSel                           ctermbg=7   ctermfg=0  cterm=bold
+hi TabLine                              ctermbg=8   ctermfg=7  cterm=none
 hi User1                                ctermbg=3   ctermfg=0  cterm=bold
 hi User2                                ctermbg=0   ctermfg=15 cterm=bold
 hi VertSplit                            ctermbg=8   ctermfg=8
 hi Visual                               ctermbg=7   ctermfg=0
 
 hi link CtrlPMode2 User1
+hi link TabLineFill StatusLineNC
+hi link TabLineSel User1
