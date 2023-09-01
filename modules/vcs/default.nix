@@ -57,8 +57,7 @@
         git_protocol = "ssh";
         editor = config.editorExec;
         prompt = "enabled";
-        aliases.co = "pr checkout";
-        aliases.pv = "pr view";
+        aliases.current = "pr view --comments";
       };
     };
 
