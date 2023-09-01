@@ -14,7 +14,7 @@
 
     difftoolExec = mkOption {
       type = types.str;
-      default = "${config.programs.vim.package}/bin/vim";
+      default = "${config.programs.vim.package}/bin/vimdiff";
       description = mdDoc "Diff editor executable.";
       readOnly = true;
     };
@@ -25,7 +25,7 @@
 
     home.packages = with pkgs; [ universal-ctags ];
 
-    programs.fish.shellAliases.editor = "vim --servername (basename (git root))";
+    programs.fish.shellAliases.editor = "${config.editorExec} --servername (basename (git root))";
 
     programs.vim = {
       enable = true;
