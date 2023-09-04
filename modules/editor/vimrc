@@ -189,31 +189,38 @@ function! LinterStatus() abort
   return l:counts.total == 0 ? 'OK' : printf('%dW %dE', all_non_errors, all_errors)
 endfunction
 
-let g:ale_completion_enabled = 1
-let g:ale_sign_column_always = 1
 let g:ale_close_preview_on_insert = 1
+let g:ale_completion_enabled = 1
 let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_echo_msg_warning_str = 'W'
+let g:ale_floating_preview = 1
+let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
+let g:ale_sign_column_always = 1
 let g:ale_sign_error = 'E'
-let g:ale_sign_warning = 'W'
 let g:ale_sign_info = 'I'
 let g:ale_sign_style_error = 'ES'
 let g:ale_sign_style_warning = 'WS'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_sign_warning = 'W'
+let g:ale_virtualtext_cursor = 'current'
 
 set omnifunc=ale#completion#OmniFunc
 inoremap <tab> <c-n>
 inoremap <c-tab> <c-x><c-o>
 
-nnoremap <localleader>i :ALEToggle<cr>
-nnoremap <localleader>I :ALEInfo<cr>
+nnoremap <silent>[e     :ALEPreviousWrap<cr>
+nnoremap <silent>]e     :ALENextWrap<cr>
 nnoremap K              :ALEHover<cr>
+
 nnoremap <localleader>, :ALEDetail<cr>
 nnoremap <localleader>a :ALECodeAction<cr>
 nnoremap <localleader>d :ALEGoToDefinition<cr>
+nnoremap <localleader>D :ALEGoToTypeDefinition<cr>
+nnoremap <localleader>f :ALEFix<cr>
+nnoremap <localleader>i :ALEInfo<cr>
+nnoremap <localleader>I :ALEToggle<cr>
 nnoremap <localleader>l :ALEPopulateLocList<cr>
 nnoremap <localleader>r :ALEFindReferences<cr>
-nnoremap <localleader>f :ALEFix<cr>
 
 """"""""""""""""""""""""""""""""""" COMMENT """"""""""""""""""""""""""""""""""""
 function! s:commentToggle()
