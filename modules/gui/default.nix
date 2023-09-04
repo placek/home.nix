@@ -74,7 +74,7 @@
       gimp
       eagle
       firefox
-      inkscape
+      inkscape-with-extensions
       lilypond
       mplayer
       qcad
