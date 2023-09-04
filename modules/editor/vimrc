@@ -194,6 +194,11 @@ let g:ale_sign_column_always = 1
 let g:ale_close_preview_on_insert = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
+let g:ale_sign_error = 'E'
+let g:ale_sign_warning = 'W'
+let g:ale_sign_info = 'I'
+let g:ale_sign_style_error = 'ES'
+let g:ale_sign_style_warning = 'WS'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
 set omnifunc=ale#completion#OmniFunc
@@ -439,33 +444,43 @@ command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
 command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
 
 """""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""""""
-hi Boolean                              ctermfg=13             cterm=bold
+hi Boolean                              ctermfg=13            cterm=bold
 hi ColorColumn                          ctermbg=8
-hi Comment                                          ctermfg=7
-hi CtrlPMode1                           ctermbg=0   ctermfg=3
-hi DiffAdd                              ctermbg=8   ctermfg=10 cterm=none
-hi DiffChange                           ctermbg=8   ctermfg=3  cterm=none
-hi DiffDelete                           ctermbg=8   ctermfg=9  cterm=none
-hi DiffText                             ctermbg=8   ctermfg=11 cterm=underline
-hi Directory                                        ctermfg=4
-hi FoldColumn                           ctermbg=0   ctermfg=7
-hi Folded                               ctermbg=0   ctermfg=7  cterm=bold
+hi Comment                                         ctermfg=7
+hi CtrlPMode1                           ctermbg=0  ctermfg=3
+hi DiffAdd                              ctermbg=8  ctermfg=10 cterm=none
+hi DiffChange                           ctermbg=8  ctermfg=3  cterm=none
+hi DiffDelete                           ctermbg=8  ctermfg=9  cterm=none
+hi DiffText                             ctermbg=8  ctermfg=11 cterm=underline
+hi Directory                                       ctermfg=4
+hi FoldColumn                           ctermbg=0  ctermfg=7
+hi Folded                               ctermbg=0  ctermfg=7  cterm=bold
 hi NormalFloat                          ctermbg=0
-hi Pmenu                                ctermbg=0   ctermfg=7
-hi PmenuSbar                            ctermbg=0   ctermfg=7
-hi PmenuSel                             ctermbg=8   ctermfg=15
+hi Pmenu                                ctermbg=0  ctermfg=7
+hi PmenuSbar                            ctermbg=0  ctermfg=7
+hi PmenuSel                             ctermbg=8  ctermfg=15
 hi QuickFixLine                         ctermbg=8
-hi Search                               ctermbg=8   ctermfg=11 cterm=bold
+hi Search                               ctermbg=8  ctermfg=11 cterm=bold
 hi SignColumn                           ctermbg=0
 hi SpellBad                             ctermbg=8
-hi StatusLine                                                  cterm=bold
-hi StatusLineNC                         ctermbg=0   ctermfg=0  cterm=none
+hi StatusLine                                                 cterm=bold
+hi StatusLineNC                         ctermbg=0  ctermfg=0  cterm=none
 hi String                               ctermfg=3
-hi TabLine                              ctermbg=8   ctermfg=7  cterm=none
-hi User1                                ctermbg=3   ctermfg=0  cterm=bold
-hi User2                                ctermbg=0   ctermfg=15 cterm=bold
-hi VertSplit                            ctermbg=8   ctermfg=8
-hi Visual                               ctermbg=7   ctermfg=0
+hi TabLine                              ctermbg=8  ctermfg=7  cterm=none
+hi User1                                ctermbg=3  ctermfg=0  cterm=bold
+hi User2                                ctermbg=0  ctermfg=15 cterm=bold
+hi VertSplit                            ctermbg=8  ctermfg=8
+hi Visual                               ctermbg=7  ctermfg=0
+
+hi ALEVirtualTextError                             ctermfg=1
+hi ALEVirtualTextWarning                           ctermfg=4
+hi ALEVirtualTextInfo                              ctermfg=5
+hi ALEError                             ctermbg=0  ctermfg=1  cterm=underline
+hi ALEErrorSign                         ctermbg=0  ctermfg=1
+hi ALEWarning                           ctermbg=0  ctermfg=4  cterm=underline
+hi ALEWarningSign                       ctermbg=0  ctermfg=4
+hi ALEInfo                              ctermbg=0  ctermfg=5  cterm=underline
+hi ALEInfoSign                          ctermbg=0  ctermfg=5
 
 hi link CtrlPMode2 User1
 hi link TabLineFill StatusLineNC
