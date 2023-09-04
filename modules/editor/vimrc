@@ -216,7 +216,7 @@ nnoremap <localleader>r :ALEFindReferences<cr>
 nnoremap <localleader>f :ALEFix<cr>
 
 """"""""""""""""""""""""""""""""""" COMMENT """"""""""""""""""""""""""""""""""""
-function! CommentToggle()
+function! s:commentToggle()
   let line = getline('.')
   if match(l:line, '^\s*'.substitute(&commentstring, '%s', '.*', '')) >= 0
     let l:target = substitute(l:line, '^\s*\zs'.substitute(&commentstring, '%s', '', ''), '', '')
@@ -226,8 +226,8 @@ function! CommentToggle()
   s/^.*$/\=l:target/
 endfunction
 
-nnoremap <silent>gc :call CommentToggle()<cr>
-vnoremap <silent>gc :call CommentToggle()<cr>
+nnoremap <silent>gc :call <sid>commentToggle()<cr>
+vnoremap <silent>gc :call <sid>commentToggle()<cr>
 
 """"""""""""""""""""""""""""""""""" QUICKFIX """""""""""""""""""""""""""""""""""
 function! s:openQuickfix(new_split_cmd)
@@ -355,6 +355,10 @@ nnoremap <leader>4 :call <sid>makeFolds()<cr>
 " terminal-mode
 nnoremap <leader>t :vertical terminal<cr>
 tnoremap <esc> <c-\><c-n>
+
+" cnake case to camel case and back
+nnoremap <silent>crs :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
+nnoremap <silent>crc :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
 
 " toggle loclist list
 function! s:toggleLocList()
