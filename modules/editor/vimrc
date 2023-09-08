@@ -115,11 +115,8 @@ let g:loaded_netrw = 1
 """""""""""""""""""""""""""""""""""" NETRW """""""""""""""""""""""""""""""""">>>
 
 """"""""""""""""""""""""""""""""""" COPILOT """""""""""""""""""""""""""""""""<<<
-inoremap <c-up>   <Plug>(copilot-previous)
-inoremap <c-down> <Plug>(copilot-next)
-inoremap <c-left> <Plug>(copilot-dismiss)
-inoremap <c-cr>   <Plug>(copilot-suggest)
-imap <silent><script><expr> <c-right> copilot#Accept("\<cr>")
+inoremap <m-backspace> <Plug>(copilot-next)
+imap <silent><script><expr> <m-space> copilot#Accept("\<cr>")
 let g:copilot_no_tab_map = v:true
 """"""""""""""""""""""""""""""""""" COPILOT """"""""""""""""""""""""""""""""">>>
 

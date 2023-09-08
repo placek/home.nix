@@ -9,19 +9,19 @@ with theme; {
   font_features = "none";
   box_drawing_scale = "0.001, 1, 1.5, 2";
 
-  # Cursor customization
+  # cursor customization
   cursor_shape = "block";
   cursor_blink_interval = "1";
   cursor_stop_blinking_after = "15.0";
 
-  # Scrollback
+  # scrollback
   scrollback_lines = "2000";
   scrollback_pager = "less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER";
   scrollback_pager_history_size = "9999";
   wheel_scroll_multiplier = "5.0";
   touch_scroll_multiplier = "1.0";
 
-  # Mouse
+  # mouse
   mouse_hide_wait = "0";
   url_style = "curly";
   open_url_with = "default";
@@ -32,19 +32,19 @@ with theme; {
   click_interval = "-1.0";
   focus_follows_mouse = "no";
 
-  # Performance tuning
+  # performance tuning
   repaint_delay = "10";
   input_delay = "3";
   sync_to_monitor = "yes";
 
-  # Terminal bell
+  # terminal bell
   enable_audio_bell = "no";
   visual_bell_duration = "0.0";
   window_alert_on_bell = "no";
   bell_on_tab = "no";
   command_on_bell = "none";
 
-  # Window layout
+  # window layout
   remember_window_size = "no";
   enabled_layouts = "tall:bias=62;full_size=1,stack";
   window_resize_step_cells = "2";
@@ -62,7 +62,7 @@ with theme; {
   confirm_os_window_close = "0";
   single_window_margin_width = "-1";
 
-  # Tab bar
+  # tab bar
   tab_bar_edge = "bottom";
   tab_bar_background = "none";
   tab_bar_margin_width = "0.0";
@@ -81,11 +81,11 @@ with theme; {
   shell_integration = "no-cursor";
   strip_trailing_spaces = "never";
   term = "xterm-kitty";
-  kitty_mod = "ctrl+shift";
+  kitty_mod = "ctrl";
   clear_all_shortcuts = "yes";
   clear_all_mouse_actions = "yes";
 
-  # Color scheme
+  # color scheme
   active_border_color = base03;
   inactive_border_color = base08;
   bell_border_color = base03;
