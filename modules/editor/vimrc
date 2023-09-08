@@ -146,7 +146,7 @@ nnoremap <localleader>b :lmake %:.<cr>
 nnoremap <localleader>B :lmake %:.:<c-r>=line('.')<cr><cr>
 
 augroup MakePrg
-  autocmd BufEnter *_spec.rb setlocal makeprg=rspec efm=rspec\ %f:%l\ #\ %m
+  autocmd BufEnter *_spec.rb setlocal makeprg=rspec\ -fp efm=rspec\ %f:%l\ #\ %m
 
   autocmd BufEnter *.test.js setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
   autocmd BufEnter *.test.ts setlocal makeprg=yarn\ jest efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
