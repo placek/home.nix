@@ -56,30 +56,30 @@
 
   config = {
     home.packages = with pkgs; [
-      (import (builtins.fetchTarball {
-        url = "https://github.com/NixOS/nixpkgs/archive/8ad5e8132c5dcf977e308e7bf5517cc6cc0bf7d8.tar.gz";
-      }) {}).spotify
-
       arandr
       libnotify
-      slack
+      shotwell
       xclip
       xf86_input_wacom
-      steam
 
       arduino
       blender
+      browsh
       discord
       dzen2
-      gimp
-      kicad
       firefox
+      gimp
       inkscape-with-extensions
+      kicad
       lilypond
       mplayer
       qcad
-      shotwell
-      browsh
+      slack
+      steam
+
+      (import (builtins.fetchTarball {
+        url = "https://github.com/NixOS/nixpkgs/archive/8ad5e8132c5dcf977e308e7bf5517cc6cc0bf7d8.tar.gz";
+      }) {}).spotify
     ];
   };
 }
