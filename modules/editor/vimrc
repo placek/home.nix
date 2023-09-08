@@ -248,6 +248,28 @@ autocmd FileType qf nnoremap <buffer> <c-v> :call <sid>openQuickfix("vnew")<cr>
 autocmd FileType qf nnoremap <buffer> <c-x> :call <sid>openQuickfix("split")<cr>
 autocmd Filetype qf setlocal statusline=%1*%f%2*
 
+" toggle loclist list
+function! s:toggleLocList()
+  if empty(filter(getwininfo(), 'v:val.loclist'))
+    lopen
+  else
+    lclose
+  endif
+endfunction
+
+nnoremap <silent><leader>w :call <sid>toggleLocList()<cr>
+
+" toggle quickfix list
+function! s:toggleQuickFix()
+  if empty(filter(getwininfo(), 'v:val.quickfix'))
+    copen
+  else
+    cclose
+  endif
+endfunction
+
+nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
+
 """"""""""""""""""""""""""""""""""""" TODO """""""""""""""""""""""""""""""""""""
 function! s:toggleTodoFile()
   let file = trim(system('git config todo.file'))
@@ -367,28 +389,6 @@ tnoremap <esc> <c-\><c-n>
 nnoremap <silent><localleader>s :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
 nnoremap <silent><localleader>c :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
 
-" toggle loclist list
-function! s:toggleLocList()
-  if empty(filter(getwininfo(), 'v:val.loclist'))
-    lopen
-  else
-    lclose
-  endif
-endfunction
-
-nnoremap <silent><leader>w :call <sid>toggleLocList()<cr>
-
-" toggle quickfix list
-function! s:toggleQuickFix()
-  if empty(filter(getwininfo(), 'v:val.quickfix'))
-    copen
-  else
-    cclose
-  endif
-endfunction
-
-nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
-
 " use `open` command to open a current buffer
 command! -nargs=0 Open !open %
 
@@ -436,26 +436,18 @@ nnoremap <silent>]t :tabnext<cr>
 nnoremap <silent>[t :tabprevious<cr>
 
 " move around buffers with leader key
-nnoremap <localleader><cr>    :argadd<cr>
-nnoremap <localleader><c-cr>  :argdelete<cr>
-nnoremap <localleader>n       :previous<cr>
-nnoremap <localleader><esc>   :next<cr>
-nnoremap <localleader>l       :bprevious<cr>
-nnoremap <localleader>m       :bnext<cr>
-nnoremap <localleader><left>  :previous<cr>
-nnoremap <localleader><right> :next<cr>
-nnoremap <localleader><up>    :bprevious<cr>
-nnoremap <localleader><down>  :bnext<cr>
+nnoremap <localleader><cr>   :argadd<cr>
+nnoremap <localleader><c-cr> :argdelete<cr>
+nnoremap <localleader>n      :previous<cr>
+nnoremap <localleader><esc>  :next<cr>
+nnoremap <localleader>l      :bprevious<cr>
+nnoremap <localleader>m      :bnext<cr>
 
 " move around windows with leader key
-nnoremap <silent><leader>l       <c-w><up>
-nnoremap <silent><leader>m       <c-w><down>
-nnoremap <silent><leader>n       <c-w><left>
-nnoremap <silent><leader><esc>   <c-w><right>
-nnoremap <silent><leader><up>    <c-w><up>
-nnoremap <silent><leader><down>  <c-w><down>
-nnoremap <silent><leader><left>  <c-w><left>
-nnoremap <silent><leader><right> <c-w><right>
+nnoremap <silent><leader>l     <c-w><up>
+nnoremap <silent><leader>m     <c-w><down>
+nnoremap <silent><leader>n     <c-w><left>
+nnoremap <silent><leader><esc> <c-w><right>
 
 " lookup
 nnoremap <leader>\ :call <sid>find(input("find /", "", "file_in_path"))<cr>
