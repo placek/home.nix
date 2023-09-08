@@ -3,11 +3,14 @@
 , pkgs
 , ...
 }:
+let
+  qutebrowser = pkgs.qutebrowser-qt6;
+in
 {
   options = with lib; {
     browserExec = mkOption {
       type = types.str;
-      default = "${pkgs.qutebrowser}/bin/qutebrowser";
+      default = "${qutebrowser}/bin/qutebrowser";
       description = mdDoc "Browser executable.";
       readOnly = true;
     };
@@ -29,7 +32,7 @@
   };
 
   config = {
-    home.packages = [ pkgs.qutebrowser ];
+    home.packages = [ qutebrowser ];
 
     xdg.desktopEntries.qutebrowser = {
       name = "qutebrowser";
@@ -57,6 +60,7 @@
 
     programs.qutebrowser = {
       enable = true;
+      package = qutebrowser;
       loadAutoconfig = false;
       searchEngines = config.browser.searchEngines;
       keyBindings = import ./key-bindings.nix { inherit (config) terminalExec downloaderExec ytDownloaderExec menuExec; inherit (config.browser) downloadsDirectory; };
