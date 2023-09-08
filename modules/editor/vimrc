@@ -102,7 +102,7 @@ endfunction
 
 """"""""""""""""""""""""""""""""""" LEADERS """"""""""""""""""""""""""""""""""""
 let g:mapleader      = "\<space>"                                              " main leader set to space
-let g:maplocalleader = ","                                                     " local leader set to comma
+let g:maplocalleader = "\<backspace>"                                          " local leader set to comma
 
 """""""""""""""""""""""""""""""""""" NETRW """""""""""""""""""""""""""""""""""""
 " do not load shitty netrw
@@ -137,13 +137,13 @@ command! -nargs=0 MakeTags call job_start('git ctags')
 
 autocmd! BufWritePost * MakeTags
 
-nnoremap gd g<c-]>
-vnoremap gd g<c-]>
+nnoremap <localleader>t g<c-]>
+vnoremap <localleader>t g<c-]>
 
 """"""""""""""""""""""""""""""""""""" MAKE """""""""""""""""""""""""""""""""""""
-nnoremap <leader><M-'> :lmake %:t:r<cr>
-nnoremap <leader>' :lmake %:.<cr>
-nnoremap <leader>" :lmake %:.:<c-r>=line('.')<cr><cr>
+nnoremap <localleader><M-b> :lmake %:t:r<cr>
+nnoremap <localleader>b :lmake %:.<cr>
+nnoremap <localleader>B :lmake %:.:<c-r>=line('.')<cr><cr>
 
 augroup MakePrg
   autocmd BufEnter *_spec.rb setlocal makeprg=rspec efm=rspec\ %f:%l\ #\ %m
@@ -165,7 +165,7 @@ function! s:altFile()
   endif
 endfunction
 
-nnoremap <localleader><leader> :call <sid>altFile()<cr>
+nnoremap <localleader>o :call <sid>altFile()<cr>
 
 augroup AltFile
   autocmd BufReadPost *.rb call setbufvar(expand('%'), 'altfile', expand('%:.:s/^app/spec/:s/\.rb$/_spec.rb/'))
@@ -210,16 +210,16 @@ inoremap <c-tab> <c-x><c-o>
 
 nnoremap <silent>[e     :ALEPreviousWrap<cr>
 nnoremap <silent>]e     :ALENextWrap<cr>
-nnoremap K              :ALEHover<cr>
 
-nnoremap <localleader>, :ALEDetail<cr>
+nnoremap <localleader>j :ALEHover<cr>
+nnoremap <localleader>k :ALEDetail<cr>
 nnoremap <localleader>a :ALECodeAction<cr>
 nnoremap <localleader>d :ALEGoToDefinition<cr>
 nnoremap <localleader>D :ALEGoToTypeDefinition<cr>
 nnoremap <localleader>f :ALEFix<cr>
 nnoremap <localleader>i :ALEInfo<cr>
 nnoremap <localleader>I :ALEToggle<cr>
-nnoremap <localleader>l :ALEPopulateLocList<cr>
+nnoremap <localleader>w :ALEPopulateLocList<cr>
 nnoremap <localleader>r :ALEFindReferences<cr>
 
 """"""""""""""""""""""""""""""""""" COMMENT """"""""""""""""""""""""""""""""""""
@@ -233,8 +233,8 @@ function! s:commentToggle()
   s/^.*$/\=l:target/
 endfunction
 
-nnoremap <silent>gc :call <sid>commentToggle()<cr>
-vnoremap <silent>gc :call <sid>commentToggle()<cr>
+nnoremap <silent><localleader>e :call <sid>commentToggle()<cr>
+vnoremap <silent><localleader>e :call <sid>commentToggle()<cr>
 
 """"""""""""""""""""""""""""""""""" QUICKFIX """""""""""""""""""""""""""""""""""
 function! s:openQuickfix(new_split_cmd)
@@ -295,8 +295,8 @@ nnoremap <leader>g :call <sid>toggleFugitive()<cr>
 nnoremap <leader>f :G pull -f<cr>
 nnoremap <leader>F :G push -f<cr>
 nnoremap <leader>G :Gchanges<cr>
-nnoremap <leader>l :GcLog<cr>
-nnoremap <leader>L :0GlLog<cr>
+nnoremap <leader>h :GcLog<cr>
+nnoremap <leader>H :0GlLog<cr>
 nnoremap <leader>p :G pull<cr>
 nnoremap <leader>P :G push<cr>
 nnoremap <leader>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
@@ -364,8 +364,8 @@ nnoremap <leader>t :vertical terminal<cr>
 tnoremap <esc> <c-\><c-n>
 
 " cnake case to camel case and back
-nnoremap <silent>crs :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
-nnoremap <silent>crc :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
+nnoremap <silent><localleader>s :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
+nnoremap <silent><localleader>c :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
 
 " toggle loclist list
 function! s:toggleLocList()
@@ -435,7 +435,23 @@ nnoremap <silent>[l :lprevious<cr>
 nnoremap <silent>]t :tabnext<cr>
 nnoremap <silent>[t :tabprevious<cr>
 
+" move around buffers with leader key
+nnoremap <localleader><cr>    :argadd<cr>
+nnoremap <localleader><c-cr>  :argdelete<cr>
+nnoremap <localleader>n       :previous<cr>
+nnoremap <localleader><esc>   :next<cr>
+nnoremap <localleader>l       :bprevious<cr>
+nnoremap <localleader>m       :bnext<cr>
+nnoremap <localleader><left>  :previous<cr>
+nnoremap <localleader><right> :next<cr>
+nnoremap <localleader><up>    :bprevious<cr>
+nnoremap <localleader><down>  :bnext<cr>
+
 " move around windows with leader key
+nnoremap <silent><leader>l       <c-w><up>
+nnoremap <silent><leader>m       <c-w><down>
+nnoremap <silent><leader>n       <c-w><left>
+nnoremap <silent><leader><esc>   <c-w><right>
 nnoremap <silent><leader><up>    <c-w><up>
 nnoremap <silent><leader><down>  <c-w><down>
 nnoremap <silent><leader><left>  <c-w><left>
