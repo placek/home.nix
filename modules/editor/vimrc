@@ -444,10 +444,10 @@ nnoremap <localleader>l      :bprevious<cr>
 nnoremap <localleader>m      :bnext<cr>
 
 " move around windows with leader key
-nnoremap <silent><leader>l     <c-w><up>
-nnoremap <silent><leader>m     <c-w><down>
-nnoremap <silent><leader>n     <c-w><left>
-nnoremap <silent><leader><esc> <c-w><right>
+nnoremap <silent><leader>l     :wincmd k<cr>
+nnoremap <silent><leader>m     :wincmd j<cr>
+nnoremap <silent><leader>n     :wincmd h<cr>
+nnoremap <silent><leader><esc> :wincmd l<cr>
 
 " lookup
 nnoremap <leader>\ :call <sid>find(input("find /", "", "file_in_path"))<cr>
