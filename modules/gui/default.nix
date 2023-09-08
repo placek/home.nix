@@ -72,7 +72,7 @@
       discord
       dzen2
       gimp
-      eagle
+      kicad
       firefox
       inkscape-with-extensions
       lilypond
