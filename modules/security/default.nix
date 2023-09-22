@@ -27,6 +27,12 @@
       qtpass
     ];
 
+    home.file.binarapps-vpn = {
+      enable = true;
+      target = ".binarapps-office.ovpn";
+      source = ./binarapps-office.ovpn;
+    };
+
     services.gpg-agent = {
       enable = true;
       enableSshSupport = true;
