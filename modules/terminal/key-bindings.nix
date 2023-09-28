@@ -11,6 +11,11 @@ in
   "kitty_mod+up" = "next_tab";
   "kitty_mod+down" = "previous_tab";
 
+  "kitty_mod+shift+right" = "move_tab_forward";
+  "kitty_mod+shift+left" = "move_tab_backward";
+  "kitty_mod+shift+up" = "move_window_backward";
+  "kitty_mod+shift+down" = "move_window_forward";
+
   "kitty_mod+enter" = "launch --type=window --cwd=current --title current";
   "kitty_mod+esc" = "launch --type=tab --cwd=current --title current";
 
@@ -25,14 +30,8 @@ in
   "kitty_mod+." = "show_scrollback";
   "kitty_mod+," = "show_last_command_output";
 
-  "kitty_mod+g" = "kitten hints ${hintsSettings} --window-title 'choose path' --type path --program -";
-  "kitty_mod+h" = "kitten hints ${hintsSettings} --window-title 'choose hash' --type hash --program -";
-#   "kitty_mod+d" = "kitten hints ${hintsSettings} --window-title 'choose hash' --regex '([0-9a-fA-F-]+)' --type regex --program -";
-#   "kitty_mod+f" = "kitten hints ${hintsSettings} --window-title 'choose hyperlink' --type hyperlink";
-#   "kitty_mod+g" = "kitten unicode_input";
-# 
-#   "kitty_mod+alt+left" = "resize_window narrower";
-#   "kitty_mod+alt+right" = "resize_window wider";
-#   "kitty_mod+alt+up" = "resize_window taller";
-#   "kitty_mod+alt+down" = "resize_window shorter";
+  "kitty_mod+q>p" = "kitten hints ${hintsSettings} --window-title 'choose path' --type path --program -";
+  "kitty_mod+q>h" = "kitten hints ${hintsSettings} --window-title 'choose hash' --regex '([0-9a-fA-F-]+)' --type regex --program -";
+  "kitty_mod+q>e" = "kitten unicode_input";
+  "kitty_mod+q>u" = "kitten hints ${hintsSettings} --window-title 'choose hyperlink' --type hyperlink";
 }
