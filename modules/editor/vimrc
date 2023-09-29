@@ -419,6 +419,11 @@ inoremap <cr> <C-G>u<cr>
 " `<C-p>` that acts like `p`, but not change the `+` register
 vnoremap <C-p> "pdp
 vnoremap <C-P> "pdP
+
+" right click is an escape
+inoremap <RightMouse> <esc>
+vnoremap <RightMouse> <esc>
+cnoremap <RightMouse> <esc>
 """""""""""""""""""""""""""""""""""" UTILS """""""""""""""""""""""""""""""""">>>
 
 """""""""""""""""""""""""""""""""" NAVIGATION """""""""""""""""""""""""""""""<<<
