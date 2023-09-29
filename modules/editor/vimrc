@@ -314,18 +314,18 @@ function! s:pickaxe(query)
   endif
 endfunction
 
-autocmd! FileType fugitive nnoremap cW :<c-u>Git commit --no-verify --message "WIP <c-r>=trim(system('curl -Ls whatthecommit.com/index.txt'))<cr>"
-autocmd! FileType fugitive nnoremap rI :<c-u>Git rebase --interactive <c-r>=trim(system('git merge-base origin/HEAD HEAD'))<cr>
-autocmd! FileType fugitive setlocal spell spelllang=en_us
+autocmd! FileType fugitive nnoremap <buffer> cW :<c-u>Git commit --no-verify --message "WIP <c-r>=trim(system('curl -Ls whatthecommit.com/index.txt'))<cr>"
+autocmd! FileType fugitive nnoremap <buffer> rI :<c-u>Git rebase --interactive <c-r>=trim(system('git merge-base origin/HEAD HEAD'))<cr>
+autocmd! FileType gitcommit setlocal spell spelllang=en_us
 
 command! -nargs=0 Gchanges G log --pretty=oneline origin/HEAD.. | resize 10
-command! -nargs=1 -complete=buffer Pickaxe call <sid>pickaxe(<q-args>)
+command! -nargs=1 -complete=buffer GPickaxe call <sid>pickaxe(<q-args>)
 
 nnoremap <leader>b :Git blame<cr>
 nnoremap <leader>B :G branch<cr>
 nnoremap <leader>e :Gedit<cr>
 nnoremap <leader>g :call <sid>toggleFugitive()<cr>
-nnoremap <leader>f :G pull -f<cr>
+nnoremap <leader>f :G fetch<cr>
 nnoremap <leader>F :G push -f<cr>
 nnoremap <leader>G :Gchanges<cr>
 nnoremap <leader>h :GcLog<cr>
