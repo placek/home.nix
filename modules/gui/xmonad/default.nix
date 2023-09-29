@@ -41,9 +41,7 @@ in
       import           XMonad.StackSet                      (focusUp, focusDown, focusMaster, shift, sink, greedyView, view, shiftMaster, workspace, stack, integrate', current, RationalRect(..))
 
       import           ClipboardPrompt
-      import           PhrasePrompt
       import           PassPrompt
-      import           SearchPrompt
       import           RunPrompt
       import           UDisksPrompt
 
@@ -106,14 +104,11 @@ in
           , ((modm              , xK_b         ), sendMessage ToggleStruts)                                                                                    -- toggle the status bar gap
           , ((modm              , xK_f         ), withFocused $ windows . sink)                                                                                -- push window back into tiling
           , ((modm .|. shiftMask, xK_f         ), refresh)                                                                                                     -- resize viewed windows to the correct size
+          , ((modm              , xK_Return    ), spawn $ XMonad.terminal conf)                                                                                -- launch a terminal
           -- utils submap
           , ((modm, xK_space                   ), submapDefault (runPrompt myXPConfig) . Map.fromList $                                                        -- run application prompt
-            [ ((0,    xK_Return                ), spawn $ XMonad.terminal conf)                                                                                -- launch a terminal
-            , ((modm, xK_Return                ), spawn $ XMonad.terminal conf)                                                                                -- launch a terminal
-            , ((0,    xK_c                     ), clipboardPrompt myXPConfig)                                                                                  -- clipboard history prompt
-            , ((0,    xK_a                     ), phrasePrompt myXPConfig)                                                                                     -- abbreviations prompt
+            [ ((0,    xK_c                     ), clipboardPrompt myXPConfig)                                                                                  -- clipboard history prompt
             , ((0,    xK_p                     ), passPrompt myXPConfig)                                                                                       -- pass prompt
-            , ((0,    xK_s                     ), searchPrompt myXPConfig)                                                                                     -- search prompt
             , ((0,    xK_m                     ), udisksPrompt myXPConfig)                                                                                     -- udisks prompt
             ])
           -- quit submap
