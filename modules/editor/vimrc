@@ -217,8 +217,8 @@ inoremap <c-tab> <c-x><c-o>
 nnoremap <silent>[e     :ALEPreviousWrap<cr>
 nnoremap <silent>]e     :ALENextWrap<cr>
 
-nnoremap <localleader>j :ALEHover<cr>
-nnoremap <localleader>k :ALEDetail<cr>
+nnoremap <localleader>h :ALEHover<cr>
+nnoremap <localleader>g :ALEDetail<cr>
 nnoremap <localleader>a :ALECodeAction<cr>
 nnoremap <localleader>d :ALEGoToDefinition<cr>
 nnoremap <localleader>D :ALEGoToTypeDefinition<cr>
