@@ -219,7 +219,7 @@ function! s:commentToggle()
   else
     let l:target = printf(&commentstring, l:line)
   endif
-  s/^.*$/\=l:target/
+  keeppatterns s/^.*$/\=l:target/
 endfunction
 
 nnoremap <silent><localleader>e :call <sid>commentToggle()<cr>
