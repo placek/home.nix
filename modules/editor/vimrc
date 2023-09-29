@@ -104,10 +104,10 @@ let g:copilot_no_tab_map = v:true
 
 """""""""""""""""""""""""""""""""""" CTRLP """"""""""""""""""""""""""""""""""<<<
 nnoremap <leader><leader> :CtrlP<cr>
+nnoremap <localleader><localleader> :CtrlPBuffer<cr>
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:50'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_map = '<leader><leader>'
-let g:ctrlp_cmd = 'CtrlPLastMode'
 let g:ctrlp_switch_buffer = 'etvh'
 let g:ctrlp_open_multiple_files = '2vjr'
 let g:ctrlp_user_command = {
