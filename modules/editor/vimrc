@@ -85,24 +85,6 @@ set statusline+=\ %Y\ %{LinterStatus()}\ %1*\ %m%r[%n]\ %{strlen(&fenc)?&fenc:'n
 autocmd InsertEnter,InsertLeave * set cul!
 """""""""""""""""""""""""""""""""" SETTINGS """"""""""""""""""""""""""""""""">>>
 
-""""""""""""""""""""""""""""""""""" FUNCTIONS """""""""""""""""""""""""""""""<<<
-" returns a text under visual selection
-function! s:selectedText()
-  silent normal gv"vy
-  let l:selection = getreg('v')
-  let l:escaped   = escape(l:selection, '\/')
-  let l:regexp    = substitute(l:escaped, "\n", "\\\\n", "g")
-  normal \<Esc>
-  return l:regexp
-endfunction
-
-" triggers a buffer search using a given query
-function! s:findTextInBuffer(register, query)
-  call setreg(a:register, "\\V" . a:query)
-  normal n
-endfunction
-""""""""""""""""""""""""""""""""""" FUNCTIONS """"""""""""""""""""""""""""""">>>
-
 """"""""""""""""""""""""""""""""""" LEADERS """""""""""""""""""""""""""""""""<<<
 let g:mapleader      = "\<space>"                                              " main leader set to space
 let g:maplocalleader = "\<backspace>"                                          " local leader set to comma
@@ -381,6 +363,22 @@ autocmd CursorHold * call <sid>blameLine()
 """""""""""""""""""""""""""""""""" BLAMELINE """""""""""""""""""""""""""""""">>>
 
 """""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""<<<
+" returns a text under visual selection
+function! s:selectedText()
+  silent normal gv"vy
+  let l:selection = getreg('v')
+  let l:escaped   = escape(l:selection, '\/')
+  let l:regexp    = substitute(l:escaped, "\n", "\\\\n", "g")
+  normal \<Esc>
+  return l:regexp
+endfunction
+
+" triggers a buffer search using a given query
+function! s:findTextInBuffer(register, query)
+  call setreg(a:register, "\\V" . a:query)
+  normal n
+endfunction
+
 " some appearance togglable settings
 nnoremap <leader>1 :set relativenumber!<cr>
 nnoremap <leader>2 :set hlsearch!<cr>
