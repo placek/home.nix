@@ -97,8 +97,9 @@ let g:loaded_netrw = 1
 """""""""""""""""""""""""""""""""""" NETRW """""""""""""""""""""""""""""""""">>>
 
 """"""""""""""""""""""""""""""""""" COPILOT """""""""""""""""""""""""""""""""<<<
-inoremap <m-backspace> <Plug>(copilot-next)
-imap <silent><script><expr> <m-space> copilot#Accept("\<cr>")
+inoremap <silent><script><expr> <m-cr> copilot#Accept("\<cr>")
+imap <m-esc> <Plug>(copilot-next)
+imap <m-p> <Plug>(copilot-suggest)
 let g:copilot_no_tab_map = v:true
 """"""""""""""""""""""""""""""""""" COPILOT """"""""""""""""""""""""""""""""">>>
 
