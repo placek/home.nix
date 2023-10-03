@@ -129,8 +129,8 @@ vnoremap <localleader>t g<c-]>
 """"""""""""""""""""""""""""""""""""" TAGS """""""""""""""""""""""""""""""""">>>
 
 """"""""""""""""""""""""""""""""""""" MAKE """"""""""""""""""""""""""""""""""<<<
-nnoremap <localleader>b :lmake file=%:.<cr>
-nnoremap <localleader>B :lmake file=%:.:<c-r>=line('.')<cr><cr>
+nnoremap <silent><localleader>b :lmake file=%:.<cr>
+nnoremap <silent><localleader>B :lmake file=%:.:<c-r>=line('.')<cr><cr>
 
 augroup MakePrg
   autocmd BufEnter *_spec.rb setlocal makeprg=make\ testrb efm=rspec\ %f:%l\ #\ %m
@@ -485,9 +485,7 @@ command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
 """""""""""""""""""""""""""""""""" NAVIGATION """"""""""""""""""""""""""""""">>>
 
 """""""""""""""""""""""""""""""""""" COLORS """""""""""""""""""""""""""""""""<<<
-hi Boolean                              ctermfg=13            cterm=bold
 hi ColorColumn                          ctermbg=8
-hi Comment                                         ctermfg=7
 hi CtrlPMode1                           ctermbg=0  ctermfg=3
 hi DiffAdd                              ctermbg=8  ctermfg=10 cterm=none
 hi DiffChange                           ctermbg=8  ctermfg=3  cterm=none
@@ -506,7 +504,6 @@ hi SignColumn                           ctermbg=0
 hi SpellBad                             ctermbg=8
 hi StatusLine                                                 cterm=bold
 hi StatusLineNC                         ctermbg=0  ctermfg=0  cterm=none
-hi String                               ctermfg=3
 hi TabLine                              ctermbg=8  ctermfg=7  cterm=none
 hi User1                                ctermbg=3  ctermfg=0  cterm=bold
 hi User2                                ctermbg=0  ctermfg=15 cterm=bold
@@ -526,4 +523,55 @@ hi ALEInfoSign                          ctermbg=0  ctermfg=5
 hi link CtrlPMode2 User1
 hi link TabLineFill StatusLineNC
 hi link TabLineSel User1
+
+" variable name
+hi! Identifier   ctermfg=12 cterm=none
+" function name
+hi! Function     ctermfg=2  cterm=none
+" generic preprocessor
+hi! PreProc      ctermfg=5  cterm=none
+" preprocessor #include
+hi! Include      ctermfg=5  cterm=none
+" preprocessor #define
+hi! Define       ctermfg=5  cterm=bold
+" same as define
+hi! Macro        ctermfg=5  cterm=none
+" preprocessor #if, #else, #endif, etc.
+hi! PreCondit    ctermfg=5  cterm=none
+" generic statement
+hi! Statement    ctermfg=4  cterm=bold
+" if, then, else, endif, swicth, etc.
+hi! Conditional  ctermfg=4  cterm=bold
+" for, do, while, etc.
+hi! Repeat       ctermfg=4  cterm=bold
+" case, default, etc.
+hi! Label        ctermfg=4  cterm=bold
+" try, catch, throw
+hi! Exception    ctermfg=4  cterm=bold
+" sizeof, "+", "*", etc.
+hi! Operator     ctermfg=14 cterm=bold
+" any other keyword
+hi! Keyword      ctermfg=4  cterm=bold
+" generic type
+hi! Type         ctermfg=2  cterm=bold
+" static, register, volatile, etc
+hi! StorageClass ctermfg=2  cterm=none
+" struct, union, enum, etc.
+hi! Structure    ctermfg=2  cterm=none
+" typedef
+hi! Typedef      ctermfg=2  cterm=none
+" character constant: 'c', '/n'
+hi! Character    ctermfg=3  cterm=none
+" string constant: "this is a string"
+hi! String       ctermfg=3  cterm=none
+" generic comment
+hi! Comment      ctermfg=8  cterm=none
+" generic constant
+hi! Constant     ctermfg=7  cterm=none
+" boolean constant: TRUE, false
+hi! Boolean      ctermfg=7  cterm=bold
+" number constant: 234, 0xff
+hi! Number       ctermfg=7  cterm=bold
+" floating point constant: 2.3e10
+hi! Float        ctermfg=7  cterm=bold
 """""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""">>>
