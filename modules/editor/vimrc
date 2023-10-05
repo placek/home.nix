@@ -131,6 +131,8 @@ vnoremap <localleader>t g<c-]>
 """"""""""""""""""""""""""""""""""""" MAKE """"""""""""""""""""""""""""""""""<<<
 nnoremap <silent><localleader>b :lmake file=%:.<cr>
 nnoremap <silent><localleader>B :lmake file=%:.:<c-r>=line('.')<cr><cr>
+nnoremap <silent><localleader>v :!<c-r>=&makeprg<cr> file=%:.<cr>
+nnoremap <silent><localleader>V :!<c-r>=&makeprg<cr> file=%:.:<c-r>=line('.')<cr><cr>
 
 augroup MakePrg
   autocmd BufEnter *_spec.rb setlocal makeprg=make\ testrb efm=rspec\ %f:%l\ #\ %m
