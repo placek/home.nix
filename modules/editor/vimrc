@@ -124,8 +124,8 @@ command! -nargs=0 MakeTags call job_start('git ctags')
 
 autocmd! BufWritePost * MakeTags
 
-nnoremap <localleader>t g<c-]>
-vnoremap <localleader>t g<c-]>
+nnoremap <localleader>f g<c-]>
+vnoremap <localleader>f g<c-]>
 """"""""""""""""""""""""""""""""""""" TAGS """""""""""""""""""""""""""""""""">>>
 
 """"""""""""""""""""""""""""""""""""" MAKE """"""""""""""""""""""""""""""""""<<<
@@ -155,7 +155,7 @@ function! s:altFile()
   endif
 endfunction
 
-nnoremap <localleader>o :call <sid>altFile()<cr>
+nnoremap <localleader>x :call <sid>altFile()<cr>
 
 augroup AltFile
   autocmd BufReadPost *.rb call setbufvar(expand('%'), 'altfile', expand('%:.:s/^app/spec/:s/\.rb$/_spec.rb/'))
@@ -203,15 +203,14 @@ nnoremap <silent>[e     :ALEPreviousWrap<cr>
 nnoremap <silent>]e     :ALENextWrap<cr>
 
 nnoremap <localleader>h :ALEHover<cr>
-nnoremap <localleader>g :ALEDetail<cr>
+nnoremap <localleader>H :ALEDetail<cr>
 nnoremap <localleader>a :ALECodeAction<cr>
 nnoremap <localleader>d :ALEGoToDefinition<cr>
 nnoremap <localleader>D :ALEGoToTypeDefinition<cr>
-nnoremap <localleader>f :ALEFix<cr>
 nnoremap <localleader>i :ALEInfo<cr>
 nnoremap <localleader>I :ALEToggle<cr>
 nnoremap <localleader>w :ALEPopulateLocList<cr>
-nnoremap <localleader>r :ALEFindReferences<cr>
+nnoremap <localleader>f :ALEFindReferences<cr>
 """"""""""""""""""""""""""""""""""""" ALE """"""""""""""""""""""""""""""""""">>>
 
 """"""""""""""""""""""""""""""""""" COMMENT """""""""""""""""""""""""""""""""<<<
@@ -309,12 +308,11 @@ command! -nargs=1 -complete=buffer GPickaxe call <sid>pickaxe(<q-args>)
 nnoremap <leader>b :Git blame<cr>
 nnoremap <leader>B :G branch<cr>
 nnoremap <leader>e :Gedit<cr>
+nnoremap <leader>o :G fetch<cr>
+nnoremap <leader>O :G push -f<cr>
 nnoremap <leader>g :call <sid>toggleFugitive()<cr>
-nnoremap <leader>f :G fetch<cr>
-nnoremap <leader>F :G push -f<cr>
-nnoremap <leader>G :Gchanges<cr>
-nnoremap <leader>h :GcLog<cr>
-nnoremap <leader>H :0GlLog<cr>
+nnoremap <leader>d :Gchanges<cr>
+nnoremap <leader>D :0GlLog<cr>
 nnoremap <leader>p :G pull<cr>
 nnoremap <leader>P :G push<cr>
 nnoremap <leader>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
@@ -399,12 +397,12 @@ set foldmarker=<<<,>>>
 nnoremap <leader>4 :call <sid>makeFolds()<cr>
 
 " terminal-mode
-nnoremap <leader>t :vertical terminal<cr>
-tnoremap <esc> <c-\><c-n>
+nnoremap <leader>v :vertical terminal<cr>
+autocmd TerminalWinOpen * tmap <esc> <c-\><c-n>
 
 " cnake case to camel case and back
-nnoremap <silent><localleader>s :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
-nnoremap <silent><localleader>c :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
+nnoremap <silent><localleader>c :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
+nnoremap <silent><localleader>C :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
 
 " use `open` command to open a current buffer
 command! -nargs=0 Open !open %
@@ -460,24 +458,24 @@ nnoremap <silent>[t :tabprevious<cr>
 
 " move around buffers with leader key
 nnoremap <localleader><cr>   :argadd<cr>
-nnoremap <localleader><c-cr> :argdelete<cr>
-nnoremap <localleader>n      :previous<cr>
-nnoremap <localleader><esc>  :next<cr>
-nnoremap <localleader>l      :bprevious<cr>
-nnoremap <localleader>m      :bnext<cr>
+nnoremap <localleader><s-cr> :argdelete<cr>
+nnoremap <localleader>h :previous<cr>
+nnoremap <localleader>l :next<cr>
+nnoremap <localleader>k :bprevious<cr>
+nnoremap <localleader>j :bnext<cr>
 
 " move around windows with leader key
-nnoremap <silent><leader>l     :wincmd k<cr>
-nnoremap <silent><leader>m     :wincmd j<cr>
-nnoremap <silent><leader>n     :wincmd h<cr>
-nnoremap <silent><leader><esc> :wincmd l<cr>
+nnoremap <silent><leader>k :wincmd k<cr>
+nnoremap <silent><leader>j :wincmd j<cr>
+nnoremap <silent><leader>h :wincmd h<cr>
+nnoremap <silent><leader>l :wincmd l<cr>
 
 " lookup
-nnoremap <leader>\ :call <sid>find(input("find /", "", "file_in_path"))<cr>
-nnoremap <leader>/ :call <sid>grep(input("grep /", "", "tag"))<cr>
+nnoremap <leader>F :call <sid>find(input("find /", "", "file_in_path"))<cr>
+nnoremap <leader>f :call <sid>grep(input("grep /", "", "tag"))<cr>
 
-vnoremap <leader>\ :<c-u>call <sid>find(<sid>selectedText())<cr>
-vnoremap <leader>/ :<c-u>call <sid>grep(<sid>selectedText())<cr>
+vnoremap <leader>F :<c-u>call <sid>find(<sid>selectedText())<cr>
+vnoremap <leader>f :<c-u>call <sid>grep(<sid>selectedText())<cr>
 
 vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
 vnoremap <silent># :<c-u>call <sid>findTextInBuffer("#", <sid>selectedText())<cr>n
