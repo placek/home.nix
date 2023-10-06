@@ -27,6 +27,8 @@ in
     gui.theme = theme;
     gui.font.name = "Iosevka Nerd Font";
     gui.font.size = 12;
+    gui.showBattery = true;
+    gui.showWiFi = true;
 
     vcs.name = "Paweł Placzyński";
     vcs.email = "placzynski.pawel@gmail.com";
