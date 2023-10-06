@@ -2,16 +2,16 @@ let
   hintsSettings = "--alphabet 'asdfghjkl' --hints-foreground-color black --hints-background-color yellow --hints-text-color blue";
 in
 {
-  "kitty_mod+ctrl+c" = "copy_to_clipboard";
-  "kitty_mod+ctrl+v" = "paste_from_clipboard";
-  "kitty_mod+ctrl+x" = "paste_from_selection";
+  "kitty_mod+shift+c" = "copy_to_clipboard";
+  "kitty_mod+shift+v" = "paste_from_clipboard";
+  "kitty_mod+shift+x" = "paste_from_selection";
 
   "kitty_mod+l" = "next_window";
   "kitty_mod+h" = "previous_window";
   "kitty_mod+shift+h" = "move_window_backward";
   "kitty_mod+shift+l" = "move_window_forward";
 
-  "kitty_mod+esc" = "launch --type=window --cwd=current --title current";
+  "kitty_mod+enter" = "launch --type=window --cwd=current --title current";
 
   "kitty_mod+space" = "next_layout";
 
