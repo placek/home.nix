@@ -35,6 +35,13 @@
       description = mdDoc "A border size.";
     };
 
+    gui.wallpaper = mkOption {
+      type = types.path;
+      default = ./wallpaper.png;
+      description = mdDoc "A wallpaper.";
+      readOnly = true;
+    };
+
     menuExec = mkOption {
       type = types.str;
       default = "${pkgs.xprompt}/bin/xprompt";
