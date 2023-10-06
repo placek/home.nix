@@ -12,12 +12,14 @@ in
 {
   confirm_quit = [ "multiple-tabs" "downloads" ];
 
-  content.default_encoding = "utf-8";
-  content.tls.certificate_errors = "load-insecurely";
-  content.notifications.enabled = true;
-  content.media.audio_capture = true;
-  content.media.audio_video_capture = true;
-  content.media.video_capture = true;
+  content.desktop_capture = true;
+  content.geolocation = true;
+  content.mouse_lock = true;
+  content.media_capture = true;
+  content.notifications = true;
+  content.persistent_storage = true;
+  content.register_protocol_handler = true;
+  content.ssl_strict = true;
 
   downloads.location.directory = downloadsDirectory;
 
