@@ -39,6 +39,7 @@
         vim-expand-region
         vim-gitgutter
 
+        haskell-vim
         (import ./vim-xit.nix { inherit pkgs; })
       ];
       extraConfig = builtins.readFile ./vimrc;
