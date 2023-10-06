@@ -15,11 +15,12 @@ in
   content.desktop_capture = true;
   content.geolocation = true;
   content.mouse_lock = true;
-  content.media_capture = true;
+  content.media.audio_video_capture = true;
   content.notifications = true;
   content.persistent_storage = true;
   content.register_protocol_handler = true;
   content.ssl_strict = true;
+  content.javascript.clipboard = "access-paste";
 
   downloads.location.directory = downloadsDirectory;
 
@@ -31,6 +32,7 @@ in
 
   hints.border = "none";
   hints.radius = 4;
+  hints.auto_follow = "always";
 
   tabs.favicons.show = "never";
   tabs.indicator.width = 0;
