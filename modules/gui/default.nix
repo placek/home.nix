@@ -37,7 +37,7 @@
 
     gui.wallpaper = mkOption {
       type = types.path;
-      default = ./wallpaper.png;
+      default = ./wallpaper.jpg;
       description = mdDoc "A wallpaper.";
       readOnly = true;
     };
