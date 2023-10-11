@@ -16,7 +16,6 @@
   tt = "nc termbin.com 9999";
   tf = "nc oshi.at 7777";
 
-  ":q" = "exit";
-  ":q!" = "exit";
-  ":w" = "git commit -p";
+  sshh = "TERM=xterm-256color ssh";
+  cdt = "cd (mktemp -d)";
 }
