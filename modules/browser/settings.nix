@@ -16,10 +16,9 @@ in
   content.geolocation = true;
   content.mouse_lock = true;
   content.media.audio_video_capture = true;
-  content.notifications = true;
+  content.notifications.enabled = true;
   content.persistent_storage = true;
   content.register_protocol_handler = true;
-  content.ssl_strict = true;
   content.javascript.clipboard = "access-paste";
 
   downloads.location.directory = downloadsDirectory;
