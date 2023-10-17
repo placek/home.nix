@@ -213,7 +213,7 @@ nnoremap <localleader>D :ALEGoToTypeDefinition<cr>
 nnoremap <localleader>i :ALEInfo<cr>
 nnoremap <localleader>I :ALEToggle<cr>
 nnoremap <localleader>w :ALEPopulateLocList<cr>
-nnoremap <localleader>f :ALEFindReferences<cr>
+nnoremap <localleader>F :ALEFindReferences<cr>
 """"""""""""""""""""""""""""""""""""" ALE """"""""""""""""""""""""""""""""""">>>
 
 """"""""""""""""""""""""""""""""""" COMMENT """""""""""""""""""""""""""""""""<<<
