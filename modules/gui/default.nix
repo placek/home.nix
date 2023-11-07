@@ -78,6 +78,8 @@
       gimp
       inkscape-with-extensions
       kicad
+      librecad
+      qcad
       lilypond
       mplayer
       qcad
