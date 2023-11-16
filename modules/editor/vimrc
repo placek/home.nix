@@ -429,6 +429,10 @@ cnoremap <RightMouse> <esc>
 
 " git settings for directories
 let g:dirvish_git_show_icons = 0
+function! s:dirvishCp()
+  return ":!cp ".shellescape(fnamemodify(getline("."),":."))." ".shellescape(fnamemodify(getline("."),":."))
+endfunction
+nnoremap <expr>, <sid>dirvishCp()
 """""""""""""""""""""""""""""""""""" UTILS """""""""""""""""""""""""""""""""">>>
 
 """""""""""""""""""""""""""""""""" NAVIGATION """""""""""""""""""""""""""""""<<<
