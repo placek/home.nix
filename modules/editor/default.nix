@@ -32,6 +32,7 @@
       plugins = with pkgs.vimPlugins; [
         vim-fugitive
         vim-dirvish
+        vim-dirvish-git
 
         ale
         copilot-vim

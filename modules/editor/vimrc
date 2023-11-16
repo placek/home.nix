@@ -426,6 +426,9 @@ vnoremap <C-P> "pdP
 inoremap <RightMouse> <esc>
 vnoremap <RightMouse> <esc>
 cnoremap <RightMouse> <esc>
+
+" git settings for directories
+let g:dirvish_git_show_icons = 0
 """""""""""""""""""""""""""""""""""" UTILS """""""""""""""""""""""""""""""""">>>
 
 """""""""""""""""""""""""""""""""" NAVIGATION """""""""""""""""""""""""""""""<<<
@@ -522,6 +525,14 @@ hi ALEWarning                           ctermbg=0  ctermfg=4  cterm=underline
 hi ALEWarningSign                       ctermbg=0  ctermfg=4
 hi ALEInfo                              ctermbg=0  ctermfg=5  cterm=underline
 hi ALEInfoSign                          ctermbg=0  ctermfg=5
+
+hi link DirvishGitModified DiffChange
+hi link DirvishGitStaged DiffAdd
+hi link DirvishGitRenamed DiffChange
+hi link DirvishGitUnmerged DiffChange
+hi link DirvishGitIgnored DiffDelete
+hi link DirvishGitUntracked DiffChange
+hi default link DirvishGitUntrackedDir DirvishPathTail
 
 hi link CtrlPMode2 User1
 hi link TabLineFill StatusLineNC
