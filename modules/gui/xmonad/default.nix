@@ -90,27 +90,24 @@ in
           , ((modm .|. shiftMask, xK_j      ), rotAllDown  )                                                                                                   -- swap the focused window with the next window
           , ((modm .|. mod1Mask , xK_k      ), sendMessage Shrink)                                                                                             -- shrink the master area
           , ((modm .|. mod1Mask , xK_j      ), sendMessage Expand)                                                                                             -- expand the master area
-          , ((modm              , xK_m      ), windows focusMaster  )                                                                                          -- move focus to the master window
           , ((modm              , xK_n      ), sendMessage NextLayout)                                                                                         -- rotate through the available layouts
           , ((modm              , xK_b      ), sendMessage ToggleStruts)                                                                                       -- toggle the status bar gap
           , ((modm .|. shiftMask, xK_n      ), withFocused $ windows . sink)                                                                                   -- push window back into tiling
           , ((modm              , xK_Return ), spawn $ XMonad.terminal conf)                                                                                   -- launch a terminal
-          -- utils submap
-          , ((modm, xK_space                ), submapDefault (runPrompt myXPConfig) . Map.fromList $                                                           -- run application prompt
-            [ ((0,    xK_c                  ), clipboardPrompt myXPConfig)                                                                                     -- clipboard history prompt
-            , ((0,    xK_p                  ), passPrompt myXPConfig)                                                                                          -- pass prompt
-            , ((0,    xK_m                  ), udisksPrompt myXPConfig)                                                                                        -- udisks prompt
-            ])
+          -- utils
+          , ((modm              , xK_space  ), runPrompt myXPConfig)                                                                                           -- run application prompt
+          , ((modm              , xK_c      ), clipboardPrompt myXPConfig)                                                                                     -- clipboard history prompt
+          , ((modm              , xK_p      ), passPrompt myXPConfig)                                                                                          -- pass prompt
+          , ((modm              , xK_m      ), udisksPrompt myXPConfig)                                                                                        -- udisks prompt
           -- quit submap
           , ((modm, xK_q                    ), submap . Map.fromList $
              [ ((modm, xK_q                 ), kill)                                                                                                           -- close focused window
-             , ((modm, xK_x                 ), confirmPrompt myXPConfig "logout" $ io (exitWith ExitSuccess))                                                  -- quit xmonad
-             , ((0, xK_x                    ), spawn "xmonad --recompile; xmonad --restart")                                                                   -- restart xmonad
+             , ((0,    xK_x                 ), confirmPrompt myXPConfig "logout" $ io (exitWith ExitSuccess))                                                  -- quit xmonad
              ])
           -- notifications submap
           , ((modm, xK_Escape               ), submap . Map.fromList $
-             [ ((modm, xK_w                 ), safeSpawn "${pkgs.dunst}/bin/dunstctl" ["close-all"])                                                           -- close all notifications
-             , ((modm, xK_q                 ), safeSpawn "${pkgs.dunst}/bin/dunstctl" ["set-paused", "toggle"])                                                -- toggle notifications
+             [ ((modm, xK_p                 ), safeSpawn "${pkgs.dunst}/bin/dunstctl" ["close-all"])                                                           -- close all notifications
+             , ((modm, xK_Return            ), safeSpawn "${pkgs.dunst}/bin/dunstctl" ["set-paused", "toggle"])                                                -- toggle notifications
              , ((modm, xK_Escape            ), safeSpawn "${pkgs.dunst}/bin/dunstctl" ["history-pop"])                                                         -- pop notification from history
              ])
           -- others
