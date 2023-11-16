@@ -56,7 +56,7 @@
     ./dunst.nix
     ./feh.nix
     ./xmobar.nix
-    ./mplayer.nix
+    ./mpv.nix
     ./zathura.nix
 
     ./xmonad
