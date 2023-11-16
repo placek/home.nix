@@ -47,5 +47,13 @@
       recolor-lightcolor = config.gui.theme.base00;
       recolor-darkcolor = config.gui.theme.base06;
     };
+
+    xdg.mimeApps.defaultApplications = {
+      "application/pdf" = [ "org.pwmt.zathura.desktop" ];
+      "application/postscript" = [ "org.pwmt.zathura.desktop" ];
+      "application/x-cbr" = [ "org.pwmt.zathura.desktop" ];
+      "application/x-cbt" = [ "org.pwmt.zathura.desktop" ];
+      "image/vnd.djvu" = [ "org.pwmt.zathura.desktop" ];
+    };
   };
 }

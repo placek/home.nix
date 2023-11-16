@@ -53,5 +53,30 @@
 
       close              = "q Q";
     };
+
+    xdg.mimeApps.defaultApplications = {
+     "image/bmp" = [ "feh.desktop" ];
+     "image/jpeg" = [ "feh.desktop" ];
+     "image/png" = [ "feh.desktop" ];
+     "image/gif" = [ "feh.desktop" ];
+     "image/tiff" = [ "feh.desktop" ];
+     "image/x-portable-pixmap" = [ "feh.desktop" ];
+     "image/x-portable-graymap" = [ "feh.desktop" ];
+     "image/x-portable-bitmap" = [ "feh.desktop" ];
+     "image/x-xbitmap" = [ "feh.desktop" ];
+     "image/x-xpixmap" = [ "feh.desktop" ];
+     "image/x-portable-anymap" = [ "feh.desktop" ];
+     "image/x-pcx" = [ "feh.desktop" ];
+     "image/x-tga" = [ "feh.desktop" ];
+     "image/sgi" = [ "feh.desktop" ];
+     "image/x-radiance" = [ "feh.desktop" ];
+     "image/vnd.radiance" = [ "feh.desktop" ];
+     "image/vnd-ms.dds" = [ "feh.desktop" ];
+     "image/x-icon" = [ "feh.desktop" ];
+     "image/fits" = [ "feh.desktop" ];
+     "image/vnd.adobe.photoshop" = [ "feh.desktop" ];
+     "image/x-adobe-dng" = [ "feh.desktop" ];
+     "image/webp" = [ "feh.desktop" ];
+    };
   };
 }

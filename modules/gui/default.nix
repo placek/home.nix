@@ -56,6 +56,7 @@
     ./dunst.nix
     ./feh.nix
     ./xmobar.nix
+    ./mplayer.nix
     ./zathura.nix
 
     ./xmonad
@@ -71,7 +72,6 @@
 
       arduino
       blender
-      browsh
       discord
       dzen2
       firefox
@@ -81,7 +81,6 @@
       librecad
       qcad
       lilypond
-      mplayer
       qcad
       slack
       steam
