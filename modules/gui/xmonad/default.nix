@@ -166,7 +166,7 @@ in
                                                    , ppHidden          = xmobarColor "${config.gui.theme.base03}" "" . wrap " <fn=1>" "</fn> "
                                                    , ppCurrent         = xmobarColor "${config.gui.theme.base0B}" "" . wrap " <fn=1>" "</fn> "
                                                    , ppVisible         = xmobarColor "${config.gui.theme.base02}" "" . wrap " <fn=1>" "</fn> "
-                                                   , ppTitle           = xmobarColor "${config.gui.theme.base0C}" "" . shorten 20
+                                                   , ppTitle           = const ""
                                                    , ppLayout          = layout
                                                    , ppUrgent          = xmobarColor "${config.gui.theme.base08}" "${config.gui.theme.base0F}"
                                                    , ppWsSep           = ""
