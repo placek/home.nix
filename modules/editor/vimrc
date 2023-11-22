@@ -427,12 +427,11 @@ inoremap <RightMouse> <esc>
 vnoremap <RightMouse> <esc>
 cnoremap <RightMouse> <esc>
 
-" git settings for directories
+" settings for dirvish buffers
 let g:dirvish_git_show_icons = 0
-function! s:dirvishCp()
-  return ":!cp ".shellescape(fnamemodify(getline("."),":."))." ".shellescape(fnamemodify(getline("."),":."))
+function! g:DovishDelete(target) abort
+  return 'rm -rf ' . a:target
 endfunction
-nnoremap <expr>, <sid>dirvishCp()
 """""""""""""""""""""""""""""""""""" UTILS """""""""""""""""""""""""""""""""">>>
 
 """""""""""""""""""""""""""""""""" NAVIGATION """""""""""""""""""""""""""""""<<<

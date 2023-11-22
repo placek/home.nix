@@ -42,6 +42,7 @@
 
         haskell-vim
         (import ./vim-xit.nix { inherit pkgs; })
+        (import ./dovish.nix { inherit pkgs; })
       ];
       extraConfig = builtins.readFile ./vimrc;
     };
