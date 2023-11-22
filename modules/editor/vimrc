@@ -296,7 +296,7 @@ endfunction
 
 function! s:pickaxe(query)
   if !empty(a:query)
-    execute ":G log -p -G " a:query
+    execute ":G log -p -G \"" a:query "\""
     call setreg("/", "\\V" . a:query)
   endif
 endfunction
