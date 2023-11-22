@@ -164,7 +164,7 @@ in
       myLogHook xmproc = dynamicLogWithPP xmobarPP { ppOutput          = hPutStrLn xmproc
                                                    , ppHiddenNoWindows = xmobarColor "${config.gui.theme.base08}" "" . wrap " <fn=1>" "</fn> "
                                                    , ppHidden          = xmobarColor "${config.gui.theme.base03}" "" . wrap " <fn=1>" "</fn> "
-                                                   , ppCurrent         = xmobarColor "${config.gui.theme.base0B}" "" . wrap " <fn=1>" "</fn> "
+                                                   , ppCurrent         = xmobarColor "${config.gui.theme.base02}" "" . wrap " <fn=1>" "</fn> "
                                                    , ppVisible         = xmobarColor "${config.gui.theme.base02}" "" . wrap " <fn=1>" "</fn> "
                                                    , ppTitle           = const ""
                                                    , ppLayout          = layout
