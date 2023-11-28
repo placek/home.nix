@@ -10,8 +10,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "placek";
       repo = "custom-fonts";
-      rev = "f4e774280cf9f887fc69552a81cced5c12f9103c";
-      sha256 = "sha256-rp4gJuUQz7+ss4zmE8E2RT/C9x7zWs3s9w7Pzs1W7z0=";
+      rev = "f441021aa940621afffa901588af4c180cc745ce";
+      sha256 = "1fnskidvnlrr0cgv3rjz6024vhqh1hi81p3dr8var5lrzcpizlgg";
     };
     phases = [ "installPhase" ];
     installPhase = ''
