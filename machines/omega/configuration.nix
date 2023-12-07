@@ -55,7 +55,7 @@
   services.printing.enable                                                     = true;
   services.udisks2.enable                                                      = true;
   sound.enable                                                                 = true;
-  system.stateVersion                                                          = "23.05";
+  system.stateVersion                                                          = "23.11";
   time.timeZone                                                                = "Europe/Warsaw";
   users.extraGroups.vboxusers.members                                          = [ "placek" ];
   virtualisation.docker.autoPrune.dates                                        = "daily";
@@ -77,6 +77,10 @@
   xdg.portal.enable                                                            = true;
 
   services.xserver.libinput.enable                                             = true;
+  services.xserver.libinput.mouse.middleEmulation                              = false;
+  services.xserver.libinput.mouse.transformationMatrix                         = "0.3 0 0 0 0.3 0 0 0 1";
+#   services.xserver.libinput.mouse.scrollButton                                 = 2;
+#   services.xserver.libinput.mouse.scrollMethod                                 = "button";
   services.xserver.libinput.touchpad.naturalScrolling                          = true;
   services.xserver.libinput.touchpad.scrollMethod                              = "twofinger";
   services.xserver.libinput.touchpad.tapping                                   = false;
@@ -111,9 +115,11 @@
   ################################## NVIDIA ####################################
   hardware.nvidia.nvidiaSettings                                               = true;
   hardware.nvidia.package                                                      = config.boot.kernelPackages.nvidiaPackages.stable;
-  services.xserver.videoDrivers                                                = ["nvidia"];
+  services.xserver.videoDrivers                                                = [ "nvidia" ];
   hardware.nvidia.modesetting.enable                                           = true;
-  hardware.nvidia.open                                                         = false;
+  hardware.nvidia.powerManagement.enable                                       = false;
+  hardware.nvidia.powerManagement.finegrained                                  = false;
+  hardware.nvidia.open                                                         = true;
   hardware.nvidia.prime.reverseSync.enable                                     = true;
   hardware.nvidia.prime.allowExternalGpu                                       = false;
   hardware.nvidia.prime.intelBusId                                             = "PCI:0:2:0";

@@ -9,7 +9,7 @@ let
 in
 {
   config = {
-    home.stateVersion = "23.05";
+    home.stateVersion = "23.11";
     home.username = "placek";
     home.homeDirectory = "/home/placek";
 

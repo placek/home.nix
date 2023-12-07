@@ -4,7 +4,7 @@
 , ...
 }:
 let
-  qutebrowser = pkgs.qutebrowser-qt6;
+  qutebrowser = pkgs.qutebrowser;
 in
 {
   options = with lib; {
