@@ -13,8 +13,6 @@ in
     home.username = "placek";
     home.homeDirectory = "/home/placek";
 
-    fonts.fontconfig.enable = true;
-
     nix.package = pkgs.nix;
     nix.settings.system-features = [ "big-parallel" "kvm" "benchmark" ];
 
