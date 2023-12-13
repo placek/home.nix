@@ -51,7 +51,7 @@
   nixpkgs.config.allowUnfree                                                   = true;
   services.cron.enable                                                         = true;
   services.openssh.extraConfig                                                 = "StreamLocalBindUnlink yes";
-  services.printing.drivers                                                    = [ pkgs.foo2zjs pkgs.mfcl8690cdwlpr ];
+  services.printing.drivers                                                    = [ pkgs.foo2zjs pkgs.mfcl8690cdwcupswrapper ];
   services.printing.enable                                                     = true;
   services.udisks2.enable                                                      = true;
   sound.enable                                                                 = true;
@@ -64,6 +64,7 @@
   virtualisation.virtualbox.host.enable                                        = true;
   security.sudo.wheelNeedsPassword                                             = false;
   programs.slock.enable                                                        = true;
+  nix.settings.experimental-features                                           = [ "nix-command" "flakes" ];
 
   ################################# SERVICES ###################################
   services.clamav.daemon.enable                                                = true;
@@ -72,9 +73,6 @@
   services.greenclip.enable                                                    = true;
   services.logind.extraConfig                                                  = "HandlePowerKey=ignore";
   services.logind.lidSwitch                                                    = "ignore";
-  services.flatpak.enable                                                      = true;
-  xdg.portal.extraPortals                                                      = [ pkgs.xdg-desktop-portal-gtk ];
-  xdg.portal.enable                                                            = true;
 
   services.xserver.libinput.enable                                             = true;
   services.xserver.libinput.mouse.middleEmulation                              = false;
