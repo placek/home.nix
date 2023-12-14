@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-export NIXPKGS_ALLOW_UNFREE=1
-nix --extra-experimental-features nix-command --extra-experimental-features flakes run home-manager/release-23.11 -- --impure init --switch -b backup

@@ -12,6 +12,7 @@ in
     home.stateVersion = "23.11";
     home.username = "placek";
     home.homeDirectory = "/home/placek";
+    home.packages = [ pkgs.gnumake ];
 
     nix.package = pkgs.nix;
     nix.settings.system-features = [ "big-parallel" "kvm" "benchmark" ];
