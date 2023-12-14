@@ -64,7 +64,6 @@
   virtualisation.virtualbox.host.enable                                        = true;
   security.sudo.wheelNeedsPassword                                             = false;
   programs.slock.enable                                                        = true;
-  nix.settings.experimental-features                                           = [ "nix-command" "flakes" ];
 
   ################################# SERVICES ###################################
   services.clamav.daemon.enable                                                = true;
