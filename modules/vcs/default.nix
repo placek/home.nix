@@ -8,7 +8,7 @@
     vcsExec = mkOption {
       type = types.str;
       default = "${pkgs.git}/bin/git";
-      description = mdDoc "VCS executable.";
+      description = "VCS executable.";
       readOnly = true;
     };
 
@@ -16,32 +16,32 @@
       type = types.str;
       default = config.home.username;
       example = "John Smith";
-      description = mdDoc "Author/commiter full name.";
+      description = "Author/commiter full name.";
     };
 
     vcs.email = mkOption {
       type = types.str;
       example = "john-smith@example.com";
-      description = mdDoc "Author/commiter email.";
+      description = "Author/commiter email.";
     };
 
     vcs.login = mkOption {
       type = types.str;
       example = "john-smith";
-      description = mdDoc "Author/commiter login.";
+      description = "Author/commiter login.";
     };
 
     vcs.signKey = mkOption {
       type = types.str;
       example = "AAAAssfGFFsgdsgERgTT35qfgewhtu12345qgaqe4…";
-      description = mdDoc "GPG sign key to sign any verifiable VCS content.";
+      description = "GPG sign key to sign any verifiable VCS content.";
     };
 
     vcs.gitAttributesFilePath = mkOption {
       type = types.str;
       default = "${config.home.homeDirectory}/.gitattributes_global";
       example = "${config.home.homeDirectory}/.gitattributes_global";
-      description = mdDoc "A path to git attributes file.";
+      description = "A path to git attributes file.";
     };
   };
 

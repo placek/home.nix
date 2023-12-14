@@ -8,7 +8,7 @@
     terminalExec = mkOption {
       type = types.str;
       default = "${pkgs.kitty}/bin/kitty";
-      description = mdDoc "Terminal executable.";
+      description = "Terminal executable.";
       readOnly = true;
     };
   };

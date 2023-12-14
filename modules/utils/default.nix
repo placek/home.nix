@@ -19,21 +19,21 @@ in
     fileManagerExec = mkOption {
       type = types.str;
       default = "${pkgs.nnn}/bin/nnn";
-      description = mdDoc "File manager executable.";
+      description = "File manager executable.";
       readOnly = true;
     };
 
     downloaderExec = mkOption {
       type = types.str;
       default = "${pkgs.aria}/bin/aria2c";
-      description = mdDoc "Downloader executable.";
+      description = "Downloader executable.";
       readOnly = true;
     };
 
     ytDownloaderExec = mkOption {
       type = types.str;
       default = "${pkgs.yt-dlp}/bin/yt-dlp";
-      description = mdDoc "YouTube downloader executable.";
+      description = "YouTube downloader executable.";
       readOnly = true;
     };
   };

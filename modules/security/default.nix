@@ -7,17 +7,17 @@
   options = with lib; {
     ssh.secretKeyID = mkOption {
       type = types.str;
-      description = mdDoc "A secret SSH key ID.";
+      description = "A secret SSH key ID.";
     };
 
     ssh.publicKey = mkOption {
       type = types.path;
-      description = mdDoc "A public SSH key.";
+      description = "A public SSH key.";
     };
 
     security.passwordStore = mkOption {
       type = types.str;
-      description = mdDoc "A public SSH key.";
+      description = "A public SSH key.";
     };
   };
 

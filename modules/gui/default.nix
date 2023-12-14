@@ -26,26 +26,26 @@
           base0F = mkOption { type = str; };
         };
       };
-      description = mdDoc "A color scheme.";
+      description = "A color scheme.";
     };
 
     gui.border.size = mkOption {
       type = types.int;
       default = 4;
-      description = mdDoc "A border size.";
+      description = "A border size.";
     };
 
     gui.wallpaper = mkOption {
       type = types.path;
       default = ./wallpaper.jpg;
-      description = mdDoc "A wallpaper.";
+      description = "A wallpaper.";
       readOnly = true;
     };
 
     menuExec = mkOption {
       type = types.str;
       default = "${pkgs.xprompt}/bin/xprompt";
-      description = mdDoc "GUI menu executable.";
+      description = "GUI menu executable.";
       readOnly = true;
     };
   };

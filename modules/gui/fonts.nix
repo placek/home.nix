@@ -25,13 +25,13 @@ in
     gui.font.name = mkOption {
       type = types.str;
       example = "Iosevka Nerd Font";
-      description = mdDoc "A name of TTF font.";
+      description = "A name of TTF font.";
     };
 
     gui.font.size = mkOption {
       type = types.int;
       example = 12;
-      description = mdDoc "A font size.";
+      description = "A font size.";
     };
   };
 

@@ -8,7 +8,7 @@
     shellExec = mkOption {
       type = types.str;
       default = "${pkgs.fish}/bin/fish";
-      description = mdDoc "Shell executable.";
+      description = "Shell executable.";
       readOnly = true;
     };
   };

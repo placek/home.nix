@@ -11,7 +11,7 @@ in
     browserExec = mkOption {
       type = types.str;
       default = "${qutebrowser}/bin/qutebrowser";
-      description = mdDoc "Browser executable.";
+      description = "Browser executable.";
       readOnly = true;
     };
 
@@ -19,13 +19,13 @@ in
       downloadsDirectory = mkOption {
         type = types.str;
         default = "${config.home.homeDirectory}/Downloads";
-        description = mdDoc "A path to downloads directory.";
+        description = "A path to downloads directory.";
       };
 
       searchEngines = mkOption {
         type = types.attrs;
         default = import ./search-engines.nix;
-        description = mdDoc "Browser search engines.";
+        description = "Browser search engines.";
         readOnly = true;
       };
     };

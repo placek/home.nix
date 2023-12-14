@@ -8,14 +8,14 @@
     editorExec = mkOption {
       type = types.str;
       default = "${config.programs.vim.package}/bin/vim";
-      description = mdDoc "Editor executable.";
+      description = "Editor executable.";
       readOnly = true;
     };
 
     difftoolExec = mkOption {
       type = types.str;
       default = "${config.programs.vim.package}/bin/vimdiff";
-      description = mdDoc "Diff editor executable.";
+      description = "Diff editor executable.";
       readOnly = true;
     };
   };

@@ -8,7 +8,7 @@
     ssh.authSocket = mkOption {
       type = types.str;
       example = "$HOME/.ssh/socket";
-      description = mdDoc "Path to SSH authentication socket.";
+      description = "Path to SSH authentication socket.";
     };
   };
 
