@@ -70,10 +70,6 @@
       xclip
       xf86_input_wacom
 
-      arduino
-      blender
-      discord
-      dzen2
       firefox
       gimp
       inkscape-with-extensions
