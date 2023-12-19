@@ -76,7 +76,6 @@
       inkscape-with-extensions
       kicad
       librecad
-      qcad
       lilypond
       qcad
       slack
