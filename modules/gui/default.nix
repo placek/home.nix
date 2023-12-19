@@ -63,6 +63,8 @@
   ];
 
   config = {
+    programs.firefox.enable = true;
+
     home.packages = with pkgs; [
       arandr
       libnotify
@@ -70,7 +72,6 @@
       xclip
       xf86_input_wacom
 
-      firefox
       gimp
       inkscape-with-extensions
       kicad
