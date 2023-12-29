@@ -53,6 +53,7 @@
   imports = [
     ./fonts.nix
 
+    ./autorandr.nix
     ./dunst.nix
     ./feh.nix
     ./xmobar.nix
@@ -66,7 +67,6 @@
     programs.firefox.enable = true;
 
     home.packages = with pkgs; [
-      arandr
       libnotify
       shotwell
       xclip
