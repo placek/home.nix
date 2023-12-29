@@ -3,10 +3,6 @@
 , pkgs
 , ...
 }:
-let
-  sources = import ../home.lock.nix;
-  theme = import ./theme.nix;
-in
 {
   config = {
     home.stateVersion = "23.11";
@@ -23,7 +19,7 @@ in
     xdg.systemDirs.data = [ "/home/placek/.nix-profile/share" ];
 
     # modules settings
-    gui.theme = theme;
+    gui.theme = import ./theme.nix;
     gui.font.name = "Iosevka Nerd Font";
     gui.font.size = 12;
     gui.showBattery = true;
