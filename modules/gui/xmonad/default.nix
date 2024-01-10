@@ -24,7 +24,7 @@ in
       import           XMonad.Actions.CycleWS               (shiftToPrev, shiftToNext, nextWS, prevWS, nextScreen, prevScreen)
       import           XMonad.Actions.RotSlaves             (rotAllUp, rotAllDown)
       import           XMonad.Config.Desktop                (desktopConfig)
-      import           XMonad.Hooks.DynamicLog              (PP(..), dynamicLogWithPP, xmobarPP, xmobarColor, wrap)
+      import           XMonad.Hooks.DynamicLog              (PP(..), dynamicLogWithPP, xmobarPP, xmobarAction, xmobarColor, wrap)
       import           XMonad.Hooks.ManageDocks             (ToggleStruts(..), docks, avoidStruts, manageDocks)
       import           XMonad.Hooks.ManageHelpers           (isDialog, isFullscreen, doCenterFloat, doFullFloat)
       import           XMonad.Layout.NoBorders              (smartBorders)
@@ -35,7 +35,7 @@ in
       import           XMonad.Util.Cursor                   (setDefaultCursor)
       import           XMonad.Util.Run                      (safeSpawn, spawnPipe, hPutStrLn)
       import           XMonad.Util.SpawnOnce                (spawnOnce)
-      import           XMonad.StackSet                      (focusUp, focusDown, sink, shiftMaster)
+      import           XMonad.StackSet                      (focusUp, focusDown, greedyView, sink, shiftMaster)
 
       import           ClipboardPrompt
       import           PassPrompt
@@ -113,6 +113,9 @@ in
           , ((0, xF86XK_Sleep                    ), safeSpawn "slock" [])
           , ((0, xF86XK_PowerOff                 ), safeSpawn "slock" [])
           ]
+          ++
+          -- mod-[1..5], switch to workspace N
+          [((modm, k), windows $ greedyView i) | (i, k) <- zip (XMonad.workspaces conf) [xK_1..]]
 
       myMouseBindings :: XConfig Layout -> Map.Map (KeyMask, Button) (Window -> X ())
       myMouseBindings XConfig {XMonad.modMask = modm} = Map.fromList
@@ -122,8 +125,12 @@ in
                                             >> windows shiftMaster)
           ]
 
+      workspaceNames :: [String]
+      workspaceNames = ["\xf43f", "\xf445", "\xf447", "\xf441", "\xf443"]
+
       myWorkspaces :: [String]
-      myWorkspaces = ["\xf43f", "\xf445", "\xf447", "\xf441", "\xf443"]
+      myWorkspaces = fmap clickable (zip [1..] workspaceNames)
+         where clickable (k, w) = xmobarAction ("${pkgs.xdotool}/bin/xdotool key super+" ++ show k) "1" w
 
       myLayout = avoidStruts . spacingRaw True border True border True . smartBorders $ t ||| m ||| f
         where
