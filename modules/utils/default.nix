@@ -10,6 +10,7 @@ let
   audio = import ./audio.nix { inherit pkgs; };
   pbcopy = import ./pbcopy.nix { inherit pkgs; };
   pbpaste = import ./pbpaste.nix { inherit pkgs; };
+  psalmus = import ./psalmus.nix { inherit pkgs; };
   vasm = import ./vasm.nix { inherit pkgs; };
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
   minipro = import ./minipro.nix { inherit pkgs; };
@@ -55,6 +56,7 @@ in
       image
       pbcopy
       pbpaste
+      psalmus
       speak
       video
 
