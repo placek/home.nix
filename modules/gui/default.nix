@@ -61,6 +61,7 @@
     ./zathura.nix
 
     ./xmonad
+    ./games.nix
   ];
 
   config = {
@@ -80,7 +81,6 @@
       qcad
       slack
       spotify
-      steam
     ];
   };
 }
