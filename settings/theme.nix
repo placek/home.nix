@@ -1,13 +1,12 @@
-{
-  # gruvbox colors
-  base00 = "#32302f";
-  base01 = "#cc241d";
-  base02 = "#98971a";
-  base03 = "#d79921";
-  base04 = "#458588";
-  base05 = "#b16286";
-  base06 = "#689d6a";
-  base07 = "#a89984";
+{                     # gruvbox colors:
+  base00 = "#32302f"; # black
+  base01 = "#cc241d"; # red
+  base02 = "#98971a"; # green
+  base03 = "#d79921"; # yellow
+  base04 = "#458588"; # blue
+  base05 = "#b16286"; # purple
+  base06 = "#689d6a"; # cyan
+  base07 = "#a89984"; # white
   base08 = "#504945";
   base09 = "#fb4934";
   base0A = "#b8bb26";
