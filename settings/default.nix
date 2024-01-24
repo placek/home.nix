@@ -16,7 +16,7 @@
     programs.home-manager.enable = true;
 
     xdg.enable = true;
-    xdg.systemDirs.data = [ "/home/placek/.nix-profile/share" ];
+    xdg.systemDirs.data = [ "${config.home.profileDirectory}/share" ];
 
     # modules settings
     gui.theme = import ./theme.nix;
@@ -30,10 +30,10 @@
     vcs.login = "placek";
     vcs.signKey = "1D95E554315BC053";
 
-    ssh.authSocket = "/run/user/1000/gnupg/S.gpg-agent.ssh"; # FIXME: the SSH_AUTH_SOCK should point to pinned data
+    ssh.authSocket = "$XDG_RUNTIME_DIR/gnupg/S.gpg-agent.ssh";
     ssh.secretKeyID = "D75BFE7D95CB0CB4B3FE0B64E624230BAE5B5299";
     ssh.publicKey = ./placek.asc;
 
-    security.passwordStore = "/home/placek/.password-store";
+    security.passwordStore = "${config.home.homeDirectory}/.password-store";
   };
 }
