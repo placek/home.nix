@@ -1,10 +1,9 @@
-""""""""""""""""""""""""""""""""" ESSENTIALS """"""""""""""""""""""""""""""""<<<
+""""""""""""""""""""""""""""""""" ESSENTIALS """"""""""""""""""""""""""""""""""<
 filetype plugin indent on                                                      " for plugins to load correctly
 syntax enable                                                                  " turn on syntax highlighting
 set nocompatible                                                               " don't try to be vi compatible
-""""""""""""""""""""""""""""""""" ESSENTIALS """""""""""""""""""""""""""""""">>>
 
-"""""""""""""""""""""""""""""""""" SETTINGS """""""""""""""""""""""""""""""""<<<
+"""""""""""""""""""""""""""""""""" SETTINGS """""""""""""""""""""""""""""""""""<
 " interface
 set cmdheight=1                                                                " set command line height
 set foldcolumn=1                                                               " always show at least one cahr in fold column
@@ -83,28 +82,24 @@ set statusline=%1*\ %{toupper(mode())}\ %2*\ %F:%l:%c%=
 set statusline+=\ %Y\ %{LinterStatus()}\ %1*\ %m%r[%n]\ %{strlen(&fenc)?&fenc:'none'}\ 
 
 autocmd InsertEnter,InsertLeave * set cul!
-"""""""""""""""""""""""""""""""""" SETTINGS """"""""""""""""""""""""""""""""">>>
 
-""""""""""""""""""""""""""""""""""" LEADERS """""""""""""""""""""""""""""""""<<<
+""""""""""""""""""""""""""""""""""" LEADERS """""""""""""""""""""""""""""""""""<
 let g:mapleader      = "\<space>"                                              " main leader set to space
 let g:maplocalleader = "\<backspace>"                                          " local leader set to comma
-""""""""""""""""""""""""""""""""""" LEADERS """"""""""""""""""""""""""""""""">>>
 
-"""""""""""""""""""""""""""""""""""" NETRW """"""""""""""""""""""""""""""""""<<<
+"""""""""""""""""""""""""""""""""""" NETRW """"""""""""""""""""""""""""""""""""<
 " do not load shitty netrw
 let g:loaded_netrwPlugin = 1
 let g:loaded_netrw = 1
-"""""""""""""""""""""""""""""""""""" NETRW """""""""""""""""""""""""""""""""">>>
 
-""""""""""""""""""""""""""""""""""" COPILOT """""""""""""""""""""""""""""""""<<<
+""""""""""""""""""""""""""""""""""" COPILOT """""""""""""""""""""""""""""""""""<
 inoremap <silent><script><expr> <f11> copilot#Accept("\<cr>")
 imap <F10> <Plug>(copilot-previous)
 imap <F12> <Plug>(copilot-next)
 imap <F9> <Plug>(copilot-suggest)
 let g:copilot_no_tab_map = v:true
-""""""""""""""""""""""""""""""""""" COPILOT """"""""""""""""""""""""""""""""">>>
 
-"""""""""""""""""""""""""""""""""""" CTRLP """"""""""""""""""""""""""""""""""<<<
+"""""""""""""""""""""""""""""""""""" CTRLP """"""""""""""""""""""""""""""""""""<
 nnoremap <leader><leader> :CtrlP<cr>
 nnoremap <localleader><localleader> :CtrlPBuffer<cr>
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:50'
@@ -118,18 +113,16 @@ let g:ctrlp_user_command = {
     \ },
   \ 'fallback': 'find %s -type f'
   \ }
-"""""""""""""""""""""""""""""""""""" CTRLP """""""""""""""""""""""""""""""""">>>
 
-""""""""""""""""""""""""""""""""""""" TAGS """"""""""""""""""""""""""""""""""<<<
+""""""""""""""""""""""""""""""""""""" TAGS """"""""""""""""""""""""""""""""""""<
 command! -nargs=0 MakeTags call job_start('git ctags')
 
 autocmd! BufWritePost * MakeTags
 
 nnoremap <localleader>f g<c-]>
 vnoremap <localleader>f g<c-]>
-""""""""""""""""""""""""""""""""""""" TAGS """""""""""""""""""""""""""""""""">>>
 
-""""""""""""""""""""""""""""""""""""" MAKE """"""""""""""""""""""""""""""""""<<<
+""""""""""""""""""""""""""""""""""""" MAKE """"""""""""""""""""""""""""""""""""<
 nnoremap <silent><localleader>b :lmake file=%:.<cr>
 nnoremap <silent><localleader>B :lmake file=%:.:<c-r>=line('.')<cr><cr>
 nnoremap <silent><localleader>v :!<c-r>=&makeprg<cr> file=%:.<cr>
@@ -143,9 +136,8 @@ augroup MakePrg
   autocmd BufEnter *.test.jsx setlocal makeprg=make\ testjs efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
   autocmd BufEnter *.test.tsx setlocal makeprg=make\ testjs efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
 augroup END
-""""""""""""""""""""""""""""""""""""" MAKE """""""""""""""""""""""""""""""""">>>
 
-""""""""""""""""""""""""""""""""""" ALTFILE """""""""""""""""""""""""""""""""<<<
+""""""""""""""""""""""""""""""""""" ALTFILE """""""""""""""""""""""""""""""""""<
 function! s:altFile()
   if exists("b:altfile")
     if bufwinid(b:altfile) > -1
@@ -171,9 +163,8 @@ augroup AltFile
   autocmd BufReadPost *.test.jsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.jsx$/.jsx/'))
   autocmd BufReadPost *.test.tsx call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.test\.tsx$/.tsx/'))
 augroup END
-""""""""""""""""""""""""""""""""""" ALTFILE """"""""""""""""""""""""""""""""">>>
 
-""""""""""""""""""""""""""""""""""""" ALE """""""""""""""""""""""""""""""""""<<<
+""""""""""""""""""""""""""""""""""""" ALE """""""""""""""""""""""""""""""""""""<
 function! LinterStatus() abort
   let l:counts = ale#statusline#Count(bufnr(''))
   let l:all_errors = l:counts.error + l:counts.style_error
@@ -214,9 +205,8 @@ nnoremap <localleader>i :ALEInfo<cr>
 nnoremap <localleader>I :ALEToggle<cr>
 nnoremap <localleader>w :ALEPopulateLocList<cr>
 nnoremap <localleader>F :ALEFindReferences<cr>
-""""""""""""""""""""""""""""""""""""" ALE """"""""""""""""""""""""""""""""""">>>
 
-""""""""""""""""""""""""""""""""""" COMMENT """""""""""""""""""""""""""""""""<<<
+""""""""""""""""""""""""""""""""""" COMMENT """""""""""""""""""""""""""""""""""<
 function! s:commentToggle()
   let line = getline('.')
   if match(l:line, '^\s*'.substitute(&commentstring, '%s', '.*', '')) >= 0
@@ -229,9 +219,8 @@ endfunction
 
 nnoremap <silent><localleader>e :call <sid>commentToggle()<cr>
 vnoremap <silent><localleader>e :call <sid>commentToggle()<cr>
-""""""""""""""""""""""""""""""""""" COMMENT """"""""""""""""""""""""""""""""">>>
 
-""""""""""""""""""""""""""""""""""" QUICKFIX """"""""""""""""""""""""""""""""<<<
+""""""""""""""""""""""""""""""""""" QUICKFIX """"""""""""""""""""""""""""""""""<
 function! s:openQuickfix(new_split_cmd)
   let l:qf_idx = line('.')
   wincmd p
@@ -264,9 +253,8 @@ function! s:toggleQuickFix()
 endfunction
 
 nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
-""""""""""""""""""""""""""""""""""" QUICKFIX """""""""""""""""""""""""""""""">>>
 
-""""""""""""""""""""""""""""""""""""" TODO """"""""""""""""""""""""""""""""""<<<
+""""""""""""""""""""""""""""""""""""" TODO """"""""""""""""""""""""""""""""""""<
 function! s:toggleTodoFile()
   let file = trim(system('git config todo.file'))
   if buflisted(bufname(l:file))
@@ -279,9 +267,8 @@ function! s:toggleTodoFile()
 endfunction
 
 nnoremap <leader>x :call <sid>toggleTodoFile()<cr>
-""""""""""""""""""""""""""""""""""""" TODO """""""""""""""""""""""""""""""""">>>
 
-""""""""""""""""""""""""""""""""""" FUGITIVE """"""""""""""""""""""""""""""""<<<
+""""""""""""""""""""""""""""""""""" FUGITIVE """"""""""""""""""""""""""""""""""<
 function! s:toggleFugitive()
   if buflisted(bufname('fugitive:///*/.git//$'))
     execute ":bdelete" bufname('fugitive:///*/.git//$')
@@ -332,19 +319,17 @@ function! s:gitPruneFile()
 endfunction
 
 command! -nargs=0 GPrune :call <sid>gitPruneFile()
-""""""""""""""""""""""""""""""""""" FUGITIVE """""""""""""""""""""""""""""""">>>
+""""""""""""""""""""""""""""""""""" FUGITIVE """""""""""""""""""""""""""""""""">
 
-"""""""""""""""""""""""""""""""""" GITGUTTER """"""""""""""""""""""""""""""""<<<
+"""""""""""""""""""""""""""""""""" GITGUTTER """"""""""""""""""""""""""""""""""<
 nnoremap ]h :GitGutterNextHunk<cr>
 nnoremap [h :GitGutterPrevHunk<cr>
-"""""""""""""""""""""""""""""""""" GITGUTTER """""""""""""""""""""""""""""""">>>
 
-"""""""""""""""""""""""""""""""" EXPAND REGION """"""""""""""""""""""""""""""<<<
+"""""""""""""""""""""""""""""""" EXPAND REGION """"""""""""""""""""""""""""""""<
 vmap v     <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
-"""""""""""""""""""""""""""""""" EXPAND REGION """""""""""""""""""""""""""""">>>
 
-"""""""""""""""""""""""""""""""""" BLAMELINE """"""""""""""""""""""""""""""""<<<
+"""""""""""""""""""""""""""""""""" BLAMELINE """"""""""""""""""""""""""""""""""<
 hi BlameLine ctermfg=8
 call prop_type_add('blame_line', { 'highlight': 'BlameLine' })
 
@@ -364,9 +349,8 @@ function! s:blameLine()
 endfunction
 
 autocmd CursorHold * call <sid>blameLine()
-"""""""""""""""""""""""""""""""""" BLAMELINE """""""""""""""""""""""""""""""">>>
 
-"""""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""<<<
+"""""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""""<
 " returns a text under visual selection
 function! s:selectedText()
   silent normal gv"vy
@@ -396,7 +380,6 @@ function! s:makeFolds()
 endfunction
 
 set foldmethod=marker
-set foldmarker=<<<,>>>
 nnoremap <leader>4 :call <sid>makeFolds()<cr>
 
 " terminal-mode
@@ -423,6 +406,7 @@ vnoremap <C-p> "pdp
 vnoremap <C-P> "pdP
 
 " right click is an escape
+nnoremap <RightMouse> <esc>
 inoremap <RightMouse> <esc>
 vnoremap <RightMouse> <esc>
 cnoremap <RightMouse> <esc>
@@ -432,9 +416,8 @@ let g:dirvish_git_show_icons = 0
 function! g:DovishDelete(target) abort
   return 'rm -rf ' . a:target
 endfunction
-"""""""""""""""""""""""""""""""""""" UTILS """""""""""""""""""""""""""""""""">>>
 
-"""""""""""""""""""""""""""""""""" NAVIGATION """""""""""""""""""""""""""""""<<<
+"""""""""""""""""""""""""""""""""" NAVIGATION """""""""""""""""""""""""""""""""<
 " triggers a grep on query and opens quickfix list
 function! s:grep(query)
   if !empty(a:query)
@@ -453,21 +436,9 @@ function! s:find(query)
   endif
 endfunction
 
-" simple jump commands
-nnoremap <silent>]a :next<cr>
-nnoremap <silent>[a :previous<cr>
-nnoremap <silent>]b :bnext<cr>
-nnoremap <silent>[b :bprevious<cr>
-nnoremap <silent>]c :cnext<cr>
-nnoremap <silent>[c :cprevious<cr>
-nnoremap <silent>]l :lnext<cr>
-nnoremap <silent>[l :lprevious<cr>
-nnoremap <silent>]t :tabnext<cr>
-nnoremap <silent>[t :tabprevious<cr>
-
 " move around buffers with leader key
-nnoremap <localleader><cr>   :argadd<cr>
-nnoremap <localleader><s-cr> :argdelete<cr>
+nnoremap <localleader><cr>  :argadd<cr>
+nnoremap <localleader><esc> :argdelete<cr>
 nnoremap <localleader>h :previous<cr>
 nnoremap <localleader>l :next<cr>
 nnoremap <localleader>k :bprevious<cr>
@@ -491,9 +462,8 @@ vnoremap <silent># :<c-u>call <sid>findTextInBuffer("#", <sid>selectedText())<cr
 
 command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
 command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
-"""""""""""""""""""""""""""""""""" NAVIGATION """"""""""""""""""""""""""""""">>>
 
-"""""""""""""""""""""""""""""""""""" COLORS """""""""""""""""""""""""""""""""<<<
+"""""""""""""""""""""""""""""""""""" COLORS """""""""""""""""""""""""""""""""""<
 hi ColorColumn                          ctermbg=8
 hi CtrlPMode1                           ctermbg=0  ctermfg=3
 hi DiffAdd                              ctermbg=8  ctermfg=10 cterm=none
@@ -591,4 +561,3 @@ hi! Boolean      ctermfg=7  cterm=bold
 hi! Number       ctermfg=7  cterm=bold
 " floating point constant: 2.3e10
 hi! Float        ctermfg=7  cterm=bold
-"""""""""""""""""""""""""""""""""""" COLORS """"""""""""""""""""""""""""""""">>>
