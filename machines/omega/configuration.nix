@@ -72,12 +72,9 @@
   services.greenclip.enable                                                    = true;
   services.logind.extraConfig                                                  = "HandlePowerKey=ignore";
   services.logind.lidSwitch                                                    = "ignore";
-
   services.xserver.libinput.enable                                             = true;
   services.xserver.libinput.mouse.middleEmulation                              = false;
   services.xserver.libinput.mouse.transformationMatrix                         = "0.3 0 0 0 0.3 0 0 0 1";
-#   services.xserver.libinput.mouse.scrollButton                                 = 2;
-#   services.xserver.libinput.mouse.scrollMethod                                 = "button";
   services.xserver.libinput.touchpad.naturalScrolling                          = true;
   services.xserver.libinput.touchpad.scrollMethod                              = "twofinger";
   services.xserver.libinput.touchpad.tapping                                   = false;
