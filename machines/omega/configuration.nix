@@ -74,7 +74,6 @@
   services.logind.lidSwitch                                                    = "ignore";
   services.xserver.libinput.enable                                             = true;
   services.xserver.libinput.mouse.middleEmulation                              = false;
-  services.xserver.libinput.mouse.transformationMatrix                         = "0.3 0 0 0 0.3 0 0 0 1";
   services.xserver.libinput.touchpad.naturalScrolling                          = true;
   services.xserver.libinput.touchpad.scrollMethod                              = "twofinger";
   services.xserver.libinput.touchpad.tapping                                   = false;
