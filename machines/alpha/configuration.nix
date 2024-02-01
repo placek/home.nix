@@ -127,11 +127,11 @@
     script      = ''
       exec ${pkgs.docker}/bin/docker run \
         --rm \
-        --name=nginx-proxy \
-        --network=nginx-proxy_net \
+        --name nginx-proxy \
+        --network nginx-proxy_net \
         --publish 8080:80 \
         --volume /var/run/docker.sock:/tmp/docker.sock:ro \
-        jwilder/nginx-proxy:alpine \
+        nginxproxy/nginx-proxy:1.4-alpine \
         "$@"
     '';
     serviceConfig.ExecStartPre    = "-${pkgs.docker}/bin/docker network create nginx-proxy_net";
