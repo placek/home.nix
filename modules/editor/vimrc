@@ -256,13 +256,13 @@ nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
 
 """"""""""""""""""""""""""""""""""""" TODO """"""""""""""""""""""""""""""""""""<
 function! s:toggleTodoFile()
-  let file = trim(system('git config todo.file'))
-  if buflisted(bufname(l:file))
-    if !win_gotoid(bufwinid(l:file))
-      execute ":split " l:file
+  silent call system('git notes --ref=todo copy HEAD~ HEAD')
+  if buflisted(bufname('.git/NOTES_EDITMSG'))
+    if !win_gotoid(bufwinid('.git/NOTES_EDITMSG'))
+      execute ":split .git/NOTES_EDITMSG"
     endif
   else
-    execute ":split " l:file
+    execute ":G notes --ref=todo edit"
   endif
 endfunction
 
