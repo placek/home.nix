@@ -264,6 +264,7 @@ function! s:toggleTodoFile()
   else
     execute ":G notes --ref=todo edit"
   endif
+  execute ":set syntax=xit"
 endfunction
 
 nnoremap <leader>x :call <sid>toggleTodoFile()<cr>
