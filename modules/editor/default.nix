@@ -33,6 +33,7 @@
         vim-fugitive
         vim-dirvish
         vim-dirvish-git
+        (import ./dovish.nix { inherit pkgs; })
 
         ale
         copilot-vim
@@ -41,8 +42,8 @@
         vim-gitgutter
 
         haskell-vim
+        vim-terraform
         (import ./vim-xit.nix { inherit pkgs; })
-        (import ./dovish.nix { inherit pkgs; })
       ];
       extraConfig = builtins.readFile ./vimrc;
     };
