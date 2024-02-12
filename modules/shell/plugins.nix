@@ -16,8 +16,8 @@
     src = fetchFromGitHub {
       owner = "pure-fish";
       repo = "pure";
-      rev = "1c1f5b4d1d3fa36162186aa0aac295f59efe22bc";
-      sha256 = "sha256-ec1ZAjIGn6xYMh+3kyQP8HYUti8iFXsyzTJ19tU8T84=";
+      rev = "21a81af6b2c46be91203f12128d1bd6be8d3abe3";
+      sha256 = "sha256-iJ08IKJNWFpaBMUxne0QR8y5fP6KWog7+dqQAKOYorI=";
     };
   }
 ]
