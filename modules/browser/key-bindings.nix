@@ -20,9 +20,9 @@
     ",rs" = "spawn summarize -s {primary}";
     ",pp" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --username-target secret --username-pattern \"user: (.+)\"";
     ",pP" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --password-only";
-    ",pL" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --username-only --username-pattern \"user: (.+)\"";
-    ",pO" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --otp-only";
-    ",pS" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --password-only --password-pattern \"secret: (.+)\"";
+    ",pl" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --username-only --username-pattern \"user: (.+)\"";
+    ",po" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --otp-only";
+    ",ps" = "spawn --userscript qute-pass --dmenu-invocation ${menuExec} --no-insert-mode --password-only --password-pattern \"secret: (.+)\"";
     ",g" = "spawn --userscript GBrowse";
 
     "<Ctrl+w>" = "mode-enter passthrough";
