@@ -22,6 +22,8 @@
   };
 
   config = {
+    home.sessionVariables.KEYID = "0xE624230BAE5B5299";
+
     home.packages = with pkgs; [
       pinentry-gtk2
       qtpass
