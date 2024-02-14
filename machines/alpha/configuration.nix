@@ -63,7 +63,7 @@
   ################################### USER #####################################
   programs.fish.enable                                                         = true;
   users.users.placek.description                                               = "Paweł Placzyński";
-  users.users.placek.extraGroups                                               = [ "audio" "disk" "docker" "input" "messagebus" "networkmanager" "plugdev" "systemd-journal" "video" "wheel" "qemu-libvirtd" "libvirtd" "dialout" ];
+  users.users.placek.extraGroups                                               = [ "dialout" "audio" "disk" "docker" "input" "messagebus" "networkmanager" "plugdev" "systemd-journal" "video" "wheel" "qemu-libvirtd" "libvirtd" "dialout" ];
   users.users.placek.isNormalUser                                              = true;
   users.users.placek.shell                                                     = pkgs.fish;
   users.users.placek.uid                                                       = 1000;

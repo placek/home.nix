@@ -113,6 +113,7 @@ in
       unrar
       unzip
       usbutils
+      uucp
       vagrant
       wally-cli
       wget
