@@ -19,7 +19,6 @@ set number                                                                     "
 set nospell                                                                    " do not display spellchecking
 set list listchars=tab:»\ ,nbsp:␣,trail:·,extends:›,precedes:‹                 " show blank characters
 set wrap                                                                       " wrap a text on screen
-set scrolloff=4                                                                " always show 4 lines before/after coursor
 set shortmess+=a shortmess+=c                                                  " shorter messages
 
 " behaviour
