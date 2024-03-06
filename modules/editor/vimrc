@@ -336,6 +336,7 @@ command! -nargs=1 -complete=buffer GPickaxe call <sid>pickaxe(<q-args>)
 
 autocmd! FileType fugitive nnoremap <buffer> rI :<c-u>call <sid>gitRebaseInteractive()<cr>
 autocmd! FileType gitcommit setlocal spell spelllang=en_us
+autocmd! FileType gitcommit nnoremap <leader>a :%!cmc<cr>
 
 nnoremap <leader>b :Git blame<cr>
 nnoremap <leader>B :G branch<cr>

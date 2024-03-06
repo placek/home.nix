@@ -14,6 +14,7 @@ let
   vasm = import ./vasm.nix { inherit pkgs; };
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
   minipro = import ./minipro.nix { inherit pkgs; };
+  cmc = import ./cmc.nix { inherit pkgs; };
 in
 {
   options = with lib; {
@@ -53,6 +54,7 @@ in
 
     home.packages = with pkgs; [
       audio
+      cmc
       image
       pbcopy
       pbpaste
