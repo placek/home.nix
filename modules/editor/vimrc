@@ -443,12 +443,6 @@ inoremap <RightMouse> <esc>
 vnoremap <RightMouse> <esc>
 cnoremap <RightMouse> <esc>
 
-" settings for dirvish buffers
-let g:dirvish_git_show_icons = 0
-function! g:DovishDelete(target) abort
-  return 'rm -rf ' . a:target
-endfunction
-
 """""""""""""""""""""""""""""""""" NAVIGATION """""""""""""""""""""""""""""""""<
 " triggers a grep on query and opens quickfix list
 function! s:grep(query)

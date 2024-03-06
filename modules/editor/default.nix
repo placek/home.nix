@@ -23,7 +23,7 @@
   config = {
     home.sessionVariables.EDITOR = "vim";
 
-    home.packages = with pkgs; [ universal-ctags ];
+    home.packages = with pkgs; [ universal-ctags trashy ];
 
     programs.fish.shellAliases.editor = "${config.editorExec} --servername (basename (git root))";
 
