@@ -344,7 +344,7 @@ autocmd! FileType gitcommit setlocal spell spelllang=en_us
 autocmd! FileType gitcommit nnoremap <buffer> <cr> :%!cmc<cr>
 
 nnoremap <leader>a :Gabsorb<cr>
-nnoremap <leader>b :Git blame<cr>
+nnoremap <leader>b :G blame<cr>
 nnoremap <leader>B :G branch<cr>
 nnoremap <leader>e :Gedit<cr>
 nnoremap <leader>i :G fetch<cr>
