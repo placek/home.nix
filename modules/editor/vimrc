@@ -347,15 +347,14 @@ nnoremap <leader>a :Gabsorb<cr>
 nnoremap <leader>b :G blame<cr>
 nnoremap <leader>B :G branch<cr>
 nnoremap <leader>e :Gedit<cr>
-nnoremap <leader>i :G fetch<cr>
 nnoremap <leader>o :Gupdate<cr>
 nnoremap <leader>O :G push -f<cr>
 nnoremap <leader>g :call <sid>toggleFugitive()<cr>
 nnoremap <leader>d :Gchanges<cr>
 nnoremap <leader>C :0GlLog<cr>
 nnoremap <leader>c :GlLog<cr>
-nnoremap <leader>p :G pull<cr>
-nnoremap <leader>P :G push<cr>
+nnoremap <leader>p :G fetch<cr>
+nnoremap <leader>P :G pull<cr>
 nnoremap <leader>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
 vnoremap <leader>s :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
 """"""""""""""""""""""""""""""""""" FUGITIVE """""""""""""""""""""""""""""""""">
