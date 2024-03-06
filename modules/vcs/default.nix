@@ -49,6 +49,7 @@
     home.packages = with pkgs; [
       (import ./git-ctags.nix { inherit pkgs; })
       git-crypt
+      git-absorb
     ];
 
     programs.gh = {

@@ -324,6 +324,10 @@ function! s:gitUpdate()
   execute ":G pull --rebase " . <sid>defaultBranch()
 endfunction
 
+function! s:gitAbsorb()
+  execute ":G absorb --base " . <sid>branchoffCommit()
+endfunction
+
 command! -nargs=0 W Gwrite
 command! -nargs=0 E Gedit
 command! -nargs=0 D GDelete
@@ -332,12 +336,14 @@ command! -nargs=0 Gwip call <sid>gitWIP()
 command! -nargs=0 Grebase call <sid>gitRebaseInteractive()
 command! -nargs=0 Gchanges call <sid>gitChanges()
 command! -nargs=0 Gupdate call <sid>gitUpdate()
+command! -nargs=0 Gabsorb call <sid>gitAbsorb()
 command! -nargs=1 -complete=buffer GPickaxe call <sid>pickaxe(<q-args>)
 
 autocmd! FileType fugitive nnoremap <buffer> rI :<c-u>call <sid>gitRebaseInteractive()<cr>
 autocmd! FileType gitcommit setlocal spell spelllang=en_us
 autocmd! FileType gitcommit nnoremap <leader>a :%!cmc<cr>
 
+nnoremap <leader>a :Gabsorb<cr>
 nnoremap <leader>b :Git blame<cr>
 nnoremap <leader>B :G branch<cr>
 nnoremap <leader>e :Gedit<cr>
