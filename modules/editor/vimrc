@@ -310,7 +310,7 @@ function! s:gitWIP()
   execute ":G commit --no-verify --message 'WIP " . <sid>whatthecommit() . "'"
 endfunction
 
-function! s:gitRebaseInteractive()
+function! s:gitRebaseBranchOnly()
   execute ":G rebase --interactive " . <sid>branchoffCommit()
 endfunction
 
@@ -338,7 +338,7 @@ command! -nargs=0 E Gedit
 command! -nargs=0 D GDelete
 command! -nargs=0 Gprune call <sid>gitPruneFile()
 command! -nargs=0 Gwip call <sid>gitWIP()
-command! -nargs=0 Grebase call <sid>gitRebaseInteractive()
+command! -nargs=0 Grebase call <sid>gitRebaseBranchOnly()
 command! -nargs=0 Gchanges call <sid>gitChanges()
 command! -nargs=0 Gupdate call <sid>gitUpdate()
 command! -nargs=0 Gabsorb call <sid>gitAbsorb()
