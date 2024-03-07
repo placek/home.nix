@@ -321,7 +321,7 @@ endfunction
 
 function! s:gitUpdate()
   G fetch
-  execute ":G pull --rebase " . <sid>defaultBranch()
+  execute ":G pull --rebase " . substitute(<sid>defaultBranch(), "/", " ", "")
 endfunction
 
 function! s:gitAbsorb()
