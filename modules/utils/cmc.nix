@@ -37,5 +37,9 @@ pkgs.writeShellScriptBin "cmc" ''
     -H "Authorization: Bearer $OPENAI_API_KEY" \
     -d "$data")
 
-  echo "$response" | ${pkgs.jq}/bin/jq -M -r '.choices[0].message.content'
+  if [ -n "$issue_no" ]; then
+    echo "$response" | ${pkgs.jq}/bin/jq -M -r --arg issue_no "$issue_no" '"[#\($issue_no)] \(.choices[0].message.content)"'
+  else
+    echo "$response" | ${pkgs.jq}/bin/jq -M -r '.choices[0].message.content'
+  fi
 ''
