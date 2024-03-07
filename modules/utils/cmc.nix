@@ -5,6 +5,11 @@ pkgs.writeShellScriptBin "cmc" ''
 
   set -e
 
+  if [ -z "$OPENAI_API_KEY" ]; then
+    echo "Please set the OPENAI_API_KEY environment variable"
+    exit 1
+  fi
+
   instructions="Compose a Git commit message by analyzing, at first, a short description explaining why the changes have been made, and additionally, a commit diff, which details what changes have been made. Ensure a thorough understanding of the relationship between the requirements stated in the description and the actual changes implemented in the commit. The goal is to generate meaningful, informative commit messages that clearly explain both the rationale behind the changes and the specifics of what has been altered. The commit message should have a short title, a paragraph explaining the purpose of the changes, and a paragraph explaining the changes themselves - each such component has to be separated by two newlines."
 
   data=$(jq -n \
