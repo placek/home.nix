@@ -1,8 +1,6 @@
 { pkgs
 }:
 pkgs.writeShellScriptBin "cmc" ''
-  #!${pkgs.stdenv.shell}
-
   set -e
 
   if [ -z "$OPENAI_API_KEY" ]; then
