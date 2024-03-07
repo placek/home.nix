@@ -357,7 +357,7 @@ nnoremap <leader>O :G push --force-with-lease --follow-tags<cr>
 nnoremap <leader>g :call <sid>toggleFugitive()<cr>
 nnoremap <leader>d :Gchanges<cr>
 nnoremap <leader>C :0GlLog<cr>
-nnoremap <leader>c :GlLog<cr>
+nnoremap <leader>c :GcLog<cr>
 nnoremap <leader>p :G fetch<cr>
 nnoremap <leader>P :G pull<cr>
 nnoremap <leader>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
