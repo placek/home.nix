@@ -273,9 +273,12 @@ function! s:toggleTodoFile()
     execute ":G notes --ref=todo edit"
   endif
   execute ":set syntax=xit"
+  if <sid>isBufferEmptyButComments()
+    execute "normal! ggVGd"
+    call <sid>currentGitHubIssue()
+  endif
 endfunction
 
-nnoremap <leader>t :<c-u>call <sid>currentGitHubIssue()<cr>
 nnoremap <leader>x :call <sid>toggleTodoFile()<cr>
 
 """"""""""""""""""""""""""""""""""" FUGITIVE """"""""""""""""""""""""""""""""""<
@@ -404,6 +407,17 @@ endfunction
 autocmd CursorHold * call <sid>blameLine()
 
 """""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""""<
+" checks if a buffer is empty, but contains comments
+function! s:isBufferEmptyButComments()
+  for i in range(1, line('$'))
+    let line = substitute(getline(i), '^\s*', '', '')
+    if line != '' && line[0] != '#'
+      return 0
+    endif
+  endfor
+  return 1
+endfunction
+
 " returns a text under visual selection
 function! s:selectedText()
   silent normal gv"vy
