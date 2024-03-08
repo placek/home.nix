@@ -254,7 +254,21 @@ endfunction
 nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
 
 """"""""""""""""""""""""""""""""""""" TODO """"""""""""""""""""""""""""""""""""<
-function! s:currentGitHubIssue()
+function! s:composeAnIssue()
+  execute ":%!jarvis story"
+  redraw!
+endfunction
+
+function! s:reportAnIssue()
+  let l:title = trim(getline(1))
+  execute "normal! ggdd"
+  execute ":%!gh issue create -t '" . l:title . "' -a '@me' -F -"
+  let l:url = trim(getline(1))
+  execute ":!open " . l:url
+  redraw!
+endfunction
+
+function! s:putCurrentGitHubIssue()
   let l:branch = trim(system('git rev-parse --abbrev-ref HEAD'))
   let l:issue_no = matchstr(l:branch, '\v\d+')
   if !empty(l:issue_no)
@@ -275,12 +289,14 @@ function! s:toggleTodoFile()
   execute ":set syntax=xit"
   if <sid>isBufferEmptyButComments()
     execute "normal! ggVGd"
-    call <sid>currentGitHubIssue()
+    call <sid>putCurrentGitHubIssue()
   endif
   syntax match Comment /^#.*/ containedin=ALL
 endfunction
 
 nnoremap <leader>x :call <sid>toggleTodoFile()<cr>
+nnoremap <leader>t :call <sid>composeAnIssue()<cr>
+nnoremap <leader>T :call <sid>reportAnIssue()<cr>
 
 """"""""""""""""""""""""""""""""""" FUGITIVE """"""""""""""""""""""""""""""""""<
 function! s:toggleFugitive()
