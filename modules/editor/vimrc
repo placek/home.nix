@@ -254,6 +254,15 @@ endfunction
 nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
 
 """"""""""""""""""""""""""""""""""""" TODO """"""""""""""""""""""""""""""""""""<
+function! s:currentGitHubIssue()
+  let l:branch = trim(system('git rev-parse --abbrev-ref HEAD'))
+  let l:issue_no = matchstr(l:branch, '\v\d+')
+  if !empty(l:issue_no)
+    let l:issue = substitute(system("gh issue view --json title,body --jq '\"\\(.title)\\n\\n\\(.body)\"' " . l:issue_no), '\r', '', 'g')
+    execute "0put =l:issue"
+  endif
+endfunction
+
 function! s:toggleTodoFile()
   silent call system('git notes --ref=todo copy HEAD~ HEAD')
   if buflisted(bufname('.git/NOTES_EDITMSG'))
@@ -266,6 +275,7 @@ function! s:toggleTodoFile()
   execute ":set syntax=xit"
 endfunction
 
+nnoremap <leader>t :<c-u>call <sid>currentGitHubIssue()<cr>
 nnoremap <leader>x :call <sid>toggleTodoFile()<cr>
 
 """"""""""""""""""""""""""""""""""" FUGITIVE """"""""""""""""""""""""""""""""""<
