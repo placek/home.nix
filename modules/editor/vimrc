@@ -424,6 +424,12 @@ endfunction
 autocmd CursorHold * call <sid>blameLine()
 
 """""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""""<
+function! s:askAI()
+  execute ":'<,'>!jarvis ask"
+endfunction
+
+vnoremap <leader>y :call <sid>askAI()<cr>
+
 " checks if a buffer is empty, but contains comments
 function! s:isBufferEmptyButComments()
   for i in range(1, line('$'))

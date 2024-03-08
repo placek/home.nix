@@ -10,11 +10,13 @@ pkgs.writeShellScriptBin "jarvis" ''
 
   model="''${model:-gpt-3.5-turbo}"
   template='{ model: $model, temperature: 1, max_tokens: 4096, top_p: 1, frequency_penalty: 0, presence_penalty: 0, messages: [ '
+  instructions=""
   context=""
 
   usage() {
-    >&2 echo "Usage: jarvis [-m \"model\"] commit-message"
+    >&2 echo "Usage: jarvis [-m \"model\"] ask"
     >&2 echo "       jarvis [-m \"model\"] story"
+    >&2 echo "       jarvis [-m \"model\"] commit-message"
   }
 
   while getopts ":m:" arg; do
@@ -45,6 +47,9 @@ pkgs.writeShellScriptBin "jarvis" ''
   command=$1
 
   case $command in
+  ask )
+    ;;
+
   commit-message )
     instructions="Compose a Git commit message by analyzing, at first, a short description explaining why the changes have been made, and additionally, a commit diff, which details what changes have been made. Ensure a thorough understanding of the relationship between the requirements stated in the description and the actual changes implemented in the commit. The goal is to generate meaningful, informative commit messages that clearly explain both the rationale behind the changes and the specifics of what has been altered. The commit message should have a short title, a paragraph explaining the purpose of the changes, and a paragraph explaining the changes themselves - each such component has to be separated by two newlines."
 
@@ -66,7 +71,9 @@ pkgs.writeShellScriptBin "jarvis" ''
     ;;
   esac
 
-  template+='{ role: "system", content: $instructions }, '
+  if [ -n "$instructions" ]; then
+    template+='{ role: "system", content: $instructions }, '
+  fi
   if [ -n "$context" ]; then
     template+='{ role: "user", content: $context }, '
   fi
