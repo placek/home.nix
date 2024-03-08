@@ -277,6 +277,7 @@ function! s:toggleTodoFile()
     execute "normal! ggVGd"
     call <sid>currentGitHubIssue()
   endif
+  syntax match Comment /^#.*/ containedin=ALL
 endfunction
 
 nnoremap <leader>x :call <sid>toggleTodoFile()<cr>
