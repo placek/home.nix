@@ -343,7 +343,7 @@ function! s:gitAbsorb()
 endfunction
 
 function! s:gitAyWayCommitMessage()
-  execute ":%!cmc"
+  execute ":%!jarvis commit-message"
   redraw!
 endfunction
 
