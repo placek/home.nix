@@ -8,7 +8,19 @@ pkgs.writeShellScriptBin "cmc" ''
     exit 1
   fi
 
-  model="gpt-3.5-turbo"
+  while getopts ":m:" arg; do
+    case $arg in
+    m)
+      model=$OPTARG
+      ;;
+    *)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    esac
+  done
+
+  model="''${model:-gpt-3.5-turbo}"
 
   instructions="Compose a Git commit message by analyzing, at first, a short description explaining why the changes have been made, and additionally, a commit diff, which details what changes have been made. Ensure a thorough understanding of the relationship between the requirements stated in the description and the actual changes implemented in the commit. The goal is to generate meaningful, informative commit messages that clearly explain both the rationale behind the changes and the specifics of what has been altered. The commit message should have a short title, a paragraph explaining the purpose of the changes, and a paragraph explaining the changes themselves - each such component has to be separated by two newlines."
 
