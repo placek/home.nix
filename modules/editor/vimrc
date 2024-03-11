@@ -254,20 +254,6 @@ endfunction
 nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
 
 """"""""""""""""""""""""""""""""""""" TODO """"""""""""""""""""""""""""""""""""<
-function! s:composeAnIssue()
-  execute ":%!jarvis story"
-  redraw!
-endfunction
-
-function! s:reportAnIssue()
-  let l:title = trim(getline(1))
-  execute "normal! ggdd"
-  execute ":%!gh issue create -t '" . l:title . "' -a '@me' -F -"
-  let l:url = trim(getline(1))
-  execute ":!open " . l:url
-  redraw!
-endfunction
-
 function! s:putCurrentGitHubIssue()
   let l:branch = trim(system('git rev-parse --abbrev-ref HEAD'))
   let l:issue_no = matchstr(l:branch, '\v\d+')
@@ -295,8 +281,6 @@ function! s:toggleTodoFile()
 endfunction
 
 nnoremap <leader>x :call <sid>toggleTodoFile()<cr>
-nnoremap <leader>t :call <sid>composeAnIssue()<cr>
-nnoremap <leader>T :call <sid>reportAnIssue()<cr>
 
 """"""""""""""""""""""""""""""""""" FUGITIVE """"""""""""""""""""""""""""""""""<
 function! s:toggleFugitive()
@@ -358,11 +342,6 @@ function! s:gitAbsorb()
   execute ":G absorb --base " . <sid>branchoffCommit()
 endfunction
 
-function! s:gitAyWayCommitMessage()
-  execute ":%!jarvis commit-message"
-  redraw!
-endfunction
-
 command! -nargs=0 W Gwrite
 command! -nargs=0 E Gedit
 command! -nargs=0 D GDelete
@@ -376,7 +355,6 @@ command! -nargs=1 -complete=buffer GPickaxe call <sid>pickaxe(<q-args>)
 
 autocmd! FileType fugitive nnoremap <buffer> rI :<c-u>call <sid>gitRebaseInteractive()<cr>
 autocmd! FileType gitcommit setlocal spell spelllang=en_us
-autocmd! FileType gitcommit nnoremap <buffer> <cr> :<c-u>call <sid>gitAyWayCommitMessage()<cr>
 
 nnoremap <leader>a :Gabsorb<cr>
 nnoremap <leader>b :G blame<cr>
@@ -423,13 +401,67 @@ endfunction
 
 autocmd CursorHold * call <sid>blameLine()
 
-"""""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""""<
-function! s:askAI()
+""""""""""""""""""""""""""""""""""" WORKFLOW """""""""""""""""""""""""""""""""""<
+function! s:askOyVeySelected()
   execute ":'<,'>!jarvis ask"
+  redraw!
 endfunction
 
-vnoremap <leader>y :call <sid>askAI()<cr>
+function! s:askOyVeyAll()
+  execute ":%!jarvis ask"
+  redraw!
+endfunction
 
+vnoremap <leader>y :call <sid>askOyVeySelected()<cr>
+nnoremap <leader>y :call <sid>askOyVeyAll()<cr>
+
+function! s:oyVeyPullRequestDescription()
+  wincmd n
+  let l:summary = substitute(system("jarvis pull-request"), '\r', '', 'g')
+  execute "0put =l:summary"
+  redraw!
+endfunction
+
+nnoremap <leader>r :call <sid>oyVeyPullRequestDescription()<cr>
+
+function! s:updatePullRequestDescription()
+  let l:pr_no = trim(system('gh current --json number --jq ".number"'))
+  if !empty(l:pr_no)
+    execute ":%!gh pr edit " . l:pr_no . " -F -"
+    let l:url = trim(getline(1))
+    execute ":!open " . l:url
+  endif
+  redraw!
+endfunction
+
+nnoremap <leader>R :call <sid>updatePullRequestDescription()<cr>
+
+function! s:oyVeyIssue()
+  execute ":%!jarvis story"
+  redraw!
+endfunction
+
+nnoremap <leader>t :call <sid>oyVeyIssue()<cr>
+
+function! s:reportAnIssue()
+  let l:title = trim(getline(1))
+  execute "normal! ggdd"
+  execute ":%!gh issue create -t '" . l:title . "' -a '@me' -F -"
+  let l:url = trim(getline(1))
+  execute ":!open " . l:url
+  redraw!
+endfunction
+
+nnoremap <leader>T :call <sid>reportAnIssue()<cr>
+
+function! s:oyVeyCommitMessage()
+  execute ":%!jarvis commit-message"
+  redraw!
+endfunction
+
+autocmd! FileType gitcommit nnoremap <buffer> <cr> :<c-u>call <sid>oyVeyCommitMessage()<cr>
+
+"""""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""""<
 " checks if a buffer is empty, but contains comments
 function! s:isBufferEmptyButComments()
   for i in range(1, line('$'))
