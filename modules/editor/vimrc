@@ -460,38 +460,42 @@ endfunction
 
 nnoremap <leader>r :call <sid>oyVeyPullRequestDescription()<cr>
 
+function! s:prepareIssue()
+  wincmd n
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+  setlocal syntax=markdown
+  file /tmp/issue-description
+  nnoremap <buffer> <cr> :<c-u>call <sid>oyVeyIssue()<cr>
+  autocmd! BufWinLeave <buffer> call s:reportIssue()
+endfunction
+
 function! s:oyVeyIssue()
   execute ":%!jarvis story"
   redraw!
 endfunction
 
-nnoremap <leader>t :call <sid>oyVeyIssue()<cr>
+function! s:reportIssue()
+  if !<sid>isBufferEmpty()
+    let l:title = trim(getline(1))
+    execute ":2,$!gh issue create -t '" . l:title . "' -a '@me' -F -"
+    let l:url = trim(getline(2))
+    let l:type = input("branch type /", "")
+    let l:description = substitute(substitute(substitute(tolower(l:title), '\s\+', '-', 'g'), '[^a-z0-9-]', '', 'g'), '-\+$', '', '')
+    let l:issue_no = matchstr(l:url, '\v\d+')
+    let l:branch = tolower(l:type) . "/" . l:issue_no . "-" . l:description
 
-function! s:createBranch(url)
-  let l:type = input("branch type /", "")
-  let l:title = trim(system("gh issue view --json title --jq '.title' " . a:url))
-  let l:description = substitute(substitute(substitute(tolower(l:title), '\s\+', '-', 'g'), '[^a-z0-9-]', '', 'g'), '-\+$', '', '')
-  let l:issue_no = matchstr(a:url, '\v\d+')
-  let l:branch = tolower(l:type) . "/" . l:issue_no . "-" . l:description
-
-  if confirm("Do you want to checkout to a branch " . l:branch . "?", "&Yes\n&No") == 1
-    execute ":!gh issue develop --checkout --base '" .  substitute(<sid>defaultBranch(), ".*/", "", "") . "' --name '" . l:branch . "' " . l:issue_no
-  else
-    execute ":!gh issue develop --base '" .  substitute(<sid>defaultBranch(), ".*/", "", "") . "' --name '" . l:branch . "' " . l:issue_no
+    if confirm("Do you want to checkout to a branch " . l:branch . "?", "&Yes\n&No") == 1
+      execute ":!gh issue develop --checkout --base '" .  substitute(<sid>defaultBranch(), ".*/", "", "") . "' --name '" . l:branch . "' " . l:issue_no
+    else
+      execute ":!gh issue develop --base '" .  substitute(<sid>defaultBranch(), ".*/", "", "") . "' --name '" . l:branch . "' " . l:issue_no
+    endif
+    execute ":!open " . l:url
   endif
 endfunction
 
-function! s:reportAnIssue()
-  let l:title = trim(getline(1))
-  execute "normal! ggdd"
-  execute ":%!gh issue create -t '" . l:title . "' -a '@me' -F -"
-  let l:url = trim(getline(1))
-  execute ":!open " . l:url
-  redraw!
-  call <sid>createBranch(l:url)
-endfunction
-
-nnoremap <leader>T :call <sid>reportAnIssue()<cr>
+nnoremap <leader>t :call <sid>prepareIssue()<cr>
 
 function! s:oyVeyCommitMessage()
   execute ":%!jarvis commit-message"
