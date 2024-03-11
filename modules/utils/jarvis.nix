@@ -56,7 +56,7 @@ pkgs.writeShellScriptBin "jarvis" ''
     issue=$(${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD | ${pkgs.gnused}/bin/sed -n 's@.*/\([[:digit:]]\+\).*@\1@p')
 
     if [ -n "$issue" ]; then
-      context=$(${pkgs.gh}/bin/gh issue view --json title,body $issue_no | ${pkgs.jq}/bin/jq  "\"This is a problem description\n\(.title)\n\n\(.body)\"")
+      context=$(${pkgs.gh}/bin/gh issue view --json title,body $issue | ${pkgs.jq}/bin/jq  "\"This is a problem description\n\(.title)\n\n\(.body)\"")
     fi
     ;;
 
@@ -91,8 +91,8 @@ pkgs.writeShellScriptBin "jarvis" ''
     -H "Authorization: Bearer $OPENAI_API_KEY" \
     -d "$data" | ${pkgs.jq}/bin/jq -M -r '.choices[0].message.content')
 
-  if [[ "$command" == "commit-message" ]] && [[ -n "$issue_no" ]]; then
-    echo "[#$issue_no] $response"
+  if [[ "$command" == "commit-message" ]] && [[ -n "$issue" ]]; then
+    echo "[#$issue] $response"
   else
     echo "$response"
   fi
