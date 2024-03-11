@@ -16,6 +16,7 @@ pkgs.writeShellScriptBin "jarvis" ''
     >&2 echo "Usage: jarvis [-m \"model\"] ask"
     >&2 echo "       jarvis [-m \"model\"] story"
     >&2 echo "       jarvis [-m \"model\"] commit-message"
+    >&2 echo "       jarvis [-m \"model\"] pull-request"
   }
 
   while getopts ":m:" arg; do
@@ -44,7 +45,6 @@ pkgs.writeShellScriptBin "jarvis" ''
   fi
 
   command=$1
-# instructions="Compose a pull request description by analyzing a user story, and additionally, any commit message that follows. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outome of the changes themselves - each such component has to be separated by two newlines."
 
   case $command in
   ask )
@@ -70,6 +70,27 @@ pkgs.writeShellScriptBin "jarvis" ''
     data=$(${pkgs.jq}/bin/jq -n --arg question "$(cat)" --arg instructions "$instructions" '[ { role: "system", content: $instructions }, { role: "user", content: $question } ]')
     ;;
 
+  pull-request )
+    instructions="Compose a pull request description by analyzing a user story, and additionally, any commit message that follows. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outome of the changes themselves - each such component has to be separated by two newlines."
+
+    default_branch=$(${pkgs.git}/bin/git config --get core.default)
+    branchoff_commit=$(${pkgs.git}/bin/git merge-base $default_branch HEAD)
+    branch_commits=$(${pkgs.git}/bin/git log --format=format:"%H" $branchoff_commit..HEAD)
+    issue=$(${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD | ${pkgs.gnused}/bin/sed -n 's@.*/\([[:digit:]]\+\).*@\1@p')
+
+    if [ -n "$issue" ]; then
+      context=$(${pkgs.gh}/bin/gh issue view --json title,body $issue | ${pkgs.jq}/bin/jq  "\"This is a problem description:\n\(.title)\n\n\(.body)\"")
+      data=$(${pkgs.jq}/bin/jq -n --arg instructions "$instructions" --arg context "$context" '[ { role: "system", content: $instructions }, { role: "user", content: $context } ]')
+    else
+      data=$(${pkgs.jq}/bin/jq -n --arg instructions "$instructions" '[ { role: "system", content: $instructions } ]')
+    fi
+
+    for hash in $branch_commits; do
+      commit_message=$(${pkgs.git}/bin/git show -s --format=%B $hash)
+      data=$(${pkgs.jq}/bin/jq -n --arg commit_message "$commit_message" --argjson data "$data" '$data + [ { role: "user", content: $commit_message } ]')
+    done
+    ;;
+
   * )
     >&2 echo "jarvis: unknown command $command"
     usage
@@ -87,6 +108,7 @@ pkgs.writeShellScriptBin "jarvis" ''
   if [ -n "$issue" ]; then
     case $command in
     commit-message ) echo "[#$issue] $response" ;;
+    pull-request ) echo "Closes #$issue.\n\n$response" ;;
     esac
     exit 0
   fi
