@@ -9,9 +9,8 @@ pkgs.writeShellScriptBin "jarvis" ''
   fi
 
   model="''${model:-gpt-3.5-turbo}"
-  template='{ model: $model, temperature: 1, max_tokens: 4096, top_p: 1, frequency_penalty: 0, presence_penalty: 0, messages: [ '
-  instructions=""
-  context=""
+  payload_template='{ model: $model, temperature: 1, max_tokens: 4096, top_p: 1, frequency_penalty: 0, presence_penalty: 0, messages: $data }'
+  data=""
 
   usage() {
     >&2 echo "Usage: jarvis [-m \"model\"] ask"
@@ -45,9 +44,11 @@ pkgs.writeShellScriptBin "jarvis" ''
   fi
 
   command=$1
+# instructions="Compose a pull request description by analyzing a user story, and additionally, any commit message that follows. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outome of the changes themselves - each such component has to be separated by two newlines."
 
   case $command in
   ask )
+    data=$(${pkgs.jq}/bin/jq -n --arg question "$(cat)" '[ { role: "user", content: $question } ]')
     ;;
 
   commit-message )
@@ -56,12 +57,17 @@ pkgs.writeShellScriptBin "jarvis" ''
     issue=$(${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD | ${pkgs.gnused}/bin/sed -n 's@.*/\([[:digit:]]\+\).*@\1@p')
 
     if [ -n "$issue" ]; then
-      context=$(${pkgs.gh}/bin/gh issue view --json title,body $issue | ${pkgs.jq}/bin/jq  "\"This is a problem description\n\(.title)\n\n\(.body)\"")
+      context=$(${pkgs.gh}/bin/gh issue view --json title,body $issue | ${pkgs.jq}/bin/jq  "\"This is a problem description:\n\(.title)\n\n\(.body)\"")
+      data=$(${pkgs.jq}/bin/jq -n --arg question "$(cat)" --arg instructions "$instructions" --arg context "$context" '[ { role: "system", content: $instructions }, { role: "user", content: $context }, { role: "user", content: $question } ]')
+    else
+      data=$(${pkgs.jq}/bin/jq -n --arg question "$(cat)" --arg instructions "$instructions" '[ { role: "system", content: $instructions }, { role: "user", content: $question } ]')
     fi
     ;;
 
   story )
     instructions="Compose a problem description by analyzing a short explanation of the problem, and additionally, any relevant context or background information. Ensure a thorough understanding of the problem and the context in which it occurs. The goal is to generate a clear, concise problem description that provides all the necessary information to understand the problem and its context. The problem description should have a short title and a paragraph with user story formatted scenario (As <actor>, I want to <action>, so <outcome>.), a 'Summary' paragraph explaining the problem, and an 'Acceptance criteria' paragraph with the tasks that has to be done to solve problem."
+
+    data=$(${pkgs.jq}/bin/jq -n --arg question "$(cat)" --arg instructions "$instructions" '[ { role: "system", content: $instructions }, { role: "user", content: $question } ]')
     ;;
 
   * )
@@ -71,29 +77,18 @@ pkgs.writeShellScriptBin "jarvis" ''
     ;;
   esac
 
-  if [ -n "$instructions" ]; then
-    template+='{ role: "system", content: $instructions }, '
-  fi
-  if [ -n "$context" ]; then
-    template+='{ role: "user", content: $context }, '
-  fi
-  template+='{ role: "user", content: $question } ] }'
-
-  data=$(${pkgs.jq}/bin/jq -n \
-    --arg model "$model" \
-    --arg instructions "$instructions" \
-    --arg context "$context" \
-    --arg question "$(cat)" \
-    "$template")
+  payload=$(${pkgs.jq}/bin/jq -n --arg model "$model" --argjson data "$data" "$payload_template")
 
   response=$(${pkgs.curl}/bin/curl -s -X POST https://api.openai.com/v1/chat/completions \
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $OPENAI_API_KEY" \
-    -d "$data" | ${pkgs.jq}/bin/jq -M -r '.choices[0].message.content')
+    -d "$payload" | ${pkgs.jq}/bin/jq -M -r '.choices[0].message.content')
 
-  if [[ "$command" == "commit-message" ]] && [[ -n "$issue" ]]; then
-    echo "[#$issue] $response"
-  else
-    echo "$response"
+  if [ -n "$issue" ]; then
+    case $command in
+    commit-message ) echo "[#$issue] $response" ;;
+    esac
+    exit 0
   fi
+  echo "$response"
 ''
