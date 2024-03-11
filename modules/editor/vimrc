@@ -303,33 +303,52 @@ function! s:pickaxe(query)
 endfunction
 
 function! s:defaultBranch()
-  return trim(system('git config --get core.default'))
+  return trim(system("git config --get core.default"))
 endfunction
 
-function! s:branchoffCommit()
-  return trim(system('git merge-base ' . <sid>defaultBranch() . ' HEAD'))
+function! s:branchoffCommit(...)
+  if a:0 > 0
+    let l:head = a:1
+  else
+    let l:head = "HEAD"
+  end
+  return trim(system("git merge-base " . <sid>defaultBranch() . " " . l:head))
 endfunction
 
 function! s:whatthecommit()
-  return trim(system('curl -Ls whatthecommit.com/index.txt'))
+  return trim(system("curl -Ls whatthecommit.com/index.txt"))
 endfunction
 
-function! s:gitPruneFile()
-  let file = expand('%')
-  let branch_base = trim(system('git merge-base origin/HEAD HEAD'))
-  execute "!git filter-branch --prune-empty --force --tree-filter 'rm -f " . l:file . "' " . l:branch_base . "..HEAD"
+function! s:gitPruneFile(...)
+  if a:0 > 0
+    let l:head = a:1
+  else
+    let l:head = "HEAD"
+  end
+  let file = expand("%")
+  execute "!git filter-branch --prune-empty --force --tree-filter 'rm -f " . l:file . "' " . s:branchoffCommit(l:head) . ".." . l:head
 endfunction
 
 function! s:gitWIP()
   execute ":G commit --no-verify --message 'WIP " . <sid>whatthecommit() . "'"
 endfunction
 
-function! s:gitRebaseBranchOnly()
-  execute ":G rebase --interactive " . <sid>branchoffCommit()
+function! s:gitRebaseBranch(...)
+  if a:0 > 0
+    let l:head = a:1
+  else
+    let l:head = "HEAD"
+  end
+  execute ":G rebase --interactive " . <sid>branchoffCommit(l:head)
 endfunction
 
-function! s:gitChanges()
-  execute ":G log --pretty=oneline " . <sid>branchoffCommit() . "..HEAD"
+function! s:gitChanges(...)
+  if a:0 > 0
+    let l:head = a:1
+  else
+    let l:head = "HEAD"
+  end
+  execute ":G log --pretty=oneline " . <sid>branchoffCommit(l:head) . ".." . l:head
   resize 10
 endfunction
 
@@ -347,13 +366,13 @@ command! -nargs=0 E Gedit
 command! -nargs=0 D GDelete
 command! -nargs=0 Gprune call <sid>gitPruneFile()
 command! -nargs=0 Gwip call <sid>gitWIP()
-command! -nargs=0 Grebase call <sid>gitRebaseBranchOnly()
+command! -nargs=0 Grebase call <sid>gitRebaseBranch()
 command! -nargs=0 Gchanges call <sid>gitChanges()
 command! -nargs=0 Gupdate call <sid>gitUpdate()
 command! -nargs=0 Gabsorb call <sid>gitAbsorb()
 command! -nargs=1 -complete=buffer GPickaxe call <sid>pickaxe(<q-args>)
 
-autocmd! FileType fugitive nnoremap <buffer> rI :<c-u>call <sid>gitRebaseBranchOnly()<cr>
+autocmd! FileType fugitive nnoremap <buffer> rI :<c-u>call <sid>gitRebaseBranch()<cr>
 autocmd! FileType gitcommit setlocal spell spelllang=en_us
 
 nnoremap <leader>a :Gabsorb<cr>
