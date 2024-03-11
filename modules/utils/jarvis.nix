@@ -90,7 +90,6 @@ pkgs.writeShellScriptBin "jarvis" ''
       data=$(${pkgs.jq}/bin/jq -n --arg commit_message "$commit_message" --argjson data "$data" '$data + [ { role: "user", content: $commit_message } ]')
     done
     ;;
-
   * )
     >&2 echo "jarvis: unknown command $command"
     usage
@@ -107,8 +106,8 @@ pkgs.writeShellScriptBin "jarvis" ''
 
   if [ -n "$issue" ]; then
     case $command in
-    commit-message ) echo "[#$issue] $response" ;;
-    pull-request ) echo "Closes #$issue.\n\n$response" ;;
+    commit-message ) echo -ne "[#$issue] "; echo "$response" ;;
+    pull-request ) echo -e "Closes #$issue."; echo; echo "$response" ;;
     esac
     exit 0
   fi
