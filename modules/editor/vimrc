@@ -444,7 +444,7 @@ endfunction
 nnoremap <leader>r :call <sid>oyVeyPullRequestDescription()<cr>
 
 function! s:updatePullRequestDescription()
-  let l:pr_no = trim(system('gh current --json number --jq ".number"'))
+  let l:pr_no = trim(system('gh current --json number --jq ".number" 2>/dev/null'))
   if !empty(l:pr_no)
     execute ":%!gh pr edit " . l:pr_no . " -F -"
     let l:url = trim(getline(1))
@@ -462,6 +462,20 @@ endfunction
 
 nnoremap <leader>t :call <sid>oyVeyIssue()<cr>
 
+function! s:createBranch(url)
+  let l:type = input("branch type /", "")
+  let l:title = trim(system("gh issue view --json title --jq '.title' " . a:url))
+  let l:description = substitute(substitute(substitute(tolower(l:title), '\s\+', '-', 'g'), '[^a-z0-9-]', '', 'g'), '-\+$', '', '')
+  let l:issue_no = matchstr(a:url, '\v\d+')
+  let l:branch = tolower(l:type) . "/" . l:issue_no . "-" . l:description
+
+  if confirm("Do you want to checkout to a branch " . l:branch . "?", "&Yes\n&No") == 1
+    execute ":!gh issue develop --checkout --base '" .  substitute(<sid>defaultBranch(), ".*/", "", "") . "' --name '" . l:branch . "' " . l:issue_no
+  else
+    execute ":!gh issue develop --base '" .  substitute(<sid>defaultBranch(), ".*/", "", "") . "' --name '" . l:branch . "' " . l:issue_no
+  endif
+endfunction
+
 function! s:reportAnIssue()
   let l:title = trim(getline(1))
   execute "normal! ggdd"
@@ -469,6 +483,7 @@ function! s:reportAnIssue()
   let l:url = trim(getline(1))
   execute ":!open " . l:url
   redraw!
+  call <sid>createBranch(l:url)
 endfunction
 
 nnoremap <leader>T :call <sid>reportAnIssue()<cr>
