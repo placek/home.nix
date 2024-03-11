@@ -436,24 +436,29 @@ nnoremap <leader>y :call <sid>askOyVeyAll()<cr>
 
 function! s:oyVeyPullRequestDescription()
   wincmd n
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+  setlocal syntax=markdown
+  file /tmp/pull-request-description
   let l:summary = substitute(system("jarvis pull-request"), '\r', '', 'g')
   execute "0put =l:summary"
   redraw!
+  autocmd! BufWinLeave <buffer> call s:updatePullRequestDescription()
+endfunction
+
+function! s:updatePullRequestDescription()
+  if !<sid>isBufferEmpty()
+    let l:pr_no = trim(system('gh current --json number --jq ".number" 2>/dev/null'))
+    if !empty(l:pr_no)
+      execute ":%!gh pr edit " . l:pr_no . " -F -"
+      let l:url = trim(getline(1))
+      execute ":!open " . l:url
+    endif
+  endif
 endfunction
 
 nnoremap <leader>r :call <sid>oyVeyPullRequestDescription()<cr>
-
-function! s:updatePullRequestDescription()
-  let l:pr_no = trim(system('gh current --json number --jq ".number" 2>/dev/null'))
-  if !empty(l:pr_no)
-    execute ":%!gh pr edit " . l:pr_no . " -F -"
-    let l:url = trim(getline(1))
-    execute ":!open " . l:url
-  endif
-  redraw!
-endfunction
-
-nnoremap <leader>R :call <sid>updatePullRequestDescription()<cr>
 
 function! s:oyVeyIssue()
   execute ":%!jarvis story"
@@ -496,6 +501,15 @@ endfunction
 autocmd! FileType gitcommit nnoremap <buffer> <cr> :<c-u>call <sid>oyVeyCommitMessage()<cr>
 
 """""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""""<
+" checks if a buffer is empty
+function! s:isBufferEmpty()
+  if line('$') == 1 && getline(1) == ''
+    return 1
+  else
+    return 0
+  endif
+endfunction
+
 " checks if a buffer is empty, but contains comments
 function! s:isBufferEmptyButComments()
   for i in range(1, line('$'))
