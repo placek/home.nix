@@ -364,6 +364,18 @@ function! s:gitAbsorbAndRebase()
   execute ":G absorb --and-rebase --base " . <sid>branchoffCommit()
 endfunction
 
+function! s:gitPush()
+  execute ":G push --force-with-lease --follow-tags"
+  let l:branch = trim(system("git rev-parse --abbrev-ref HEAD"))
+  let l:base = substitute(<sid>defaultBranch(), ".*/", "", "")
+
+  if l:branch != l:base
+    if confirm("Do you want to open a pull request?", "&Yes\n&No") == 1
+      call <sid>oyVeyPullRequestDescription()
+    endif
+  endif
+endfunction
+
 command! -nargs=0 W Gwrite
 command! -nargs=0 E Gedit
 command! -nargs=0 D GDelete
@@ -385,7 +397,7 @@ nnoremap <leader>b :G blame<cr>
 nnoremap <leader>B :G branch<cr>
 nnoremap <leader>e :Gedit<cr>
 nnoremap <leader>o :Gupdate<cr>
-nnoremap <leader>O :G push --force-with-lease --follow-tags<cr>
+nnoremap <leader>O :<c-u>call <sid>gitPush()<cr>
 nnoremap <leader>g :call <sid>toggleFugitive()<cr>
 nnoremap <leader>d :Gchanges<cr>
 nnoremap <leader>C :0GlLog --pretty=oneline<cr>
@@ -425,7 +437,7 @@ endfunction
 
 autocmd CursorHold * call <sid>blameLine()
 
-""""""""""""""""""""""""""""""""""" WORKFLOW """""""""""""""""""""""""""""""""""<
+""""""""""""""""""""""""""""""""""" WORKFLOW """""""""""""""""""""""""""""""""""
 function! s:askOyVeySelected()
   execute ":'<,'>!jarvis ask"
   redraw!
@@ -459,11 +471,11 @@ function! s:updatePullRequestDescription()
       execute ":%!gh pr edit " . l:pr_no . " -F -"
       let l:url = trim(getline(1))
       execute ":!open " . l:url
+    else
+      execute ":%!gh-pr"
     endif
   endif
 endfunction
-
-nnoremap <leader>r :call <sid>oyVeyPullRequestDescription()<cr>
 
 function! s:prepareIssue()
   wincmd n
