@@ -343,13 +343,25 @@ function! s:gitRebaseBranch(...)
 endfunction
 
 function! s:gitChanges(...)
-  if a:0 > 0
-    let l:head = a:1
+  let l:bufnr = bufnr('fugitive://*/.git/CHANGES')
+  let l:winid = bufwinid(l:bufnr)
+  if l:bufnr > 0 && l:winid > 0
+    call win_execute(l:winid, "close")
   else
-    let l:head = "HEAD"
-  end
-  execute ":G log --pretty=oneline " . <sid>branchoffCommit(l:head) . ".." . l:head
-  resize 10
+    if a:0 > 0
+      let l:head = a:1
+    else
+      let l:head = "HEAD"
+    end
+    let l:directory = trim(system("git rev-parse --show-toplevel"))
+    execute ":G log --pretty=oneline " . <sid>branchoffCommit(l:head) . ".." . l:head
+    silent execute "file fugitive://" . l:directory . "/.git/CHANGES"
+    resize 10
+    setlocal winfixheight
+    setlocal nonumber
+    setlocal norelativenumber
+    setlocal buftype=nofile
+  endif
 endfunction
 
 function! s:gitUpdate()
