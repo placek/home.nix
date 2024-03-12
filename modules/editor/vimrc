@@ -343,25 +343,12 @@ function! s:gitRebaseBranch(...)
 endfunction
 
 function! s:gitChanges(...)
-  let l:bufnr = bufnr('fugitive://*/.git/CHANGES')
-  let l:winid = bufwinid(l:bufnr)
-  if l:bufnr > 0 && l:winid > 0
-    call win_execute(l:winid, "close")
+  if a:0 > 0
+    let l:head = a:1
   else
-    if a:0 > 0
-      let l:head = a:1
-    else
-      let l:head = "HEAD"
-    end
-    let l:directory = trim(system("git rev-parse --show-toplevel"))
-    execute ":G log --pretty=oneline " . <sid>branchoffCommit(l:head) . ".." . l:head
-    silent execute "file fugitive://" . l:directory . "/.git/CHANGES"
-    resize 10
-    setlocal winfixheight
-    setlocal nonumber
-    setlocal norelativenumber
-    setlocal buftype=nofile
-  endif
+    let l:head = "HEAD"
+  end
+  execute ":Gclog --pretty=oneline " . <sid>branchoffCommit(l:head) . ".." . l:head
 endfunction
 
 function! s:gitUpdate()
@@ -373,6 +360,10 @@ function! s:gitAbsorb()
   execute ":G absorb --base " . <sid>branchoffCommit()
 endfunction
 
+function! s:gitAbsorbAndRebase()
+  execute ":G absorb --and-rebase --base " . <sid>branchoffCommit()
+endfunction
+
 command! -nargs=0 W Gwrite
 command! -nargs=0 E Gedit
 command! -nargs=0 D GDelete
@@ -382,12 +373,14 @@ command! -nargs=0 Grebase call <sid>gitRebaseBranch()
 command! -nargs=0 Gchanges call <sid>gitChanges()
 command! -nargs=0 Gupdate call <sid>gitUpdate()
 command! -nargs=0 Gabsorb call <sid>gitAbsorb()
+command! -nargs=0 GabsorbAndRebase call <sid>gitAbsorbAndRebase()
 command! -nargs=1 -complete=buffer GPickaxe call <sid>pickaxe(<q-args>)
 
 autocmd! FileType fugitive nnoremap <buffer> rI :<c-u>call <sid>gitRebaseBranch()<cr>
 autocmd! FileType gitcommit setlocal spell spelllang=en_us
 
 nnoremap <leader>a :Gabsorb<cr>
+nnoremap <leader>A :GabsorbAndRebase<cr>
 nnoremap <leader>b :G blame<cr>
 nnoremap <leader>B :G branch<cr>
 nnoremap <leader>e :Gedit<cr>
@@ -395,8 +388,8 @@ nnoremap <leader>o :Gupdate<cr>
 nnoremap <leader>O :G push --force-with-lease --follow-tags<cr>
 nnoremap <leader>g :call <sid>toggleFugitive()<cr>
 nnoremap <leader>d :Gchanges<cr>
-nnoremap <leader>C :0GlLog<cr>
-nnoremap <leader>c :GcLog<cr>
+nnoremap <leader>C :0GlLog --pretty=oneline<cr>
+nnoremap <leader>c :GcLog --pretty=oneline<cr>
 nnoremap <leader>p :G fetch<cr>
 nnoremap <leader>P :G pull<cr>
 nnoremap <leader>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
