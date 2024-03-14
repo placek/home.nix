@@ -451,12 +451,16 @@ endfunction
 vnoremap <leader>y :call <sid>askOyVeySelected()<cr>
 nnoremap <leader>y :call <sid>askOyVeyAll()<cr>
 
-function! s:oyVeyPullRequestDescription()
+function! s:openIntermediateBuffer()
   wincmd n
   setlocal buftype=nofile
-  setlocal bufhidden=hide
+  setlocal bufhidden=delete
   setlocal noswapfile
   setlocal syntax=markdown
+endfunction
+
+function! s:oyVeyPullRequestDescription()
+  call <sid>openIntermediateBuffer()
   file /tmp/pull-request-description
   let l:summary = substitute(system("jarvis pull-request"), '\r', '', 'g')
   execute "0put =l:summary"
@@ -478,11 +482,7 @@ function! s:updatePullRequestDescription()
 endfunction
 
 function! s:prepareIssue()
-  wincmd n
-  setlocal buftype=nofile
-  setlocal bufhidden=hide
-  setlocal noswapfile
-  setlocal syntax=markdown
+  call <sid>openIntermediateBuffer()
   file /tmp/issue-description
   nnoremap <buffer> <cr> :<c-u>call <sid>oyVeyIssue()<cr>
   autocmd! BufWinLeave <buffer> call s:reportIssue()
