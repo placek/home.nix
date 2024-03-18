@@ -5,6 +5,12 @@
 }:
 {
   options = with lib; {
+    projectsDirectory = mkOption {
+      type = types.str;
+      default = "${config.home.homeDirectory}/Projects";
+      description = "A path to project directory.";
+    };
+
     editorExec = mkOption {
       type = types.str;
       default = "${config.programs.vim.package}/bin/vim";
@@ -25,7 +31,7 @@
 
     home.packages = with pkgs; [ universal-ctags trashy ];
 
-    programs.fish.shellAliases.editor = "${config.editorExec} --servername (basename (git root))";
+    programs.fish.shellAliases.editor = "${config.editorExec} --servername (string replace '${config.projectsDirectory}/' '' (git root))";
 
     programs.vim = {
       enable = true;

@@ -4,25 +4,20 @@ export project
 export object
 export name
 
-project=$(echo "$QUTE_URL" | sed -En 's@https://github.com/[^/]+/([^/]+)/.*@\1@p')
-
-case "$QUTE_MODE" in
-  hints)
-    object=$(echo "$QUTE_URL" | sed -En 's@https://github.com/.*/commits?/([[:xdigit:]]{40}).*@\1@p')
-    name=$(echo "$QUTE_SELECTED_HTML" | sed -En 's@.*title="([^"]+)".*@\1@p')
-    ;;
-
-  command)
-    object=$(echo "$QUTE_URL" | sed -En 's@https://github.com/.*/blob/([[:xdigit:]]{40}).*@\1@p')
-    ;;
-esac
+project=$(echo "$QUTE_URL" | sed -En 's@https://git[^/]+/([^/]+)/([^/]+)/.*@\U\1\/\U\2@p')
 
 if [ -n "$project" ]; then
+  object=$(echo "$QUTE_URL" | sed -En 's@https://git[^/]+/.*/([[:xdigit:]]{40}).*@\1@p')
+
   if [ -n "$object" ]; then
     vim --servername "$project" --remote-send ":<c-u>G show $object<cr>"
-  elif [ -n "$name" ]; then
-    vim --servername "$project" --remote-send ":<c-u>edit $name<cr>"
   else
-    exit 1
+    >&2 echo "No object present in URL: $QUTE_URL"
+    >&2 echo "  object: $object"
+    exit 3
   fi
+else
+  >&2 echo "No project present in URL: $QUTE_URL"
+  >&2 echo "  project: $project"
+  exit 2
 fi
