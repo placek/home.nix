@@ -52,16 +52,26 @@ pkgs.writeShellScriptBin "jarvis" ''
     ;;
 
   commit-message )
-    instructions="Compose a Git commit message by analyzing, at first, a short description explaining why the changes have been made, and additionally, a commit diff, which details what changes have been made. Ensure a thorough understanding of the relationship between the requirements stated in the description and the actual changes implemented in the commit. The goal is to generate meaningful, informative commit messages that clearly explain both the rationale behind the changes and the specifics of what has been altered. The commit message should have a short title, a paragraph explaining the purpose of the changes, and a paragraph explaining the changes themselves - each such component has to be separated by two newlines."
-
+    default_branch=$(${pkgs.git}/bin/git config --get core.default)
+    branchoff_commit=$(${pkgs.git}/bin/git merge-base $default_branch HEAD)
+    branch_commits=$(${pkgs.git}/bin/git log --format=format:"%H" $branchoff_commit..HEAD)
     issue=$(${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD | ${pkgs.gnused}/bin/sed -n 's@.*/\([[:digit:]]\+\).*@\1@p')
 
     if [ -n "$issue" ]; then
-      context=$(${pkgs.gh}/bin/gh issue view --json title,body $issue | ${pkgs.jq}/bin/jq  "\"This is a problem description:\n\(.title)\n\n\(.body)\"")
-      data=$(${pkgs.jq}/bin/jq -n --arg question "$(cat)" --arg instructions "$instructions" --arg context "$context" '[ { role: "system", content: $instructions }, { role: "user", content: $context }, { role: "user", content: $question } ]')
+      instructions="Compose a Git commit message. To draft a Git commit message, first analyze the user story to understand why changes were needed. Next, review the series of commit messages to see what modifications have been made. Concentrate on the last item, considering it the commit candidate. This should include a brief explanation of the changes and a diff that showcases these modifications. Your task is to ensure that there is a clear connection between the requirements specified in the user story and the changes made in the commit. The objective is to create a concise and informative commit message that effectively communicates the reasoning behind the changes and details the specific alterations. The message should comprise a succinct title, followed by two paragraphs: one explaining the reason for the changes and another describing the changes themselves. Each section should be separated by a blank line, without any headings."
+      context=$(${pkgs.gh}/bin/gh issue view --json title,body $issue | ${pkgs.jq}/bin/jq  "\"\(.title)\n\n\(.body)\"")
+      data=$(${pkgs.jq}/bin/jq -n --arg instructions "$instructions" --arg context "This is the user story:\n$context" '[ { role: "system", content: $instructions }, { role: "user", content: $context } ]')
     else
-      data=$(${pkgs.jq}/bin/jq -n --arg question "$(cat)" --arg instructions "$instructions" '[ { role: "system", content: $instructions }, { role: "user", content: $question } ]')
+      instructions="Compose a Git commit message. To draft a Git commit message, review the series of commit messages to see what modifications have been made.  Concentrate on the last item, considering it the commit candidate. This should include a brief explanation of the changes and a diff that showcases these modifications. Your task is to ensure that there is a clear connection between the changes made in the commits. The objective is to create a concise and informative commit message that effectively communicates the reasoning behind the changes and details the specific alterations. The message should comprise a succinct title, followed by two paragraphs: one explaining the reason for the changes and another describing the changes themselves. Each section should be separated by a blank line, without any headings."
+      data=$(${pkgs.jq}/bin/jq -n --arg instructions "$instructions" '[ { role: "system", content: $instructions } ]')
     fi
+
+    for hash in $branch_commits; do
+      commit_message=$(${pkgs.git}/bin/git show -s --format=%B $hash)
+      data=$(${pkgs.jq}/bin/jq -n --arg commit_message "This is a change already implemented in scope of the user story:\n$commit_message" --argjson data "$data" '$data + [ { role: "user", content: $commit_message } ]')
+    done
+
+    data=$(${pkgs.jq}/bin/jq -n --arg question "This is the commit candidate with short explanation:\n$(cat)" --argjson data "$data" '$data + [ { role: "user", content: $question } ]')
     ;;
 
   story )
@@ -71,7 +81,7 @@ pkgs.writeShellScriptBin "jarvis" ''
     ;;
 
   pull-request )
-    instructions="Compose a pull request description by analyzing a user story, and additionally, any commit message that follows. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outome of the changes themselves - each such component has to be separated by two newlines."
+    instructions="Compose a pull request description by analyzing a user story, and additionally, any commit message that follows. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outome of the changes themselves - each such component has to be separated by two newlines and have no header."
 
     default_branch=$(${pkgs.git}/bin/git config --get core.default)
     branchoff_commit=$(${pkgs.git}/bin/git merge-base $default_branch HEAD)
