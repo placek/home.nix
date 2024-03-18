@@ -14,6 +14,7 @@ pkgs.writeShellScriptBin "jarvis" ''
 
   usage() {
     >&2 echo "Usage: jarvis [-m \"model\"] ask"
+    >&2 echo "       jarvis [-m \"model\"] grammar"
     >&2 echo "       jarvis [-m \"model\"] story"
     >&2 echo "       jarvis [-m \"model\"] commit-message"
     >&2 echo "       jarvis [-m \"model\"] pull-request"
@@ -49,6 +50,12 @@ pkgs.writeShellScriptBin "jarvis" ''
   case $command in
   ask )
     data=$(${pkgs.jq}/bin/jq -n --arg question "$(cat)" '[ { role: "user", content: $question } ]')
+    ;;
+
+  grammar )
+    instructions="Correct the grammar of the following text. Ensure that the text is free of spelling and grammatical errors. The goal is to produce a clear, concise, and grammatically correct text. If the text is already correct, just output it."
+
+    data=$(${pkgs.jq}/bin/jq -n --arg question "$(cat)" --arg instructions "$instructions" '[ { role: "system", content: $instructions }, { role: "user", content: $question } ]')
     ;;
 
   commit-message )
