@@ -8,12 +8,16 @@ project=$(echo "$QUTE_URL" | sed -En 's@https://git[^/]+/([^/]+)/([^/]+)/.*@\U\1
 
 if [ -n "$project" ]; then
   object=$(echo "$QUTE_URL" | sed -En 's@https://git[^/]+/.*/([[:xdigit:]]{40}).*@\1@p')
+  pr=$(echo "$QUTE_URL" | sed -En 's@https://git[^/]+/.*/pull/([[:digit:]]+)@\1@p')
 
   if [ -n "$object" ]; then
     vim --servername "$project" --remote-send ":<c-u>G show $object<cr>"
+  elif [ -n "$pr" ]; then
+    vim --servername "$project" --remote-send ":<c-u>G checkout <c-r>=trim(system('gh pr view --json headRefName --jq \"\\\"\\(.headRefName)\\\"\" $pr'))<cr>"
   else
     >&2 echo "No object present in URL: $QUTE_URL"
     >&2 echo "  object: $object"
+    >&2 echo "  pr: $pr"
     exit 3
   fi
 else
