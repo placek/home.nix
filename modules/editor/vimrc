@@ -568,10 +568,10 @@ nnoremap <leader>3 :set spell!<cr>
 function! s:makeFolds()
   setlocal foldmethod=indent
   norm zR
-  setlocal foldmethod=marker
+  setlocal foldmethod=manual
 endfunction
 
-set foldmethod=marker
+set foldmethod=manual
 nnoremap <leader>4 :call <sid>makeFolds()<cr>
 
 " terminal-mode
