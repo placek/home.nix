@@ -31,7 +31,7 @@
 
     home.packages = with pkgs; [ universal-ctags trashy ];
 
-    programs.fish.shellAliases.editor = "${config.editorExec} --servername (string replace '${config.projectsDirectory}/' '' (git root))";
+    programs.fish.shellAliases.editor = "${config.editorExec} --servername (git remote get-url origin | awk -F'[:/]' '{print $(NF-1) \"/\" $(NF)}' | sed 's/\\.git$//')";
 
     programs.vim = {
       enable = true;
