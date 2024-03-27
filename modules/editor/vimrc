@@ -369,7 +369,7 @@ function! s:gitPush()
   let l:base = substitute(<sid>defaultBranch(), ".*/", "", "")
 
   if l:branch != l:base
-    if confirm("Do you want to open a pull request?", "&Yes\n&No") == 1
+    if confirm("Do you want to open a pull request?", "&yes\n&No", 2) == 1
       call <sid>oyVeyPullRequestDescription()
     endif
   endif
