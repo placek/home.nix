@@ -389,7 +389,8 @@ autocmd! FileType gitcommit setlocal spell spelllang=en_us
 nnoremap <leader>a :Gabsorb<cr>
 nnoremap <leader>A :GabsorbAndRebase<cr>
 nnoremap <leader>b :G blame<cr>
-nnoremap <leader>B :G branch<cr>
+nnoremap <leader>B :G branch --all<cr>
+nnoremap <leader>W :G -p worktree list<cr>
 nnoremap <leader>e :Gedit<cr>
 nnoremap <leader>o :Gupdate<cr>
 nnoremap <leader>O :<c-u>call <sid>gitPush()<cr>
@@ -488,6 +489,22 @@ function! s:oyVeyIssue()
   redraw!
 endfunction
 
+function! s:checkoutWorktree(branch)
+  let l:issue_no = matchstr(a:branch, '\v\d+')
+  let l:branch = substitute(substitute(a:branch, '.*\s+', '', ''), 'remotes/origin/', '', '')
+  let l:project_dir = trim(system("git worktree list --porcelain | grep -B 1 bare | head -n 1 | cut -d ' ' -f 2"))
+  let l:worktree = l:project_dir . "/" . l:issue_no
+
+  if !empty(l:issue_no)
+    if !isdirectory(l:worktree)
+      execute ":G worktree add -B " . l:branch . " " . l:worktree
+    endif
+    execute ":cd " . l:worktree
+  endif
+endfunction
+
+autocmd! FileType git nnoremap <buffer> w :<c-u>call <sid>checkoutWorktree(trim(getline(".")))<cr>
+
 function! s:reportIssue()
   if !<sid>isBufferEmpty()
     let l:title = trim(getline(1))
@@ -497,12 +514,10 @@ function! s:reportIssue()
     let l:description = substitute(substitute(substitute(tolower(l:title), '\s\+', '-', 'g'), '[^a-z0-9-]', '', 'g'), '-\+$', '', '')
     let l:issue_no = matchstr(l:url, '\v\d+')
     let l:branch = tolower(l:type) . "/" . l:issue_no . "-" . l:description
+    let l:base = substitute(<sid>defaultBranch(), ".*/", "", "")
 
-    if confirm("Do you want to checkout to a branch " . l:branch . "?", "&Yes\n&No") == 1
-      execute ":!gh issue develop --checkout --base '" .  substitute(<sid>defaultBranch(), ".*/", "", "") . "' --name '" . l:branch . "' " . l:issue_no
-    else
-      execute ":!gh issue develop --base '" .  substitute(<sid>defaultBranch(), ".*/", "", "") . "' --name '" . l:branch . "' " . l:issue_no
-    endif
+    execute ":!gh issue develop --base '" . l:base . "' --name '" . l:branch . "' " . l:issue_no
+    call <sid>checkoutWorktree(l:branch)
     execute ":!open " . l:url
   endif
 endfunction
