@@ -613,11 +613,7 @@ endfunction
 " finds a file using git ls-files or find command
 function! s:find(query)
   if !empty(a:query)
-    if isdirectory(".git")
-      execute "silent cexpr system('git ls-files \"**" . a:query . "*\" | sed \"s/.*/&:1:1/\"') | copen"
-    else
-      execute "silent cexpr system('find . -type f -printf \"%p:1:1\\n\" \"*" . a:query . "*\"') | copen"
-    endif
+    execute "silent cexpr system('git ls-files \"**" . a:query . "*\" | sed \"s/.*/&:1:1/\"') | copen"
   endif
 endfunction
 
