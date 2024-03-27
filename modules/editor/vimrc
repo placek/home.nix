@@ -198,6 +198,7 @@ nnoremap <silent>]e     :ALENextWrap<cr>
 nnoremap <localleader>h :ALEHover<cr>
 nnoremap <localleader>H :ALEDetail<cr>
 nnoremap <localleader>a :ALECodeAction<cr>
+nnoremap <localleader>A :ALEFix<cr>
 nnoremap <localleader>d :ALEGoToDefinition<cr>
 nnoremap <localleader>D :ALEGoToTypeDefinition<cr>
 nnoremap <localleader>i :ALEInfo<cr>
