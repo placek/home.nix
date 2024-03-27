@@ -64,6 +64,8 @@ in
       video
       gh-pr
 
+      elixir
+
       # dcc6502
       # minipro
       # vasm
