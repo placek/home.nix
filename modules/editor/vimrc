@@ -659,6 +659,14 @@ vnoremap <silent># :<c-u>call <sid>findTextInBuffer("#", <sid>selectedText())<cr
 command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
 command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
 
+" remap addition and substraction
+nnoremap <A-a> <C-a>
+nnoremap <A-x> <C-x>
+vnoremap <A-a> <C-a>
+vnoremap <A-x> <C-x>
+vnoremap g<A-a> g<C-a>
+vnoremap g<A-x> g<C-x>
+
 """""""""""""""""""""""""""""""""""" COLORS """""""""""""""""""""""""""""""""""<
 hi ColorColumn                          ctermbg=8
 hi CtrlPMode1                           ctermbg=0  ctermfg=3
