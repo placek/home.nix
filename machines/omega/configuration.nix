@@ -14,6 +14,15 @@
 
   swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
+  ################################### NIX ######################################
+  nix.gc.automatic = true;
+  nix.gc.dates = "daily";
+  nix.gc.options = "--delete-older-than 30d";
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes repl-flake
+    auto-optimise-store = true
+  '';
+
   ################################# HARDWARE ###################################
   boot.extraModulePackages                                                     = with config.boot.kernelPackages; [ acpi_call nvidia_x11 ];
   boot.initrd.availableKernelModules                                           = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
