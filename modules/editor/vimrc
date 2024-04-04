@@ -491,7 +491,7 @@ endfunction
 
 function! s:checkoutWorktree(branch)
   let l:issue_no = matchstr(a:branch, '\v\d+')
-  let l:branch = substitute(substitute(a:branch, '.*\s+', '', ''), 'remotes/origin/', '', '')
+  let l:branch = substitute(substitute(a:branch, '^.*\s\+', '', ''), 'remotes/origin/', '', '')
   let l:project_dir = trim(system("git worktree list --porcelain | grep -B 1 bare | head -n 1 | cut -d ' ' -f 2"))
 
   if !empty(l:issue_no)
