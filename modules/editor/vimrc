@@ -493,17 +493,20 @@ function! s:checkoutWorktree(branch)
   let l:issue_no = matchstr(a:branch, '\v\d+')
   let l:branch = substitute(substitute(a:branch, '.*\s+', '', ''), 'remotes/origin/', '', '')
   let l:project_dir = trim(system("git worktree list --porcelain | grep -B 1 bare | head -n 1 | cut -d ' ' -f 2"))
-  let l:worktree = l:project_dir . "/" . l:issue_no
 
   if !empty(l:issue_no)
-    if !isdirectory(l:worktree)
-      execute ":G worktree add -B " . l:branch . " " . l:worktree
-    endif
-    execute ":cd " . l:worktree
+    let l:worktree = l:project_dir . "/" . l:issue_no
+  else
+    let l:worktree = l:project_dir . "/" . l:branch
   endif
+  if !isdirectory(l:worktree)
+    execute ":G worktree add -B " . l:branch . " " . l:worktree
+  endif
+  execute ":cd " . l:worktree
 endfunction
 
 autocmd! FileType git nnoremap <buffer> w :<c-u>call <sid>checkoutWorktree(trim(getline(".")))<cr>
+nnoremap <leader>n :call <sid>checkoutWorktree(input("branch name /", ""))<cr>
 
 function! s:reportIssue()
   if !<sid>isBufferEmpty()
@@ -522,7 +525,7 @@ function! s:reportIssue()
   endif
 endfunction
 
-nnoremap <leader>t :call <sid>prepareIssue()<cr>
+nnoremap <leader>N :call <sid>prepareIssue()<cr>
 
 function! s:oyVeyCommitMessage()
   execute ":%!jarvis commit-message"
