@@ -415,25 +415,28 @@ vmap v     <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
 
 """""""""""""""""""""""""""""""""" BLAMELINE """"""""""""""""""""""""""""""""""<
-hi BlameLine ctermfg=8
-call prop_type_add("blame_line", { "highlight": "BlameLine" })
-
 function! BlameLineHandler(channel, msg)
-  let text = substitute(trim(a:msg), '^\(\w\+\)\s\+(\(.\{-}\)\s\+\d\+).*', '\1 \2', 'g')
+  let text = substitute(trim(a:msg), '^\(\w\+\)\s\+(\(.\{-}\)\s\+\d\+).*', ' \1 \2', 'g')
   call prop_remove({ "type": "blame_line" }, 1, line("$"))
-  call prop_add(line("."), 0, { "text": " " . l:text, "type": "blame_line", "text_align": "right" })
+  call prop_add(line("."), 0, { "text": l:text, "type": "blame_line", "text_align": "right" })
 endfunc
 
 function! s:blameLine()
-  if trim(system("git rev-parse --is-inside-work-tree")) == "true"
-    let line = line('.')
-    let file = expand('%')
-    let cmd = "git blame --date=relative -L" . l:line . "," . l:line . " " . l:file
-    call job_start(l:cmd, { "out_cb": "BlameLineHandler" })
+  let line = line('.')
+  let file = expand('%')
+  let cmd = "git blame --date=relative -L" . l:line . "," . l:line . " " . l:file
+  call job_start(l:cmd, { "out_cb": "BlameLineHandler" })
+endfunction
+
+function s:setBlameLine()
+  if prop_type_get("blame_line") == {} && trim(system("git rev-parse --is-inside-work-tree")) == "true"
+    hi BlameLine ctermfg=8
+    call prop_type_add("blame_line", { "highlight": "BlameLine" })
+    autocmd CursorHold * call <sid>blameLine()
   endif
 endfunction
 
-autocmd CursorHold * call <sid>blameLine()
+autocmd BufReadPost * call <sid>setBlameLine()
 
 """"""""""""""""""""""""""""""""""" WORKFLOW """""""""""""""""""""""""""""""""""
 function! s:askOyVeySelected()
