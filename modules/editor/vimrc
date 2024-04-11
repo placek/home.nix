@@ -349,6 +349,7 @@ endfunction
 function! s:gitUpdate()
   G fetch
   execute ":G pull --rebase " . substitute(<sid>defaultBranch(), "/", " ", "")
+  echom "Branch rebased to its default branch"
 endfunction
 
 function! s:gitAbsorb()
@@ -363,6 +364,7 @@ function! s:gitPush()
   execute ":G push --force-with-lease --follow-tags"
   let l:branch = trim(system("git rev-parse --abbrev-ref HEAD"))
   let l:base = substitute(<sid>defaultBranch(), ".*/", "", "")
+  echom "Branch pushed"
 
   if l:branch != l:base
     if confirm("Do you want to open a pull request?", "&yes\n&No", 2) == 1
@@ -509,6 +511,7 @@ function! s:checkoutWorktree(branch)
     execute ":G worktree add -B " . l:branch . " " . l:worktree
   endif
   execute ":cd " . l:worktree
+  echom "Switched to " . l:worktree
 endfunction
 
 autocmd! FileType git nnoremap <buffer> w :<c-u>call <sid>checkoutWorktree(trim(getline(".")))<cr>
@@ -528,6 +531,7 @@ function! s:reportIssue()
     execute ":!gh issue develop --base '" . l:base . "' --name '" . l:branch . "' " . l:issue_no
     call <sid>checkoutWorktree(l:branch)
     execute ":!open " . l:url
+    echom "Issue " . l:issue_no . " created"
   endif
 endfunction
 
