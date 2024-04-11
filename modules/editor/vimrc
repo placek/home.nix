@@ -439,13 +439,19 @@ function! s:askOyVeySelected()
   redraw!
 endfunction
 
+function! s:askOyVeyLine()
+  execute "V:'<,'>!jarvis ask"
+  redraw!
+endfunction
+
 function! s:askOyVeyAll()
   execute ":%!jarvis ask"
   redraw!
 endfunction
 
 vnoremap <leader>y :call <sid>askOyVeySelected()<cr>
-nnoremap <leader>y :call <sid>askOyVeyAll()<cr>
+nnoremap <leader>y :call <sid>askOyVeyLine()<cr>
+nnoremap <leader>Y :call <sid>askOyVeyAll()<cr>
 
 function! s:openIntermediateBuffer()
   wincmd n
