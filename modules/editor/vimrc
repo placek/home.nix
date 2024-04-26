@@ -401,16 +401,18 @@ nnoremap <leader>a :Gabsorb<cr>
 nnoremap <leader>A :GabsorbAndRebase<cr>
 nnoremap <leader>b :G blame<cr>
 nnoremap <leader>B :G branch --all<cr>
-nnoremap <leader>W :G -p worktree list<cr>
+nnoremap <leader>i :echo "Branch-off commit: " . <sid>branchoffCommit("HEAD")<cr>
+nnoremap <leader>I :edit .<cr>
 nnoremap <leader>e :Gedit<cr>
-nnoremap <leader>o :Gupdate<cr>
-nnoremap <leader>O :<c-u>call <sid>gitPush()<cr>
+nnoremap <leader>o :G fetch<cr>
+nnoremap <leader>O :Gupdate<cr>
 nnoremap <leader>g :call <sid>openFugitive()<cr>
 nnoremap <leader>d :Gchanges<cr>
 nnoremap <leader>C :0GlLog --pretty=oneline<cr>
 nnoremap <leader>c :GcLog --pretty=oneline<cr>
-nnoremap <leader>p :G fetch<cr>
-nnoremap <leader>P :G pull<cr>
+nnoremap <leader>p :G pull --rebase<cr>
+nnoremap <leader>P :G push<cr>
+nnoremap <leader><c-p> :Gpushf<cr>
 nnoremap <leader>s :call <sid>pickaxe(input("pickaxe /", "", "tag"))<cr>
 vnoremap <leader>s :<c-u>call <sid>pickaxe(<sid>selectedText())<cr>
 """"""""""""""""""""""""""""""""""" FUGITIVE """""""""""""""""""""""""""""""""">
