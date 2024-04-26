@@ -373,6 +373,14 @@ function! s:gitPush()
   endif
 endfunction
 
+function! s:gitCheckout(branch)
+  let l:branch = substitute(substitute(a:branch, '^.*\s\+', '', ''), 'remotes/origin/', '', '')
+  execute ":G checkout -B " . l:branch
+  echom "Switched to " . l:branch
+endfunction
+
+autocmd! FileType git nnoremap <buffer> w :<c-u>call <sid>gitCheckout(trim(getline(".")))<cr>
+
 command! -nargs=0 W Gwrite
 command! -nargs=0 E Gedit
 command! -nargs=0 D GDelete
@@ -500,26 +508,6 @@ function! s:oyVeyIssue()
   redraw!
 endfunction
 
-function! s:checkoutWorktree(branch)
-  let l:issue_no = matchstr(a:branch, '\v\d+')
-  let l:branch = substitute(substitute(a:branch, '^.*\s\+', '', ''), 'remotes/origin/', '', '')
-  let l:project_dir = trim(system("git worktree list --porcelain | grep -B 1 bare | head -n 1 | cut -d ' ' -f 2"))
-
-  if !empty(l:issue_no)
-    let l:worktree = l:project_dir . "/" . l:issue_no
-  else
-    let l:worktree = l:project_dir . "/" . l:branch
-  endif
-  if !isdirectory(l:worktree)
-    execute ":G worktree add -B " . l:branch . " " . l:worktree
-  endif
-  execute ":cd " . l:worktree
-  echom "Switched to " . l:worktree
-endfunction
-
-autocmd! FileType git nnoremap <buffer> w :<c-u>call <sid>checkoutWorktree(trim(getline(".")))<cr>
-nnoremap <leader>n :call <sid>checkoutWorktree(input("branch name /", ""))<cr>
-
 function! s:reportIssue()
   if !<sid>isBufferEmpty()
     let l:title = trim(getline(1))
@@ -532,7 +520,7 @@ function! s:reportIssue()
     let l:base = substitute(<sid>defaultBranch(), ".*/", "", "")
 
     execute ":!gh issue develop --base '" . l:base . "' --name '" . l:branch . "' " . l:issue_no
-    call <sid>checkoutWorktree(l:branch)
+    call <sid>gitCheckout(l:branch)
     execute ":!open " . l:url
     echom "Issue " . l:issue_no . " created"
   endif
