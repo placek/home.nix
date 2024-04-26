@@ -76,9 +76,7 @@
         core.attributesfile = config.vcs.gitAttributesFilePath;
         core.editor = config.editorExec;
         core.whitespace = "fix,-indent-with-non-tab,trailing-space,cr-at-eol";
-        core.default = "origin/HEAD";
-        core.logallrefupdates = true;
-        remote.origin.fetch = "+refs/heads/*:refs/remotes/origin/*";
+        core.default = "origin/master";
         difftool.prompt = false;
         difftool.trustExitCode = true;
         fetch.prune = true;
