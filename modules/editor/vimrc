@@ -521,6 +521,7 @@ nnoremap <leader>N :call <sid>prepareIssue()<cr>
 
 function! s:oyVeyCommitMessage()
   execute ":%!jarvis commit-message"
+  normal! ggVGgq
   redraw!
 endfunction
 
