@@ -24,8 +24,17 @@
 
     programs.fzf.enable = true;
     programs.lsd.enable = true;
-    programs.nnn.enable = true;
     programs.zoxide.enable = true;
+
+    programs.nnn = {
+      enable = true;
+      package = pkgs.nnn.override ({ withNerdIcons = true; });
+      bookmarks = { d = "~/Documents"; D = "~/Downloads"; p = "~/Projects"; };
+      plugins = {
+        src = (pkgs.fetchFromGitHub { owner = "jarun"; repo = "nnn"; rev = "v4.0"; sha256 = "sha256-Hpc8YaJeAzJoEi7aJ6DntH2VLkoR6ToP6tPYn3llR7k="; }) + "/plugins";
+        mappings = { z = "autojump"; x = "togglex"; r = "renamer"; s = "suedit"; };
+      };
+    };
 
     programs.fish = {
       enable = true;
