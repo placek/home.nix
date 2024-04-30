@@ -16,7 +16,6 @@
   config = {
     home.sessionVariables.SHELL = "fish";
 
-    programs.broot.enableFishIntegration = true;
     programs.fzf.enableFishIntegration = true;
     programs.nix-index.enableFishIntegration = true;
 
