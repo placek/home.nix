@@ -12,6 +12,7 @@
 
     nix.package = pkgs.nix;
     nix.settings.system-features = [ "big-parallel" "kvm" "benchmark" ];
+    nixpkgs.config.allowUnfree = true;
 
     programs.home-manager.enable = true;
 
