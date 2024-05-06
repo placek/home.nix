@@ -11,6 +11,7 @@
     '';
     programs.zathura.mappings = {
       "S" = "toggle_statusbar";
+      "ZZ" = "quit";
     };
     programs.zathura.options = {
       adjust-open = "best-fit";
