@@ -27,11 +27,11 @@
       zoom-min = 10;
 
       default-bg = config.gui.theme.base00;
-      default-fg = config.gui.theme.base05;
-      statusbar-fg = config.gui.theme.base05;
+      default-fg = config.gui.theme.base07;
+      statusbar-fg = config.gui.theme.base07;
       statusbar-bg = config.gui.theme.base00;
       inputbar-bg = config.gui.theme.base00;
-      inputbar-fg = config.gui.theme.base05;
+      inputbar-fg = config.gui.theme.base07;
       notification-bg = config.gui.theme.base00;
       notification-fg = config.gui.theme.base07;
       notification-error-bg = config.gui.theme.base00;
