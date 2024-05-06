@@ -10,13 +10,11 @@
       unmap q
     '';
     programs.zathura.mappings = {
-      "S" = "toggle_statusbar";
       "ZZ" = "quit";
     };
     programs.zathura.options = {
       adjust-open = "best-fit";
       font = "${config.gui.font.name} ${builtins.toString config.gui.font.size}";
-      guioptions = "";
       pages-per-row = 1;
       recolor = false;
       recolor-keephue = false;
