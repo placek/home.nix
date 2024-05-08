@@ -4,8 +4,13 @@ apply:
 
 configure:
 	@echo "Configuring NixOS..."
-	sudo cp --backup --interactive --link machines/omega/configuration.nix /etc/nixos/configuration.nix
+	sudo cp --backup --interactive --link machines/$$(hostname)/configuration.nix /etc/nixos/configuration.nix
 	sudo nixos-rebuild switch
+
+upgrade:
+	@echo "Configuring and upgrading NixOS..."
+	sudo cp --backup --interactive --link machines/$$(hostname)/configuration.nix /etc/nixos/configuration.nix
+	sudo nixos-rebuild switch --upgrade
 
 expire:
 	@echo "Expiring home-manager generations older than a month..."
