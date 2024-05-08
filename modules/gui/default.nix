@@ -53,7 +53,7 @@
   imports = [
     ./fonts.nix
 
-    ./autorandr
+    # ./autorandr
     ./dunst.nix
     ./feh.nix
     ./xmobar.nix
