@@ -1,8 +1,6 @@
 { pkgs
 }:
 pkgs.writeShellScriptBin "video" ''
-  #!${pkgs.stdenv.shell}
-
   trap 'rm -f "transforms.trf"' EXIT
 
   case "$1" in

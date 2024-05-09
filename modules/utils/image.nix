@@ -1,8 +1,6 @@
 { pkgs
 }:
 pkgs.writeShellScriptBin "image" ''
-  #!${pkgs.stdenv.shell}
-
   case "$1" in
     stack*) # combine images horizontally
       convert +append "$1" "$2" "''${1%.*}_''${2%.*}_merged.png"

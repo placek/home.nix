@@ -1,8 +1,6 @@
 { pkgs
 }:
 pkgs.writeShellScriptBin "psalmus" ''
-  #!${pkgs.stdenv.shell}
-
   if [ $# -eq 0 ]; then
     data=$(date +"%Y-%m-%d")
   else

@@ -1,8 +1,6 @@
 { pkgs
 }:
 pkgs.writeShellScriptBin "audio" ''
-  #!${pkgs.stdenv.shell}
-
   case "$1" in
     dev*) # list devices
       pactl list sources short

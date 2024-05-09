@@ -1,8 +1,6 @@
 { pkgs
 }:
 pkgs.writeShellScriptBin "speak" ''
-  #!${pkgs.stdenv.shell}
-
   OUTPUT=unset
   LANGUAGE="en"
 
