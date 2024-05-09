@@ -59,8 +59,8 @@ in
       speak
       video
 
-      # dcc6502
-      # minipro
+      dcc6502           # 6502 disassembler
+      minipro           # EEPROM programmer
       # vasm
       # pkgsCross.avr.buildPackages.gcc
 
