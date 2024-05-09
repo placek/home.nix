@@ -69,60 +69,53 @@ in
       # vasm
       # pkgsCross.avr.buildPackages.gcc
 
-      ansible
-      avrdude
-      bash
-      bind
-      cbqn
-      croc
-      cryptsetup
-      curl
-      docker-compose
-      entr
-      fd
-      ffmpeg-full
-      file
-      ghostscript
-      go-jira
-      htmlq
-      imagemagick
-      jmespath
-      jmtpfs
-      killall
-      libinput
-      lightburn
-      mdcat
-      nap
-      netpbm
-      ngrep
-      ngrok
-      niv
-      nix-direnv-flakes
-      nix-prefetch-git
-      openssl
-      openvpn
-      orca-c
-      qmk
-      rclone
-      ripgrep
-      rlwrap
-      rnix-lsp
-      rpi-imager
-      rsync
-      sox
-      sshfs
-      timidity
-      tiv
-      tmate
-      unrar
-      unzip
-      usbutils
-      uucp
-      vagrant
-      wally-cli
-      wget
-      wrk2
-      yq
+      ansible           # manage remote machines
+      avrdude           # program AVR microcontrollers
+      bash              # shell
+      bind              # DNS server
+      cbqn              # BQN interpreter
+      croc              # transfer files
+      cryptsetup        # manage encrypted volumes
+      curl              # download files
+      docker-compose    # manage multi-container Docker applications
+      entr              # run arbitrary commands when files change
+      fd                # find files
+      ffmpeg-full       # multimedia framework
+      file              # determine file type
+      ghostscript       # manipulate PDF files
+      go-jira           # interact with Jira
+      htmlq             # extract data from HTML
+      imagemagick       # manipulate images
+      killall           # kill processes by name
+      libinput          # input device management
+      lightburn         # laser cutter software
+      mdcat             # render markdown
+      netpbm            # image processing tools
+      ngrep             # network packet analyzer
+      ngrok             # expose local servers to the internet
+      nix-direnv-flakes # Nix flakes support
+      nix-prefetch-git  # fetch Git repositories
+      openssl           # cryptographic library
+      openvpn           # VPN client
+      orca-c            # midi sequencer
+      qmk               # keyboard firmware
+      rclone            # cloud storage
+      ripgrep           # search tool
+      rlwrap            # readline wrapper
+      rnix-lsp          # Nix language server
+      rpi-imager        # Raspberry Pi OS image writer
+      rsync             # file synchronization
+      sox               # audio processing
+      sshfs             # mount remote filesystems
+      tmate             # terminal sharing
+      unrar             # extract RAR archives
+      unzip             # extract ZIP archives
+      usbutils          # USB device management
+      uucp              # Unix-to-Unix copy
+      vagrant           # virtual machine manager
+      wget              # download files
+      wrk2              # HTTP benchmarking tool
+      yq                # YAML processor
     ];
   };
 }
