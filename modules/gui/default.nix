@@ -73,6 +73,7 @@
       xclip
       xf86_input_wacom
 
+      arandr
       gimp
       inkscape-with-extensions
       kicad
