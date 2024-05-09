@@ -61,7 +61,7 @@ in
 
       dcc6502           # 6502 disassembler
       minipro           # EEPROM programmer
-      # vasm
+      vasm              # 6502 assembler
       # pkgsCross.avr.buildPackages.gcc
 
       ansible           # manage remote machines

@@ -3,15 +3,17 @@
 }:
 pkgs.stdenv.mkDerivation rec {
   pname   = "vasm";
-  version = "1.8j";
+  version = "1.9j";
 
   src = pkgs.fetchFromGitHub {
-    owner  = "mbitsnbites";
+    owner  = "StarWolf3000";
     repo   = "vasm-mirror";
-    rev    = "2dce5498402353bbe01d74949fe765ee3620d6d5";
-    sha256 = "sha256-GehSxHSlTPzOUq+YiZYpmGJyQBv0ufJl7CuboBJ+l3M=";
+    rev    = "e092f8c9fe97f1d850d78e9b790f274eecd4b4ef";
+    sha256 = "sha256-ymuS78pcYKRWHRj8PrR1CTKKes16FZ3YIPXxvnOFZ2c=";
   };
 
+  buildInputs = [ pkgs.pkg-config ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   makeFlags = [ "CPU=6502" "SYNTAX=oldstyle" ];
   installPhase = ''
     mkdir -p $out/bin
