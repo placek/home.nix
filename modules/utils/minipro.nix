@@ -9,7 +9,7 @@ pkgs.stdenv.mkDerivation rec {
     owner  = "DavidGriffith";
     repo   = "minipro";
     rev    = "22ec014f6bf0c45741d68d03c99489d0b852ff06";
-    sha256 = "sha256-qEW/kmikD8Sa/v9HFM6ceXEnoHlo4ljwzOC8fsjxR4s=";
+    sha256 = "sha256-GehSxHSlTPzOUq+YiZYpmGJyQBv0ufJl7CuboBJ+l3M=";
   };
 
   nativeBuildInputs = with pkgs; [ pkg-config installShellFiles ];
