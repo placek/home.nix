@@ -43,15 +43,12 @@ in
 
   config = {
     programs.aria2.enable = true;
+    programs.bat.config.theme = "gruvbox-dark";
+    programs.bat.enable = true;
     programs.direnv.enable = true;
     programs.htop.enable = true;
     programs.jq.enable = true;
     programs.nix-index.enable = true;
-
-    programs.bat = {
-      enable = true;
-      config.theme = "gruvbox-dark";
-    };
 
     home.packages = with pkgs; [
       audio
