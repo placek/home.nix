@@ -15,7 +15,6 @@ let
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
   minipro = import ./minipro.nix { inherit pkgs; };
   jarvis = import ./jarvis.nix { inherit pkgs; };
-  gh-pr = import ./gh-pr.nix { inherit pkgs; };
 in
 {
   options = with lib; {
@@ -59,7 +58,6 @@ in
       psalmus
       speak
       video
-      gh-pr
 
       # dcc6502
       # minipro
