@@ -69,7 +69,6 @@
 
     home.packages = with pkgs; [
       libnotify
-      shotwell
       xclip
       xf86_input_wacom
 
