@@ -107,6 +107,18 @@ pkgs.writeShellScriptBin "jarvis" ''
       data=$(${pkgs.jq}/bin/jq -n --arg commit_message "$commit_message" --argjson data "$data" '$data + [ { role: "user", content: $commit_message } ]')
     done
     ;;
+
+  report )
+    instructions="Compose a report by analyzing git commits from the last 24 hours. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise report that provides all the necessary information to understand the progress and the context of the changes. The report should be in a form of a list of bullet points, each per task, with an ID from the commit message (if given) and a brief description of the progress. Collect all the messages for a given task in a single bullet."
+    author=$(${pkgs.git}/bin/git config --get user.email)
+    commits=$(${pkgs.git}/bin/git log --since="24 hours ago" --author=$author --format=format:"%H" --reverse)
+    data=$(${pkgs.jq}/bin/jq -n --arg instructions "$instructions" '[ { role: "system", content: $instructions } ]')
+    for hash in $commits; do
+      commit_message=$(${pkgs.git}/bin/git show -s --format=%B $hash)
+      data=$(${pkgs.jq}/bin/jq -n --arg commit_message "$commit_message" --argjson data "$data" '$data + [ { role: "user", content: $commit_message } ]')
+    done
+    ;;
+
   * )
     >&2 echo "jarvis: unknown command $command"
     usage
