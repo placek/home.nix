@@ -1,10 +1,10 @@
 { pkgs
 }:
-pkgs.writeShellScriptBin "jarvis" ''
+pkgs.writeShellScriptBin "tertius" ''
   set -e
 
   if [ -z "$OPENAI_API_KEY" ]; then
-    >&2 echo "jarvis: please set the OPENAI_API_KEY environment variable"
+    >&2 echo "tertius: please set the OPENAI_API_KEY environment variable"
     exit 1
   fi
 
@@ -13,11 +13,11 @@ pkgs.writeShellScriptBin "jarvis" ''
   data=""
 
   usage() {
-    >&2 echo "Usage: jarvis [-m \"model\"] ask"
-    >&2 echo "       jarvis [-m \"model\"] grammar"
-    >&2 echo "       jarvis [-m \"model\"] story"
-    >&2 echo "       jarvis [-m \"model\"] commit-message"
-    >&2 echo "       jarvis [-m \"model\"] pull-request"
+    >&2 echo "Usage: tertius [-m \"model\"] ask"
+    >&2 echo "       tertius [-m \"model\"] grammar"
+    >&2 echo "       tertius [-m \"model\"] story"
+    >&2 echo "       tertius [-m \"model\"] commit-message"
+    >&2 echo "       tertius [-m \"model\"] pull-request"
   }
 
   while getopts ":m:" arg; do
@@ -26,12 +26,12 @@ pkgs.writeShellScriptBin "jarvis" ''
       model=$OPTARG
       ;;
     \? )
-      >&2 echo "jarvis: invalid option: -$OPTARG."
+      >&2 echo "tertius: invalid option: -$OPTARG."
       usage
       exit 1
       ;;
     : )
-      >&2 echo "jarvis: option -$OPTARG requires an argument."
+      >&2 echo "tertius: option -$OPTARG requires an argument."
       usage
       exit 1
       ;;
@@ -40,7 +40,7 @@ pkgs.writeShellScriptBin "jarvis" ''
   shift $((OPTIND -1))
 
   if [ $# -eq 0 ]; then
-    >&2 echo "jarvis: no command provided."
+    >&2 echo "tertius: no command provided."
     usage
     exit 1
   fi
@@ -120,7 +120,7 @@ pkgs.writeShellScriptBin "jarvis" ''
     ;;
 
   * )
-    >&2 echo "jarvis: unknown command $command"
+    >&2 echo "tertius: unknown command $command"
     usage
     exit 1
     ;;

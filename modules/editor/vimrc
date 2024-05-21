@@ -451,7 +451,7 @@ autocmd BufReadPost * call <sid>setBlameLine()
 
 """"""""""""""""""""""""""""""""""" WORKFLOW """""""""""""""""""""""""""""""""""
 function! s:askOyVeySelected()
-  execute ":'<,'>!jarvis ask"
+  execute ":'<,'>!tertius ask"
   redraw!
 endfunction
 
@@ -468,7 +468,7 @@ endfunction
 function! s:oyVeyPullRequestDescription()
   call <sid>openIntermediateBuffer()
   file /tmp/pull-request-description
-  let l:summary = substitute(system("jarvis pull-request"), '\r', '', 'g')
+  let l:summary = substitute(system("tertius pull-request"), '\r', '', 'g')
   execute "0put =l:summary"
   redraw!
   autocmd! BufWinLeave <buffer> call s:updatePullRequestDescription()
@@ -501,7 +501,7 @@ function! s:prepareIssue()
 endfunction
 
 function! s:oyVeyIssue()
-  execute ":%!jarvis story"
+  execute ":%!tertius story"
   redraw!
 endfunction
 
@@ -526,7 +526,7 @@ endfunction
 nnoremap <leader>N :call <sid>prepareIssue()<cr>
 
 function! s:oyVeyCommitMessage()
-  execute ":%!jarvis commit-message"
+  execute ":%!tertius commit-message"
   normal! ggVGgq
   redraw!
 endfunction

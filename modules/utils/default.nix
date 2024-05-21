@@ -14,7 +14,7 @@ let
   vasm = import ./vasm.nix { inherit pkgs; };
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
   minipro = import ./minipro.nix { inherit pkgs; };
-  jarvis = import ./jarvis.nix { inherit pkgs; };
+  tertius = import ./tertius.nix { inherit pkgs; };
 in
 {
   options = with lib; {
@@ -51,7 +51,7 @@ in
 
     home.packages = with pkgs; [
       audio
-      jarvis
+      tertius
       image
       pbcopy
       pbpaste
