@@ -24,6 +24,11 @@ let
     path = "Program Files (x86)/The Creative Assembly/Rome - Total War";
     exe  = "RomeTW-ALX.exe";
   };
+  df = (import (builtins.fetchTarball { url = "https://github.com/NixOS/nixpkgs/archive/3f888f673360440b6b7e6994a1e6d092d7588e84.tar.gz"; }) {}).pkgs.dwarf-fortress.override {
+    theme = "spacefox";
+    enableIntro = false;
+    enableFPS = true;
+  };
 in
 {
   config = {
@@ -31,6 +36,7 @@ in
       wine-rome-total-war
       wine-rome-barbarian-invasion
       wine-rome-alexander
+      df
 
       pkgs.wineWowPackages.stable
       pkgs.steam
