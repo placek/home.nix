@@ -483,12 +483,8 @@ function! s:updatePullRequestDescription()
       execute ":!open " . l:url
     else
       let l:issue_no = matchstr(trim(system('git rev-parse --abbrev-ref HEAD')), '\v\d+')
-      if !empty(l:issue_no)
-        let l:cmd = trim(system("gh issue view " . l:issue_no . " --json number,title,milestone --jq \"\\\"gh pr create -w -a '@me' -t '[#\\(.number)] \\(.title)' -m '\\(.milestone.title)' -F -\\\"\" 2>/dev/null"))
-        execute ":%!" . l:cmd
-      else
-        execute ":%!gh pr create -w -a '@me' -F -"
-      endif
+      let l:cmd = trim(system("gh issue view " . l:issue_no . " --json number,title,milestone --jq \"\\\"-t '[#\\(.number)] \\(.title)' -m '\\(.milestone.title)'\\\"\" 2>/dev/null"))
+      execute ":%!gh pr create -w -a '@me' -F - " . l:cmd
     endif
   endif
 endfunction
