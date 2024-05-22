@@ -131,7 +131,7 @@ in
                                                              , ("mostly cloudy",           "overcast")
                                                              , ("considerable cloudiness", "overcast")
                                                              ]
-                                                             [ "-t", "<fc=${config.gui.theme.base07},${config.gui.theme.base08}>\xE0B2</fc><fc=${config.gui.theme.base00},${config.gui.theme.base07}> ${actionCmd (openUrlCmd "https://m.meteo.pl/brojce/60/lodzki-wschodni") "" "" "<skyConditionS> <tempC>\\x2103 <rh>% <windKnots>kn <windCardinal>"} </fc>"
+                                                             [ "-t", "<fc=${config.gui.theme.base07},${config.gui.theme.base08}>\xE0B2</fc><fc=${config.gui.theme.base00},${config.gui.theme.base07}> ${actionCmd (openUrlCmd "https://www.meteo.pl/") "" "" "<skyConditionS> <tempC>\\x2103 <rh>% <windKnots>kn <windCardinal>"} </fc>"
                                                              ] 18000
 
                             , Run UnsafeStdinReader
