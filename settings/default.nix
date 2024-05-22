@@ -35,6 +35,7 @@
     ssh.secretKeyID = "D75BFE7D95CB0CB4B3FE0B64E624230BAE5B5299";
     ssh.publicKey = ./placek.asc;
 
+    security.gpgKeyID = "0xE624230BAE5B5299";
     security.passwordStore = "${config.home.homeDirectory}/.password-store";
   };
 }

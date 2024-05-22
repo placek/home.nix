@@ -19,10 +19,15 @@
       type = types.str;
       description = "A public SSH key.";
     };
+
+    security.gpgKeyID = mkOption {
+      type = types.str;
+      description = "A public GPG key ID.";
+    };
   };
 
   config = {
-    home.sessionVariables.KEYID = "0xE624230BAE5B5299";
+    home.sessionVariables.KEYID = config.security.gpgKeyID;
 
     home.packages = with pkgs; [
       pinentry-gtk2
