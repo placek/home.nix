@@ -34,6 +34,9 @@ in
   config = {
     home.packages = [ qutebrowser ];
 
+    # backup browser
+    programs.firefox.enable = true;
+
     xdg.desktopEntries.qutebrowser = {
       name = "qutebrowser";
       genericName = "qutebrowser";
