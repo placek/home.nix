@@ -27,13 +27,8 @@
     home.packages = with pkgs; [
       pinentry-gtk2
       qtpass
+      (pkgs.writeShellScriptBin "bavpn" "sudo openvpn ${./binarapps-office.ovpn}")
     ];
-
-    home.file.binarapps-vpn = {
-      enable = true;
-      target = ".binarapps-office.ovpn";
-      source = ./binarapps-office.ovpn;
-    };
 
     services.gpg-agent = {
       enable = true;
