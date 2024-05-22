@@ -109,7 +109,7 @@ pkgs.writeShellScriptBin "tertius" ''
     ;;
 
   report )
-    instructions="Compose a report by analyzing git commits from the last 24 hours. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise report that provides all the necessary information to understand the progress and the context of the changes. The report should be in a form of a list of bullet points, each per task, with an ID from the commit message (if given) and a brief description of the progress. Collect all the messages for a given task in a single bullet."
+    instructions+="Compose a brief report on work progress by analyzing git commits from the last 24 hours. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise report that provides all the necessary information to understand the progress and the context of the changes. The report should be in a form of a list of bullet points, one sentence per bullet point, no headers, no nested lists, each bullet point per task, including the task ID if available. Collect all the git commit messages for a given task in a single bullet. Don't mention the commits, only the progress. "
     author=$(${pkgs.git}/bin/git config --get user.email)
     commits=$(${pkgs.git}/bin/git log --since="24 hours ago" --author=$author --format=format:"%H" --reverse)
     data=$(${pkgs.jq}/bin/jq -n --arg instructions "$instructions" '[ { role: "system", content: $instructions } ]')
