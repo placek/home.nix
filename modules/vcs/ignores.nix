@@ -1,6 +1,5 @@
 [
   "*.key"
-  "*.sql"
   "*~"
   ".DS_Store"
   ".authorized_keys"
