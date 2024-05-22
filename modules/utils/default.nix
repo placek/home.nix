@@ -8,8 +8,8 @@ let
   image = import ./image.nix { inherit pkgs; };
   video = import ./video.nix { inherit pkgs; };
   audio = import ./audio.nix { inherit pkgs; };
-  pbcopy = import ./pbcopy.nix { inherit pkgs; };
-  pbpaste = import ./pbpaste.nix { inherit pkgs; };
+  pbcopy = pkgs.writeShellScriptBin "pbcopy" "xclip -selection clipboard";
+  pbpaste = pkgs.writeShellScriptBin "pbpaste" "xclip -selection clipboard -o";
   psalmus = import ./psalmus.nix { inherit pkgs; };
   vasm = import ./vasm.nix { inherit pkgs; };
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
