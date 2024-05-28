@@ -379,7 +379,7 @@ function! s:gitCheckout(branch)
   echom "Switched to " . l:branch
 endfunction
 
-autocmd! FileType git nnoremap <buffer> w :<c-u>call <sid>gitCheckout(trim(getline(".")))<cr>
+autocmd FileType git nnoremap <buffer> w :<c-u>call <sid>gitCheckout(trim(getline(".")))<cr>
 nnoremap <leader>n :<c-u>call <sid>gitCheckout(trim(input("branch /")))<cr>
 
 function! s:branchFromCommit()
@@ -398,7 +398,7 @@ function! s:cherryPickToBranch(branch)
   execute ":G cherry-pick " . l:commit
 endfunction
 
-autocmd! FileType git nnoremap <buffer> W :<c-u>call <sid>cherryPickToBranch(trim(getline(".")))<cr>
+autocmd FileType git nnoremap <buffer> W :<c-u>call <sid>cherryPickToBranch(trim(getline(".")))<cr>
 
 command! -nargs=0 W Gwrite
 command! -nargs=0 E Gedit
