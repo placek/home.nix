@@ -173,36 +173,38 @@ endfunction
 
 let g:ale_close_preview_on_insert = 1
 let g:ale_completion_enabled = 1
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_floating_preview = 1
-let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
+let g:ale_floating_preview = 0
+let g:ale_set_loclist = 1
+let g:ale_loclist_msg_format = '%severity%: %s'
+
+let g:ale_echo_cursor = 0
+
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = 'E'
 let g:ale_sign_info = 'I'
 let g:ale_sign_style_error = 'ES'
 let g:ale_sign_style_warning = 'WS'
 let g:ale_sign_warning = 'W'
-let g:ale_virtualtext_cursor = 'current'
+
+let g:ale_virtualtext_cursor = 'all'
+let g:ale_virtualtext_prefix = '%comment% '
 
 set omnifunc=ale#completion#OmniFunc
 inoremap <tab> <c-n>
-inoremap <c-tab> <c-x><c-o>
+inoremap <s-tab> <c-x><c-o>
 
-nnoremap <silent>[e     :ALEPreviousWrap<cr>
-nnoremap <silent>]e     :ALENextWrap<cr>
+nnoremap <silent> [e    <Plug>(ale_previous_wrap)
+nnoremap <silent> ]e    <Plug>(ale_next_wrap)
 
-nnoremap <localleader>h :ALEHover<cr>
-nnoremap <localleader>H :ALEDetail<cr>
-nnoremap <localleader>a :ALECodeAction<cr>
-nnoremap <localleader>A :ALEFix<cr>
-nnoremap <localleader>d :ALEGoToDefinition<cr>
-nnoremap <localleader>D :ALEGoToTypeDefinition<cr>
-nnoremap <localleader>i :ALEInfo<cr>
-nnoremap <localleader>I :ALEToggle<cr>
-nnoremap <localleader>w :ALEPopulateLocList<cr>
-nnoremap <localleader>F :ALEFindReferences<cr>
+nnoremap <localleader>a <Plug>(ale_code_action)
+nnoremap <localleader>A <Plug>(ale_fix)
+nnoremap <localleader>d <Plug>(ale_go_to_definition_in_vsplit)
+nnoremap <localleader>D <Plug>(ale_go_to_type_definition_in_vsplit)
+nnoremap <localleader>s <Plug>(ale_info)
+nnoremap <localleader>S <Plug>(ale_toggle)
+nnoremap <localleader>F :ALEFindReferences -quickfix \| copen<cr>
+nnoremap <localleader>g <Plug>(ale_detail)
+nnoremap <localleader>G <Plug>(ale_hover)
 
 """"""""""""""""""""""""""""""""""" COMMENT """""""""""""""""""""""""""""""""""<
 function! s:commentToggle()
