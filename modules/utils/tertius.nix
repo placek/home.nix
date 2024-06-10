@@ -89,6 +89,19 @@ pkgs.writeShellScriptBin "tertius" ''
       -d "$payload" | ${pkgs.jq}/bin/jq -M -r '.choices[0].message.content'
   }
 
+  function user_story_header() {
+    if [ -n "$user_story_id" ]; then
+      case $command in
+      commit-message )
+        echo -ne "[#$user_story_id] "
+        ;;
+      pull-request )
+        echo -e "Closes #$user_story_id."; echo
+        ;;
+      esac
+    fi
+  }
+
   while getopts ":" arg; do
     case $arg in
     \? )
@@ -154,13 +167,7 @@ pkgs.writeShellScriptBin "tertius" ''
     ;;
   esac
 
-  if [ -n "$user_story_id" ]; then
-    case $command in
-    commit-message ) echo -ne "[#$user_story_id] "; openai_response ;;
-    pull-request ) echo -e "Closes #$user_story_id."; echo; openai_response ;;
-    esac
-  else
-    openai_response
-  fi
+  user_story_header
+  openai_response
   exit 0
 ''
