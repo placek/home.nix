@@ -485,7 +485,7 @@ endfunction
 function! s:oyVeyPullRequestDescription()
   call <sid>openIntermediateBuffer()
   file /tmp/pull-request-description
-  let l:summary = substitute(system("tertius pull-request"), '\r', '', 'g')
+  let l:summary = substitute(system("tertius pull-request write"), '\r', '', 'g')
   execute "0put =l:summary"
   redraw!
   autocmd! BufWinLeave <buffer> call s:updatePullRequestDescription()
@@ -493,16 +493,7 @@ endfunction
 
 function! s:updatePullRequestDescription()
   if !<sid>isBufferEmpty()
-    let l:pr_no = trim(system('gh current --json number --jq ".number" 2>/dev/null'))
-    if !empty(l:pr_no)
-      execute ":%!gh pr edit " . l:pr_no . " -F -"
-      let l:url = trim(getline(1))
-      execute ":!open " . l:url
-    else
-      let l:issue_no = matchstr(trim(system('git rev-parse --abbrev-ref HEAD')), '\v\d+')
-      let l:cmd = trim(system("gh issue view " . l:issue_no . " --json number,title,milestone --jq \"\\\"-t '[#\\(.number)] \\(.title)' -m '\\(.milestone.title)'\\\"\" 2>/dev/null"))
-      execute ":%!gh pr create -w -a '@me' -F - " . l:cmd
-    endif
+    execute ":%!tertius pull-request publish"
   endif
 endfunction
 

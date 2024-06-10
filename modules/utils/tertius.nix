@@ -19,9 +19,12 @@ pkgs.writeShellScriptBin "tertius" ''
   usage() {
     >&2 echo "Usage: tertius ask"
     >&2 echo "       tertius grammar"
-    >&2 echo "       tertius story [get|write|publish]"
+    >&2 echo "       tertius story get"
+    >&2 echo "       tertius story write"
+    >&2 echo "       tertius story publish"
     >&2 echo "       tertius commit-message"
-    >&2 echo "       tertius pull-request"
+    >&2 echo "       tertius pull-request write"
+    >&2 echo "       tertius pull-request publish"
     >&2 echo "       tertius report"
   }
 
@@ -34,9 +37,17 @@ pkgs.writeShellScriptBin "tertius" ''
   }
 
   function user_story_id_from_branch() {
-    head_commit=$(${pkgs.git}/bin/git rev-parse HEAD 2>/dev/null)
-    if [ -n "$head_commit" ]; then
-      echo $head_commit | ${pkgs.gnused}/bin/sed -n 's@.*#\([[:digit:]]\+\).*@\1@p'
+    git rev-parse --abbrev-ref HEAD | sed -n 's@.*/\([[:digit:]]\+\).*@\1@p'
+  }
+
+  function user_story_title() {
+    user_story_id=$(user_story_id_from_branch)
+    if [ -n "$user_story_id" ]; then
+      case $issue_tracker in
+      github )
+        ${pkgs.gh}/bin/gh issue view --json title $user_story_id | ${pkgs.jq}/bin/jq "\"[#$user_story_id] \(.title)\""
+        ;;
+      esac
     fi
   }
 
@@ -66,6 +77,17 @@ pkgs.writeShellScriptBin "tertius" ''
       branch_name="$user_story_type/$user_story_id-$branch_descr"
       ${pkgs.gh}/bin/gh issue develop --base "$base" --name "$branch_name" "$user_story_id"
       ${browserExec} "$user_story_url"
+      ;;
+    esac
+  }
+
+  function publish_pull_request() {
+    body=$(cat)
+    case $issue_tracker in
+    github )
+      user_story_title=$(user_story_title)
+      pull_request_url=$(echo $body | ${pkgs.gh}/bin/gh pr create -t "$user_story_title" -F -)
+      ${browserExec} "$pull_request_url"
       ;;
     esac
   }
@@ -189,12 +211,19 @@ pkgs.writeShellScriptBin "tertius" ''
     ;; # story
 
   pull-request )
-    apply_instruction "Compose a pull request description by analyzing any given commit messages. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outome of the changes themselves - each such component has to be separated by two newlines and have no header."
-    apply_user_story
-    apply_commit_messages
-    user_story_header
-    openai_response
-    ;;
+    case $2 in
+    write )
+      apply_instruction "Compose a pull request description by analyzing any given commit messages. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outome of the changes themselves - each such component has to be separated by two newlines and have no header."
+      apply_user_story
+      apply_commit_messages
+      user_story_header
+      openai_response
+      ;;
+    publish )
+      publish_pull_request
+      ;;
+    esac
+    ;; # pull-request
 
   report )
     apply_instruction "Compose a brief report on work progress by analyzing git commits from the last $duration. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise report that provides all the necessary information to understand the progress and the context of the changes. The report should be in a form of a list of bullet points, one sentence per bullet point, no headers, no nested lists, each bullet point per task, including the task ID if available. Collect all the git commit messages for a given task in a single bullet. Don't mention the commits, only the progress. "
