@@ -256,12 +256,8 @@ nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
 
 """"""""""""""""""""""""""""""""""""" TODO """"""""""""""""""""""""""""""""""""<
 function! s:putCurrentGitHubIssue()
-  let l:branch = trim(system('git rev-parse --abbrev-ref HEAD'))
-  let l:issue_no = matchstr(l:branch, '\v\d+')
-  if !empty(l:issue_no)
-    let l:issue = substitute(system("gh issue view --json title,body --jq '\"\\(.title)\\n\\n\\(.body)\"' " . l:issue_no), '\r', '', 'g')
-    execute "0put =l:issue"
-  endif
+  let l:issue = substitute(system("tertius story get"), '\r', '', 'g')
+  execute "0put =l:issue"
 endfunction
 
 function! s:toggleTodoFile()
@@ -518,7 +514,7 @@ function! s:prepareIssue()
 endfunction
 
 function! s:oyVeyIssue()
-  execute ":%!tertius story"
+  execute ":%!tertius story write"
   redraw!
 endfunction
 
