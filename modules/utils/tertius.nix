@@ -1,4 +1,5 @@
 { pkgs
+, browserExec
 }:
 pkgs.writeShellScriptBin "tertius" ''
   set -e
@@ -18,7 +19,7 @@ pkgs.writeShellScriptBin "tertius" ''
   usage() {
     >&2 echo "Usage: tertius ask"
     >&2 echo "       tertius grammar"
-    >&2 echo "       tertius story [get|write]"
+    >&2 echo "       tertius story [get|write|publish]"
     >&2 echo "       tertius commit-message"
     >&2 echo "       tertius pull-request"
     >&2 echo "       tertius report"
@@ -48,6 +49,25 @@ pkgs.writeShellScriptBin "tertius" ''
         ;;
       esac
     fi
+  }
+
+  function publish_user_story() {
+    user_story_type=$1
+    body=$(cat)
+    user_story_title=$(echo "$body" | head -n 1)
+    user_story_body=$(echo "$body" | tail -n +2)
+    default_branch=$(${pkgs.git}/bin/git config --get core.default)
+    base=$(echo $default_branch | ${pkgs.gnused}/bin/sed 's@.*/@@')
+    branch_descr=$(echo $user_story_title | ${pkgs.gnused}/bin/sed -E 's/.*/\L&/; s/[^a-z0-9]+/-/g; s/-$//; s/^-//;')
+    case $issue_tracker in
+    github )
+      user_story_url=$(echo "$user_story_body" | ${pkgs.gh}/bin/gh issue create -t "$user_story_title" -a "@me" -F -)
+      user_story_id=$(echo $user_story_url | ${pkgs.gnused}/bin/sed -n 's@.*github.com/[^/]\+/[^/]\+/issues/\([[:digit:]]\+\).*@\1@p')
+      branch_name="$user_story_type/$user_story_id-$branch_descr"
+      ${pkgs.gh}/bin/gh issue develop --base "$base" --name "$branch_name" "$user_story_id"
+      ${browserExec} "$user_story_url"
+      ;;
+    esac
   }
 
   function apply_instruction() {
@@ -161,6 +181,10 @@ pkgs.writeShellScriptBin "tertius" ''
       apply_question_from_stdin
       user_story_header
       openai_response
+      ;;
+    publish )
+      publish_user_story $3
+      ;;
     esac
     ;; # story
 

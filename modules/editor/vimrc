@@ -520,19 +520,8 @@ endfunction
 
 function! s:reportIssue()
   if !<sid>isBufferEmpty()
-    let l:title = trim(getline(1))
-    execute ":2,$!gh issue create -t '" . l:title . "' -a '@me' -F -"
-    let l:url = trim(getline(2))
     let l:type = input("branch type /", "")
-    let l:description = substitute(substitute(substitute(tolower(l:title), '\s\+', '-', 'g'), '[^a-z0-9-]', '', 'g'), '-\+$', '', '')
-    let l:issue_no = matchstr(l:url, '\v\d+')
-    let l:branch = tolower(l:type) . "/" . l:issue_no . "-" . l:description
-    let l:base = substitute(<sid>defaultBranch(), ".*/", "", "")
-
-    execute ":!gh issue develop --base '" . l:base . "' --name '" . l:branch . "' " . l:issue_no
-    call <sid>gitCheckout(l:branch)
-    execute ":!open " . l:url
-    echom "Issue " . l:issue_no . " created"
+    execute ":%!tertius story publish " . l:type
   endif
 endfunction
 

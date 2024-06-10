@@ -14,7 +14,7 @@ let
   vasm = import ./vasm.nix { inherit pkgs; };
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
   minipro = import ./minipro.nix { inherit pkgs; };
-  tertius = import ./tertius.nix { inherit pkgs; };
+  tertius = import ./tertius.nix { inherit pkgs; inherit (config) browserExec; };
 in
 {
   options = with lib; {
