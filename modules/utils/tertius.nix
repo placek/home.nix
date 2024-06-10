@@ -11,6 +11,7 @@ pkgs.writeShellScriptBin "tertius" ''
   model="''${OPENAI_MODEL:-gpt-3.5-turbo}"
   language="''${OPENAI_LANGUAGE:-english}"
   issue_tracker="''${OPENAI_ISSUE_TRACKER:-github}"
+  duration="''${OPENAI_DURATION:-24 hours}"
   payload_template='{ model: $model, temperature: 1, max_tokens: 4095, top_p: 1, frequency_penalty: 0, presence_penalty: 0, messages: $data }'
   data="[]"
 
@@ -156,8 +157,8 @@ pkgs.writeShellScriptBin "tertius" ''
     ;;
 
   report )
-    apply_instruction "Compose a brief report on work progress by analyzing git commits from the last 24 hours. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise report that provides all the necessary information to understand the progress and the context of the changes. The report should be in a form of a list of bullet points, one sentence per bullet point, no headers, no nested lists, each bullet point per task, including the task ID if available. Collect all the git commit messages for a given task in a single bullet. Don't mention the commits, only the progress. "
-    apply_commit_messages_from "24 hours ago"
+    apply_instruction "Compose a brief report on work progress by analyzing git commits from the last $duration. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise report that provides all the necessary information to understand the progress and the context of the changes. The report should be in a form of a list of bullet points, one sentence per bullet point, no headers, no nested lists, each bullet point per task, including the task ID if available. Collect all the git commit messages for a given task in a single bullet. Don't mention the commits, only the progress. "
+    apply_commit_messages_from "$duration ago"
     ;;
 
   * )
