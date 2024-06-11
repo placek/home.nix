@@ -526,6 +526,28 @@ endfunction
 
 autocmd! FileType gitcommit nnoremap <buffer> <cr> :<c-u>call <sid>oyVeyCommitMessage()<cr>
 
+function! s:oyVeyFixError()
+  let l:loclist = ale#engine#GetLoclist(bufnr('%'))
+  if empty(l:loclist)
+    return
+  endif
+  let [l:lnum, l:col] = getpos('.')[1:2]
+  let l:item_under_cursor = filter(l:loclist, {_, v -> v.lnum == l:lnum && v.col <= l:col && (has_key(v, 'end_col') ? v.end_col : v.col) >= l:col})
+  if empty(l:item_under_cursor)
+    return
+  endif
+  let l:item = l:item_under_cursor[0]
+  let l:detail = printf("in file %s at line %d and column %s. This are the details of the problem:\n%s", expand('%:.'), l:item.lnum, l:item.col, l:item.text)
+  let l:solution = system('tertius fix-error ' . expand('%:p'), l:detail)
+  let lines = split(l:solution, "\n")
+  for i in range(len(lines))
+    let lines[i] = printf(&commentstring, lines[i])
+  endfor
+  call append(line('.'), lines)
+endfunction
+
+nnoremap <localleader>y :call <sid>oyVeyFixError()<cr>
+
 """""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""""<
 " checks if a buffer is empty
 function! s:isBufferEmpty()

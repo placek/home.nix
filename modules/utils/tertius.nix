@@ -21,11 +21,12 @@ pkgs.writeShellScriptBin "tertius" ''
     >&2 echo "       tertius grammar"
     >&2 echo "       tertius story get"
     >&2 echo "       tertius story write"
-    >&2 echo "       tertius story publish"
+    >&2 echo "       tertius story publish TYPE"
     >&2 echo "       tertius commit-message"
     >&2 echo "       tertius pull-request write"
     >&2 echo "       tertius pull-request publish"
     >&2 echo "       tertius report"
+    >&2 echo "       tertius fix-error FILE"
   }
 
   function current_branch_commits() {
@@ -121,7 +122,12 @@ pkgs.writeShellScriptBin "tertius" ''
   }
 
   function apply_question_from_stdin() {
-    data=$(${pkgs.jq}/bin/jq -n --arg question "$(cat)" --argjson data "$data" '$data + [ { role: "user", content: $question } ]')
+    data=$(${pkgs.jq}/bin/jq -n --arg question "$1$(cat)" --argjson data "$data" '$data + [ { role: "user", content: $question } ]')
+  }
+
+  function apply_file() {
+    file=$1
+    data=$(${pkgs.jq}/bin/jq -n --arg file "$(cat $file)" --argjson data "$data" '$data + [ { role: "user", content: $file } ]')
   }
 
   function openai_response() {
@@ -205,6 +211,11 @@ pkgs.writeShellScriptBin "tertius" ''
       openai_response
       ;;
     publish )
+      if [ -z "$3" ]; then
+        >&2 echo "tertius: story publish requires a story type as an argument."
+        usage
+        exit 1
+      fi
       publish_user_story $3
       ;;
     esac
@@ -228,6 +239,19 @@ pkgs.writeShellScriptBin "tertius" ''
   report )
     apply_instruction "Compose a brief report on work progress by analyzing git commits from the last $duration. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise report that provides all the necessary information to understand the progress and the context of the changes. The report should be in a form of a list of bullet points, one sentence per bullet point, no headers, no nested lists, each bullet point per task, including the task ID if available. Collect all the git commit messages for a given task in a single bullet. Don't mention the commits, only the progress. "
     apply_commit_messages_from "$duration ago"
+    user_story_header
+    openai_response
+    ;;
+
+  fix-error )
+    if [ -z "$2" ]; then
+      >&2 echo "tertius: fix-error requires a file path as an argument."
+      usage
+      exit 1
+    fi
+    apply_instruction "Correct the following code. Ensure that the code is free of syntax errors and that it adheres to the best practices of the language. If the code is already correct, just output it. Do not change anything in the parts not affected by the error. Show only the code you changed. The solution should be a minimal change with one sentence of explanation."
+    apply_file $2
+    apply_question_from_stdin "The LSP reported a problem "
     user_story_header
     openai_response
     ;;
