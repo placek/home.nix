@@ -519,7 +519,7 @@ endfunction
 nnoremap <leader>N :call <sid>prepareIssue()<cr>
 
 function! s:oyVeyCommitMessage()
-  execute ":%!tertius commit-message"
+  execute ":%!tertius commit write-message"
   normal! ggVGgq
   redraw!
 endfunction
@@ -538,7 +538,7 @@ function! s:oyVeyFixError()
   endif
   let l:item = l:item_under_cursor[0]
   let l:detail = printf("in file %s at line %d and column %s. This are the details of the problem:\n%s", expand('%:.'), l:item.lnum, l:item.col, l:item.text)
-  let l:solution = system('tertius fix-error ' . expand('%:p'), l:detail)
+  let l:solution = system('tertius code fix ' . expand('%:p'), l:detail)
   let lines = split(l:solution, "\n")
   for i in range(len(lines))
     let lines[i] = printf(&commentstring, lines[i])

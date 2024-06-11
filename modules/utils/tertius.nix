@@ -22,11 +22,11 @@ pkgs.writeShellScriptBin "tertius" ''
     >&2 echo "       tertius story get"
     >&2 echo "       tertius story write"
     >&2 echo "       tertius story publish TYPE"
-    >&2 echo "       tertius commit-message"
+    >&2 echo "       tertius commit write-message"
     >&2 echo "       tertius pull-request write"
     >&2 echo "       tertius pull-request publish"
     >&2 echo "       tertius report"
-    >&2 echo "       tertius fix-error FILE"
+    >&2 echo "       tertius code fix FILE"
   }
 
   function current_branch_commits() {
@@ -190,13 +190,17 @@ pkgs.writeShellScriptBin "tertius" ''
     openai_response
     ;;
 
-  commit-message )
-    apply_instruction "Compose a Git commit message. To draft a Git commit message review the context in which the modifications have been made. This should include a brief explanation of the changes and a diff that showcases these modifications. Your task is to ensure that there is a clear connection between the requirements specified in the user story and the changes made in the commit. The objective is to create a concise and informative commit message that effectively communicates the reasoning behind the changes and high-level explanation of the alterations. The message should comprise a succinct title, followed by a paragraphs explaining the reason for the changes. The title and the following paragraph should be separated by a blank line."
-    apply_user_story
-    apply_commit_messages
-    apply_question_from_stdin
-    user_story_header
-    openai_response
+  commit )
+    case $2 in
+    write-message )
+      apply_instruction "Compose a Git commit message. To draft a Git commit message review the context in which the modifications have been made. This should include a brief explanation of the changes and a diff that showcases these modifications. Your task is to ensure that there is a clear connection between the requirements specified in the user story and the changes made in the commit. The objective is to create a concise and informative commit message that effectively communicates the reasoning behind the changes and high-level explanation of the alterations. The message should comprise a succinct title, followed by a paragraphs explaining the reason for the changes. The title and the following paragraph should be separated by a blank line. Avoid using 'Title:' or similar headers."
+      apply_user_story
+      apply_commit_messages
+      apply_question_from_stdin
+      user_story_header
+      openai_response
+      ;;
+    esac
     ;;
 
   story )
@@ -243,17 +247,21 @@ pkgs.writeShellScriptBin "tertius" ''
     openai_response
     ;;
 
-  fix-error )
-    if [ -z "$2" ]; then
-      >&2 echo "tertius: fix-error requires a file path as an argument."
-      usage
-      exit 1
-    fi
-    apply_instruction "Correct the following code. Ensure that the code is free of syntax errors and that it adheres to the best practices of the language. If the code is already correct, just output it. Do not change anything in the parts not affected by the error. Show only the code you changed. The solution should be a minimal change with one sentence of explanation."
-    apply_file $2
-    apply_question_from_stdin "The LSP reported a problem "
-    user_story_header
-    openai_response
+  code )
+    case $2 in
+    fix )
+      if [ -z "$3" ]; then
+        >&2 echo "tertius: code fix requires a file path as an argument."
+        usage
+        exit 1
+      fi
+      apply_instruction "Correct the following code. Ensure that the code is free of syntax errors and that it adheres to the best practices of the language. If the code is already correct, just output it. Do not change anything in the parts not affected by the error. Show only the code you changed. The solution should be a minimal change with one sentence of explanation."
+      apply_file $3
+      apply_question_from_stdin "The LSP reported a problem "
+      user_story_header
+      openai_response
+      ;;
+    esac
     ;;
 
   * )
