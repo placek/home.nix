@@ -468,8 +468,16 @@ autocmd BufReadPost * call <sid>setBlameLine()
 
 """"""""""""""""""""""""""""""""""" WORKFLOW """""""""""""""""""""""""""""""""""
 function! s:askOyVeySelected()
-  execute ":'<,'>!tertius ask"
-  redraw!
+  let l:text = <sid>selectedText()
+  if empty(l:text)
+    return
+  endif
+  let l:solution = system('tertius ask', l:text)
+  let lines = split(l:solution, "\n")
+  for i in range(len(lines))
+    let lines[i] = printf(&commentstring, lines[i])
+  endfor
+  call append(line('.'), lines)
 endfunction
 
 vnoremap <leader>y :call <sid>askOyVeySelected()<cr>
@@ -546,7 +554,22 @@ function! s:oyVeyFixError()
   call append(line('.'), lines)
 endfunction
 
-nnoremap <localleader>y :call <sid>oyVeyFixError()<cr>
+nnoremap <localleader>Y :call <sid>oyVeyFixError()<cr>
+
+function! s:oyVeyExplain()
+  let l:text = <sid>selectedText()
+  if empty(l:text)
+    return
+  endif
+  let l:solution = system('tertius code explain', l:text)
+  let lines = split(l:solution, "\n")
+  for i in range(len(lines))
+    let lines[i] = printf(&commentstring, lines[i])
+  endfor
+  call append(line('.'), lines)
+endfunction
+
+vnoremap <localleader>y :call <sid>oyVeyExplain()<cr>
 
 """""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""""<
 " checks if a buffer is empty
