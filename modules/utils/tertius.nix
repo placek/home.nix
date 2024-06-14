@@ -199,7 +199,7 @@ pkgs.writeShellScriptBin "tertius" ''
   commit )
     case $2 in
     write-message )
-      apply_instruction "Compose a Git commit message. To draft a Git commit message review the context in which the modifications have been made. This should include a brief explanation of the changes and a diff that showcases these modifications. Your task is to ensure that there is a clear connection between the requirements specified in the user story and the changes made in the commit. The objective is to create a concise and informative commit message that effectively communicates the reasoning behind the changes and high-level explanation of the alterations. The message should comprise a succinct title, followed by a paragraphs explaining the reason for the changes. The title and the following paragraph should be separated by a blank line. Avoid using 'Title:' or similar headers."
+      apply_instruction "Compose a Git commit message. To draft a Git commit message review the context in which the modifications have been made. This should include a brief explanation of the changes and a diff that showcases these modifications. Your task is to ensure that there is a clear connection between the requirements specified in the user story and the changes made in the commit. The objective is to create a concise and informative commit message that effectively communicates the reasoning behind the changes and high-level explanation of the alterations. The message should comprise a succinct title, followed by a paragraph explaining the reason for the changes. The title and the following paragraph should be separated by a blank line. Avoid using 'Title:' or similar headers."
       apply_user_story
       apply_commit_messages
       apply_question_from_stdin
@@ -234,7 +234,7 @@ pkgs.writeShellScriptBin "tertius" ''
   pull-request )
     case $2 in
     write )
-      apply_instruction "Compose a pull request description by analyzing any given commit messages. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outome of the changes themselves - each such component has to be separated by two newlines and have no header."
+      apply_instruction "Compose a pull request description by analyzing any given commit messages. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outcome of the changes themselves - each such component has to be separated by two newlines and have no header."
       apply_user_story
       apply_commit_messages
       user_story_header
@@ -268,7 +268,7 @@ pkgs.writeShellScriptBin "tertius" ''
       ;;
 
     explain )
-      apply_instruction "Explain the following code. Ensure that the explanation is clear, concise and to the point, providing only the necessary information to understand the code. If it's possible, provide a refferences (links) to the documentation or other resources. The explanation should be in a form of a bullet list."
+      apply_instruction "Explain the following code. Ensure that the explanation is clear, concise and to the point, providing only the necessary information to understand the code. If it's possible, provide references (links) to the documentation or other resources. The explanation should be in a form of a bullet list."
       apply_question_from_stdin "This is a code snippet:\n"
       openai_response
       ;;
