@@ -30,7 +30,7 @@ pkgs.writeShellScriptBin "tertius" ''
     >&2 echo "       tertius code explain"
   }
 
-  function current_branch_commits() {
+  current_branch_commits() {
     default_branch=$(${pkgs.git}/bin/git config --get core.default)
     branchoff_commit=$(${pkgs.git}/bin/git merge-base $default_branch HEAD 2>/dev/null)
     if [ -n "$branchoff_commit" ]; then
@@ -38,33 +38,33 @@ pkgs.writeShellScriptBin "tertius" ''
     fi
   }
 
-  function user_story_id_from_branch() {
+  user_story_id_from_branch() {
     git rev-parse --abbrev-ref HEAD | sed -n 's@.*/\([[:digit:]]\+\).*@\1@p'
   }
 
-  function user_story_title() {
+  user_story_title() {
     user_story_id=$(user_story_id_from_branch)
     if [ -n "$user_story_id" ]; then
       case $issue_tracker in
       github )
-        ${pkgs.gh}/bin/gh issue view --json title $user_story_id | ${pkgs.jq}/bin/jq "\"[#$user_story_id] \(.title)\""
+        ${pkgs.gh}/bin/gh issue view --json title $user_story_id | ${pkgs.jq}/bin/jq -r "\"[#$user_story_id] \(.title)\""
         ;;
       esac
     fi
   }
 
-  function user_story_content() {
+  user_story_content() {
     user_story_id=$(user_story_id_from_branch)
     if [ -n "$user_story_id" ]; then
       case $issue_tracker in
       github )
-        ${pkgs.gh}/bin/gh issue view --json title,body $user_story_id | ${pkgs.jq}/bin/jq  "\"\(.title)\n\n\(.body)\""
+        ${pkgs.gh}/bin/gh issue view --json title,body $user_story_id | ${pkgs.jq}/bin/jq -r "\"\(.title)\n\n\(.body)\""
         ;;
       esac
     fi
   }
 
-  function publish_user_story() {
+  publish_user_story() {
     user_story_type=$1
     body=$(cat)
     user_story_title=$(echo "$body" | head -n 1)
@@ -83,7 +83,7 @@ pkgs.writeShellScriptBin "tertius" ''
     esac
   }
 
-  function publish_pull_request() {
+  publish_pull_request() {
     body=$(cat)
     case $issue_tracker in
     github )
@@ -94,18 +94,18 @@ pkgs.writeShellScriptBin "tertius" ''
     esac
   }
 
-  function apply_instruction() {
+  apply_instruction() {
     data=$(${pkgs.jq}/bin/jq -n --arg instructions "$1" --argjson data "$data" '$data + [ { role: "system", content: $instructions } ]')
   }
 
-  function apply_user_story() {
+  apply_user_story() {
     user_story=$(user_story_content)
     if [ -n "$user_story" ]; then
       data=$(${pkgs.jq}/bin/jq -n --arg user_story "Analyze this user story as a context of the problem:\n$user_story" --argjson data "$data" '$data + [ { role: "user", content: $user_story } ]')
     fi
   }
 
-  function apply_commit_messages() {
+  apply_commit_messages() {
     branch_commits=$(current_branch_commits)
     for hash in $branch_commits; do
       commit_message=$(${pkgs.git}/bin/git show -s --format=%B $hash)
@@ -113,7 +113,7 @@ pkgs.writeShellScriptBin "tertius" ''
     done
   }
 
-  function apply_commit_messages_from() {
+  apply_commit_messages_from() {
     author=$(${pkgs.git}/bin/git config --get user.email)
     commits=$(${pkgs.git}/bin/git log --since="$1" --author=$author --format=format:"%H" --reverse)
     for hash in $commits; do
@@ -122,24 +122,29 @@ pkgs.writeShellScriptBin "tertius" ''
     done
   }
 
-  function apply_question_from_stdin() {
+  apply_question_from_stdin() {
     data=$(${pkgs.jq}/bin/jq -n --arg question "$1$(cat)" --argjson data "$data" '$data + [ { role: "user", content: $question } ]')
   }
 
-  function apply_file() {
+  apply_file() {
     file=$1
     data=$(${pkgs.jq}/bin/jq -n --arg file "$(cat $file)" --argjson data "$data" '$data + [ { role: "user", content: $file } ]')
   }
 
-  function openai_response() {
+  openai_response() {
     payload=$(${pkgs.jq}/bin/jq -n --arg model "$model" --argjson data "$data" "$payload_template")
-    ${pkgs.curl}/bin/curl -s -X POST https://api.openai.com/v1/chat/completions \
+    response=$(${pkgs.curl}/bin/curl -s -X POST https://api.openai.com/v1/chat/completions \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OPENAI_API_KEY" \
-      -d "$payload" | ${pkgs.jq}/bin/jq -M -r '.choices[0].message.content'
+      -d "$payload")
+    if [ $? -ne 0 ]; then
+      >&2 echo "tertius: failed to get response from OpenAI API"
+      exit 1
+    fi
+    echo "$response" | ${pkgs.jq}/bin/jq -M -r '.choices[0].message.content'
   }
 
-  function user_story_header() {
+  user_story_header() {
     if [ -n "$user_story_id" ]; then
       case $command in
       commit-message )
