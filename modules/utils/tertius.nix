@@ -258,7 +258,7 @@ pkgs.writeShellScriptBin "tertius" ''
       fi
       apply_instruction "Correct the following code. Ensure that the code is free of syntax errors and that it adheres to the best practices of the language. If the code is already correct, just output it. Do not change anything in the parts not affected by the error. Show only the code you changed. The solution should be a minimal change with one sentence of explanation."
       apply_file $3
-      apply_question_from_stdin "The LSP reported a problem "
+      apply_question_from_stdin
       openai_response
       ;;
 

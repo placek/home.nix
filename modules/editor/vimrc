@@ -545,7 +545,14 @@ function! s:oyVeyFixError()
     return
   endif
   let l:item = l:item_under_cursor[0]
-  let l:detail = printf("in file %s at line %d and column %s. This are the details of the problem:\n%s", expand('%:.'), l:item.lnum, l:item.col, l:item.text)
+  let messages = {
+  \ 'E': 'an error',
+  \ 'W': 'a warning',
+  \ 'WS': 'a style warning',
+  \ 'ES': 'a style error',
+  \ 'I': 'some LSP info',
+  \ }
+  let l:detail = printf("The `%s` linter reported %s in file %s at line %d and column %s:\n%s", l:item.linter_name, l:messages[l:item.type], l:item.lnum, expand('%:.'), l:item.col, l:item.text)
   let l:solution = system('tertius code fix ' . expand('%:p'), l:detail)
   let lines = split(l:solution, "\n")
   for i in range(len(lines))
