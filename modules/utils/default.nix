@@ -48,6 +48,7 @@ in
     programs.htop.enable = true;
     programs.jq.enable = true;
     programs.nix-index.enable = true;
+    programs.yt-dlp.enable = true;
 
     home.packages = with pkgs; [
       audio
