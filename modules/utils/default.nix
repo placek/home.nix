@@ -93,6 +93,7 @@ in
       openssl           # cryptographic library
       openvpn           # VPN client
       orca-c            # midi sequencer
+      pandoc            # document converter
       qmk               # keyboard firmware
       rclone            # cloud storage
       ripgrep           # search tool
