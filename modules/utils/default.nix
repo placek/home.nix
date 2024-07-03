@@ -95,6 +95,7 @@ in
       openssl           # cryptographic library
       openvpn           # VPN client
       orca-c            # midi sequencer
+      p7zip             # extract 7z archives
       pandoc            # document converter
       qmk               # keyboard firmware
       rclone            # cloud storage
