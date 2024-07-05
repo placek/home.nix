@@ -12,6 +12,7 @@
   "SMS" = "https://messages.google.com/web/conversations";
   "WhatsApp" = "https://web.whatsapp.com/";
   "Messenger" = "https://www.messenger.com/";
+  "mBank" = "https://online.mbank.pl/pl/Login";
   "Allegro" = "https://allegro.pl/";
   "GitHub" = "https://github.com/";
   "LiChess" = "https://lichess.org/";
