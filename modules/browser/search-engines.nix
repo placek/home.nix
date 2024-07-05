@@ -17,5 +17,4 @@
   stack = "https://stackexchange.com/search?q={}";
   we = "https://en.wikipedia.org/wiki/{}";
   wp = "https://pl.wikipedia.org/wiki/{}";
-  yt = "https://www.youtube.com/results?search_query={}";
 }

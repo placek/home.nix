@@ -18,5 +18,4 @@
   "Pinterest" = "https://pl.pinterest.com/?autologin=true";
   "Pocket" = "https://getpocket.com/my-list";
   "Reddit" = "https://www.reddit.com/";
-  "YouTube" = "https://www.youtube.com/";
 }
