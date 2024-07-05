@@ -40,6 +40,10 @@ in
     };
   };
 
+  imports = [
+    ./freetube.nix
+  ];
+
   config = {
     programs.aria2.enable = true;
     programs.bat.config.theme = "gruvbox-dark";
@@ -49,40 +53,6 @@ in
     programs.jq.enable = true;
     programs.nix-index.enable = true;
     programs.yt-dlp.enable = true;
-
-    programs.freetube.enable = true;
-    programs.freetube.settings = {
-      allSettingsSectionsExpandedByDefault = true;
-      barColor = false;
-      baseTheme = "dark";
-      checkForBlogPosts = false;
-      checkForUpdates = false;
-      commentAutoLoadEnabled = false;
-      currentLocale = "pl";
-      defaultInvidiousInstance = "";
-      downloadBehavior = "open";
-      hideActiveSubscriptions = false;
-      hideChannelPlaylists = false;
-      hideChannelShorts = false;
-      hideCommentLikes = true;
-      hideCommentPhotos = true;
-      hideComments = true;
-      hideHeaderLogo = true;
-      hideLabelsSideBar = true;
-      hideLiveChat = true;
-      hidePlaylists = false;
-      hidePopularVideos = true;
-      hideSubscriptionsCommunity = true;
-      hideSubscriptionsLive = true;
-      hideSubscriptionsShorts = false;
-      hideTrendingVideos = true;
-      hideVideoLikesAndDislikes = true;
-      mainColor = "Orange";
-      proxyProtocol = "https";
-      secColor = "Orange";
-      useProxy = false;
-      useSponsorBlock = false;
-    };
 
     home.packages = with pkgs; [
       audio
