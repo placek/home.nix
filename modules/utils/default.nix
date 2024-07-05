@@ -13,7 +13,7 @@ let
   psalmus = import ./psalmus.nix { inherit pkgs; };
   vasm = import ./vasm.nix { inherit pkgs; };
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
-  minipro = import ./minipro.nix { inherit pkgs; };
+#   minipro = import ./minipro.nix { inherit pkgs; };
   tertius = import ./tertius.nix { inherit pkgs; inherit (config) browserExec; };
 in
 {
@@ -95,7 +95,7 @@ in
       video
 
       dcc6502           # 6502 disassembler
-      minipro           # EEPROM programmer
+#       minipro           # EEPROM programmer
       vasm              # 6502 assembler
       # pkgsCross.avr.buildPackages.gcc
 
@@ -135,7 +135,6 @@ in
       rclone            # cloud storage
       ripgrep           # search tool
       rlwrap            # readline wrapper
-      rnix-lsp          # Nix language server
       rpi-imager        # Raspberry Pi OS image writer
       rsync             # file synchronization
       sox               # audio processing

@@ -1,6 +1,6 @@
 expiration ?= 30 days
 
-hm-flake := home-manager/release-23.11
+hm-flake := home-manager/release-24.05
 hm :=  NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ALLOW_INSECURE=1 nix --extra-experimental-features nix-command --extra-experimental-features flakes run $(hm-flake) -- --impure
 rebuild := sudo nixos-rebuild switch
 link := sudo cp --backup --interactive --link

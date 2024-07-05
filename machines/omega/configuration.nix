@@ -64,7 +64,7 @@
   services.printing.enable                                                     = true;
   services.udisks2.enable                                                      = true;
   sound.enable                                                                 = true;
-  system.stateVersion                                                          = "23.11";
+  system.stateVersion                                                          = "24.05";
   time.timeZone                                                                = "Europe/Warsaw";
   users.extraGroups.vboxusers.members                                          = [ "placek" ];
   virtualisation.docker.autoPrune.dates                                        = "daily";
@@ -79,19 +79,20 @@
   services.clamav.updater.enable                                               = true;
   services.acpid.enable                                                        = true;
   services.greenclip.enable                                                    = true;
+  services.libinput.enable                                                     = true;
+  services.libinput.mouse.middleEmulation                                      = false;
+  services.libinput.touchpad.naturalScrolling                                  = true;
+  services.libinput.touchpad.scrollMethod                                      = "twofinger";
+  services.libinput.touchpad.tapping                                           = false;
   services.logind.extraConfig                                                  = "HandlePowerKey=ignore";
   services.logind.lidSwitch                                                    = "ignore";
-  services.xserver.libinput.enable                                             = true;
-  services.xserver.libinput.mouse.middleEmulation                              = false;
-  services.xserver.libinput.touchpad.naturalScrolling                          = true;
-  services.xserver.libinput.touchpad.scrollMethod                              = "twofinger";
-  services.xserver.libinput.touchpad.tapping                                   = false;
   services.xserver.enable                                                      = true;
   services.xserver.layout                                                      = "pl";
   services.xserver.displayManager.lightdm.enable                               = true;
   services.xserver.windowManager.xmonad.enable                                 = true;
   services.xserver.displayManager.lightdm.greeters.mini.enable                 = true;
   services.xserver.displayManager.lightdm.greeters.mini.user                   = "placek";
+  services.xserver.xkb.layout                                                  = "pl";
   services.xserver.displayManager.lightdm.greeters.mini.extraConfig = ''
     [greeter]
     show-password-label       = false
