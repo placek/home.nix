@@ -14,7 +14,6 @@ let
   vasm = import ./vasm.nix { inherit pkgs; };
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
 #   minipro = import ./minipro.nix { inherit pkgs; };
-  tertius = import ./tertius.nix { inherit pkgs; inherit (config) browserExec; };
 in
 {
   options = with lib; {
@@ -42,6 +41,7 @@ in
 
   imports = [
     ./freetube.nix
+    ./tertius.nix
   ];
 
   config = {
@@ -56,7 +56,6 @@ in
 
     home.packages = with pkgs; [
       audio
-      tertius
       image
       pbcopy
       pbpaste
