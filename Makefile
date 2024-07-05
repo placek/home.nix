@@ -17,6 +17,7 @@ switch: $(nixos-config)
 	$(rebuild)
 
 upgrade: $(nixos-config)
+	sudo nix-channel --update
 	$(rebuild) --upgrade
 
 expire:
@@ -28,3 +29,7 @@ gens:
 gc:
 	nix-collect-garbage --delete-older-than "$(shell echo "$(expiration)" | sed 's/ days/d/')"
 	nix-store --optimise
+
+all: upgrade apply expire gc
+
+.PHONY: apply switch upgrade expire gens gc all
