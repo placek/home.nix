@@ -86,11 +86,6 @@ autocmd InsertEnter,InsertLeave * set cul!
 let g:mapleader      = "\<space>"                                              " main leader set to space
 let g:maplocalleader = "\<backspace>"                                          " local leader set to comma
 
-"""""""""""""""""""""""""""""""""""" NETRW """"""""""""""""""""""""""""""""""""<
-" do not load shitty netrw
-let g:loaded_netrwPlugin = 1
-let g:loaded_netrw = 1
-
 """"""""""""""""""""""""""""""""""" COPILOT """""""""""""""""""""""""""""""""""<
 inoremap <silent><script><expr> <f11> copilot#Accept("\<cr>")
 imap <F10> <Plug>(copilot-previous)
@@ -753,14 +748,6 @@ hi ALEWarning                           ctermbg=0  ctermfg=4  cterm=underline
 hi ALEWarningSign                       ctermbg=0  ctermfg=4
 hi ALEInfo                              ctermbg=0  ctermfg=5  cterm=underline
 hi ALEInfoSign                          ctermbg=0  ctermfg=5
-
-hi link DirvishGitModified DiffChange
-hi link DirvishGitStaged DiffAdd
-hi link DirvishGitRenamed DiffChange
-hi link DirvishGitUnmerged DiffChange
-hi link DirvishGitIgnored DiffDelete
-hi link DirvishGitUntracked DiffChange
-hi default link DirvishGitUntrackedDir DirvishPathTail
 
 hi link CtrlPMode2 User1
 hi link TabLineFill StatusLineNC

@@ -34,13 +34,13 @@
 
   imports = [
     ./vim-xit.nix
-    ./dovish.nix
+    ./dirvish.nix
   ];
 
   config = {
     home.sessionVariables.EDITOR = "vim";
 
-    home.packages = with pkgs; [ universal-ctags trashy ];
+    home.packages = [ pkgs.universal-ctags ];
 
     programs.fish.shellAliases.editor = "${config.editorExec} --servername (git remote get-url origin | awk -F'[:/]' '{print $(NF-1) \"/\" $(NF)}' | sed 's/\\.git$//')";
 
@@ -50,8 +50,6 @@
       enable = true;
       plugins = with pkgs.vimPlugins; [
         vim-fugitive
-        vim-dirvish
-        vim-dirvish-git
 
         ale
         copilot-vim
