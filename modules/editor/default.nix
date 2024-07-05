@@ -24,6 +24,12 @@
       description = "Diff editor executable.";
       readOnly = true;
     };
+
+    editor.RCs = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "List of vimrc configuration strings.";
+    };
   };
 
   imports = [
@@ -37,6 +43,8 @@
     home.packages = with pkgs; [ universal-ctags trashy ];
 
     programs.fish.shellAliases.editor = "${config.editorExec} --servername (git remote get-url origin | awk -F'[:/]' '{print $(NF-1) \"/\" $(NF)}' | sed 's/\\.git$//')";
+
+    editor.RCs = [ (builtins.readFile ./vimrc) ];
 
     programs.vim = {
       enable = true;
@@ -54,7 +62,7 @@
         haskell-vim
         vim-terraform
       ];
-      extraConfig = builtins.readFile ./vimrc;
+      extraConfig = lib.strings.concatStringsSep "\n" config.editor.RCs;
     };
   };
 }
