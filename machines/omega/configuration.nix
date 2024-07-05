@@ -35,7 +35,6 @@
   hardware.opengl.driSupport                                                   = true;
   hardware.opengl.driSupport32Bit                                              = true;
   hardware.opengl.enable                                                       = true;
-  services.xserver.resolutions                                                 = [ { x = 1920; y = 1080; } ];
   hardware.pulseaudio.enable                                                   = true;
   hardware.pulseaudio.package                                                  = pkgs.pulseaudioFull;
   networking.firewall.allowPing                                                = false;
@@ -44,10 +43,11 @@
   networking.hostName                                                          = "omega";
   networking.hosts."127.0.0.1"                                                 = ["localhost" "dev"];
   networking.wlanInterfaces.wlan0                                              = { device = "wlp82s0"; mac = "01:01:01:01:01:01"; };
-  powerManagement.enable                                                       = true;
   powerManagement.cpuFreqGovernor                                              = "performance";
+  powerManagement.enable                                                       = true;
   programs.light.enable                                                        = true;
   services.throttled.enable                                                    = true;
+  services.xserver.resolutions                                                 = [ { x = 1920; y = 1080; } ];
 
   ################################## SYSTEM ####################################
   boot.consoleLogLevel                                                         = 0;
@@ -58,6 +58,8 @@
   i18n.defaultLocale                                                           = "pl_PL.UTF-8";
   networking.networkmanager.enable                                             = true;
   nixpkgs.config.allowUnfree                                                   = true;
+  programs.slock.enable                                                        = true;
+  security.sudo.wheelNeedsPassword                                             = false;
   services.cron.enable                                                         = true;
   services.openssh.extraConfig                                                 = "StreamLocalBindUnlink yes";
   services.printing.drivers                                                    = [ pkgs.foo2zjs pkgs.mfcl8690cdwcupswrapper ];
@@ -71,13 +73,11 @@
   virtualisation.docker.enable                                                 = true;
   virtualisation.libvirtd.enable                                               = true;
   virtualisation.virtualbox.host.enable                                        = true;
-  security.sudo.wheelNeedsPassword                                             = false;
-  programs.slock.enable                                                        = true;
 
   ################################# SERVICES ###################################
+  services.acpid.enable                                                        = true;
   services.clamav.daemon.enable                                                = true;
   services.clamav.updater.enable                                               = true;
-  services.acpid.enable                                                        = true;
   services.greenclip.enable                                                    = true;
   services.libinput.enable                                                     = true;
   services.libinput.mouse.middleEmulation                                      = false;
@@ -86,12 +86,11 @@
   services.libinput.touchpad.tapping                                           = false;
   services.logind.extraConfig                                                  = "HandlePowerKey=ignore";
   services.logind.lidSwitch                                                    = "ignore";
-  services.xserver.enable                                                      = true;
-  services.xserver.layout                                                      = "pl";
   services.xserver.displayManager.lightdm.enable                               = true;
-  services.xserver.windowManager.xmonad.enable                                 = true;
   services.xserver.displayManager.lightdm.greeters.mini.enable                 = true;
   services.xserver.displayManager.lightdm.greeters.mini.user                   = "placek";
+  services.xserver.enable                                                      = true;
+  services.xserver.windowManager.xmonad.enable                                 = true;
   services.xserver.xkb.layout                                                  = "pl";
   services.xserver.displayManager.lightdm.greeters.mini.extraConfig = ''
     [greeter]
@@ -116,17 +115,17 @@
   '';
 
   ################################## NVIDIA ####################################
-  hardware.nvidia.nvidiaSettings                                               = true;
-  hardware.nvidia.package                                                      = config.boot.kernelPackages.nvidiaPackages.stable;
-  services.xserver.videoDrivers                                                = [ "nvidia" ];
   hardware.nvidia.modesetting.enable                                           = true;
+  hardware.nvidia.nvidiaSettings                                               = true;
+  hardware.nvidia.open                                                         = true;
+  hardware.nvidia.package                                                      = config.boot.kernelPackages.nvidiaPackages.stable;
   hardware.nvidia.powerManagement.enable                                       = false;
   hardware.nvidia.powerManagement.finegrained                                  = false;
-  hardware.nvidia.open                                                         = true;
-  hardware.nvidia.prime.reverseSync.enable                                     = true;
   hardware.nvidia.prime.allowExternalGpu                                       = false;
   hardware.nvidia.prime.intelBusId                                             = "PCI:0:2:0";
   hardware.nvidia.prime.nvidiaBusId                                            = "PCI:1:0:0";
+  hardware.nvidia.prime.reverseSync.enable                                     = true;
+  services.xserver.videoDrivers                                                = [ "nvidia" ];
 
   ################################### USER #####################################
   programs.fish.enable                                                         = true;
