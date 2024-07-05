@@ -28,6 +28,7 @@
 
   imports = [
     ./vim-xit.nix
+    ./dovish.nix
   ];
 
   config = {
@@ -43,7 +44,6 @@
         vim-fugitive
         vim-dirvish
         vim-dirvish-git
-        (import ./dovish.nix { inherit pkgs; })
 
         ale
         copilot-vim
