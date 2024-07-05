@@ -57,7 +57,6 @@ with theme; {
   inactive_text_alpha = "0.9";
   hide_window_decorations = "yes";
   resize_debounce_time = "0.1";
-  resize_draw_strategy = "static";
   resize_in_steps = "no";
   confirm_os_window_close = "0";
   single_window_margin_width = "-1";
@@ -93,7 +92,6 @@ with theme; {
   foreground = base0F;
   selection_background = base04;
   selection_foreground = base0F;
-  background_opacity = "0.9";
   url_color = base04;
   cursor = base0F;
   color0 = base00;
