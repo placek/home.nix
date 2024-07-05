@@ -26,6 +26,10 @@
     };
   };
 
+  imports = [
+    ./vim-xit.nix
+  ];
+
   config = {
     home.sessionVariables.EDITOR = "vim";
 
@@ -49,7 +53,6 @@
 
         haskell-vim
         vim-terraform
-        (import ./vim-xit.nix { inherit pkgs; })
       ];
       extraConfig = builtins.readFile ./vimrc;
     };
