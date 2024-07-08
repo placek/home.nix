@@ -93,21 +93,6 @@ imap <F12> <Plug>(copilot-next)
 imap <F9> <Plug>(copilot-suggest)
 let g:copilot_no_tab_map = v:true
 
-"""""""""""""""""""""""""""""""""""" CTRLP """"""""""""""""""""""""""""""""""""<
-nnoremap <leader><leader> :CtrlP<cr>
-nnoremap <localleader><localleader> :CtrlPBuffer<cr>
-let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:50'
-let g:ctrlp_show_hidden = 1
-let g:ctrlp_map = '<leader><leader>'
-let g:ctrlp_switch_buffer = 'etvh'
-let g:ctrlp_open_multiple_files = '2vjr'
-let g:ctrlp_user_command = {
-  \ 'types': {
-    \ 1: ['.git', 'cd %s && git ls-files'],
-    \ },
-  \ 'fallback': 'find %s -type f'
-  \ }
-
 """"""""""""""""""""""""""""""""""""" TAGS """"""""""""""""""""""""""""""""""""<
 command! -nargs=0 MakeTags call job_start('git ctags')
 
@@ -509,32 +494,31 @@ vnoremap g<A-a> g<C-a>
 vnoremap g<A-x> g<C-x>
 
 """""""""""""""""""""""""""""""""""" COLORS """""""""""""""""""""""""""""""""""<
-hi ColorColumn                          ctermbg=8
-hi CtrlPMode1                           ctermbg=0  ctermfg=3
-hi DiffAdd                              ctermbg=8  ctermfg=10 cterm=none
-hi DiffChange                           ctermbg=8  ctermfg=3  cterm=none
-hi DiffDelete                           ctermbg=8  ctermfg=9  cterm=none
-hi DiffText                             ctermbg=8  ctermfg=11 cterm=underline
-hi Directory                                       ctermfg=4
-hi FoldColumn                           ctermbg=0  ctermfg=7
-hi Folded                               ctermbg=0  ctermfg=7  cterm=bold
-hi NormalFloat                          ctermbg=0
-hi Pmenu                                ctermbg=0  ctermfg=7
-hi PmenuSbar                            ctermbg=0  ctermfg=7
-hi PmenuSel                             ctermbg=8  ctermfg=15
-hi QuickFixLine                         ctermbg=8
-hi Search                               ctermbg=8  ctermfg=11 cterm=bold
-hi SignColumn                           ctermbg=0
-hi SpellBad                             ctermbg=8
-hi StatusLine                                                 cterm=bold
-hi StatusLineNC                         ctermbg=0  ctermfg=0  cterm=none
-hi TabLine                              ctermbg=8  ctermfg=7  cterm=none
-hi User1                                ctermbg=3  ctermfg=0  cterm=bold
-hi User2                                ctermbg=0  ctermfg=15 cterm=bold
-hi VertSplit                            ctermbg=8  ctermfg=8
-hi Visual                               ctermbg=7  ctermfg=0
+hi ColorColumn  ctermbg=8
+hi CtrlPMode1   ctermbg=0  ctermfg=3
+hi DiffAdd      ctermbg=8  ctermfg=10 cterm=none
+hi DiffChange   ctermbg=8  ctermfg=3  cterm=none
+hi DiffDelete   ctermbg=8  ctermfg=9  cterm=none
+hi DiffText     ctermbg=8  ctermfg=11 cterm=underline
+hi Directory               ctermfg=4
+hi FoldColumn   ctermbg=0  ctermfg=7
+hi Folded       ctermbg=0  ctermfg=7  cterm=bold
+hi NormalFloat  ctermbg=0
+hi Pmenu        ctermbg=0  ctermfg=7
+hi PmenuSbar    ctermbg=0  ctermfg=7
+hi PmenuSel     ctermbg=8  ctermfg=15
+hi QuickFixLine ctermbg=8
+hi Search       ctermbg=8  ctermfg=11 cterm=bold
+hi SignColumn   ctermbg=0
+hi SpellBad     ctermbg=8
+hi StatusLine                         cterm=bold
+hi StatusLineNC ctermbg=0  ctermfg=0  cterm=none
+hi TabLine      ctermbg=8  ctermfg=7  cterm=none
+hi User1        ctermbg=3  ctermfg=0  cterm=bold
+hi User2        ctermbg=0  ctermfg=15 cterm=bold
+hi VertSplit    ctermbg=8  ctermfg=8
+hi Visual       ctermbg=7  ctermfg=0
 
-hi link CtrlPMode2 User1
 hi link TabLineFill StatusLineNC
 hi link TabLineSel User1
 

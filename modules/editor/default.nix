@@ -35,6 +35,7 @@
   imports = [
     ./dirvish.nix
     ./fugitive.nix
+    ./ctrlp.nix
     ./ale.nix
     ./syntax.nix
   ];
@@ -50,7 +51,6 @@
       enable = true;
       plugins = with pkgs.vimPlugins; [
         copilot-vim
-        ctrlp-vim
         vim-expand-region
       ];
       extraConfig = lib.strings.concatStringsSep "\n" ([ (builtins.readFile ./vimrc) ] ++ config.editor.RCs);
