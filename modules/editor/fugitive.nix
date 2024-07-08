@@ -102,7 +102,7 @@
 
           if l:branch != l:base
             if confirm("Do you want to open a pull request?", "&yes\n&No", 2) == 1
-              call <sid>oyVeyPullRequestDescription()
+              normal! \<Plug>(TertiusPullRequestDescriptionWindow)
             endif
           endif
         endfunction
@@ -149,6 +149,7 @@
 
         autocmd! FileType fugitive nnoremap <buffer> rI :<c-u>call <sid>gitRebaseBranch()<cr>
         autocmd! FileType gitcommit setlocal spell spelllang=en_us
+        autocmd! FileType gitcommit nnoremap <buffer> <cr> <Plug>(TertiusCommitMessage)<cr>
 
         nnoremap <leader>a :Gabsorb<cr>
         nnoremap <leader>A :GabsorbAndRebase<cr>

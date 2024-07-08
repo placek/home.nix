@@ -51,7 +51,11 @@
 
     programs.vim = {
       enable = true;
-      extraConfig = lib.strings.concatStringsSep "\n" ([ (builtins.readFile ./vimrc) ] ++ config.editor.RCs);
+      extraConfig = let
+        debug = c: builtins.trace c c;
+      in
+        debug (lib.strings.concatStringsSep "\n" ([ (builtins.readFile ./vimrc)
+      ] ++ config.editor.RCs));
     };
   };
 }

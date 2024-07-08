@@ -7,73 +7,77 @@
     editor.RCs = [
       ''
         " fetch an answer for the selected text
-        function! s:askOyVeySelected()
+        function! s:tertiusAsk() abort
           let l:text = <sid>selectedText()
           if empty(l:text)
             return
           endif
           let l:solution = system('${config.tertiusExec} ask', l:text)
-          let lines = split(l:solution, "\n")
-          for i in range(len(lines))
-            let lines[i] = printf(&commentstring, lines[i])
-          endfor
-          call append(line('.'), lines)
+          call <sid>appendComment(l:solution)
         endfunction
 
-        vnoremap <leader>y :call <sid>askOyVeySelected()<cr>
+        vnoremap <silent> <Plug>(TertiusAsk) :<c-u>call <sid>tertiusAsk()<cr>
 
         " generate a pull request description
-        function! s:oyVeyPullRequestDescription()
+        function! s:tertiusPullRequestDescriptionWindow() abort
           call <sid>openIntermediateBuffer()
           file /tmp/pull-request-description
           let l:summary = substitute(system("${config.tertiusExec} pull-request write"), '\r', "", 'g')
           execute "0put =l:summary"
           redraw!
-          autocmd! BufWinLeave <buffer> call s:updatePullRequestDescription()
+          autocmd! BufWinLeave <buffer> normal! \<Plug>(TertiusUpdatePullRequestDescription)
         endfunction
 
+        nnoremap <silent> <Plug>(TertiusPullRequestDescriptionWindow) :<c-u>call <sid>tertiusPullRequestDescriptionWindow()<cr>
+
         " update the pull request description
-        function! s:updatePullRequestDescription()
+        function! s:tertiusUpdatePullRequestDescription() abort
           if !<sid>isBufferEmpty()
             execute ":%!${config.tertiusExec} pull-request publish"
           endif
         endfunction
 
+        nnoremap <silent> <Plug>(TertiusUpdatePullRequestDescription) :<c-u>call <sid>tertiusUpdatePullRequestDescription()<cr>
+
         " open a window for issue description
-        function! s:prepareIssue()
+        function! s:tertiusIssueWindow() abort
           call <sid>openIntermediateBuffer()
           file /tmp/issue-description
-          nnoremap <buffer> <cr> :<c-u>call <sid>oyVeyIssue()<cr>
-          autocmd! BufWinLeave <buffer> call s:reportIssue()
+          nnoremap <buffer> <cr> <Plug>(TertiusIssue)<cr>
+          autocmd! BufWinLeave <buffer> normal! \<Plug>(TertiusReportIssue)
         endfunction
 
-        nnoremap <leader>N :call <sid>prepareIssue()<cr>
-
-        " generate an issue description
-        function! s:oyVeyIssue()
-          execute ":%!${config.tertiusExec} story write"
-          redraw!
-        endfunction
+        nnoremap <silent> <Plug>(TertiusIssueWindow) :<c-u>call <sid>tertiusIssueWindow()<cr>
 
         " report an issue
-        function! s:reportIssue()
+        function! s:tertiusReportIssue() abort
           if !<sid>isBufferEmpty()
             let l:type = input("branch type /", "")
             execute ":%!${config.tertiusExec} story publish " . l:type
           endif
         endfunction
 
+        nnoremap <silent> <Plug>(TertiusReportIssue) :<c-u>call <sid>tertiusReportIssue()<cr>
+
+        " generate an issue description
+        function! s:tertiusIssue() abort
+          execute ":%!${config.tertiusExec} story write"
+          redraw!
+        endfunction
+
+        nnoremap <silent> <Plug>(TertiusIssue) :<c-u>call <sid>tertiusIssue()<cr>
+
         " generate a commit message
-        function! s:oyVeyCommitMessage()
+        function! s:tertiusCommitMessage() abort
           execute ":%!${config.tertiusExec} commit write-message"
           normal! ggVGgq
           redraw!
         endfunction
 
-        autocmd! FileType gitcommit nnoremap <buffer> <cr> :<c-u>call <sid>oyVeyCommitMessage()<cr>
+        nnoremap <silent> <Plug>(TertiusCommitMessage) :<c-u>call <sid>tertiusCommitMessage()<cr>
 
         " fetch an explanation and solution for the selected error
-        function! s:oyVeyFixError()
+        function! s:tertiusFixCode() abort
           let l:loclist = ale#engine#GetLoclist(bufnr('%'))
           if empty(l:loclist)
             return
@@ -93,30 +97,28 @@
           \ }
           let l:detail = printf("The `%s` linter reported %s in file %s at line %d and column %s:\n%s", l:item.linter_name, l:messages[l:item.type], l:item.lnum, expand('%:.'), l:item.col, l:item.text)
           let l:solution = system('${config.tertiusExec} code fix ' . expand('%:p'), l:detail)
-          let lines = split(l:solution, "\n")
-          for i in range(len(lines))
-            let lines[i] = printf(&commentstring, lines[i])
-          endfor
-          call append(line('.'), lines)
+          call <sid>appendComment(l:solution)
         endfunction
 
-        nnoremap <localleader>Y :call <sid>oyVeyFixError()<cr>
+        nnoremap <silent> <Plug>(TertiusFixCode) :<c-u>call <sid>tertiusFixCode()<cr>
 
         " fetch an explanation for the selected code
-        function! s:oyVeyExplain()
+        function! s:tertiusExplain() abort
           let l:text = <sid>selectedText()
           if empty(l:text)
             return
           endif
           let l:solution = system('${config.tertiusExec} code explain', l:text)
-          let lines = split(l:solution, "\n")
-          for i in range(len(lines))
-            let lines[i] = printf(&commentstring, lines[i])
-          endfor
-          call append(line('.'), lines)
+          call <sid>appendComment(l:solution)
         endfunction
 
-        vnoremap <localleader>y :call <sid>oyVeyExplain()<cr>
+        vnoremap <silent> <Plug>(TertiusExplain) :<c-u>call <sid>tertiusExplain()<cr>
+
+        " standard mappings
+        vnoremap <leader>y <Plug>(TertiusAsk)<cr>
+        vnoremap <localleader>y <Plug>(TertiusExplain)<cr>
+        nnoremap <leader>N <Plug>(TertiusPrepareIssue)<cr>
+        nnoremap <localleader>Y <Plug>(TertiusFixCode)<cr>
       ''
     ];
   };

@@ -267,6 +267,15 @@ function! s:findTextInBuffer(register, query)
   normal n
 endfunction
 
+" append the text to the current buffer as a comment
+function! s:appendComment(text) abort
+  let lines = split(a:text, "\n")
+  for i in range(len(lines))
+    let lines[i] = printf(&commentstring, lines[i])
+  endfor
+  call append(line('.'), lines)
+endfunction
+
 " some appearance togglable settings
 nnoremap <leader>1 :set relativenumber!<cr>
 nnoremap <leader>2 :set hlsearch!<cr>
