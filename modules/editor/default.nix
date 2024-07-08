@@ -41,6 +41,7 @@
     ./copilot.nix
     ./tertius.nix
     ./gitgutter.nix
+    ./blameline.nix
     ./expand-region.nix
     ./syntax.nix
   ];
