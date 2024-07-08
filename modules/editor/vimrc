@@ -271,7 +271,7 @@ nnoremap <leader>4 :call <sid>makeFolds()<cr>
 nnoremap <leader>v :vertical terminal<cr>
 autocmd TerminalWinOpen * tmap <esc> <c-\><c-n>
 
-" cnake case to camel case and back
+" snake case to camel case and back
 nnoremap <silent><localleader>c :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
 nnoremap <silent><localleader>C :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
 

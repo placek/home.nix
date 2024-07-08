@@ -13,7 +13,7 @@
         set tags+=.git/tags " add git tags to tag list
         set showfulltag " show info about tag in completemenu
 
-        command! -nargs=0 MakeTags call job_start('git ctags')
+        command! -nargs=0 MakeTags call job_start('${config.vcsExec} ctags')
 
         autocmd! BufWritePost * MakeTags
 
