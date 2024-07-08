@@ -37,6 +37,7 @@
     ./fugitive.nix
     ./ctrlp.nix
     ./ale.nix
+    ./copilot.nix
     ./syntax.nix
   ];
 
@@ -50,7 +51,6 @@
     programs.vim = {
       enable = true;
       plugins = with pkgs.vimPlugins; [
-        copilot-vim
         vim-expand-region
       ];
       extraConfig = lib.strings.concatStringsSep "\n" ([ (builtins.readFile ./vimrc) ] ++ config.editor.RCs);
