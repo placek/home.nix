@@ -35,6 +35,7 @@
   imports = [
     ./vim-xit.nix
     ./dirvish.nix
+    ./fugitive.nix
   ];
 
   config = {
@@ -44,23 +45,18 @@
 
     programs.fish.shellAliases.editor = "${config.editorExec} --servername (git remote get-url origin | awk -F'[:/]' '{print $(NF-1) \"/\" $(NF)}' | sed 's/\\.git$//')";
 
-    editor.RCs = [ (builtins.readFile ./vimrc) ];
-
     programs.vim = {
       enable = true;
       plugins = with pkgs.vimPlugins; [
-        vim-fugitive
-
         ale
         copilot-vim
         ctrlp-vim
         vim-expand-region
-        vim-gitgutter
 
         haskell-vim
         vim-terraform
       ];
-      extraConfig = lib.strings.concatStringsSep "\n" config.editor.RCs;
+      extraConfig = lib.strings.concatStringsSep "\n" ([ (builtins.readFile ./vimrc) ] ++ config.editor.RCs);
     };
   };
 }
