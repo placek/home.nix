@@ -34,6 +34,7 @@
 
   imports = [
     ./dirvish.nix
+    ./tags.nix
     ./fugitive.nix
     ./ctrlp.nix
     ./ale.nix
@@ -44,8 +45,6 @@
 
   config = {
     home.sessionVariables.EDITOR = "vim";
-
-    home.packages = [ pkgs.universal-ctags ];
 
     programs.fish.shellAliases.editor = "${config.editorExec} --servername (git remote get-url origin | awk -F'[:/]' '{print $(NF-1) \"/\" $(NF)}' | sed 's/\\.git$//')";
 

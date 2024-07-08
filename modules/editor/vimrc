@@ -12,7 +12,6 @@ set laststatus=2                                                               "
 set noshowmode                                                                 " do not show mode in command line
 set showmatch                                                                  " highlight matching brackets
 set signcolumn=yes                                                             " always show sign column
-set showfulltag                                                                " show info about tag in completemenu
 set showcmd                                                                    " always show the command opearator
 set ruler                                                                      " show file stats
 set number                                                                     " show line numbers
@@ -73,9 +72,6 @@ set wildmenu                                                                   "
 set wildignore+=.git/,**/node_modules/**                                       " ignore files from unwanted directories
 set wildmode=longest:full,full                                                 " match longest path fully matching pattern
 
-" ctags
-set tags+=.git/tags                                                            " add .git/tags file to scope
-
 " status line
 set statusline=%1*\ %{toupper(mode())}\ %2*\ %F:%l:%c%=
 set statusline+=\ %Y\ %{LinterStatus()}\ %1*\ %m%r[%n]\ %{strlen(&fenc)?&fenc:'none'}\ 
@@ -85,14 +81,6 @@ autocmd InsertEnter,InsertLeave * set cul!
 """"""""""""""""""""""""""""""""""" LEADERS """""""""""""""""""""""""""""""""""<
 let g:mapleader      = "\<space>"                                              " main leader set to space
 let g:maplocalleader = "\<backspace>"                                          " local leader set to comma
-
-""""""""""""""""""""""""""""""""""""" TAGS """"""""""""""""""""""""""""""""""""<
-command! -nargs=0 MakeTags call job_start('git ctags')
-
-autocmd! BufWritePost * MakeTags
-
-nnoremap <localleader>f g<c-]>
-vnoremap <localleader>f g<c-]>
 
 """"""""""""""""""""""""""""""""""""" MAKE """"""""""""""""""""""""""""""""""""<
 nnoremap <silent><localleader>b :lmake file=%:.<cr>
