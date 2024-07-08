@@ -33,10 +33,10 @@
   };
 
   imports = [
-    ./vim-xit.nix
     ./dirvish.nix
     ./fugitive.nix
     ./ale.nix
+    ./syntax.nix
   ];
 
   config = {
@@ -52,9 +52,6 @@
         copilot-vim
         ctrlp-vim
         vim-expand-region
-
-        haskell-vim
-        vim-terraform
       ];
       extraConfig = lib.strings.concatStringsSep "\n" ([ (builtins.readFile ./vimrc) ] ++ config.editor.RCs);
     };

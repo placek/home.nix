@@ -15,5 +15,9 @@ let
   };
 in
 {
-  config.programs.vim.plugins = [ vim-xit ];
+  config.programs.vim.plugins = [
+    vim-xit
+    pkgs.vimPlugins.haskell-vim
+    pkgs.vimPlugins.vim-terraform
+  ];
 }
