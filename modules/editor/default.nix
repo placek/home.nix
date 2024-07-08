@@ -39,6 +39,7 @@
     ./ctrlp.nix
     ./ale.nix
     ./copilot.nix
+    ./tertius.nix
     ./expand-region.nix
     ./syntax.nix
   ];
