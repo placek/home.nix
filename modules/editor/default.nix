@@ -38,6 +38,7 @@
     ./ctrlp.nix
     ./ale.nix
     ./copilot.nix
+    ./expand-region.nix
     ./syntax.nix
   ];
 
@@ -50,9 +51,6 @@
 
     programs.vim = {
       enable = true;
-      plugins = with pkgs.vimPlugins; [
-        vim-expand-region
-      ];
       extraConfig = lib.strings.concatStringsSep "\n" ([ (builtins.readFile ./vimrc) ] ++ config.editor.RCs);
     };
   };
