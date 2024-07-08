@@ -36,6 +36,7 @@
     ./vim-xit.nix
     ./dirvish.nix
     ./fugitive.nix
+    ./ale.nix
   ];
 
   config = {
@@ -48,7 +49,6 @@
     programs.vim = {
       enable = true;
       plugins = with pkgs.vimPlugins; [
-        ale
         copilot-vim
         ctrlp-vim
         vim-expand-region
