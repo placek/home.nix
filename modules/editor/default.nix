@@ -40,6 +40,7 @@
     ./ale.nix
     ./copilot.nix
     ./tertius.nix
+    ./gitgutter.nix
     ./expand-region.nix
     ./syntax.nix
   ];

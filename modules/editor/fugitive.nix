@@ -6,7 +6,6 @@
   config = {
     programs.vim.plugins = [
       pkgs.vimPlugins.vim-fugitive
-      pkgs.vimPlugins.vim-gitgutter
     ];
 
     editor.RCs = [
@@ -197,10 +196,6 @@
         vnoremap <leader>s <Plug>(GitPickaxeWithSelection)<cr>
         nnoremap <leader>n <Plug>(GitCheckoutFromInput)<cr>
         nnoremap <leader><C-n> <Plug>(GitBranchOffFromCommit)<cr>
-
-        " gitgutter
-        nnoremap ]h :GitGutterNextHunk<cr>
-        nnoremap [h :GitGutterPrevHunk<cr>
       ''
     ];
   };
