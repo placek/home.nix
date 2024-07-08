@@ -1,5 +1,6 @@
 { config
 , pkgs
+, lib
 , ...
 }:
 let
@@ -288,6 +289,15 @@ let
   '';
 in
 {
+  options = with lib; {
+    tertiusExec = mkOption {
+      type = types.str;
+      default = "${tertius}/bin/tertius";
+      description = "Path to the Tertius executable";
+      readOnly = true;
+    };
+  };
+
   config = {
     home.packages = [ tertius ];
   };

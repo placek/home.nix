@@ -12,7 +12,7 @@
           if empty(l:text)
             return
           endif
-          let l:solution = system('tertius ask', l:text)
+          let l:solution = system('${config.tertiusExec} ask', l:text)
           let lines = split(l:solution, "\n")
           for i in range(len(lines))
             let lines[i] = printf(&commentstring, lines[i])
@@ -26,7 +26,7 @@
         function! s:oyVeyPullRequestDescription()
           call <sid>openIntermediateBuffer()
           file /tmp/pull-request-description
-          let l:summary = substitute(system("tertius pull-request write"), '\r', "", 'g')
+          let l:summary = substitute(system("${config.tertiusExec} pull-request write"), '\r', "", 'g')
           execute "0put =l:summary"
           redraw!
           autocmd! BufWinLeave <buffer> call s:updatePullRequestDescription()
@@ -35,7 +35,7 @@
         " update the pull request description
         function! s:updatePullRequestDescription()
           if !<sid>isBufferEmpty()
-            execute ":%!tertius pull-request publish"
+            execute ":%!${config.tertiusExec} pull-request publish"
           endif
         endfunction
 
@@ -51,7 +51,7 @@
 
         " generate an issue description
         function! s:oyVeyIssue()
-          execute ":%!tertius story write"
+          execute ":%!${config.tertiusExec} story write"
           redraw!
         endfunction
 
@@ -59,13 +59,13 @@
         function! s:reportIssue()
           if !<sid>isBufferEmpty()
             let l:type = input("branch type /", "")
-            execute ":%!tertius story publish " . l:type
+            execute ":%!${config.tertiusExec} story publish " . l:type
           endif
         endfunction
 
         " generate a commit message
         function! s:oyVeyCommitMessage()
-          execute ":%!tertius commit write-message"
+          execute ":%!${config.tertiusExec} commit write-message"
           normal! ggVGgq
           redraw!
         endfunction
@@ -92,7 +92,7 @@
           \ 'I': 'some LSP info',
           \ }
           let l:detail = printf("The `%s` linter reported %s in file %s at line %d and column %s:\n%s", l:item.linter_name, l:messages[l:item.type], l:item.lnum, expand('%:.'), l:item.col, l:item.text)
-          let l:solution = system('tertius code fix ' . expand('%:p'), l:detail)
+          let l:solution = system('${config.tertiusExec} code fix ' . expand('%:p'), l:detail)
           let lines = split(l:solution, "\n")
           for i in range(len(lines))
             let lines[i] = printf(&commentstring, lines[i])
@@ -108,7 +108,7 @@
           if empty(l:text)
             return
           endif
-          let l:solution = system('tertius code explain', l:text)
+          let l:solution = system('${config.tertiusExec} code explain', l:text)
           let lines = split(l:solution, "\n")
           for i in range(len(lines))
             let lines[i] = printf(&commentstring, lines[i])
