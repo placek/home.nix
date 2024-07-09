@@ -69,7 +69,7 @@ set ttyfast                                                                    "
 " autocomplete paths in command mode
 set path+=**                                                                   " search down files into subdirectories
 set wildmenu                                                                   " display all matching files on tab completion
-set wildignore+=.git/,**/node_modules/**                                       " ignore files from unwanted directories
+set wildignore+=**/node_modules/**                                             " ignore files from unwanted directories
 set wildmode=longest:full,full                                                 " match longest path fully matching pattern
 
 " status line
@@ -277,19 +277,6 @@ if !empty($DIRENV_EXTRA_VIMRC) && filereadable($DIRENV_EXTRA_VIMRC)
 endif
 
 """""""""""""""""""""""""""""""""" NAVIGATION """""""""""""""""""""""""""""""""<
-" triggers a grep on query and opens quickfix list
-function! s:grep(query)
-  if !empty(a:query)
-    execute "silent Ggrep \"" . a:query . "\" | copen"
-  endif
-endfunction
-
-" finds a file using git ls-files or find command
-function! s:find(query)
-  if !empty(a:query)
-    execute "silent cexpr system('git ls-files \"**" . a:query . "*\" | sed \"s/.*/&:1:1/\"') | copen"
-  endif
-endfunction
 
 " move around buffers with leader key
 nnoremap <localleader><cr>  :argadd<cr>
@@ -306,17 +293,8 @@ nnoremap <silent><leader>h :wincmd h<cr>
 nnoremap <silent><leader>l :wincmd l<cr>
 
 " lookup
-nnoremap <leader>F :call <sid>find(input("find /", "", "file_in_path"))<cr>
-nnoremap <leader>f :call <sid>grep(input("grep /", "", "tag"))<cr>
-
-vnoremap <leader>F :<c-u>call <sid>find(<sid>selectedText())<cr>
-vnoremap <leader>f :<c-u>call <sid>grep(<sid>selectedText())<cr>
-
 vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
 vnoremap <silent># :<c-u>call <sid>findTextInBuffer("#", <sid>selectedText())<cr>n
-
-command! -nargs=1 -complete=buffer Grep call <sid>grep(<q-args>)
-command! -nargs=1 -complete=buffer Find call <sid>find(<q-args>)
 
 " remap addition and substraction
 nnoremap <A-a> <C-a>
