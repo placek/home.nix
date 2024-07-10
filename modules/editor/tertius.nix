@@ -117,7 +117,8 @@
         " standard mappings
         vnoremap <leader>y <Plug>(TertiusAsk)<cr>
         vnoremap <localleader>y <Plug>(TertiusExplain)<cr>
-        nnoremap <leader>N <Plug>(TertiusIssueWindow)<cr>
+        nnoremap <leader>a <Plug>(TertiusIssueWindow)<cr>
+        nnoremap <leader>A <Plug>(TertiusPullRequestDescriptionWindow)<cr>
         nnoremap <localleader>Y <Plug>(TertiusFixCode)<cr>
       ''
     ];

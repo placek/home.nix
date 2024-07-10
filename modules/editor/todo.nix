@@ -27,8 +27,6 @@
           endif
           syntax match Comment /^#.*/ containedin=ALL
         endfunction
-
-        nnoremap <leader>x :call <sid>toggleTodoFile()<cr>
       ''
     ];
   };

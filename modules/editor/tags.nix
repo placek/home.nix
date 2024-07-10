@@ -14,11 +14,6 @@
         set showfulltag " show info about tag in completemenu
 
         command! -nargs=0 MakeTags call job_start('${config.vcsExec} ctags')
-
-        autocmd! BufWritePost * MakeTags
-
-        nnoremap <localleader>f g<c-]>
-        vnoremap <localleader>f g<c-]>
       ''
     ];
   };

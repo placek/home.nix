@@ -10,8 +10,6 @@
 
     editor.RCs = [
       ''
-        nnoremap <leader><leader> :CtrlP<cr>
-        nnoremap <localleader><localleader> :CtrlPBuffer<cr>
 
         let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:50'
         let g:ctrlp_show_hidden = 1

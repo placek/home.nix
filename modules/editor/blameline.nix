@@ -26,8 +26,6 @@
             autocmd CursorHold * call <sid>blameLine()
           endif
         endfunction
-
-        autocmd BufReadPost * call <sid>setBlameLine()
       ''
     ];
   };

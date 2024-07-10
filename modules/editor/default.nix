@@ -50,11 +50,19 @@
   config = {
     home.sessionVariables.EDITOR = "vim";
 
-    programs.fish.shellAliases.editor = "${config.editorExec} --servername (git remote get-url origin | awk -F'[:/]' '{print $(NF-1) \"/\" $(NF)}' | sed 's/\\.git$//')";
+    programs.fish.shellAliases.editor = "${config.editorExec} --servername (${config.vcsExec} remote get-url origin | awk -F'[:/]' '{print $(NF-1) \"/\" $(NF)}' | sed 's/\\.git$//')";
 
-    programs.vim = {
+    programs.vim = let
+      composeVimRC = pre: post: lib.strings.concatStringsSep "\n" (lib.lists.flatten [ pre config.editor.RCs post ]);
+    in {
       enable = true;
-      extraConfig = lib.strings.concatStringsSep "\n" ([ (builtins.readFile ./vimrc) ] ++ config.editor.RCs);
+      extraConfig = composeVimRC [
+        (builtins.readFile ./settings.vim)
+        (builtins.readFile ./helpers.vim)
+      ] [
+        (builtins.readFile ./mappings.vim)
+        (builtins.readFile ./autocmd.vim)
+      ];
     };
   };
 }

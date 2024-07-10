@@ -36,21 +36,6 @@
         let g:ale_virtualtext_prefix = '%comment% '
 
         set omnifunc=ale#completion#OmniFunc
-        inoremap <tab> <c-n>
-        inoremap <s-tab> <c-x><c-o>
-
-        nnoremap <silent> [e    <Plug>(ale_previous_wrap)
-        nnoremap <silent> ]e    <Plug>(ale_next_wrap)
-
-        nnoremap <localleader>a <Plug>(ale_code_action)
-        nnoremap <localleader>A <Plug>(ale_fix)
-        nnoremap <localleader>d <Plug>(ale_go_to_definition_in_vsplit)
-        nnoremap <localleader>D <Plug>(ale_go_to_type_definition_in_vsplit)
-        nnoremap <localleader>s <Plug>(ale_info)
-        nnoremap <localleader>S <Plug>(ale_toggle)
-        nnoremap <localleader>F :ALEFindReferences -quickfix \| copen<cr>
-        nnoremap <localleader>g <Plug>(ale_detail)
-        nnoremap <localleader>G <Plug>(ale_hover)
 
         hi ALEVirtualTextError              ctermfg=1
         hi ALEVirtualTextWarning            ctermfg=4

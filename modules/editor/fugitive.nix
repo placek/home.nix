@@ -113,9 +113,7 @@
           execute ":G absorb --base " . <sid>branchoffCommit()
         endfunction
 
-        function! s:gitAbsorbAndRebase()
-          execute ":G absorb --and-rebase --base " . <sid>branchoffCommit()
-        endfunction
+        nnoremap <silent> <Plug>(GitAbsorb) :call <sid>gitAbsorb()<cr>
 
         " push with force
         function! s:gitPushForce() abort
@@ -186,43 +184,10 @@
         " standard fugitive commands, autocommands and mappings
         command! -nargs=0 W Gwrite
         command! -nargs=0 E Gedit
-        command! -nargs=0 D GDelete
+        command! -nargs=0 D Gdelete
         command! -nargs=0 Gprune call <sid>gitPruneFile()
         command! -nargs=0 Gwip call <sid>gitWIP()
         command! -nargs=0 Grebase call <sid>gitRebaseBranch()
-        command! -nargs=0 Gabsorb call <sid>gitAbsorb()
-        command! -nargs=0 GabsorbAndRebase call <sid>gitAbsorbAndRebase()
-
-        autocmd! FileType fugitive  nnoremap <buffer> rI <Plug>(GitRebaseBranch)<cr>
-        autocmd! FileType gitcommit setlocal spell spelllang=en_us
-        autocmd! FileType gitcommit nnoremap <buffer> <cr> <Plug>(TertiusCommitMessage)<cr>
-        autocmd! FileType git       nnoremap <buffer> w <Plug>(GitCheckoutFromLine)<cr>
-        autocmd! FileType git       nnoremap <buffer> W <Plug>(GitCherryPickToBranch)<cr>
-
-        nnoremap <leader>a :Gabsorb<cr>
-        nnoremap <leader>A :GabsorbAndRebase<cr>
-        nnoremap <leader>b :G blame<cr>
-        nnoremap <leader>B :G branch --all<cr>
-        nnoremap <leader>c :GcLog --pretty=oneline<cr>
-        nnoremap <leader>C :0GlLog --pretty=oneline<cr>
-        nnoremap <leader>d <Plug>(GitChanges)<cr>
-        nnoremap <leader>e :Gedit<cr>
-        nnoremap <leader>f <Plug>(GitGrep)
-        nnoremap <leader>F <Plug>(GitFind)
-        nnoremap <leader>g <Plug>(GitToggleStatus)<cr>
-        nnoremap <leader>i :echo "Branch-off commit: " . <sid>branchoffCommit("HEAD")<cr>
-        nnoremap <leader>I :edit .<cr>
-        nnoremap <leader>n <Plug>(GitCheckoutFromInput)<cr>
-        nnoremap <leader><C-n> <Plug>(GitBranchOffFromCommit)<cr>
-        nnoremap <leader>o :G fetch<cr>
-        nnoremap <leader>O <Plug>(GitPullAndRebase)<cr>
-        nnoremap <leader>p :G push<cr>
-        nnoremap <leader>P :<Plug>(GitPushForce)<cr>
-        nnoremap <leader>s <Plug>(GitPickaxe)<cr>
-
-        vnoremap <leader>F <Plug>(GitFindSelected)<cr>
-        vnoremap <leader>f <Plug>(GitGrepSelected)<cr>
-        vnoremap <leader>s <Plug>(GitPickaxeSelected)<cr>
       ''
     ];
   };
