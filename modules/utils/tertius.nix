@@ -34,15 +34,15 @@ let
     }
 
     current_branch_commits() {
-      default_branch=$(${pkgs.git}/bin/git config --get core.default)
-      branchoff_commit=$(${pkgs.git}/bin/git merge-base $default_branch HEAD 2>/dev/null)
+      default_branch=$(${config.vcsExec} config --get core.default)
+      branchoff_commit=$(${config.vcsExec} merge-base $default_branch HEAD 2>/dev/null)
       if [ -n "$branchoff_commit" ]; then
-        ${pkgs.git}/bin/git log --format=format:"%H" $branchoff_commit..HEAD
+        ${config.vcsExec} log --format=format:"%H" $branchoff_commit..HEAD
       fi
     }
 
     user_story_id_from_branch() {
-      git rev-parse --abbrev-ref HEAD | sed -n 's@.*/\([[:digit:]]\+\).*@\1@p'
+      ${config.vcsExec} rev-parse --abbrev-ref HEAD | sed -n 's@\([[:digit:]]\+\).*@\1@p'
     }
 
     user_story_title() {
@@ -72,7 +72,7 @@ let
       body=$(cat)
       user_story_title=$(echo "$body" | head -n 1)
       user_story_body=$(echo "$body" | tail -n +2)
-      default_branch=$(${pkgs.git}/bin/git config --get core.default)
+      default_branch=$(${config.vcsExec} config --get core.default)
       base=$(echo $default_branch | ${pkgs.gnused}/bin/sed 's@.*/@@')
       branch_descr=$(echo $user_story_title | ${pkgs.gnused}/bin/sed -E 's/.*/\L&/; s/[^a-z0-9]+/-/g; s/-$//; s/^-//;')
       case $issue_tracker in
@@ -111,16 +111,16 @@ let
     apply_commit_messages() {
       branch_commits=$(current_branch_commits)
       for hash in $branch_commits; do
-        commit_message=$(${pkgs.git}/bin/git show -s --format=%B $hash)
+        commit_message=$(${config.vcsExec} show -s --format=%B $hash)
         data=$(${pkgs.jq}/bin/jq -n --arg commit_message "This is a change already implemented as a step towards solution of the problem:\n$commit_message" --argjson data "$data" '$data + [ { role: "user", content: $commit_message } ]')
       done
     }
 
     apply_commit_messages_from() {
-      author=$(${pkgs.git}/bin/git config --get user.email)
-      commits=$(${pkgs.git}/bin/git log --since="$1" --author=$author --format=format:"%H" --reverse)
+      author=$(${config.vcsExec} config --get user.email)
+      commits=$(${config.vcsExec} log --since="$1" --author=$author --format=format:"%H" --reverse)
       for hash in $commits; do
-        commit_message=$(${pkgs.git}/bin/git show -s --format=%B $hash)
+        commit_message=$(${config.vcsExec} show -s --format=%B $hash)
         data=$(${pkgs.jq}/bin/jq -n --arg commit_message "$commit_message" --argjson data "$data" '$data + [ { role: "user", content: $commit_message } ]')
       done
     }

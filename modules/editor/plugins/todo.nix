@@ -23,7 +23,7 @@
           execute ":set syntax=xit"
           if <sid>isBufferEmptyButComments()
             execute "normal! ggVGd"
-            call <sid>putCurrentGitHubIssue() " TODO: fix that
+            call <sid>putCurrentGitHubIssue()
           endif
           syntax match Comment /^#.*/ containedin=ALL
         endfunction

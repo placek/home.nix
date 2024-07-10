@@ -10,7 +10,6 @@
 
     editor.RCs = [
       ''
-
         let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:50'
         let g:ctrlp_show_hidden = 1
         let g:ctrlp_map = '<leader><leader>'
