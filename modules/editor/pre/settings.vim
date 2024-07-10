@@ -167,8 +167,3 @@ command! -nargs=0 Open !open %
 
 " leave only the current buffer - delete others
 command! -nargs=0 BufOnly execute '%bdelete|edit #|normal `"'
-
-" source a file under DIRENV_EXTRA_VIMRC environment variable if exists
-if !empty($DIRENV_EXTRA_VIMRC) && filereadable($DIRENV_EXTRA_VIMRC)
-  source $DIRENV_EXTRA_VIMRC
-endif
