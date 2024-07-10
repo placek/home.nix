@@ -45,17 +45,6 @@
 
         nnoremap <silent> <Plug>(GitToggleStatus) :<c-u>call <sid>gitToggleStatus()<cr>
 
-        " pickaxe search
-        function! s:gitPickaxe(query) abort
-          if !empty(a:query)
-            execute ":G log -p -G \"" a:query "\""
-            call setreg("/", "\\V" . a:query)
-          endif
-        endfunction
-
-        nnoremap <silent> <Plug>(GitPickaxe) :<c-u>call <sid>gitPickaxe(input("pickaxe /", "", "tag"))<cr>
-        vnoremap <silent> <Plug>(GitPickaxeSelected) :call <sid>gitPickaxe(<sid>selectedText())<cr>
-
         " prune a file in whole git history
         function! s:gitPruneFile(...) abort
           if a:0 > 0
@@ -98,7 +87,7 @@
           execute ":Gclog --pretty=oneline " . <sid>branchoffCommit(l:head) . ".." . l:head
         endfunction
 
-        nnoremap <silent> <Plug>(GitChanges) :call <sid>gitChanges()<cr>
+        nnoremap <silent> <Plug>(GitChanges) :<c-u>call <sid>gitChanges()<cr>
 
         " pull and rebase a feature branch
         function! s:gitPullAndRebase() abort
@@ -107,13 +96,13 @@
           echom "Branch rebased to its default branch"
         endfunction
 
-        nnoremap <silent> <Plug>(GitPullAndRebase) :call <sid>gitPullAndRebase()<cr>
+        nnoremap <silent> <Plug>(GitPullAndRebase) :<c-u>call <sid>gitPullAndRebase()<cr>
 
         function! s:gitAbsorb() abort
           execute ":G absorb --base " . <sid>branchoffCommit()
         endfunction
 
-        nnoremap <silent> <Plug>(GitAbsorb) :call <sid>gitAbsorb()<cr>
+        nnoremap <silent> <Plug>(GitAbsorb) :<c-u>call <sid>gitAbsorb()<cr>
 
         " push with force
         function! s:gitPushForce() abort
@@ -129,7 +118,7 @@
           endif
         endfunction
 
-        nnoremap <silent> <Plug>(GitPushForce) :call <sid>gitPushForce()<cr>
+        nnoremap <silent> <Plug>(GitPushForce) :<c-u>call <sid>gitPushForce()<cr>
 
         " checkout a branch
         function! s:gitCheckout(branch) abort
@@ -149,7 +138,7 @@
           execute ":G checkout -B " . l:branch_name
         endfunction
 
-        nnoremap <silent> <Plug>(GitBranchOffFromCommit) :call <sid>gitBranchOffFromCommit()<cr>
+        nnoremap <silent> <Plug>(GitBranchOffFromCommit) :<c-u>call <sid>gitBranchOffFromCommit()<cr>
 
         " cherry-pick a current commit to a target branch
         function! s:gitCherryPickToBranch(branch) abort
@@ -159,27 +148,28 @@
           execute ":G cherry-pick " . l:commit
         endfunction
 
-        nnoremap <silent> <Plug>(GitCherryPickToBranch) :call <sid>gitCherryPickToBranch(input("branch /"))<cr>
+        nnoremap <silent> <Plug>(GitCherryPickToBranch) :<c-u>call <sid>gitCherryPickToBranch(input("branch /"))<cr>
 
         " triggers a grep on query and opens quickfix list
-        function! s:grep(query) abort
+        function! s:gitGrep(query) abort
           if !empty(a:query)
             execute "silent Ggrep \"" . a:query . "\" | copen"
           endif
         endfunction
 
-        nnoremap <silent> <Plug>(GitFind) :call <sid>find(input("find /", "", "file_in_path"))<cr>
-        vnoremap <silent> <Plug>(GitFindSelected) :call <sid>find(<sid>selectedText())<cr>
+        nnoremap <silent> <Plug>(GitGrep) :<c-u>call <sid>gitGrep(input("grep /", "", "tag"))<cr>
+        vnoremap <silent> <Plug>(GitGrepSelected) :<c-u>call <sid>gitGrep(<sid>selectedText())<cr>
 
-        " finds a file using git ls-files or find command
-        function! s:find(query) abort
+        " pickaxe search
+        function! s:gitPickaxe(query) abort
           if !empty(a:query)
-            execute "silent cexpr system('${config.vcsExec}  ls-files \"**" . a:query . "*\" | sed \"s/.*/&:1:1/\"') | copen"
+            execute ":G log -p -G \"" a:query "\""
+            call setreg("/", "\\V" . a:query)
           endif
         endfunction
 
-        nnoremap <silent> <Plug>(GitGrep) :call <sid>grep(input("grep /", "", "tag"))<cr>
-        vnoremap <silent> <Plug>(GitGrepSelected) :call <sid>grep(<sid>selectedText())<cr>
+        nnoremap <silent> <Plug>(GitPickaxe) :<c-u>call <sid>gitPickaxe(input("pickaxe /", "", "tag"))<cr>
+        vnoremap <silent> <Plug>(GitPickaxeSelected) :<c-u>call <sid>gitPickaxe(<sid>selectedText())<cr>
 
         " standard fugitive commands, autocommands and mappings
         command! -nargs=0 W Gwrite

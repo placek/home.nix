@@ -25,26 +25,26 @@
           let l:summary = substitute(system("${config.tertiusExec} pull-request write"), '\r', "", 'g')
           execute "0put =l:summary"
           redraw!
-          autocmd! BufWinLeave <buffer> normal! \<Plug>(TertiusUpdatePullRequestDescription)
+          autocmd! BufWinLeave <buffer> call <sid>tertiusUpdatePullRequest()
         endfunction
 
-        nnoremap <silent> <Plug>(TertiusPullRequestDescriptionWindow) :<c-u>call <sid>tertiusPullRequestDescriptionWindow()<cr>
+        nnoremap <silent> <Plug>(TertiusPullRequestWindow) :<c-u>call <sid>tertiusPullRequestDescriptionWindow()<cr>
 
         " update the pull request description
-        function! s:tertiusUpdatePullRequestDescription() abort
+        function! s:tertiusUpdatePullRequest() abort
           if !<sid>isBufferEmpty()
             execute ":%!${config.tertiusExec} pull-request publish"
           endif
         endfunction
 
-        nnoremap <silent> <Plug>(TertiusUpdatePullRequestDescription) :<c-u>call <sid>tertiusUpdatePullRequestDescription()<cr>
+        nnoremap <silent> <Plug>(TertiusUpdatePullRequest) :<c-u>call <sid>tertiusUpdatePullRequest()<cr>
 
         " open a window for issue description
         function! s:tertiusIssueWindow() abort
           call <sid>openIntermediateBuffer()
           file /tmp/issue-description
           nnoremap <buffer> <cr> <Plug>(TertiusIssue)<cr>
-          autocmd! BufWinLeave <buffer> normal! \<Plug>(TertiusReportIssue)
+          autocmd! BufWinLeave <buffer> call <sid>tertiusReportIssue()
         endfunction
 
         nnoremap <silent> <Plug>(TertiusIssueWindow) :<c-u>call <sid>tertiusIssueWindow()<cr>
@@ -113,13 +113,6 @@
         endfunction
 
         vnoremap <silent> <Plug>(TertiusExplain) :<c-u>call <sid>tertiusExplain()<cr>
-
-        " standard mappings
-        vnoremap <leader>y <Plug>(TertiusAsk)<cr>
-        vnoremap <localleader>y <Plug>(TertiusExplain)<cr>
-        nnoremap <leader>a <Plug>(TertiusIssueWindow)<cr>
-        nnoremap <leader>A <Plug>(TertiusPullRequestDescriptionWindow)<cr>
-        nnoremap <localleader>Y <Plug>(TertiusFixCode)<cr>
       ''
     ];
   };

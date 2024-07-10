@@ -32,37 +32,22 @@
     };
   };
 
-  imports = [
-    ./dirvish.nix
-    ./tags.nix
-    ./fugitive.nix
-    ./ctrlp.nix
-    ./ale.nix
-    ./copilot.nix
-    ./tertius.nix
-    ./gitgutter.nix
-    ./blameline.nix
-    ./expand-region.nix
-    ./syntax.nix
-    ./todo.nix
-  ];
+  imports = lib.filesystem.listFilesRecursive ./plugins;
 
   config = {
     home.sessionVariables.EDITOR = "vim";
 
     programs.fish.shellAliases.editor = "${config.editorExec} --servername (${config.vcsExec} remote get-url origin | awk -F'[:/]' '{print $(NF-1) \"/\" $(NF)}' | sed 's/\\.git$//')";
 
-    programs.vim = let
-      composeVimRC = pre: post: lib.strings.concatStringsSep "\n" (lib.lists.flatten [ pre config.editor.RCs post ]);
-    in {
+    programs.vim = {
       enable = true;
-      extraConfig = composeVimRC [
-        (builtins.readFile ./settings.vim)
-        (builtins.readFile ./helpers.vim)
-      ] [
-        (builtins.readFile ./mappings.vim)
-        (builtins.readFile ./autocmd.vim)
-      ];
+      # compose the vimrc out of files from pre directory, plugin configurations
+      # and files from post directory:
+      extraConfig = lib.strings.concatStringsSep "\n" (lib.lists.flatten [
+        (builtins.map builtins.readFile (lib.filesystem.listFilesRecursive ./pre))
+        config.editor.RCs
+        (builtins.map builtins.readFile (lib.filesystem.listFilesRecursive ./post))
+      ]);
     };
   };
 }

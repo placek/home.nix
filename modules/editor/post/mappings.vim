@@ -1,68 +1,76 @@
-inoremap <tab> <c-n>
-inoremap <s-tab> <c-x><c-o>
-inoremap <silent><script><expr> <F11> copilot#Accept("\<cr>")
-imap <F10> <Plug>(copilot-previous)
-imap <F12> <Plug>(copilot-next)
-imap <F9> <Plug>(copilot-suggest)
+" LOCALLEADER
+nnoremap <localleader><localleader> :CtrlPBuffer<cr>
+nnoremap <silent><localleader>a <Plug>(ale_code_action)
+nnoremap <silent><localleader>A <Plug>(ale_fix)
+nnoremap <silent><localleader>b :lmake file=%:.<cr>
+nnoremap <silent><localleader>B :lmake file=%:.:<c-r>=line('.')<cr><cr>
+nnoremap <silent><localleader>c :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
+nnoremap <silent><localleader>C :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
+nnoremap <silent><localleader>d <Plug>(ale_go_to_definition_in_vsplit)
+nnoremap <silent><localleader>D <Plug>(ale_go_to_type_definition_in_vsplit)
+nnoremap <silent><localleader>e :call <sid>commentToggle()<cr>
+nnoremap <silent><localleader>f g<c-]>
+nnoremap <silent><localleader>F :ALEFindReferences -quickfix \| copen<cr>
+nnoremap <silent><localleader>g <Plug>(ale_detail)
+nnoremap <silent><localleader>G <Plug>(ale_hover)
+nnoremap <silent><localleader>s <Plug>(ale_info)
+nnoremap <silent><localleader>S <Plug>(ale_toggle)
+nnoremap <silent><localleader>v :!<c-r>=&makeprg<cr> file=%:.<cr>
+nnoremap <silent><localleader>V :!<c-r>=&makeprg<cr> file=%:.:<c-r>=line('.')<cr><cr>
+nnoremap <silent><localleader>x :call <sid>altFile()<cr>
+nnoremap <silent><localleader>y <Plug>(TertiusFixCode)
 
-vmap v     <Plug>(expand_region_expand)
-vmap <C-v> <Plug>(expand_region_shrink)
+vnoremap <silent><localleader>f g<c-]>
+vnoremap <silent><localleader>y <Plug>(TertiusExplain)
 
+" LEADER
+nnoremap <silent><leader><leader> :CtrlP<cr>
+nnoremap <silent><leader>a <Plug>(TertiusIssueWindow)
+nnoremap <silent><leader>A <Plug>(TertiusPullRequestWindow)
+nnoremap <silent><leader>b :G blame<cr>
+nnoremap <silent><leader>B :G branch --all<cr>
+nnoremap <silent><leader>c :GcLog --pretty=oneline<cr>
+nnoremap <silent><leader>C :0GlLog --pretty=oneline<cr>
+nnoremap <silent><leader>d <Plug>(GitChanges)
+nnoremap <silent><leader>e :Gedit<cr>
+nnoremap <silent><leader>f <Plug>(GitGrep)
+nnoremap <silent><leader>F <Plug>(GitPickaxe)
+nnoremap <silent><leader>g <Plug>(GitToggleStatus)
+nnoremap <silent><leader>i :echo "Branch-off commit: " . <sid>branchoffCommit("HEAD")<cr>
+nnoremap <silent><leader>n <Plug>(GitCheckoutFromInput)
+nnoremap <silent><leader>N <Plug>(GitBranchOffFromCommit)
+nnoremap <silent><leader>o :G fetch<cr>
+nnoremap <silent><leader>O <Plug>(GitPullAndRebase)
+nnoremap <silent><leader>p :G push<cr>
+nnoremap <silent><leader>P <Plug>(GitPushForce)
+nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
+nnoremap <silent><leader>r :edit .<cr>
+nnoremap <silent><leader>v :vertical terminal<cr>
+nnoremap <silent><leader>w :call <sid>toggleLocList()<cr>
+nnoremap <silent><leader>x :call <sid>toggleTodoFile()<cr>
+
+vnoremap <silent><leader>f <Plug>(GitGrepSelected)
+vnoremap <silent><leader>F <Plug>(GitPickaxeSelected)
+vnoremap <silent><leader>y <Plug>(TertiusAsk)
+
+" movement
 nnoremap <silent> [e <Plug>(ale_previous_wrap)
 nnoremap <silent> ]e <Plug>(ale_next_wrap)
 nnoremap <silent> ]h :GitGutterNextHunk<cr>
 nnoremap <silent> [h :GitGutterPrevHunk<cr>
 
-nnoremap <localleader><localleader> :CtrlPBuffer<cr>
-nnoremap <silent><localleader>A <Plug>(ale_fix)
-nnoremap <silent><localleader>B :lmake file=%:.:<c-r>=line('.')<cr><cr>
-nnoremap <silent><localleader>C :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
-nnoremap <silent><localleader>D <Plug>(ale_go_to_type_definition_in_vsplit)
-nnoremap <silent><localleader>F :ALEFindReferences -quickfix \| copen<cr>
-nnoremap <silent><localleader>G <Plug>(ale_hover)
-nnoremap <silent><localleader>S <Plug>(ale_toggle)
-nnoremap <silent><localleader>V :!<c-r>=&makeprg<cr> file=%:.:<c-r>=line('.')<cr><cr>
-nnoremap <silent><localleader>a <Plug>(ale_code_action)
-nnoremap <silent><localleader>b :lmake file=%:.<cr>
-nnoremap <silent><localleader>c :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
-nnoremap <silent><localleader>d <Plug>(ale_go_to_definition_in_vsplit)
-nnoremap <silent><localleader>e :call <sid>commentToggle()<cr>
-nnoremap <silent><localleader>f g<c-]>
-nnoremap <silent><localleader>g <Plug>(ale_detail)
-nnoremap <silent><localleader>s <Plug>(ale_info)
-nnoremap <silent><localleader>v :!<c-r>=&makeprg<cr> file=%:.<cr>
-nnoremap <silent><localleader>x :call <sid>altFile()<cr>
-vnoremap <silent><localleader>e :call <sid>commentToggle()<cr>
+" completion
+inoremap <tab> <c-n>
 
-vnoremap <localleader>f g<c-]>
+" copilot
+inoremap <silent><script><expr> <F11> copilot#Accept("\<cr>")
+imap <F10> <Plug>(copilot-previous)
+imap <F12> <Plug>(copilot-next)
+imap <F9> <Plug>(copilot-suggest)
 
-nnoremap <silent><leader><leader> :CtrlP<cr>
-nnoremap <silent><leader>B :G branch --all<cr>
-nnoremap <silent><leader>C :0GlLog --pretty=oneline<cr>
-nnoremap <silent><leader>F <Plug>(GitFind)
-nnoremap <silent><leader>I :echo "Branch-off commit: " . <sid>branchoffCommit("HEAD")<cr>
-nnoremap <silent><leader>N <Plug>(GitBranchOffFromCommit)
-nnoremap <silent><leader>O <Plug>(GitPullAndRebase)
-nnoremap <silent><leader>P <Plug>(GitPushForce)
-nnoremap <silent><leader>b :G blame<cr>
-nnoremap <silent><leader>c :GcLog --pretty=oneline<cr>
-nnoremap <silent><leader>d <Plug>(GitChanges)
-nnoremap <silent><leader>e :Gedit<cr>
-nnoremap <silent><leader>f <Plug>(GitGrep)
-nnoremap <silent><leader>g <Plug>(GitToggleStatus)
-nnoremap <silent><leader>i :edit .<cr>
-nnoremap <silent><leader>n <Plug>(GitCheckoutFromInput)
-nnoremap <silent><leader>o :G fetch<cr>
-nnoremap <silent><leader>p :G push<cr>
-nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
-nnoremap <silent><leader>s <Plug>(GitPickaxe)
-nnoremap <silent><leader>v :vertical terminal<cr>
-nnoremap <silent><leader>w :call <sid>toggleLocList()<cr>
-nnoremap <silent><leader>x :call <sid>toggleTodoFile()<cr>
-
-vnoremap <silent><leader>F <Plug>(GitFindSelected)
-vnoremap <silent><leader>f <Plug>(GitGrepSelected)
-vnoremap <silent><leader>s <Plug>(GitPickaxeSelected)
+" expand region
+vmap v     <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
 
 " some appearance togglable settings
 nnoremap <silent><leader>1 :set relativenumber!<cr>
@@ -94,10 +102,10 @@ nnoremap <localleader>k :bprevious<cr>
 nnoremap <localleader>j :bnext<cr>
 
 " move around windows with leader key
-nnoremap <silent><leader>k :wincmd k<cr>
-nnoremap <silent><leader>j :wincmd j<cr>
 nnoremap <silent><leader>h :wincmd h<cr>
 nnoremap <silent><leader>l :wincmd l<cr>
+nnoremap <silent><leader>k :wincmd k<cr>
+nnoremap <silent><leader>j :wincmd j<cr>
 
 " lookup
 vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
