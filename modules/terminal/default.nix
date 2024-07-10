@@ -13,6 +13,11 @@
     };
   };
 
+  imports = [
+    ./key-bindings.nix
+    ./settings.nix
+  ];
+
   config = {
     home.packages = [ pkgs.kitty ];
 
@@ -27,13 +32,6 @@
 
     programs.fish.shellAliases.icat = "kitty +kitten icat";
 
-    programs.kitty = {
-      enable = true;
-      font.name = config.gui.font.name;
-      font.size = config.gui.font.size;
-      keybindings = import ./key-bindings.nix;
-      settings = import ./settings.nix { inherit (config) shellExec editorExec; inherit (config.gui) theme; };
-      extraConfig = builtins.readFile ./extraConfig;
-    };
+    programs.kitty.enable = true;
   };
 }
