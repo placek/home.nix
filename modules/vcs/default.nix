@@ -45,9 +45,14 @@
     };
   };
 
+  imports = [
+    ./git-ctags.nix
+#     ./aliases.nix
+#     ./ignores.nix
+  ];
+
   config = {
     home.packages = with pkgs; [
-      (import ./git-ctags.nix { inherit pkgs; })
       git-crypt
       git-absorb
     ];
