@@ -21,15 +21,16 @@ in
         default = "${config.home.homeDirectory}/Downloads";
         description = "A path to downloads directory.";
       };
-
-      searchEngines = mkOption {
-        type = types.attrs;
-        default = import ./search-engines.nix;
-        description = "Browser search engines.";
-        readOnly = true;
-      };
     };
   };
+
+  imports = [
+    ./aliases.nix
+    ./key-bindings.nix
+    ./quickmarks.nix
+    ./settings.nix
+    ./search-engines.nix
+  ];
 
   config = {
     home.packages = [ qutebrowser ];
@@ -54,7 +55,6 @@ in
       "x-scheme-handler/https" = [ "qutebrowser.desktop" ];
     };
 
-    xdg.configFile."qutebrowser/bookmarks/urls".source = ./bookmarks;
     xdg.configFile."qutebrowser/userscripts/GBrowse" = {
       source = ./GBrowse;
       executable = true;
@@ -63,13 +63,7 @@ in
     programs.qutebrowser = {
       enable = true;
       package = qutebrowser;
-      loadAutoconfig = false;
       searchEngines = config.browser.searchEngines;
-      keyBindings = import ./key-bindings.nix { inherit (config) terminalExec downloaderExec ytDownloaderExec menuExec; inherit (config.browser) downloadsDirectory; };
-      quickmarks = import ./quickmarks.nix;
-      extraConfig = builtins.readFile ./extraConfig;
-      aliases = import ./aliases.nix;
-      settings = import ./settings.nix { inherit (config) terminalExec editorExec fileManagerExec; inherit (config.browser) downloadsDirectory; inherit (config.gui) theme font; };
     };
   };
 }
