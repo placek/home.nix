@@ -105,7 +105,7 @@ let
         ;;
 
       p*) # preview
-        ffplay "$2" && exit 0
+        ${pkgs.ffmpeg}/bin/ffplay "$2" && exit 0
         ;;
 
       re*) # resize
@@ -129,7 +129,7 @@ let
         ;;
 
       gif)
-        ${pkgs.ffmpeg}/bin/ffmpeg -i "$2" -vf "fps=10,scale=320:-1:flags=lanczos" -c:v pam -f image2pipe - | convert -delay 10 - -loop 0 -layers optimize "''${2%.*}.gif"
+        ${pkgs.ffmpeg}/bin/ffmpeg -i "$2" -vf "fps=10,scale=320:-1:flags=lanczos" -c:v pam -f image2pipe - | ${pkgs.imagemagick}/bin/convert -delay 10 - -loop 0 -layers optimize "''${2%.*}.gif"
         ;;
 
       *)
@@ -152,11 +152,11 @@ let
   audio = pkgs.writeShellScriptBin "audio" ''
     case "$1" in
       dev*) # list devices
-        pactl list sources short
+        ${pkgs.pulseaudio}/bin/pactl list sources short
         ;;
 
       loop*) # redirect audio input to other card output
-        parec -d $2 --latency-msec 1 | pacat -p --latency-msec 1
+        ${pkgs.pulseaudio}/bin/parec -d $2 --latency-msec 1 | ${pkgs.pulseaudio}/bin/pacat -p --latency-msec 1
         ;;
 
       *)
@@ -169,20 +169,19 @@ let
 
   psalmus = pkgs.writeShellScriptBin "psalmus" ''
     if [ $# -eq 0 ]; then
-      data=$(date +"%Y-%m-%d")
+      today=$(date +"%Y-%m-%d")
     else
-      data=$(date -d "$1" +"%Y-%m-%d" 2>/dev/null)
+      today=$(date -d "$1" +"%Y-%m-%d" 2>/dev/null)
       if [ $? -ne 0 ]; then
-        echo "Błąd: Nieprawidłowy format daty."
+        echo "invalid date format"
         exit 1
       fi
     fi
 
-    numer_dnia=$(date -d "$data" +"%-j")
-    numer_psalmu=$(( (numer_dnia * 79) % 150 + 1 ))
+    day_no=$(date -d "$today" +"%-j")
+    psalm_no=$(( (day_no * 79) % 150 + 1 ))
 
-    echo "Data: $data"
-    echo "Numer psalmu dla dnia $numer_dnia: $numer_psalmu"
+    echo "$psalm_no"
   '';
 in
 {

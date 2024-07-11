@@ -4,13 +4,6 @@
 , ...
 }:
 let
-  speak = import ./speak.nix { inherit pkgs; };
-  image = import ./image.nix { inherit pkgs; };
-  video = import ./video.nix { inherit pkgs; };
-  audio = import ./audio.nix { inherit pkgs; };
-  pbcopy = pkgs.writeShellScriptBin "pbcopy" "xclip -selection clipboard";
-  pbpaste = pkgs.writeShellScriptBin "pbpaste" "xclip -selection clipboard -o";
-  psalmus = import ./psalmus.nix { inherit pkgs; };
   vasm = import ./vasm.nix { inherit pkgs; };
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
 #   minipro = import ./minipro.nix { inherit pkgs; };
@@ -43,6 +36,8 @@ in
     ./freetube.nix
     ./tertius.nix
     ./nnn.nix
+    ./clipboard.nix
+    ./scripts.nix
   ];
 
   config = {
@@ -59,14 +54,6 @@ in
     programs.zoxide.enable = true;
 
     home.packages = with pkgs; [
-      audio
-      image
-      pbcopy
-      pbpaste
-      psalmus
-      speak
-      video
-
       dcc6502           # 6502 disassembler
 #       minipro           # EEPROM programmer
       vasm              # 6502 assembler
