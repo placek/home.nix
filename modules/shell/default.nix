@@ -28,7 +28,21 @@
 
     programs.fish = {
       enable = true;
-      interactiveShellInit = builtins.readFile ./extraConfig;
+      interactiveShellInit = ''
+        bind \ex echo\ -n\ \(clear\ \|\ string\ replace\ \\e\\\[3J\ \"\"\)\;\ commandline\ -f\ repaint
+        bind \ec fzf-cd-widget
+        bind \ez undo
+        bind \eu togglecase_char
+
+        set --universal pure_show_system_time true
+        set --universal pure_color_primary yellow
+        set --universal pure_color_success green
+        set --universal pure_color_danger red
+        set --universal pure_enable_nixdevshell true
+        set --universal pure_color_nixdevshell_prefix brblack
+        set --universal pure_symbol_nixdevshell_prefix '''
+        set --universal pure_enable_git true
+      '';
     };
   };
 }
