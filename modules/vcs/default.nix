@@ -47,6 +47,7 @@
 
   imports = [
     ./git-ctags.nix
+    ./gh.nix
     ./aliases.nix
     ./ignores.nix
     ./settings.nix
@@ -57,18 +58,6 @@
       git-crypt
       git-absorb
     ];
-
-    programs.gh = {
-      enable = true;
-      settings = {
-        git_protocol = "ssh";
-        editor = config.editorExec;
-        prompt = "enabled";
-        aliases.current = "pr view --comments";
-      };
-    };
-
-    programs.gh-dash.enable = true;
 
     programs.git = {
       enable = true;
