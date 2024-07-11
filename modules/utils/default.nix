@@ -42,6 +42,7 @@ in
   imports = [
     ./freetube.nix
     ./tertius.nix
+    ./nnn.nix
   ];
 
   config = {
@@ -49,10 +50,13 @@ in
     programs.bat.config.theme = "gruvbox-dark";
     programs.bat.enable = true;
     programs.direnv.enable = true;
+    programs.fzf.enable = true;
     programs.htop.enable = true;
     programs.jq.enable = true;
+    programs.lsd.enable = true;
     programs.nix-index.enable = true;
     programs.yt-dlp.enable = true;
+    programs.zoxide.enable = true;
 
     home.packages = with pkgs; [
       audio

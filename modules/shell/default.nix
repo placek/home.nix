@@ -16,7 +16,6 @@
   imports = [
     ./aliases.nix
     ./plugins.nix
-    ./nnn.nix
   ];
 
   config = {
@@ -26,10 +25,6 @@
     programs.nix-index.enableFishIntegration = true;
 
     services.gpg-agent.enableFishIntegration = true;
-
-    programs.fzf.enable = true;
-    programs.lsd.enable = true;
-    programs.zoxide.enable = true;
 
     programs.fish = {
       enable = true;
