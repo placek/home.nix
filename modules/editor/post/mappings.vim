@@ -45,7 +45,9 @@ nnoremap <silent><leader>p :G push<cr>
 nnoremap <silent><leader>P <Plug>(GitPushForce)
 nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
 nnoremap <silent><leader>r :edit .<cr>
+nnoremap <silent><leader>R <Plug>(GitOpen)
 nnoremap <silent><leader>v :vertical terminal<cr>
+nnoremap <silent><leader>V :terminal<cr>
 nnoremap <silent><leader>w :call <sid>toggleLocList()<cr>
 nnoremap <silent><leader>x :call <sid>toggleTodoFile()<cr>
 

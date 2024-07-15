@@ -19,7 +19,7 @@
         vnoremap <silent> <Plug>(TertiusAsk) :<c-u>call <sid>tertiusAsk()<cr>
 
         " generate a pull request description
-        function! s:tertiusPullRequestDescriptionWindow() abort
+        function! s:tertiusPullRequestWindow() abort
           call <sid>openIntermediateBuffer()
           file /tmp/pull-request-description
           let l:summary = substitute(system("${config.tertiusExec} pull-request write"), '\r', "", 'g')
@@ -28,7 +28,7 @@
           autocmd! BufWinLeave <buffer> call <sid>tertiusUpdatePullRequest()
         endfunction
 
-        nnoremap <silent> <Plug>(TertiusPullRequestWindow) :<c-u>call <sid>tertiusPullRequestDescriptionWindow()<cr>
+        nnoremap <silent> <Plug>(TertiusPullRequestWindow) :<c-u>call <sid>tertiusPullRequestWindow()<cr>
 
         " update the pull request description
         function! s:tertiusUpdatePullRequest() abort

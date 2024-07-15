@@ -113,7 +113,7 @@
 
           if l:branch != l:base
             if confirm("Do you want to open a pull request?", "&yes\n&No", 2) == 1
-              normal! \<Plug>(TertiusPullRequestDescriptionWindow)
+              call <sid>tertiusPullRequestWindow()
             endif
           endif
         endfunction
@@ -143,12 +143,13 @@
         " cherry-pick a current commit to a target branch
         function! s:gitCherryPickToBranch(branch) abort
           let l:commit = trim(system("${config.vcsExec} log -1 --pretty=%H"))
-          execute ":G switch " . a:branch
+          let l:branch = substitute(substitute(a:branch, '^.*\s\+', "", ""), 'remotes/origin/', "", "")
+          execute ":G switch " . l:branch
           execute ":G pull --rebase"
           execute ":G cherry-pick " . l:commit
         endfunction
 
-        nnoremap <silent> <Plug>(GitCherryPickToBranch) :<c-u>call <sid>gitCherryPickToBranch(input("branch /"))<cr>
+        nnoremap <silent> <Plug>(GitCherryPickToBranchFromLine) :<c-u>call <sid>gitCherryPickToBranch(trim(getline(".")))<cr>
 
         " triggers a grep on query and opens quickfix list
         function! s:gitGrep(query) abort
