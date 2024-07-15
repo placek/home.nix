@@ -17,6 +17,61 @@
           return trim(system("${config.vcsExec} config --get core.default"))
         endfunction
 
+        function! s:currentBranch() abort
+          return trim(system("${config.vcsExec} rev-parse --abbrev-ref HEAD"))
+        endfunction
+
+        function! s:projectName() abort
+          let l:url = trim(system('${config.vcsExec} remote get-url origin 2>/dev/null'))
+          let l:patterns = [
+                \ 'git@[^:]\+:[^/]\+/\([^/]\+\)\.git',
+                \ 'https\?://[^/]\+/\([^/]\+\)\.git',
+                \ 'git@[^:]\+:[^/]\+/\([^/]\+\)',
+                \ 'https\?://[^/]\+/\([^/]\+\)'
+                \ ]
+          for l:pattern in l:patterns
+            let l:matches = matchlist(l:url, l:pattern)
+            if len(l:matches) > 0
+              return l:matches[1]
+            endif
+          endfor
+          throw 'Unable to extract project name from git remote.'
+        endfunction
+
+        function! s:projectOwner() abort
+          let l:url = trim(system('${config.vcsExec} remote get-url origin 2>/dev/null'))
+          let l:patterns = [
+                \ 'git@\([^:]\+\):\([^/]\+\)/[^/]\+\.git',
+                \ 'https\?://[^/]\+/\([^/]\+\)/[^/]\+\.git',
+                \ 'git@\([^:]\+\):\([^/]\+\)/[^/]\+',
+                \ 'https\?://[^/]\+/\([^/]\+\)/[^/]\+'
+                \ ]
+          for l:pattern in l:patterns
+            let l:matches = matchlist(l:url, l:pattern)
+            if len(l:matches) > 0
+              return l:matches[2]
+            endif
+          endfor
+          throw 'Unable to extract owner from git remote.'
+        endfunction
+
+        function! s:gitHostingUrl() abort
+          echo getcwd()
+          let l:file = expand('%:~:.')
+          echo l:file
+          let l:owner = <sid>projectOwner()
+          let l:repo = <sid>projectName()
+          let l:hosting = $GIT_HOSTING ?? 'github'
+          echo l:owner . '/' . l:repo . '/blob/' .  <sid>currentBranch() . '/' . l:file
+          if l:hosting ==# 'github'
+            return 'https://github.com/' .  l:owner . '/' . l:repo . '/blob/' .  <sid>currentBranch() . '/' . l:file
+          " elseif l:hosting ==# 'gitlab'
+          "   return 'https://gitlab.com/' . l:owner . '/' . l:repo . '/blob/' . <sid>currentBranch() . '/' . l:file
+          else
+            throw 'Unsupported GIT_HOSTING environment: ' . l:hosting
+          endif
+        endfunction
+
         function! s:branchoffCommit(...) abort
           if a:0 > 0
             let l:head = a:1
@@ -29,6 +84,17 @@
         function! s:whatthecommit() abort
           return trim(system("curl -Ls whatthecommit.com/index.txt"))
         endfunction
+
+        " open a file in a git hosting page in branch context
+        function! s:openFileInGitHosting() abort
+          let l:bufname = bufname('%')
+          if !empty(l:bufname) && filereadable(l:bufname)
+            silent execute '!${config.browserExec} ' . <sid>gitHostingUrl()
+            redraw!
+          endif
+        endfunction
+
+        nnoremap <silent> <Plug>(GitOpen) :<c-u>call <sid>openFileInGitHosting()<cr>
 
         " toggle fugitive status window
         function! s:gitToggleStatus() abort
