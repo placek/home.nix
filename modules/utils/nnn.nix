@@ -3,12 +3,22 @@
 , ...
 }:
 let
-  plugins = pkgs.fetchFromGitHub {
-    owner = "jarun";
-    repo = "nnn";
-    rev = "v4.0";
-    sha256 = "sha256-Hpc8YaJeAzJoEi7aJ6DntH2VLkoR6ToP6tPYn3llR7k=";
+  autojump = pkgs.writeScriptBin "autojump" ''
+    odir="$(zoxide query -i --)"
+    printf "%s" "0c$odir" > "$NNN_PIPE"
+  '';
+  icat = pkgs.writeScriptBin "icat" ''
+    kitty +kitten icat --silent --scale-up "$1"
+    read -p "Press any key to continue…" -n1 -s
+  '';
+  suedit = pkgs.writeScriptBin "suedit" ''
+    sudo -E "$EDITOR" "$1"
+  '';
+  plugins = pkgs.buildEnv {
+    name = "nnn-plugins";
+    paths = [ autojump icat suedit ];
   };
+  d = c: builtins.trace c c;
 in
 {
   config.programs.nnn = {
@@ -19,11 +29,10 @@ in
       d = "~/Downloads";
       p = "~/Projects";
     };
-    plugins.src = plugins + "/plugins";
+    plugins.src = (d "${plugins}") + "/bin";
     plugins.mappings = {
       z = "autojump";
-      x = "togglex";
-      r = "renamer";
+      p = "icat";
       s = "suedit";
     };
   };

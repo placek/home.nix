@@ -23,7 +23,7 @@ in
     "kitty_mod+shift+h" = "move_window_backward";
     "kitty_mod+shift+l" = "move_window_forward";
 
-    "kitty_mod+enter" = "launch --type=window --cwd=current --title current";
+    "kitty_mod+enter" = "launch --type=window --cwd=current";
 
     "kitty_mod+space" = "next_layout";
 
