@@ -12,7 +12,7 @@ let
       exit 1
     fi
 
-    model="''${OPENAI_MODEL:-gpt-3.5-turbo}"
+    model="''${OPENAI_MODEL:-gpt-4o-mini}"
     language="''${OPENAI_LANGUAGE:-english}"
     issue_tracker="''${OPENAI_ISSUE_TRACKER:-github}"
     duration="''${OPENAI_DURATION:-24 hours}"
