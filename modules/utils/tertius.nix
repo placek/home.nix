@@ -42,7 +42,7 @@ let
     }
 
     user_story_id_from_branch() {
-      ${config.vcsExec} rev-parse --abbrev-ref HEAD | sed 's@[^[:digit:]]*\([[:digit:]]\+\).*@\1@'
+      ${config.vcsExec} rev-parse --abbrev-ref HEAD | sed -n 's@[^[:digit:]]*\([[:digit:]]\+\).*@\1@p'
     }
 
     user_story_title() {
