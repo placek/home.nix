@@ -71,6 +71,7 @@
       xf86_input_wacom
 
       arandr
+      discord
       gimp
       inkscape-with-extensions
       kicad
