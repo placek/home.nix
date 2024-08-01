@@ -3,8 +3,6 @@
 , ...
 }:
 pkgs.writeShellScriptBin "sshot" ''
-  #!${pkgs.stdenv.shell}
-
   file="${config.browser.downloadsDirectory}/sshot.png"
 
   case "$1" in

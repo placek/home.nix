@@ -67,7 +67,6 @@
   config = {
     home.packages = with pkgs; [
       libnotify
-      xclip
       xf86_input_wacom
 
       arandr
