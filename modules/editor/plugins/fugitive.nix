@@ -230,7 +230,7 @@
         " pickaxe search
         function! s:gitPickaxe(query) abort
           if !empty(a:query)
-            execute ":G log -p -G \"" a:query "\""
+            execute ":G log -p -G \"" . a:query . "\""
             call setreg("/", "\\V" . a:query)
           endif
         endfunction
