@@ -98,7 +98,7 @@ hi PmenuSel     ctermbg=8  ctermfg=15
 hi QuickFixLine ctermbg=8
 hi Search       ctermbg=8  ctermfg=11 cterm=bold
 hi SignColumn   ctermbg=0
-hi SpellBad     ctermbg=8
+hi SpellBad     ctermbg=8  ctermfg=9  cterm=underline
 hi StatusLine                         cterm=bold
 hi StatusLineNC ctermbg=0  ctermfg=0  cterm=none
 hi TabLine      ctermbg=8  ctermfg=7  cterm=none
@@ -109,6 +109,8 @@ hi Visual       ctermbg=7  ctermfg=0
 
 hi link TabLineFill StatusLineNC
 hi link TabLineSel User1
+hi link SpellCap SpellBad
+hi link SpellLocal SpellBad
 
 " variable name
 hi! Identifier   ctermfg=12 cterm=none
