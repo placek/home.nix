@@ -91,6 +91,7 @@ in
       orca-c            # midi sequencer
       p7zip             # extract 7z archives
       pandoc            # document converter
+      qFlipper          # flipper control software
       qmk               # keyboard firmware
       rclone            # cloud storage
       ripgrep           # search tool
