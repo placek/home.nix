@@ -48,6 +48,7 @@ in
       wine-rome-total-war-enhancement
       dwarf-fortress
 
+      (pkgs.prismlauncher.override { jdks = [ pkgs.temurin-bin ]; })
       pkgs.wineWowPackages.stable
       pkgs.steam
     ];
