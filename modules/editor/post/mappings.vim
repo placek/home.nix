@@ -2,8 +2,8 @@
 nnoremap <localleader><localleader> :CtrlPBuffer<cr>
 nnoremap <silent><localleader>a <Plug>(ale_code_action)
 nnoremap <silent><localleader>A <Plug>(ale_fix)
-nnoremap <silent><localleader>b :lmake file=%:.<cr>
-nnoremap <silent><localleader>B :lmake file=%:.:<c-r>=line('.')<cr><cr>
+nnoremap <silent><localleader>b :lmake %:.<cr>
+nnoremap <silent><localleader>B :lmake %:. line=<c-r>=line('.')<cr><cr>
 nnoremap <silent><localleader>c :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
 nnoremap <silent><localleader>C :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
 nnoremap <silent><localleader>d <Plug>(ale_go_to_definition_in_vsplit)
@@ -13,10 +13,11 @@ nnoremap <silent><localleader>f g<c-]>
 nnoremap <silent><localleader>F :ALEFindReferences -quickfix \| copen<cr>
 nnoremap <silent><localleader>g <Plug>(ale_detail)
 nnoremap <silent><localleader>G <Plug>(ale_hover)
+nnoremap <silent><localleader>w :call <sid>toggleLocList()<cr>
 nnoremap <silent><localleader>s <Plug>(ale_info)
 nnoremap <silent><localleader>S <Plug>(ale_toggle)
-nnoremap <silent><localleader>v :!<c-r>=&makeprg<cr> file=%:.<cr>
-nnoremap <silent><localleader>V :!<c-r>=&makeprg<cr> file=%:.:<c-r>=line('.')<cr><cr>
+nnoremap <silent><localleader>v :!<c-r>=&makeprg<cr><cr>
+nnoremap <silent><localleader>V :!<c-r>=&makeprg<cr>:<c-r>=line('.')<cr><cr>
 nnoremap <silent><localleader>x :call <sid>altFile()<cr>
 nnoremap <silent><localleader>y <Plug>(TertiusFixCode)
 
@@ -48,7 +49,6 @@ nnoremap <silent><leader>r :edit .<cr>
 nnoremap <silent><leader>R <Plug>(GitOpen)
 nnoremap <silent><leader>v :vertical terminal<cr>
 nnoremap <silent><leader>V :terminal<cr>
-nnoremap <silent><leader>w :call <sid>toggleLocList()<cr>
 nnoremap <silent><leader>x :call <sid>toggleTodoFile()<cr>
 
 vnoremap <silent><leader>f <Plug>(GitGrepSelected)

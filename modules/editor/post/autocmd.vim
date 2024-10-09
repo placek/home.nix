@@ -9,12 +9,12 @@ augroup Git
 augroup END
 
 augroup MakePrg
-  autocmd BufEnter *_spec.rb  setlocal makeprg=make\ testrb efm=rspec\ %f:%l\ #\ %m
+  autocmd BufEnter *_spec.rb  setlocal efm=rspec\ %f:%l\ #\ %m
 
-  autocmd BufEnter *.test.js  setlocal makeprg=make\ testjs efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
-  autocmd BufEnter *.test.ts  setlocal makeprg=make\ testjs efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
-  autocmd BufEnter *.test.jsx setlocal makeprg=make\ testjs efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
-  autocmd BufEnter *.test.tsx setlocal makeprg=make\ testjs efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
+  autocmd BufEnter *.test.js  setlocal efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
+  autocmd BufEnter *.test.ts  setlocal efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
+  autocmd BufEnter *.test.jsx setlocal efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
+  autocmd BufEnter *.test.tsx setlocal efm=%.%#\ at\ %f:%l:%c,%.%#\ at\ %.%#(%f:%l:%c)
 augroup END
 
 augroup AltFile
