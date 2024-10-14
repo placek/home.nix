@@ -131,7 +131,7 @@
   hardware.nvidia.prime.intelBusId                                             = "PCI:0:2:0";
   hardware.nvidia.prime.nvidiaBusId                                            = "PCI:1:0:0";
   hardware.nvidia.prime.reverseSync.enable                                     = true;
-  services.xserver.videoDrivers                                                = [ "nvidia" ];
+  services.xserver.videoDrivers                                                = [ "nvidia" "displaylink" ];
 
   ################################### USER #####################################
   programs.fish.enable                                                         = true;
