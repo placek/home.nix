@@ -85,6 +85,7 @@
   services.clamav.daemon.enable                                                = true;
   services.clamav.updater.enable                                               = true;
   services.greenclip.enable                                                    = true;
+  services.ollama.enable                                                       = true;
   services.libinput.enable                                                     = true;
   services.libinput.mouse.middleEmulation                                      = false;
   services.libinput.touchpad.naturalScrolling                                  = true;

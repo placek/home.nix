@@ -60,6 +60,7 @@
   services.clamav.daemon.enable                                                = true;
   services.clamav.updater.enable                                               = true;
   services.nfs.server.enable                                                   = true;
+  services.ollama.enable                                                       = true;
 
   ################################### NFS ######################################
   services.nfs.server.exports                                                  = "/var/projects *(rw,sync,no_subtree_check,no_root_squash,nohide,insecure)";
