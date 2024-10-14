@@ -12,6 +12,12 @@
     fsType = "vfat";
   };
 
+  fileSystems."/mnt/projects" = {
+    device = "placki.cloud:/var/projects";
+    fsType = "nfs";
+    options = [ "rw" "hard" "timeo=600" "retrans=2" "x-systemd.automount" "noauto" ];
+  };
+
   swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
   ################################### NIX ######################################
