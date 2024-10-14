@@ -81,6 +81,7 @@ in
       lightburn         # laser cutter software
       mdcat             # render markdown
       netpbm            # image processing tools
+      nfs-utils         # NFS client
       ngrep             # network packet analyzer
       ngrok             # expose local servers to the internet
       nix-direnv-flakes # Nix flakes support

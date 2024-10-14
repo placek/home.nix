@@ -59,6 +59,10 @@
   ################################# SERVICES ###################################
   services.clamav.daemon.enable                                                = true;
   services.clamav.updater.enable                                               = true;
+  services.nfs.server.enable                                                   = true;
+
+  ################################### NFS ######################################
+  services.nfs.server.exports                                                  = "/var/projects *(rw,sync,no_subtree_check,no_root_squash,nohide,insecure)";
 
   ################################### USER #####################################
   programs.fish.enable                                                         = true;
@@ -84,10 +88,15 @@
   networking.firewall.allowPing                                                = true;
   networking.firewall.trustedInterfaces                                        = [ "eno1" ];
   networking.firewall.checkReversePath                                         = false;
-  networking.firewall.allowedUDPPorts                                          = [ ];
+  networking.firewall.allowedUDPPorts                                          = [
+    111  # rpcbind
+    2049 # nfs
+  ];
   networking.firewall.allowedTCPPorts                                          = [
     22   # ssh
     80   # http
+    111  # rpcbind
+    2049 # nfs
     443  # https
     2222 # git
   ];
