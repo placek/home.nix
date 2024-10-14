@@ -15,6 +15,7 @@ let
     model="''${OPENAI_MODEL:-gpt-4o-mini}"
     language="''${OPENAI_LANGUAGE:-english}"
     issue_tracker="''${OPENAI_ISSUE_TRACKER:-github}"
+    repository_hub="''${OPENAI_REPOSITORY_HUB:-github}"
     duration="''${OPENAI_DURATION:-24 hours}"
     payload_template='{ model: $model, temperature: 1, max_tokens: 4095, top_p: 1, frequency_penalty: 0, presence_penalty: 0, messages: $data }'
     data="[]"
@@ -41,8 +42,12 @@ let
       fi
     }
 
+    current_branch_name() {
+      ${config.vcsExec} rev-parse --abbrev-ref HEAD
+    }
+
     user_story_id_from_branch() {
-      ${config.vcsExec} rev-parse --abbrev-ref HEAD | sed -n 's@[^[:digit:]]*\([[:digit:]]\+\).*@\1@p'
+      echo "$(current_branch_name)" | sed -n 's@[^[:digit:]]*\([[:digit:]]\+\).*@\1@p'
     }
 
     user_story_title() {
@@ -52,6 +57,8 @@ let
         github )
           ${pkgs.gh}/bin/gh issue view --json title $user_story_id | ${pkgs.jq}/bin/jq -r "\"[#$user_story_id] \(.title)\""
           ;;
+        * )
+          echo "[#$user_story_id] $(current_branch_name | sed -n 's@[-/_]\+@ @gp')"
         esac
       fi
     }
@@ -88,7 +95,7 @@ let
 
     publish_pull_request() {
       body=$(cat)
-      case $issue_tracker in
+      case $repository_hub in
       github )
         user_story_title=$(user_story_title)
         pull_request_url=$(echo $body | ${pkgs.gh}/bin/gh pr create -t "$user_story_title" -F -)
