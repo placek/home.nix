@@ -4,8 +4,7 @@
 , ...
 }:
 let
-  inherit (config) terminalExec editorExec fileManagerExec;
-  inherit (config.browser) downloadsDirectory;
+  inherit (config) terminalExec editorExec fileManagerExec downloadsDirectory;
   inherit (config.gui) theme font;
   fontSizePt = "${builtins.toString font.size}pt";
   fontSetting = "${builtins.toString font.size}pt ${font.name}";

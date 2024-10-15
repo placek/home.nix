@@ -10,6 +10,24 @@ let
 in
 {
   options = with lib; {
+    projectsDirectory = mkOption {
+      type = types.str;
+      default = "${config.home.homeDirectory}/Projects";
+      description = "A path to project directory.";
+    };
+
+    downloadsDirectory = mkOption {
+      type = types.str;
+      default = "${config.home.homeDirectory}/Downloads";
+      description = "A path to downloads directory.";
+    };
+
+    documentsDirectory = mkOption {
+      type = types.str;
+      default = "${config.home.homeDirectory}/Documents";
+      description = "A path to documents directory.";
+    };
+
     fileManagerExec = mkOption {
       type = types.str;
       default = "${pkgs.nnn}/bin/nnn";

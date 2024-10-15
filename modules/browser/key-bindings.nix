@@ -7,9 +7,9 @@
   config.programs.qutebrowser.keyBindings.normal = {
     "I" = "hint inputs";
 
-    ";D" = "hint links spawn ${config.terminalExec} -e ${config.downloaderExec} {hint-url} -d ${config.browser.downloadsDirectory}";
-    ";m" = "hint links spawn ${config.terminalExec} -e ${config.ytDownloaderExec} -x {hint-url} -o ${config.browser.downloadsDirectory}/%(title)s.%(ext)s";
-    ";v" = "hint links spawn ${config.terminalExec} -e ${config.ytDownloaderExec} {hint-url} -o ${config.browser.downloadsDirectory}/%(title)s.%(ext)s";
+    ";D" = "hint links spawn ${config.terminalExec} -e ${config.downloaderExec} {hint-url} -d ${config.downloadsDirectory}";
+    ";m" = "hint links spawn ${config.terminalExec} -e ${config.ytDownloaderExec} -x {hint-url} -o ${config.downloadsDirectory}/%(title)s.%(ext)s";
+    ";v" = "hint links spawn ${config.terminalExec} -e ${config.ytDownloaderExec} {hint-url} -o ${config.downloadsDirectory}/%(title)s.%(ext)s";
     ";g" = "hint links userscript GBrowse";
 
     ",s" = "open -t https://getpocket.com/edit?url={url}";

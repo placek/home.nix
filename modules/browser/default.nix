@@ -14,14 +14,6 @@ in
       description = "Browser executable.";
       readOnly = true;
     };
-
-    browser = {
-      downloadsDirectory = mkOption {
-        type = types.str;
-        default = "${config.home.homeDirectory}/Downloads";
-        description = "A path to downloads directory.";
-      };
-    };
   };
 
   imports = [

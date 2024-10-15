@@ -3,7 +3,7 @@
 , ...
 }:
 pkgs.writeShellScriptBin "sshot" ''
-  file="${config.browser.downloadsDirectory}/sshot.png"
+  file="${config.downloadsDirectory}/sshot.png"
 
   case "$1" in
     w*)

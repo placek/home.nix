@@ -24,8 +24,8 @@ in
     enable = true;
     package = pkgs.nnn.override ({ withNerdIcons = true; });
     bookmarks = {
-      D = "~/Documents";
-      d = "~/Downloads";
+      D = config.documentsDirectory;
+      d = config.downloadsDirectory;
       p = config.projectsDirectory;
     };
     plugins.src = "${plugins}/bin";
