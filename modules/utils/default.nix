@@ -30,6 +30,13 @@ in
       description = "YouTube downloader executable.";
       readOnly = true;
     };
+
+    cloudDomain = mkOption {
+      type = types.str;
+      default = "placki.cloud";
+      description = "The domain of the cloud server.";
+      readOnly = true;
+    };
   };
 
   imports = [
@@ -38,6 +45,7 @@ in
     ./nnn.nix
     ./clipboard.nix
     ./scripts.nix
+    ./sync_projects.nix
   ];
 
   config = {
