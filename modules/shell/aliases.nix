@@ -19,8 +19,11 @@
     dcres = "docker-compose -f .local.compose restart";
     dcps = "docker-compose -f .local.compose ps";
 
+    syncp = "rsync -avz --progress /home/placek/Projects/ placek@placki.cloud:/var/projects/";
+
     j = "journalctl";
     s = "systemctl";
+
     tt = "nc termbin.com 9999";
     tf = "nc oshi.at 7777";
 
