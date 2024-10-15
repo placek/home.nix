@@ -27,7 +27,7 @@ in
     bookmarks = {
       D = "~/Documents";
       d = "~/Downloads";
-      p = "~/Projects";
+      p = config.projectsDirectory;
     };
     plugins.src = (d "${plugins}") + "/bin";
     plugins.mappings = {
