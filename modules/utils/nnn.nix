@@ -18,7 +18,6 @@ let
     name = "nnn-plugins";
     paths = [ autojump icat suedit ];
   };
-  d = c: builtins.trace c c;
 in
 {
   config.programs.nnn = {
@@ -29,7 +28,7 @@ in
       d = "~/Downloads";
       p = config.projectsDirectory;
     };
-    plugins.src = (d "${plugins}") + "/bin";
+    plugins.src = "${plugins}/bin";
     plugins.mappings = {
       z = "autojump";
       p = "icat";
