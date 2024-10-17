@@ -6,6 +6,7 @@
 let
   tertius = pkgs.writeShellScriptBin "tertius" ''
     set -e
+    if [ -n "$DEBUG" ]; then set -x; fi
 
     if [ -z "$OPENAI_API_KEY" ]; then
       >&2 echo "tertius: please set the OPENAI_API_KEY environment variable"
