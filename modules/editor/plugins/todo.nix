@@ -30,6 +30,26 @@
         endfunction
 
         nnoremap <silent> <Plug>(TodoNote) :<c-u>call <sid>toggleTodoNote()<cr>
+
+        function! s:getTodoNote()
+          let l:note = system('${config.vcsExec} notes --ref=todo show HEAD')
+          return l:note
+        endfunction
+
+        function! s:putTodoNote()
+          let l:note = <sid>getTodoNote()
+          let lines = split(l:note, "\n")
+          let commented_lines = []
+          for line in lines
+            call add(commented_lines, '# ' . line)
+          endfor
+          let l:commented_note = join(commented_lines, "\n")
+          execute "put ='# Actual TODOs:'"
+          execute "put =l:commented_note"
+          execute "put ='# ------------------------ 8< ------------------------'"
+        endfunction
+
+        nnoremap <silent> <Plug>(PutTodoNote) :<c-u>call <sid>putTodoNote()<cr>
       ''
     ];
   };
