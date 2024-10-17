@@ -202,10 +202,14 @@ let
       data="$(${pkgs.jq}/bin/jq -n --arg instructions "$1" --argjson data "$data" '$data + [ { role: "system", content: $instructions } ]')"
     }
 
+    apply_context() {
+      data="$(${pkgs.jq}/bin/jq -n --arg instructions "$1" --argjson data "$data" '$data + [ { role: "user", content: $instructions } ]')"
+    }
+
     apply_user_story() {
       user_story="$(user_story_content)"
       if [ -n "$user_story" ]; then
-        data="$(${pkgs.jq}/bin/jq -n --arg user_story "Analyze this user story as a context of the problem:\n$user_story" --argjson data "$data" '$data + [ { role: "user", content: $user_story } ]')"
+        apply_context "Analyze this user story as a context of the problem:\n$user_story"
       fi
     }
 
@@ -213,7 +217,7 @@ let
       branch_commits="$(current_branch_commits)"
       for hash in $branch_commits; do
         commit_message="$(${config.vcsExec} show -s --format=%B "$hash")"
-        data="$(${pkgs.jq}/bin/jq -n --arg commit_message "This is a change already implemented as a step towards solution of the problem:\n$commit_message" --argjson data "$data" '$data + [ { role: "user", content: $commit_message } ]')"
+        apply_context "This is a change already implemented as a step towards solution of the problem:\n$commit_message"
       done
     }
 
@@ -222,17 +226,17 @@ let
       commits=$(${config.vcsExec} log --since="$1" --author=$author --format=format:"%H" --reverse)
       for hash in $commits; do
         commit_message=$(${config.vcsExec} show -s --format=%B $hash)
-        data=$(${pkgs.jq}/bin/jq -n --arg commit_message "$commit_message" --argjson data "$data" '$data + [ { role: "user", content: $commit_message } ]')
+        apply_context "$commit_message"
       done
     }
 
     apply_question_from_stdin() {
-      data="$(${pkgs.jq}/bin/jq -n --arg question "$1$(cat)" --argjson data "$data" '$data + [ { role: "user", content: $question } ]')"
+      apply_context "$1$(cat)"
     }
 
     apply_file() {
       file=$1
-      data=$(${pkgs.jq}/bin/jq -n --arg file "$(cat $file)" --argjson data "$data" '$data + [ { role: "user", content: $file } ]')
+      apply_context "$(cat $file)"
     }
 
     openai_response() {
