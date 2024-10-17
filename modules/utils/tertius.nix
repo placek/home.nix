@@ -28,6 +28,7 @@ let
       >&2 echo "       tertius ask"
       >&2 echo "       tertius grammar"
       >&2 echo "       tertius story get"
+      >&2 echo "       tertius story begin STORY_ID"
       >&2 echo "       tertius story write"
       >&2 echo "       tertius story publish TYPE"
       >&2 echo "       tertius commit write-message"
@@ -131,10 +132,40 @@ let
           fetch_github_user_story "$user_story_id" | ${pkgs.jq}/bin/jq -r "\"\(.title)\n\n\(.body)\""
           ;;
         jira )
-          fetch_jira_user_story "$user_story_id" | ${pkgs.jq}/bin/jq -r '"\(.fields.description)"'
+          fetch_jira_user_story "$user_story_id" | ${pkgs.jq}/bin/jq -r '"\(.fields.summary)\n\n\(.fields.description)"'
           ;;
         esac
       fi
+    }
+
+    user_story_begin() {
+      user_story_id="$1"
+      branch_prefix="$2"
+      case "$issue_tracker" in
+      github )
+        user_story=$(fetch_github_user_story "$user_story_id")
+        user_story_title=$(echo "$user_story" | ${pkgs.jq}/bin/jq -r "\"\(.title)\"")
+        user_story_content=$(echo "$user_story" | ${pkgs.jq}/bin/jq -r "\"\(.title)\n\n\(.body)\"")
+        ;;
+      jira )
+        user_story=$(fetch_jira_user_story "$user_story_id")
+        user_story_title=$(echo "$user_story" | ${pkgs.jq}/bin/jq -r '"\(.fields.summary)"')
+        user_story_content=$(echo "$user_story" | ${pkgs.jq}/bin/jq -r '"\(.fields.summary)\n\n\(.fields.description)"')
+        ;;
+      esac
+      branch_descr="$(echo $user_story_title | ${pkgs.gnused}/bin/sed -E 's/.*/\L&/; s/[^a-z0-9]+/-/g; s/-$//; s/^-//; s/\s+/-/g')"
+      if [ -n "$branch_prefix" ]; then
+        branch_name="$branch_prefix/$user_story_id"
+      else
+        branch_name="$user_story_id"
+      fi
+      if [ -n "$branch_descr" ]; then
+        branch_name="$branch_name-$branch_descr"
+      fi
+      ${config.vcsExec} fetch
+      ${config.vcsExec} checkout "origin/$(default_branch)"
+      ${config.vcsExec} checkout -B "$branch_name"
+      ${config.vcsExec} commit --allow-empty -m "[$user_story_id] $user_story_content"
     }
 
     publish_user_story() {
@@ -298,6 +329,14 @@ let
       case "$2" in
       get )
         user_story_content
+        ;;
+      begin )
+        if [ -z "$3" ]; then
+          >&2 echo "tertius: story begin requires a story ID as an argument."
+          usage
+          exit 1
+        fi
+        user_story_begin "$3" "$4"
         ;;
       write )
         apply_instruction "Compose a problem description by analyzing a short explanation of the problem, and additionally, any relevant context or background information. Ensure a thorough understanding of the problem and the context in which it occurs. The goal is to generate a clear, concise problem description that provides all the necessary information to understand the problem and its context. The problem description should have a title, a paragraph with user story formatted scenario (As <actor>, I want to <action>, so <outcome>.), a 'Summary' paragraph explaining the problem, and an 'Acceptance criteria' paragraph with the tasks that has to be done to solve problem."
