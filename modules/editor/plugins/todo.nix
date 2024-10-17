@@ -11,7 +11,7 @@
           execute "0put =l:issue"
         endfunction
 
-        function! s:toggleTodoFile()
+        function! s:toggleTodoNote()
           silent call system('${config.vcsExec} notes --ref=todo copy HEAD~ HEAD')
           if buflisted(bufname('.git/NOTES_EDITMSG'))
             if !win_gotoid(bufwinid('.git/NOTES_EDITMSG'))
@@ -27,6 +27,8 @@
           endif
           syntax match Comment /^#.*/ containedin=ALL
         endfunction
+
+        nnoremap <silent> <Plug>(TodoNote) :<c-u>call <sid>toggleTodoNote()<cr>
       ''
     ];
   };
