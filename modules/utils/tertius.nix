@@ -16,6 +16,7 @@ let
     model="''${OPENAI_MODEL:-gpt-4o-mini}"
     language="''${OPENAI_LANGUAGE:-english}"
     issue_tracker="''${OPENAI_ISSUE_TRACKER:-github}"
+    issue_tracker_account="''${OPENAI_ISSUE_TRACKER_ACCOUNT:-}"
     repository_hub="''${OPENAI_REPOSITORY_HUB:-github}"
     repository_hub_account="''${OPENAI_REPOSITORY_HUB_ACCOUNT:-}"
     duration="''${OPENAI_DURATION:-24 hours}"
@@ -65,17 +66,33 @@ let
       fi
     }
 
-    get_credentials() {
-      ${config.programs.password-store.package}/bin/pass show "$repository_hub_account"
+    get_repository_hub_credentials() {
+      ${config.programs.password-store.package}/bin/pass show "$repository_hub_account" 2>/dev/null
     }
 
-    get_otp() {
-      ${config.programs.password-store.package}/bin/pass otp "$repository_hub_account"
+    get_repository_hub_otp() {
+      ${config.programs.password-store.package}/bin/pass otp "$repository_hub_account" 2>/dev/null
+    }
+
+    get_issue_tracker_credentials() {
+      ${config.programs.password-store.package}/bin/pass show "$issue_tracker_account" 2>/dev/null
+    }
+
+    get_issue_tracker_otp() {
+      ${config.programs.password-store.package}/bin/pass otp "$issue_tracker_account" 2>/dev/null
     }
 
     fetch_jira_user_story() {
-      credentials=$(get_credentials)
-      otp=$(get_otp)
+      credentials=$(get_issue_tracker_credentials)
+      if [ -z "$credentials" ]; then
+        >&2 echo "tertius: missing Jira credentials"
+        exit 1
+      fi
+      otp=$(get_issue_tracker_otp)
+      if [ -z "$otp" ]; then
+        >&2 echo "tertius: this account requires OTP"
+        exit 1
+      fi
       pass=$(echo "$credentials" | ${pkgs.gnused}/bin/sed -n '1s/\([^ ]*\).*/\1/p')
       login=$(echo "$credentials" | ${pkgs.gnugrep}/bin/grep "user: " | ${pkgs.gnused}/bin/sed 's/user: //g')
       base_url=$(echo "$credentials" | ${pkgs.gnugrep}/bin/grep "url: " | ${pkgs.gnused}/bin/sed 's/url: //g')
