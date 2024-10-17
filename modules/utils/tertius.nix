@@ -24,7 +24,8 @@ let
     data="[]"
 
     usage() {
-      >&2 echo "Usage: tertius ask"
+      >&2 echo "Usage: tertius info"
+      >&2 echo "       tertius ask"
       >&2 echo "       tertius grammar"
       >&2 echo "       tertius story get"
       >&2 echo "       tertius story write"
@@ -250,11 +251,23 @@ let
       usage
       exit 1
     fi
-    command=$1
+    command="$1"
 
     apply_instruction "Formulate all answers in $language."
 
-    case $command in
+    case "$command" in
+    info )
+      echo "Model: $model"
+      echo "Language: $language"
+      echo "Issue tracker: $issue_tracker"
+      echo "Issue tracker account: $issue_tracker_account"
+      echo "Repository hub: $repository_hub"
+      echo "Repository hub account: $repository_hub_account"
+      echo "Current branch: $(current_branch_name)"
+      echo "Branchoff commit: $(branchoff_commit)"
+      echo "Issue ID: $(user_story_id)"
+      ;;
+
     ask )
       apply_question_from_stdin
       user_story_header
@@ -282,7 +295,7 @@ let
       ;;
 
     story )
-      case $2 in
+      case "$2" in
       get )
         user_story_content
         ;;
@@ -304,7 +317,7 @@ let
       ;; # story
 
     pull-request )
-      case $2 in
+      case "$2" in
       write )
         apply_instruction "Compose a pull request description by analyzing any given commit messages. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outcome of the changes themselves - each such component has to be separated by two newlines and have no header."
         apply_user_story
@@ -326,7 +339,7 @@ let
       ;;
 
     code )
-      case $2 in
+      case "$2" in
       fix )
         if [ -z "$3" ]; then
           >&2 echo "tertius: code fix requires a file path as an argument."
