@@ -17,6 +17,7 @@ let
     language="''${OPENAI_LANGUAGE:-english}"
     issue_tracker="''${OPENAI_ISSUE_TRACKER:-github}"
     repository_hub="''${OPENAI_REPOSITORY_HUB:-github}"
+    repository_hub_account="''${OPENAI_REPOSITORY_HUB_ACCOUNT:-}"
     duration="''${OPENAI_DURATION:-24 hours}"
     payload_template='{ model: $model, temperature: 1, max_tokens: 4095, top_p: 1, frequency_penalty: 0, presence_penalty: 0, messages: $data }'
     data="[]"
@@ -35,41 +36,84 @@ let
       >&2 echo "       tertius code explain"
     }
 
-    current_branch_commits() {
-      default_branch=$(${config.vcsExec} config --get core.default)
-      branchoff_commit=$(${config.vcsExec} merge-base $default_branch HEAD 2>/dev/null)
-      if [ -n "$branchoff_commit" ]; then
-        ${config.vcsExec} log --format=format:"%H" $branchoff_commit..HEAD
-      fi
+    default_branch() {
+      ${config.vcsExec} config --get core.default
+    }
+
+    branchoff_commit() {
+      ${config.vcsExec} merge-base "$(default_branch)" HEAD 2>/dev/null
     }
 
     current_branch_name() {
       ${config.vcsExec} rev-parse --abbrev-ref HEAD
     }
 
-    user_story_id_from_branch() {
-      echo "$(current_branch_name)" | sed -n 's@[^[:digit:]]*\([[:digit:]]\+\).*@\1@p'
+    current_branch_commits() {
+      branchoff_commit=$(branchoff_commit)
+      if [ -n "$branchoff_commit" ]; then
+        ${config.vcsExec} log --reverse --format=format:"%H" "$branchoff_commit"..HEAD
+      fi
+    }
+
+    first_commit_in_current_branch() {
+      current_branch_commits | ${pkgs.gnused}/bin/sed -n '1s/\([^ ]*\).*/\1/p'
+    }
+
+    user_story_id() {
+      if [ -n "$(first_commit_in_current_branch)" ]; then
+        ${config.vcsExec} log --format=%s -n 1 "$(first_commit_in_current_branch)" | ${pkgs.gnused}/bin/sed -n '1s/.*\[\([^]]*\)\].*/\1/p'
+      fi
+    }
+
+    get_credentials() {
+      ${config.programs.password-store.package}/bin/pass show "$repository_hub_account"
+    }
+
+    get_otp() {
+      ${config.programs.password-store.package}/bin/pass otp "$repository_hub_account"
+    }
+
+    fetch_jira_user_story() {
+      credentials=$(get_credentials)
+      otp=$(get_otp)
+      pass=$(echo "$credentials" | ${pkgs.gnused}/bin/sed -n '1s/\([^ ]*\).*/\1/p')
+      login=$(echo "$credentials" | ${pkgs.gnugrep}/bin/grep "user: " | ${pkgs.gnused}/bin/sed 's/user: //g')
+      base_url=$(echo "$credentials" | ${pkgs.gnugrep}/bin/grep "url: " | ${pkgs.gnused}/bin/sed 's/url: //g')
+
+      ${pkgs.curl}/bin/curl --silent \
+                            -H "Authorization: Basic $(printf "%s" "$login:$pass$otp" | ${pkgs.coreutils}/bin/base64)" \
+                            -X GET \
+                            -H "Content-Type: application/json" \
+                            "$base_url/rest/api/latest/issue/$1"
+    }
+
+    fetch_github_user_story() {
+      ${pkgs.gh}/bin/gh issue view --json title,body "$1"
     }
 
     user_story_title() {
-      user_story_id=$(user_story_id_from_branch)
+      user_story_id="$(user_story_id)"
       if [ -n "$user_story_id" ]; then
-        case $issue_tracker in
+        case "$issue_tracker" in
         github )
-          ${pkgs.gh}/bin/gh issue view --json title $user_story_id | ${pkgs.jq}/bin/jq -r "\"[#$user_story_id] \(.title)\""
+          fetch_github_user_story "$user_story_id" | ${pkgs.jq}/bin/jq -r "\"[#$user_story_id] \(.title)\""
           ;;
-        * )
-          echo "[#$user_story_id] $(current_branch_name | sed -n 's@[-/_]\+@ @gp')"
+        jira )
+          fetch_jira_user_story "$user_story_id" | ${pkgs.jq}/bin/jq -r '"\(.fields.summary)"'
+          ;;
         esac
       fi
     }
 
     user_story_content() {
-      user_story_id=$(user_story_id_from_branch)
+      user_story_id=$(user_story_id)
       if [ -n "$user_story_id" ]; then
         case $issue_tracker in
         github )
-          ${pkgs.gh}/bin/gh issue view --json title,body $user_story_id | ${pkgs.jq}/bin/jq -r "\"\(.title)\n\n\(.body)\""
+          fetch_github_user_story "$user_story_id" | ${pkgs.jq}/bin/jq -r "\"\(.title)\n\n\(.body)\""
+          ;;
+        jira )
+          fetch_jira_user_story "$user_story_id" | ${pkgs.jq}/bin/jq -r '"\(.fields.description)"'
           ;;
         esac
       fi
@@ -106,21 +150,21 @@ let
     }
 
     apply_instruction() {
-      data=$(${pkgs.jq}/bin/jq -n --arg instructions "$1" --argjson data "$data" '$data + [ { role: "system", content: $instructions } ]')
+      data="$(${pkgs.jq}/bin/jq -n --arg instructions "$1" --argjson data "$data" '$data + [ { role: "system", content: $instructions } ]')"
     }
 
     apply_user_story() {
-      user_story=$(user_story_content)
+      user_story="$(user_story_content)"
       if [ -n "$user_story" ]; then
-        data=$(${pkgs.jq}/bin/jq -n --arg user_story "Analyze this user story as a context of the problem:\n$user_story" --argjson data "$data" '$data + [ { role: "user", content: $user_story } ]')
+        data="$(${pkgs.jq}/bin/jq -n --arg user_story "Analyze this user story as a context of the problem:\n$user_story" --argjson data "$data" '$data + [ { role: "user", content: $user_story } ]')"
       fi
     }
 
     apply_commit_messages() {
-      branch_commits=$(current_branch_commits)
+      branch_commits="$(current_branch_commits)"
       for hash in $branch_commits; do
-        commit_message=$(${config.vcsExec} show -s --format=%B $hash)
-        data=$(${pkgs.jq}/bin/jq -n --arg commit_message "This is a change already implemented as a step towards solution of the problem:\n$commit_message" --argjson data "$data" '$data + [ { role: "user", content: $commit_message } ]')
+        commit_message="$(${config.vcsExec} show -s --format=%B "$hash")"
+        data="$(${pkgs.jq}/bin/jq -n --arg commit_message "This is a change already implemented as a step towards solution of the problem:\n$commit_message" --argjson data "$data" '$data + [ { role: "user", content: $commit_message } ]')"
       done
     }
 
@@ -134,7 +178,7 @@ let
     }
 
     apply_question_from_stdin() {
-      data=$(${pkgs.jq}/bin/jq -n --arg question "$1$(cat)" --argjson data "$data" '$data + [ { role: "user", content: $question } ]')
+      data="$(${pkgs.jq}/bin/jq -n --arg question "$1$(cat)" --argjson data "$data" '$data + [ { role: "user", content: $question } ]')"
     }
 
     apply_file() {
@@ -159,10 +203,10 @@ let
       if [ -n "$user_story_id" ]; then
         case $command in
         commit-message )
-          echo -ne "[#$user_story_id] "
+          echo -ne "[$user_story_id] "
           ;;
         pull-request )
-          echo -e "Closes #$user_story_id."; echo
+          echo -e "Closes $user_story_id."; echo
           ;;
         esac
       fi
@@ -208,7 +252,7 @@ let
       ;;
 
     commit )
-      case $2 in
+      case "$2" in
       write-message )
         apply_instruction "Compose a Git commit message. To draft a Git commit message review the context in which the modifications have been made. This should include a brief explanation of the changes and a diff that showcases these modifications. Your task is to ensure that there is a clear connection between the requirements specified in the user story and the changes made in the commit. The objective is to create a concise and informative commit message that effectively communicates the reasoning behind the changes and high-level explanation of the alterations. The message should comprise a succinct title, followed by a paragraph explaining the reason for the changes. The title and the following paragraph should be separated by a blank line. Avoid using 'Title:' or similar headers."
         apply_user_story
