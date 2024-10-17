@@ -44,7 +44,7 @@ let
     }
 
     branchoff_commit() {
-      ${config.vcsExec} merge-base "$(default_branch)" HEAD 2>/dev/null
+      ${config.vcsExec} merge-base "origin/$(default_branch)" HEAD 2>/dev/null
     }
 
     current_branch_name() {

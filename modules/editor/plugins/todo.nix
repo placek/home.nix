@@ -9,6 +9,7 @@
         function! s:putCurrentGitHubIssue()
           let l:issue = substitute(system("${config.tertiusExec} story get"), '\r', "", 'g')
           execute "0put =l:issue"
+          execute ":2,$s/^/    /"
         endfunction
 
         function! s:toggleTodoNote()
