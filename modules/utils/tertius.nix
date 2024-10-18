@@ -209,7 +209,7 @@ let
     apply_user_story() {
       user_story="$(user_story_content)"
       if [ -n "$user_story" ]; then
-        apply_context "Analyze this user story as a context of the problem:\n$user_story"
+        apply_context "Analyze this user story '$(user_story_id)' as a context of the problem:\n$user_story"
       fi
     }
 
@@ -217,7 +217,7 @@ let
       branch_commits="$(current_branch_commits)"
       for hash in $branch_commits; do
         commit_message="$(${config.vcsExec} show -s --format=%B "$hash")"
-        apply_context "This is a change already implemented as a step towards solution of the problem:\n$commit_message"
+        apply_context "This is a message of a commit '$hash' that introduces a part of implementation of the user story:\n$commit_message"
       done
     }
 
