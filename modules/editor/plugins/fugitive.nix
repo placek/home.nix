@@ -118,8 +118,9 @@
           else
             let l:head = "HEAD"
           end
-          let file = expand("%")
+          let l:file = expand("%")
           execute "!${config.vcsExec} filter-branch --prune-empty --force --tree-filter 'rm -f " . l:file . "' " . s:branchoffCommit(l:head) . ".." . l:head
+          echom "File " . l:file . " pruned from git history"
         endfunction
 
         nnoremap <silent> <Plug>(GitPruneFile) :<c-u>call <sid>gitPruneFile()<cr>
@@ -175,7 +176,7 @@
           execute ":G push --force-with-lease --follow-tags"
           let l:branch = trim(system("${config.vcsExec} rev-parse --abbrev-ref HEAD"))
           let l:base = substitute(<sid>defaultBranch(), ".*/", "", "")
-          echom "Branch pushed"
+          echom "Branch pushed with force to " . l:base . " branch
 
           if l:branch != l:base
             if confirm("Do you want to open a pull request?", "&yes\n&No", 2) == 1
@@ -202,6 +203,7 @@
           let l:branch_name = trim(substitute(substitute(tolower(l:commit), '[^a-z0-9-]', ' ', 'g'), '\s\+', '-', 'g'))
           let l:branch_name = input("branch /", l:branch_name)
           execute ":G checkout -B " . l:branch_name
+          echom "Switched to " . l:branch_name
         endfunction
 
         nnoremap <silent> <Plug>(GitBranchOffFromCommit) :<c-u>call <sid>gitBranchOffFromCommit()<cr>
@@ -213,6 +215,7 @@
           execute ":G switch " . l:branch
           execute ":G pull --rebase"
           execute ":G cherry-pick " . l:commit
+          echom "Cherry-picked commit " . l:commit . " to " . l:branch
         endfunction
 
         nnoremap <silent> <Plug>(GitCherryPickToBranchFromLine) :<c-u>call <sid>gitCherryPickToBranch(trim(getline(".")))<cr>
