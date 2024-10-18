@@ -44,7 +44,7 @@ let
     }
 
     branchoff_commit() {
-      ${config.vcsExec} merge-base "origin/$(default_branch)" HEAD 2>/dev/null
+      ${config.vcsExec} merge-base "$(default_branch)" HEAD 2>/dev/null
     }
 
     current_branch_name() {
@@ -163,7 +163,7 @@ let
         branch_name="$branch_name-$branch_descr"
       fi
       ${config.vcsExec} fetch
-      ${config.vcsExec} checkout "origin/$(default_branch)"
+      ${config.vcsExec} checkout "$(default_branch)"
       ${config.vcsExec} checkout -B "$branch_name"
       ${config.vcsExec} commit --allow-empty -m "[$user_story_id] $user_story_content"
     }
