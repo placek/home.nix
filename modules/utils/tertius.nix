@@ -27,6 +27,7 @@ let
       >&2 echo "Usage: tertius info"
       >&2 echo "       tertius ask"
       >&2 echo "       tertius grammar"
+      >&2 echo "       tertius story id"
       >&2 echo "       tertius story get"
       >&2 echo "       tertius story begin STORY_ID"
       >&2 echo "       tertius story write"
