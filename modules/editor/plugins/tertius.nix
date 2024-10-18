@@ -67,10 +67,16 @@
 
         nnoremap <silent> <Plug>(TertiusIssue) :<c-u>call <sid>tertiusIssue()<cr>
 
+        function! s:tertiusGetStoryID() abort
+          return trim(system("${config.tertiusExec} story id"))
+        endfunction
+
         " generate a commit message
         function! s:tertiusCommitMessage() abort
           execute ":%!${config.tertiusExec} commit write-message"
           normal! ggVGgq
+          execute "0put ='['.<sid>tertiusGetStoryID().']'"
+          normal! ggJ
           redraw!
         endfunction
 
