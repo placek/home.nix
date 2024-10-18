@@ -252,19 +252,6 @@ let
       echo "$response" | ${pkgs.jq}/bin/jq -M -r '.choices[0].message.content'
     }
 
-    user_story_header() {
-      if [ -n "$user_story_id" ]; then
-        case $command in
-        commit-message )
-          echo -ne "[$user_story_id] "
-          ;;
-        pull-request )
-          echo -e "Closes $user_story_id."; echo
-          ;;
-        esac
-      fi
-    }
-
     while getopts ":" arg; do
       case $arg in
       \? )
@@ -305,14 +292,12 @@ let
 
     ask )
       apply_question_from_stdin
-      user_story_header
       openai_response
       ;;
 
     grammar )
       apply_instruction "Correct the following text. Ensure that the text is free of spelling, grammatical and language errors. If the text is already correct, just output it."
       apply_question_from_stdin
-      user_story_header
       openai_response
       ;;
 
@@ -323,7 +308,6 @@ let
         apply_user_story
         apply_commit_messages
         apply_question_from_stdin
-        user_story_header
         openai_response
         ;;
       esac
@@ -331,6 +315,9 @@ let
 
     story )
       case "$2" in
+      id )
+        user_story_id
+        ;;
       get )
         user_story_content
         ;;
@@ -345,7 +332,6 @@ let
       write )
         apply_instruction "Compose a problem description by analyzing a short explanation of the problem, and additionally, any relevant context or background information. Ensure a thorough understanding of the problem and the context in which it occurs. The goal is to generate a clear, concise problem description that provides all the necessary information to understand the problem and its context. The problem description should have a title, a paragraph with user story formatted scenario (As <actor>, I want to <action>, so <outcome>.), a 'Summary' paragraph explaining the problem, and an 'Acceptance criteria' paragraph with the tasks that has to be done to solve problem."
         apply_question_from_stdin
-        user_story_header
         openai_response
         ;;
       publish )
@@ -365,7 +351,6 @@ let
         apply_instruction "Compose a pull request description by analyzing any given commit messages. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outcome of the changes themselves - each such component has to be separated by two newlines and have no header."
         apply_user_story
         apply_commit_messages
-        user_story_header
         openai_response
         ;;
       publish )
@@ -377,7 +362,6 @@ let
     report )
       apply_instruction "Compose a brief report on work progress by analyzing git commits from the last $duration. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise report that provides all the necessary information to understand the progress and the context of the changes. The report should be in a form of a list of bullet points, one sentence per bullet point, no headers, no nested lists, each bullet point per task, including the task ID if available. Collect all the git commit messages for a given task in a single bullet. Don't mention the commits, only the progress. "
       apply_commit_messages_from "$duration ago"
-      user_story_header
       openai_response
       ;;
 
