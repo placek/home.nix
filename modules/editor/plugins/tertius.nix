@@ -75,8 +75,11 @@
         function! s:tertiusCommitMessage() abort
           execute ":%!${config.tertiusExec} commit write-message"
           normal! ggVGgq
-          execute "0put ='['.<sid>tertiusGetStoryID().']'"
-          normal! ggJ
+          let l:story_id = <sid>tertiusGetStoryID()
+          if !empty(l:story_id)
+            execute "0put ='['.l:story_id.']'"
+            normal! ggJ
+          endif
           redraw!
         endfunction
 
