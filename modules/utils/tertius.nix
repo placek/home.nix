@@ -107,6 +107,31 @@ let
                             "$base_url/rest/api/latest/issue/$1"
     }
 
+    create_jira_user_story() {
+      credentials=$(get_issue_tracker_credentials)
+      if [ -z "$credentials" ]; then
+        >&2 echo "tertius: missing Jira credentials"
+        exit 1
+      fi
+      otp=$(get_issue_tracker_otp)
+      if [ -z "$otp" ]; then
+        >&2 echo "tertius: this account requires OTP"
+        exit 1
+      fi
+      title="$1"
+      body="$2"
+      pass=$(echo "$credentials" | ${pkgs.gnused}/bin/sed -n '1s/\([^ ]*\).*/\1/p')
+      login=$(echo "$credentials" | ${pkgs.gnugrep}/bin/grep "user: " | ${pkgs.gnused}/bin/sed 's/user: //g')
+      base_url=$(echo "$credentials" | ${pkgs.gnugrep}/bin/grep "url: " | ${pkgs.gnused}/bin/sed 's/url: //g')
+
+      ${pkgs.curl}/bin/curl --silent \
+                            -H "Authorization: Basic $(printf "%s" "$login:$pass$otp" | ${pkgs.coreutils}/bin/base64)" \
+                            -X POST \
+                            -H "Content-Type: application/json" \
+                            -d "{\"fields\": {\"summary\": \"$title\", \"description\": \"$body\"}}" \
+                            "$base_url/rest/api/latest/issue" | ${pkgs.jq}/bin/jq -r '.self'
+    }
+
     fetch_github_user_story() {
       ${pkgs.gh}/bin/gh issue view --json title,body "$1"
     }
@@ -174,17 +199,15 @@ let
       body=$(cat)
       user_story_title=$(echo "$body" | head -n 1)
       user_story_body=$(echo "$body" | tail -n +2)
-      default_branch=$(${config.vcsExec} config --get core.default)
-      base=$(echo $default_branch | ${pkgs.gnused}/bin/sed 's@.*/@@')
-      branch_descr=$(echo $user_story_title | ${pkgs.gnused}/bin/sed -E 's/.*/\L&/; s/[^a-z0-9]+/-/g; s/-$//; s/^-//;')
       case $issue_tracker in
       github )
         user_story_url=$(echo "$user_story_body" | ${pkgs.gh}/bin/gh issue create -t "$user_story_title" -a "@me" -F -)
         user_story_id=$(echo $user_story_url | ${pkgs.gnused}/bin/sed -n 's@.*github.com/[^/]\+/[^/]\+/issues/\([[:digit:]]\+\).*@\1@p')
-        branch_name="$user_story_type/$user_story_id-$branch_descr"
-        ${pkgs.gh}/bin/gh issue develop --base "$base" --name "$branch_name" "$user_story_id"
         ${config.browserExec} "$user_story_url"
         ;;
+      jira )
+        user_story_url="$(create_jira_user_story "$user_story_title" "$user_story_body")"
+        ${config.browserExec} "$user_story_url"
       esac
     }
 
