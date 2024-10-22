@@ -26,10 +26,10 @@ vnoremap <silent><localleader>y <Plug>(TertiusExplain)
 
 " LEADER
 nnoremap <silent><leader><leader> :CtrlP<cr>
-nnoremap <silent><leader>a <Plug>(TertiusIssueWindow)
-nnoremap <silent><leader>A <Plug>(TertiusPullRequestWindow)
-nnoremap <silent><leader>b :G blame<cr>
-nnoremap <silent><leader>B :G branch --all<cr>
+nnoremap <silent><leader>a <Plug>(TertiusPullRequestWindow)
+nnoremap <silent><leader>A <Plug>(TertiusIssueWindow)
+nnoremap <silent><leader>b :G branch --all<cr>
+nnoremap <silent><leader>B :G blame<cr>
 nnoremap <silent><leader>c :GcLog --pretty=oneline<cr>
 nnoremap <silent><leader>C :0GlLog --pretty=oneline<cr>
 nnoremap <silent><leader>d <Plug>(GitChanges)
