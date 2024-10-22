@@ -37,7 +37,7 @@ nnoremap <silent><leader>e :Gedit<cr>
 nnoremap <silent><leader>f <Plug>(GitGrep)
 nnoremap <silent><leader>F <Plug>(GitPickaxe)
 nnoremap <silent><leader>g <Plug>(GitToggleStatus)
-nnoremap <silent><leader>i :echo "Branch-off commit: " . <sid>branchoffCommit("HEAD")<cr>
+nnoremap <silent><leader>i :echo "Branch-off commit: " . <sid>gitBranchoffCommit()<cr>
 nnoremap <silent><leader>n <Plug>(GitCheckoutFromInput)
 nnoremap <silent><leader>N <Plug>(GitBranchOffFromCommit)
 nnoremap <silent><leader>o :G fetch<cr>

@@ -12,16 +12,35 @@
       ''
         set wildignore+=.git/ " ignore files from git directory
 
-        " Git helpers
-        function! s:defaultBranch() abort
+        " GIT HELPERS
+
+        " get the default branch of the current git repository
+        function! s:gitDefaultBranch() abort
           return trim(system("${config.vcsExec} config --get core.default"))
         endfunction
 
-        function! s:currentBranch() abort
+        " get the current branch of the current git repository
+        function! s:gitCurrentBranch() abort
           return trim(system("${config.vcsExec} rev-parse --abbrev-ref HEAD"))
         endfunction
 
-        function! s:projectName() abort
+        " sanitize a branch name
+        function! s:gitSanitizeBranchName(branch) abort
+          return substitute(substitute(a:branch, '^.*\s\+', "", ""), 'remotes/origin/', "", "")
+        endfunction
+
+        " get the selected text and format it into a branch name
+        function! s:gitBranchNameFromText(text) abort
+          return trim(substitute(substitute(tolower(a:text), '[^a-z0-9-]', ' ', 'g'), '\s\+', '-', 'g'))
+        endfunction
+
+        " get the branch off commit of the current branch
+        function! s:gitBranchoffCommit() abort
+          return trim(system("${config.vcsExec} merge-base " . <sid>gitDefaultBranch() . " HEAD"))
+        endfunction
+
+        " get the project name from the git remote
+        function! s:gitProjectName() abort
           let l:url = trim(system('${config.vcsExec} remote get-url origin 2>/dev/null'))
           let l:patterns = [
                 \ 'git@[^:]\+:[^/]\+/\([^/]\+\)\.git',
@@ -38,7 +57,8 @@
           throw 'Unable to extract project name from git remote.'
         endfunction
 
-        function! s:projectOwner() abort
+        " get the project organisation from the git remote
+        function! s:gitProjectOrganisation() abort
           let l:url = trim(system('${config.vcsExec} remote get-url origin 2>/dev/null'))
           let l:patterns = [
                 \ 'git@\([^:]\+\):\([^/]\+\)/[^/]\+\.git',
@@ -55,38 +75,24 @@
           throw 'Unable to extract owner from git remote.'
         endfunction
 
+        " get the git hosting url of the current file
         function! s:gitHostingUrl() abort
-          echo getcwd()
           let l:file = expand('%:~:.')
-          echo l:file
-          let l:owner = <sid>projectOwner()
-          let l:repo = <sid>projectName()
+          let l:owner = <sid>gitProjectOrganisation()
+          let l:repo = <sid>gitProjectName()
           let l:hosting = $GIT_HOSTING ?? 'github'
-          echo l:owner . '/' . l:repo . '/blob/' .  <sid>currentBranch() . '/' . l:file
+          echo l:owner . '/' . l:repo . '/blob/' .  <sid>gitCurrentBranch() . '/' . l:file
           if l:hosting ==# 'github'
-            return 'https://github.com/' .  l:owner . '/' . l:repo . '/blob/' .  <sid>currentBranch() . '/' . l:file
-          " elseif l:hosting ==# 'gitlab'
-          "   return 'https://gitlab.com/' . l:owner . '/' . l:repo . '/blob/' . <sid>currentBranch() . '/' . l:file
+            return 'https://github.com/' .  l:owner . '/' . l:repo . '/blob/' . <sid>gitCurrentBranch() . '/' . l:file
+          elseif l:hosting ==# 'gitlab'
+            return 'https://gitlab.com/' . l:owner . '/' . l:repo . '/blob/' . <sid>gitCurrentBranch() . '/' . l:file
           else
             throw 'Unsupported GIT_HOSTING environment: ' . l:hosting
           endif
         endfunction
 
-        function! s:branchoffCommit(...) abort
-          if a:0 > 0
-            let l:head = a:1
-          else
-            let l:head = "HEAD"
-          end
-          return trim(system("${config.vcsExec} merge-base " . <sid>defaultBranch() . " " . l:head))
-        endfunction
-
-        function! s:whatthecommit() abort
-          return trim(system("curl -Ls whatthecommit.com/index.txt"))
-        endfunction
-
         " open a file in a git hosting page in branch context
-        function! s:openFileInGitHosting() abort
+        function! s:gitOpenFileInHosting() abort
           let l:bufname = bufname('%')
           if !empty(l:bufname) && filereadable(l:bufname)
             silent execute '!${config.browserExec} ' . <sid>gitHostingUrl()
@@ -94,7 +100,7 @@
           endif
         endfunction
 
-        nnoremap <silent> <Plug>(GitOpen) :<c-u>call <sid>openFileInGitHosting()<cr>
+        nnoremap <silent> <Plug>(GitOpen) :<c-u>call <sid>gitOpenFileInHosting()<cr>
 
         " toggle fugitive status window
         function! s:gitToggleStatus() abort
@@ -112,14 +118,9 @@
         nnoremap <silent> <Plug>(GitToggleStatus) :<c-u>call <sid>gitToggleStatus()<cr>
 
         " prune a file in whole git history
-        function! s:gitPruneFile(...) abort
-          if a:0 > 0
-            let l:head = a:1
-          else
-            let l:head = "HEAD"
-          end
+        function! s:gitPruneFile() abort
           let l:file = expand("%")
-          execute "!${config.vcsExec} filter-branch --prune-empty --force --tree-filter 'rm -f " . l:file . "' " . s:branchoffCommit(l:head) . ".." . l:head
+          execute "!${config.vcsExec} filter-branch --prune-empty --force --tree-filter 'rm -f " . l:file . "' " . <sid>gitBranchoffCommit() . "..HEAD"
           echom "File " . l:file . " pruned from git history"
         endfunction
 
@@ -127,31 +128,21 @@
 
         " make a WIP commit
         function! s:gitWIP() abort
-          execute ":G commit --no-verify --message 'WIP " . <sid>whatthecommit() . "'"
+          execute ":G commit --no-verify --message 'WIP " . trim(system("curl -Ls whatthecommit.com/index.txt")) . "'"
         endfunction
 
         nnoremap <silent> <Plug>(GitWIP) :<c-u>call <sid>gitWIP()<cr>
 
         " rebase a feature branch
-        function! s:gitRebaseBranch(...) abort
-          if a:0 > 0
-            let l:head = a:1
-          else
-            let l:head = "HEAD"
-          end
-          execute ":G rebase --interactive " . <sid>branchoffCommit(l:head)
+        function! s:gitRebaseBranch() abort
+          execute ":G rebase --interactive " . <sid>gitBranchoffCommit()
         endfunction
 
         nnoremap <silent> <Plug>(GitRebaseBranch) :<c-u>call <sid>gitRebaseBranch()<cr>
 
         " show changes in a feature branch
-        function! s:gitChanges(...) abort
-          if a:0 > 0
-            let l:head = a:1
-          else
-            let l:head = "HEAD"
-          end
-          execute ":Gclog --pretty=oneline " . <sid>branchoffCommit(l:head) . ".." . l:head
+        function! s:gitChanges() abort
+          execute ":Gclog --pretty=oneline " . <sid>gitBranchoffCommit() . "..HEAD"
         endfunction
 
         nnoremap <silent> <Plug>(GitChanges) :<c-u>call <sid>gitChanges()<cr>
@@ -159,14 +150,14 @@
         " pull and rebase a feature branch
         function! s:gitPullAndRebase() abort
           G fetch
-          execute ":G pull --rebase " . substitute(<sid>defaultBranch(), "/", " ", "")
+          execute ":G pull --rebase " . substitute(<sid>gitDefaultBranch(), "/", " ", "")
           echom "Branch rebased to its default branch"
         endfunction
 
         nnoremap <silent> <Plug>(GitPullAndRebase) :<c-u>call <sid>gitPullAndRebase()<cr>
 
         function! s:gitAbsorb() abort
-          execute ":G absorb --base " . <sid>branchoffCommit()
+          execute ":G absorb --base " . <sid>gitBranchoffCommit()
         endfunction
 
         nnoremap <silent> <Plug>(GitAbsorb) :<c-u>call <sid>gitAbsorb()<cr>
@@ -174,22 +165,14 @@
         " push with force
         function! s:gitPushForce() abort
           execute ":G push --force-with-lease --follow-tags"
-          let l:branch = trim(system("${config.vcsExec} rev-parse --abbrev-ref HEAD"))
-          let l:base = substitute(<sid>defaultBranch(), ".*/", "", "")
-          echom "Branch pushed with force to " . l:base . " branch
-
-          if l:branch != l:base
-            if confirm("Do you want to open a pull request?", "&yes\n&No", 2) == 1
-              call <sid>tertiusPullRequestWindow()
-            endif
-          endif
+          echom "Branch pushed with force to " . l:base . " branch."
         endfunction
 
         nnoremap <silent> <Plug>(GitPushForce) :<c-u>call <sid>gitPushForce()<cr>
 
         " checkout a branch
         function! s:gitCheckout(branch) abort
-          let l:branch = substitute(substitute(a:branch, '^.*\s\+', "", ""), 'remotes/origin/', "", "")
+          let l:branch = <sid>gitSanitizeBranchName(a:branch)
           execute ":G switch " . l:branch
           echom "Switched to " . l:branch
         endfunction
@@ -200,8 +183,7 @@
         " branch off from a current commit
         function! s:gitBranchOffFromCommit() abort
           let l:commit = trim(system("${config.vcsExec} log -1 --pretty=%s"))
-          let l:branch_name = trim(substitute(substitute(tolower(l:commit), '[^a-z0-9-]', ' ', 'g'), '\s\+', '-', 'g'))
-          let l:branch_name = input("branch /", l:branch_name)
+          let l:branch_name = input("branch /", <sid>gitBranchNameFromText(l:commit))
           execute ":G checkout -B " . l:branch_name
           echom "Switched to " . l:branch_name
         endfunction
@@ -211,7 +193,7 @@
         " cherry-pick a current commit to a target branch
         function! s:gitCherryPickToBranch(branch) abort
           let l:commit = trim(system("${config.vcsExec} log -1 --pretty=%H"))
-          let l:branch = substitute(substitute(a:branch, '^.*\s\+', "", ""), 'remotes/origin/', "", "")
+          let l:branch = <sid>gitSanitizeBranchName(a:branch)
           execute ":G switch " . l:branch
           execute ":G pull --rebase"
           execute ":G cherry-pick " . l:commit
