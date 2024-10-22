@@ -165,7 +165,7 @@
         " push with force
         function! s:gitPushForce() abort
           execute ":G push --force-with-lease --follow-tags"
-          echom "Branch pushed with force to " . l:base . " branch."
+          echom "Branch pushed with force to upstream branch."
         endfunction
 
         nnoremap <silent> <Plug>(GitPushForce) :<c-u>call <sid>gitPushForce()<cr>
