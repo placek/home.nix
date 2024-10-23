@@ -10,15 +10,13 @@ nnoremap <silent><localleader>w :call <sid>toggleLocList()<cr>
 nnoremap <silent><localleader>v :!<c-r>=&makeprg<cr><cr>
 nnoremap <silent><localleader>V :!<c-r>=&makeprg<cr>:<c-r>=line('.')<cr><cr>
 nnoremap <silent><localleader>x :call <sid>altFile()<cr>
-nnoremap <silent><localleader>y <Plug>(TertiusFixCode)
 
 vnoremap <silent><localleader>f g<c-]>
-vnoremap <silent><localleader>y <Plug>(TertiusExplain)
 
 " LEADER
 nnoremap <silent><leader><leader> :CtrlP<cr>
 nnoremap <silent><leader>a <Plug>(TertiusPullRequestWindow)
-nnoremap <silent><leader>A <Plug>(TertiusIssueWindow)
+nnoremap <silent><leader>A <Plug>(TertiusUserStoryWindow)
 nnoremap <silent><leader>b :G branch --all<cr>
 nnoremap <silent><leader>B :G blame<cr>
 nnoremap <silent><leader>c :GcLog --pretty=oneline<cr>
@@ -44,7 +42,6 @@ nnoremap <silent><leader>x <Plug>(TodoNote)
 
 vnoremap <silent><leader>f <Plug>(GitGrepSelected)
 vnoremap <silent><leader>F <Plug>(GitPickaxeSelected)
-vnoremap <silent><leader>y <Plug>(TertiusAsk)
 
 " movement
 nnoremap <silent> ]h :GitGutterNextHunk<cr>
