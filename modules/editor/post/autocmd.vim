@@ -38,3 +38,24 @@ autocmd FileType                qf nnoremap <buffer> <c-x> :call <sid>openQuickf
 autocmd Filetype                qf setlocal statusline=%1*%f%2*
 autocmd TerminalWinOpen         *  tmap <esc> <c-\><c-n>
 autocmd InsertEnter,InsertLeave *  set cul!
+
+if executable('ruby-lsp')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'ruby-lsp',
+    \ 'cmd': {server_info->['ruby-lsp']},
+    \ 'allowlist': ['ruby'],
+    \ })
+endif
+
+if executable('haskell-language-server-wrapper')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'haskell-language-server',
+    \ 'cmd': {server_info->['haskell-language-server-wrapper', '--lsp']},
+    \ 'allowlist': ['haskell', 'lhaskell'],
+    \ })
+endif
+
+augroup lsp_install
+  au!
+  autocmd User lsp_buffer_enabled call <sid>lspOnBufferEnabled()
+augroup END

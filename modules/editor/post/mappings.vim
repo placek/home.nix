@@ -1,21 +1,12 @@
 " LOCALLEADER
 nnoremap <localleader><localleader> :CtrlPBuffer<cr>
-nnoremap <silent><localleader>a <Plug>(ale_code_action)
-nnoremap <silent><localleader>A <Plug>(ale_fix)
 nnoremap <silent><localleader>b :lmake %:.<cr>
 nnoremap <silent><localleader>B :lmake %:. line=<c-r>=line('.')<cr><cr>
 nnoremap <silent><localleader>c :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
 nnoremap <silent><localleader>C :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
-nnoremap <silent><localleader>d <Plug>(ale_go_to_definition_in_vsplit)
-nnoremap <silent><localleader>D <Plug>(ale_go_to_type_definition_in_vsplit)
 nnoremap <silent><localleader>e :call <sid>commentToggle()<cr>
-nnoremap <silent><localleader>f g<c-]>
-nnoremap <silent><localleader>F :ALEFindReferences -quickfix \| copen<cr>
-nnoremap <silent><localleader>g <Plug>(ale_detail)
-nnoremap <silent><localleader>G <Plug>(ale_hover)
+nnoremap <silent><localleader>F g<c-]>
 nnoremap <silent><localleader>w :call <sid>toggleLocList()<cr>
-nnoremap <silent><localleader>s <Plug>(ale_info)
-nnoremap <silent><localleader>S <Plug>(ale_toggle)
 nnoremap <silent><localleader>v :!<c-r>=&makeprg<cr><cr>
 nnoremap <silent><localleader>V :!<c-r>=&makeprg<cr>:<c-r>=line('.')<cr><cr>
 nnoremap <silent><localleader>x :call <sid>altFile()<cr>
@@ -56,8 +47,6 @@ vnoremap <silent><leader>F <Plug>(GitPickaxeSelected)
 vnoremap <silent><leader>y <Plug>(TertiusAsk)
 
 " movement
-nnoremap <silent> [e <Plug>(ale_previous_wrap)
-nnoremap <silent> ]e <Plug>(ale_next_wrap)
 nnoremap <silent> ]h :GitGutterNextHunk<cr>
 nnoremap <silent> [h :GitGutterPrevHunk<cr>
 
