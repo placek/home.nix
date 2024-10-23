@@ -6,13 +6,7 @@
   config = {
     editor.RCs = [
       ''
-        function! s:putCurrentGitHubIssue()
-          let l:issue = substitute(system("${config.tertiusExec} story get"), '\r', "", 'g')
-          execute "0put =l:issue"
-          execute ":2,$s/^/    /"
-        endfunction
-
-        function! s:toggleTodoNote()
+        function! s:todoToggleWindow()
           silent call system('${config.vcsExec} notes --ref=todo copy HEAD~ HEAD')
           if buflisted(bufname('.git/NOTES_EDITMSG'))
             if !win_gotoid(bufwinid('.git/NOTES_EDITMSG'))
@@ -22,22 +16,18 @@
             execute ":G notes --ref=todo edit"
           endif
           execute ":set syntax=xit"
-          if <sid>isBufferEmptyButComments()
-            execute "normal! ggVGd"
-            call <sid>putCurrentGitHubIssue()
-          endif
           syntax match Comment /^#.*/ containedin=ALL
         endfunction
 
-        nnoremap <silent> <Plug>(TodoNote) :<c-u>call <sid>toggleTodoNote()<cr>
+        nnoremap <silent> <Plug>(TodoToggle) :<c-u>call <sid>todoToggleWindow()<cr>
 
-        function! s:getTodoNote()
+        function! s:todoGetNote()
           let l:note = system('${config.vcsExec} notes --ref=todo show HEAD')
           return l:note
         endfunction
 
-        function! s:putTodoNote()
-          let l:note = <sid>getTodoNote()
+        function! s:todoPutNote()
+          let l:note = <sid>todoGetNote()
           let lines = split(l:note, "\n")
           let commented_lines = []
           for line in lines
@@ -49,7 +39,7 @@
           execute "put ='# ------------------------ 8< ------------------------'"
         endfunction
 
-        nnoremap <silent> <Plug>(PutTodoNote) :<c-u>call <sid>putTodoNote()<cr>
+        nnoremap <silent> <Plug>(TodoPutNote) :<c-u>call <sid>todoPutNote()<cr>
       ''
     ];
   };

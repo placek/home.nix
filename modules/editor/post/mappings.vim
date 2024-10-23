@@ -38,7 +38,7 @@ nnoremap <silent><leader>r :edit .<cr>
 nnoremap <silent><leader>R <Plug>(GitOpen)
 nnoremap <silent><leader>v :vertical terminal<cr>
 nnoremap <silent><leader>V :terminal<cr>
-nnoremap <silent><leader>x <Plug>(TodoNote)
+nnoremap <silent><leader>x <Plug>(TodoToggle)
 
 vnoremap <silent><leader>f <Plug>(GitGrepSelected)
 vnoremap <silent><leader>F <Plug>(GitPickaxeSelected)
