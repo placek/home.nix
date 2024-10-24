@@ -15,7 +15,7 @@
           else
             execute ":G notes --ref=todo edit"
           endif
-          execute ":set syntax=xit"
+          execute ":set syntax=xit filetype=xit"
           syntax match Comment /^#.*/ containedin=ALL
         endfunction
 
@@ -40,6 +40,19 @@
         endfunction
 
         nnoremap <silent> <Plug>(TodoPutNote) :<c-u>call <sid>todoPutNote()<cr>
+
+        function! s:todoToggleItem()
+          let l:line = getline('.')
+          if l:line =~ '^\[[^x]\] '
+            call setline('.', substitute(l:line, '^\[ \] ', '[x] ', ""))
+          elseif l:line =~ '^\[x\] '
+            call setline('.', substitute(l:line, '^\[x\] ', '[ ] ', ""))
+          else
+            call setline('.', substitute(l:line, '^\W*', '[ ] ', ""))
+          endif
+        endfunction
+
+        nnoremap <silent> <Plug>(TodoToggleItem) :<c-u>call <sid>todoToggleItem()<cr>
       ''
     ];
   };

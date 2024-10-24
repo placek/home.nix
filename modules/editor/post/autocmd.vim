@@ -9,6 +9,10 @@ augroup Git
   autocmd BufReadPost *         call <sid>setBlameLine()
 augroup END
 
+augroup Todo
+  autocmd FileType xit nnoremap <buffer> gt <Plug>(TodoToggleItem)<cr>
+augroup END
+
 augroup MakePrg
   autocmd BufEnter *_spec.rb  setlocal efm=rspec\ %f:%l\ #\ %m
 
