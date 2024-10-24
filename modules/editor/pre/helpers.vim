@@ -10,12 +10,11 @@ endfunction
 
 function! s:commentToggle()
   let line = getline('.')
-  if match(l:line, '^\s*'.substitute(&commentstring, '%s', '.*', '')) >= 0
-    let l:target = substitute(l:line, '^\s*\zs'.substitute(&commentstring, '%s', '', ''), '', '')
+  if l:line =~ '^\s*' . substitute(&commentstring, '%s', '.*', '')
+    call setline('.', substitute(l:line, '^\s*\zs' . substitute(&commentstring, '%s', '', ''), '', ''))
   else
-    let l:target = printf(&commentstring, l:line)
+    call setline('.', printf(&commentstring, l:line))
   endif
-  keeppatterns s/^.*$/\=l:target/
 endfunction
 
 function! s:openQuickfix(new_split_cmd)

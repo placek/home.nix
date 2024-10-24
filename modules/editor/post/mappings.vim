@@ -8,7 +8,6 @@ nnoremap <silent><localleader>c :G blame<cr>
 nnoremap <silent><localleader>C :0GlLog --pretty=oneline<cr>
 nnoremap <buffer><localleader>d <plug>(lsp-definition)
 nnoremap <buffer><localleader>D <plug>(lsp-type-definition)
-nnoremap <silent><localleader>e :call <sid>commentToggle()<cr>
 nnoremap <buffer><localleader>f <plug>(lsp-references)
 nnoremap <silent><localleader>F g<c-]>
 nnoremap <buffer><localleader>g <plug>(lsp-implementation)
@@ -21,6 +20,8 @@ nnoremap <silent><localleader>x :call <sid>altFile()<cr>
 vnoremap <buffer> <localleader>A <plug>(lsp-document-range-format)
 vnoremap <silent><localleader>f g<c-]>
 nnoremap <buffer> K <plug>(lsp-hover-float)
+nnoremap <silent>gc :call <sid>commentToggle()<cr>
+vnoremap <silent>gc :call <sid>commentToggle()<cr>
 
 " LEADER
 nnoremap <silent><leader><leader> :CtrlP<cr>
