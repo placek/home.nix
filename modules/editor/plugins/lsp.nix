@@ -23,19 +23,6 @@
           setlocal omnifunc=lsp#complete
           setlocal signcolumn=yes
           if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-          nmap <buffer> <localleader>a <plug>(lsp-code-action-float)
-          nmap <buffer> <localleader>A <plug>(lsp-document-format)
-          vmap <buffer> <localleader>A <plug>(lsp-document-range-format)
-          nmap <buffer> <localleader>d <plug>(lsp-definition)
-          nmap <buffer> <localleader>D <plug>(lsp-type-definition)
-          nmap <buffer> <localleader>f <plug>(lsp-references)
-          nmap <buffer> <localleader>s <plug>(lsp-status)
-          nmap <buffer> <localleader>g <plug>(lsp-implementation)
-          nmap <buffer> <localleader>G <plug>(lsp-workspace-symbol-search)
-          nmap <buffer> <leader>rn <plug>(lsp-rename)
-          nmap <buffer> [e <plug>(lsp-previous-diagnostic)
-          nmap <buffer> ]e <plug>(lsp-next-diagnostic)
-          nmap <buffer> K <plug>(lsp-hover-float)
 
           let g:lsp_format_sync_timeout = 1000
           let g:lsp_diagnostics_echo_cursor = 1

@@ -1,27 +1,35 @@
 " LOCALLEADER
 nnoremap <localleader><localleader> :CtrlPBuffer<cr>
+nnoremap <buffer><localleader>a <plug>(lsp-code-action-float)
+nnoremap <buffer><localleader>A <plug>(lsp-document-format)
 nnoremap <silent><localleader>b :lmake %:.<cr>
 nnoremap <silent><localleader>B :lmake %:. line=<c-r>=line('.')<cr><cr>
-nnoremap <silent><localleader>c :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0), '\(\u\?\l\+\)\(\u\)', '\l\1_\l\2', 'g'):<cr><c-o>
-nnoremap <silent><localleader>C :keeppatterns s:<c-r><c-w>:\=substitute(submatch(0),'\(\l\+\)_\?', '\u\1', 'g'):<cr><c-o>
+nnoremap <silent><localleader>c :G blame<cr>
+nnoremap <silent><localleader>C :0GlLog --pretty=oneline<cr>
+nnoremap <buffer><localleader>d <plug>(lsp-definition)
+nnoremap <buffer><localleader>D <plug>(lsp-type-definition)
 nnoremap <silent><localleader>e :call <sid>commentToggle()<cr>
+nnoremap <buffer><localleader>f <plug>(lsp-references)
 nnoremap <silent><localleader>F g<c-]>
+nnoremap <buffer><localleader>g <plug>(lsp-implementation)
+nnoremap <buffer><localleader>G <plug>(lsp-workspace-symbol-search)
+nnoremap <buffer><localleader>r <plug>(lsp-rename)
+nnoremap <buffer><localleader>s <plug>(lsp-status)
 nnoremap <silent><localleader>w :call <sid>toggleLocList()<cr>
-nnoremap <silent><localleader>v :!<c-r>=&makeprg<cr><cr>
-nnoremap <silent><localleader>V :!<c-r>=&makeprg<cr>:<c-r>=line('.')<cr><cr>
 nnoremap <silent><localleader>x :call <sid>altFile()<cr>
 
+vnoremap <buffer> <localleader>A <plug>(lsp-document-range-format)
 vnoremap <silent><localleader>f g<c-]>
+nnoremap <buffer> K <plug>(lsp-hover-float)
 
 " LEADER
 nnoremap <silent><leader><leader> :CtrlP<cr>
 nnoremap <silent><leader>a <Plug>(TertiusPullRequestWindow)
 nnoremap <silent><leader>A <Plug>(TertiusUserStoryWindow)
-nnoremap <silent><leader>b :G branch --all<cr>
-nnoremap <silent><leader>B :G blame<cr>
-nnoremap <silent><leader>c :GcLog --pretty=oneline<cr>
-nnoremap <silent><leader>C :0GlLog --pretty=oneline<cr>
-nnoremap <silent><leader>d <Plug>(GitChanges)
+nnoremap <silent><leader>b :make<cr>
+nnoremap <silent><leader>B :make all<cr>
+nnoremap <silent><leader>c <Plug>(GitChanges)
+nnoremap <silent><leader>C :GcLog --pretty=oneline<cr>
 nnoremap <silent><leader>e :Gedit<cr>
 nnoremap <silent><leader>f <Plug>(GitGrep)
 nnoremap <silent><leader>F <Plug>(GitPickaxe)
@@ -36,14 +44,17 @@ nnoremap <silent><leader>P <Plug>(GitPushForce)
 nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
 nnoremap <silent><leader>r :edit .<cr>
 nnoremap <silent><leader>R <Plug>(GitOpen)
-nnoremap <silent><leader>v :vertical terminal<cr>
-nnoremap <silent><leader>V :terminal<cr>
+nnoremap <silent><leader>t :vertical terminal<cr>
+nnoremap <silent><leader>T :terminal<cr>
+nnoremap <silent><leader>v :G branch --all<cr>
 nnoremap <silent><leader>x <Plug>(TodoToggle)
 
 vnoremap <silent><leader>f <Plug>(GitGrepSelected)
 vnoremap <silent><leader>F <Plug>(GitPickaxeSelected)
 
 " movement
+nnoremap <buffer> [e <plug>(lsp-previous-diagnostic)
+nnoremap <buffer> ]e <plug>(lsp-next-diagnostic)
 nnoremap <silent> ]h :GitGutterNextHunk<cr>
 nnoremap <silent> [h :GitGutterPrevHunk<cr>
 
