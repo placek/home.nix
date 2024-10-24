@@ -13,7 +13,7 @@ nnoremap <buffer><localleader>f <plug>(lsp-references)
 nnoremap <silent><localleader>F <plug>(lsp-workspace-symbol-search)
 nnoremap <buffer><localleader>i <plug>(lsp-status)
 nnoremap <buffer><localleader>r <plug>(lsp-rename)
-nnoremap <silent><localleader>w :call <sid>toggleLocList()<cr>
+nnoremap <silent><localleader>q :call <sid>toggleLocList()<cr>
 nnoremap <silent><localleader>x :call <sid>altFile()<cr>
 
 vnoremap <buffer> <localleader>A <plug>(lsp-document-range-format)
