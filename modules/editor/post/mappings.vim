@@ -8,12 +8,11 @@ nnoremap <silent><localleader>c :G blame<cr>
 nnoremap <silent><localleader>C :0GlLog --pretty=oneline<cr>
 nnoremap <buffer><localleader>d <plug>(lsp-definition)
 nnoremap <buffer><localleader>D <plug>(lsp-type-definition)
+nnoremap <silent><localleader>e :Gedit<cr>
 nnoremap <buffer><localleader>f <plug>(lsp-references)
-nnoremap <silent><localleader>F g<c-]>
-nnoremap <buffer><localleader>g <plug>(lsp-implementation)
-nnoremap <buffer><localleader>G <plug>(lsp-workspace-symbol-search)
+nnoremap <silent><localleader>F <plug>(lsp-workspace-symbol-search)
+nnoremap <buffer><localleader>i <plug>(lsp-status)
 nnoremap <buffer><localleader>r <plug>(lsp-rename)
-nnoremap <buffer><localleader>s <plug>(lsp-status)
 nnoremap <silent><localleader>w :call <sid>toggleLocList()<cr>
 nnoremap <silent><localleader>x :call <sid>altFile()<cr>
 
@@ -31,7 +30,7 @@ nnoremap <silent><leader>b :make<cr>
 nnoremap <silent><leader>B :make all<cr>
 nnoremap <silent><leader>c <Plug>(GitChanges)
 nnoremap <silent><leader>C :GcLog --pretty=oneline<cr>
-nnoremap <silent><leader>e :Gedit<cr>
+nnoremap <silent><leader>e :edit .<cr>
 nnoremap <silent><leader>f <Plug>(GitGrep)
 nnoremap <silent><leader>F <Plug>(GitPickaxe)
 nnoremap <silent><leader>g <Plug>(GitToggleStatus)
@@ -43,7 +42,6 @@ nnoremap <silent><leader>O <Plug>(GitPullAndRebase)
 nnoremap <silent><leader>p :G push<cr>
 nnoremap <silent><leader>P <Plug>(GitPushForce)
 nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
-nnoremap <silent><leader>r :edit .<cr>
 nnoremap <silent><leader>R <Plug>(GitOpen)
 nnoremap <silent><leader>t :vertical terminal<cr>
 nnoremap <silent><leader>T :terminal<cr>
