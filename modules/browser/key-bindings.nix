@@ -7,6 +7,9 @@
   config.programs.qutebrowser.keyBindings.normal = {
     "I" = "hint inputs";
 
+    "pS" = "open -t -- {clipboard}";
+    "ps" = "cmd-set-text /{clipboard}";
+
     ";D" = "hint links spawn ${config.terminalExec} -e ${config.downloaderExec} {hint-url} -d ${config.downloadsDirectory}";
     ";m" = "hint links spawn ${config.terminalExec} -e ${config.ytDownloaderExec} -x {hint-url} -o ${config.downloadsDirectory}/%(title)s.%(ext)s";
     ";v" = "hint links spawn ${config.terminalExec} -e ${config.ytDownloaderExec} {hint-url} -o ${config.downloadsDirectory}/%(title)s.%(ext)s";
