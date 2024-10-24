@@ -31,7 +31,7 @@
 
         " get the selected text and format it into a branch name
         function! s:gitBranchNameFromText(text) abort
-          return trim(substitute(substitute(tolower(a:text), '[^a-z0-9-]', ' ', 'g'), '\s\+', '-', 'g'))
+          return substitute(trim(substitute(tolower(a:text), '[^a-z0-9-]', ' ', 'g')), '\s\+', '-', 'g')
         endfunction
 
         " get the branch off commit of the current branch
