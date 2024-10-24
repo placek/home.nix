@@ -34,8 +34,8 @@ let
       fi
     }
 
-    _git_is_empty_commit() {
-      git diff-tree --no-commit-id --name-only -r "$1" | grep -q .
+    _git_is_not_empty_commit() {
+      git show --stat --format="" "$1" | grep -q .
     }
 
 ################################### OPEN AI ####################################
@@ -55,10 +55,10 @@ let
     _ai_apply_commit() {
       hash="$1"
       commit_message="$(${config.vcsExec} show -s --format=%B "$hash")"
-      if _git_is_empty_commit "$hash"; then
-        _ai_apply_context "This are the details of the task that is to be done:\n$commit_message"
-      else
+      if _git_is_not_empty_commit "$hash"; then
         _ai_apply_context "This is a message of a commit that introduces a part of implementation of the user story:\n$commit_message"
+      else
+        _ai_apply_context "This are the details of the task that is to be done:\n$commit_message"
       fi
     }
 

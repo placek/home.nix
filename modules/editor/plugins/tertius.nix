@@ -6,10 +6,37 @@
   config = {
     editor.RCs = [
       ''
+        " compose a commit message from the output of `tertius commit` from the current buffer
+        function! s:gitComposeCommitMessage(buffer_content) abort
+          let l:result = split(trim(system("${config.tertiusExec} commit", a:buffer_content)), '\n')
+          let l:user_story_id = <sid>gitUserStoryId(<sid>gitLastEmptyCommit())
+          let l:header = "[" . l:user_story_id . "] " . l:result[0]
+          if l:user_story_id != ""
+            let l:result[0] = l:header
+          endif
+          normal! ggVGd
+          call append(0, l:result)
+          normal! GVggjgq
+        endfunction
+
+        " get the buffer content after the first commented line (including the commented line)
+        function! s:gitCommitMessageTail(buffer_content) abort
+          let l:index = 0
+          for l:line in a:buffer_content
+            if l:line !~ '^#'
+              let l:index += 1
+            else
+              break
+            endif
+          endfor
+          call append(line('$'), a:buffer_content[l:index:])
+        endfunction
+
         " generate a commit message
         function! s:tertiusCommitMessage() abort
-          execute ":%!${config.tertiusExec} commit write-message"
-          normal! ggVGgq
+          let l:buffer_content = getline(1, '$')
+          call <sid>gitComposeCommitMessage(l:buffer_content)
+          call <sid>gitCommitMessageTail(l:buffer_content)
           redraw!
         endfunction
 

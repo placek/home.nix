@@ -39,6 +39,38 @@
           return trim(system("${config.vcsExec} merge-base " . <sid>gitDefaultBranch() . " HEAD"))
         endfunction
 
+        " check if commit is empty
+        function! s:gitCommitIsEmpty(commit) abort
+          return empty(trim(system("${config.vcsExec} show --pretty=format: --name-only " . a:commit)))
+        endfunction
+
+        " get commits from the current branch
+        function! s:gitCurrentBranchCommits() abort
+          return split(system("${config.vcsExec} log --format=%H " . <sid>gitBranchoffCommit() . "..HEAD"), "\n")
+        endfunction
+
+        " get last empty commit on the current branch
+        function! s:gitLastEmptyCommit() abort
+          let l:commits = <sid>gitCurrentBranchCommits()
+          for l:commit in l:commits
+            if <sid>gitCommitIsEmpty(l:commit)
+              return l:commit
+            endif
+          endfor
+        endfunction
+
+        " extract user story id from commit message
+        function! s:gitUserStoryId(commit) abort
+          let l:commit_message = system("${config.vcsExec} show --pretty=format:%s -s " . a:commit)
+          let l:matches = matchlist(l:commit_message, '\[\([^\]]\+\)\]')
+          if len(l:matches) > 1
+            return l:matches[1]
+          endif
+          return ""
+        endfunction
+
+        nmap <localleader>g :<c-u>echo <sid>gitUserStoryId(<sid>gitLastEmptyCommit())<cr>
+
         " get the project name from the git remote
         function! s:gitProjectName() abort
           let l:url = trim(system('${config.vcsExec} remote get-url origin 2>/dev/null'))
@@ -74,6 +106,8 @@
           endfor
           throw 'Unable to extract owner from git remote.'
         endfunction
+
+        " VIM FUNCTIONS
 
         " get the git hosting url of the current file
         function! s:gitHostingUrl() abort
