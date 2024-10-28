@@ -71,67 +71,39 @@
 
         nmap <localleader>g :<c-u>echo <sid>gitUserStoryId(<sid>gitLastEmptyCommit())<cr>
 
-        " get the project name from the git remote
-        function! s:gitProjectName() abort
-          let l:url = trim(system('${config.vcsExec} remote get-url origin 2>/dev/null'))
-          let l:patterns = [
-                \ 'git@[^:]\+:[^/]\+/\([^/]\+\)\.git',
-                \ 'https\?://[^/]\+/\([^/]\+\)\.git',
-                \ 'git@[^:]\+:[^/]\+/\([^/]\+\)',
-                \ 'https\?://[^/]\+/\([^/]\+\)'
-                \ ]
-          for l:pattern in l:patterns
-            let l:matches = matchlist(l:url, l:pattern)
-            if len(l:matches) > 0
-              return l:matches[1]
-            endif
-          endfor
-          throw 'Unable to extract project name from git remote.'
-        endfunction
-
-        " get the project organisation from the git remote
-        function! s:gitProjectOrganisation() abort
-          let l:url = trim(system('${config.vcsExec} remote get-url origin 2>/dev/null'))
-          let l:patterns = [
-                \ 'git@\([^:]\+\):\([^/]\+\)/[^/]\+\.git',
-                \ 'https\?://[^/]\+/\([^/]\+\)/[^/]\+\.git',
-                \ 'git@\([^:]\+\):\([^/]\+\)/[^/]\+',
-                \ 'https\?://[^/]\+/\([^/]\+\)/[^/]\+'
-                \ ]
-          for l:pattern in l:patterns
-            let l:matches = matchlist(l:url, l:pattern)
-            if len(l:matches) > 0
-              return l:matches[2]
-            endif
-          endfor
-          throw 'Unable to extract owner from git remote.'
-        endfunction
-
         " VIM FUNCTIONS
 
         " get the git hosting url of the current file
-        function! s:gitHostingUrl() abort
-          let l:file = expand('%:~:.')
-          let l:owner = <sid>gitProjectOrganisation()
-          let l:repo = <sid>gitProjectName()
-          let l:hosting = $GIT_HOSTING ?? 'github'
-          echo l:owner . '/' . l:repo . '/blob/' .  <sid>gitCurrentBranch() . '/' . l:file
-          if l:hosting ==# 'github'
-            return 'https://github.com/' .  l:owner . '/' . l:repo . '/blob/' . <sid>gitCurrentBranch() . '/' . l:file
-          elseif l:hosting ==# 'gitlab'
-            return 'https://gitlab.com/' . l:owner . '/' . l:repo . '/blob/' . <sid>gitCurrentBranch() . '/' . l:file
-          else
-            throw 'Unsupported GIT_HOSTING environment: ' . l:hosting
+        function! s:gitBufferInfo() abort
+          let l:remote = trim(system("${config.vcsExec} remote get-url origin"))
+          let l:host = matchlist(l:remote, '@\zs[^/]\+\ze:')
+          let l:repo = matchlist(l:remote, '[[:alnum:]_\-]\+/[[:alnum:]_\-]\+')
+          let l:object = matchlist(expand('%'), '^fugitive://.\+\.git//\zs[a-f0-9]\{40\}$')
+          if empty(l:repo) || empty(l:object) || empty(l:host)
+            throw "Git object not found"
           endif
+          return { "host" : l:host[0], "repo" : l:repo[0], "object" : l:object[0] }
         endfunction
 
         " open a file in a git hosting page in branch context
         function! s:gitOpenFileInHosting() abort
-          let l:bufname = bufname('%')
-          if !empty(l:bufname) && filereadable(l:bufname)
-            silent execute '!${config.browserExec} ' . <sid>gitHostingUrl()
+          try
+            let l:info = <sid>gitBufferInfo()
+            if l:info.host =~ "gitlab"
+              let l:url = "https://" . l:info.host . "/" . l:info.repo .  "/-/commit/" . l:info.object
+            elseif l:info.host =~ "bitbucket"
+              let l:url = "https://" . l:info.host . "/" . l:info.repo .  "/commits/" . l:info.object
+            elseif l:info.host =~ "github"
+              let l:url = "https://" . l:info.host . "/" . l:info.repo . "/commit/" . l:info.object
+            else
+              throw "Unsupported git hosting"
+            endif
+            silent execute '!${config.browserExec} ' . l:url
+          catch /.*/
+            echom "Error: " . v:exception
+          finally
             redraw!
-          endif
+          endtry
         endfunction
 
         nnoremap <silent> <Plug>(GitOpen) :<c-u>call <sid>gitOpenFileInHosting()<cr>

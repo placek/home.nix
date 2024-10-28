@@ -42,7 +42,6 @@ nnoremap <silent><leader>O <Plug>(GitPullAndRebase)
 nnoremap <silent><leader>p :G push<cr>
 nnoremap <silent><leader>P <Plug>(GitPushForce)
 nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
-nnoremap <silent><leader>R <Plug>(GitOpen)
 nnoremap <silent><leader>t :vertical terminal<cr>
 nnoremap <silent><leader>T :terminal<cr>
 nnoremap <silent><leader>v :G branch --all<cr>
