@@ -1,23 +1,32 @@
 #!/usr/bin/env bash
 
 export project
-export object
+export commit
 export name
+export pr
+export file
 
-project=$(echo "$QUTE_URL" | sed -En 's@https://git[^/]+/([^/]+)/([^/]+)/.*@\U\1\/\U\2@p')
+hosting=$(echo "$QUTE_URL" | sed -En 's@https://([^/]+)/.*@\1@p')
+project=$(echo "$QUTE_URL" | sed -En 's@https://[^/]+/([^/]+)/([^/]+)/.*@\U\1\/\U\2@p')
 
 if [ -n "$project" ]; then
-  object=$(echo "$QUTE_URL" | sed -En 's@https://git[^/]+/.*/([[:xdigit:]]{40}).*@\1@p')
-  pr=$(echo "$QUTE_URL" | sed -En 's@https://git[^/]+/.*/pull/([[:digit:]]+)@\1@p')
+  case $hosting in
+  github* )
+    commit=$(echo "$QUTE_URL" | sed -En 's@https://[^/]+/.*/([[:xdigit:]]{40}).*@\1@p')
+    ;;
+  gitlab* )
+    commit=$(echo "$QUTE_URL" | sed -En 's@https://[^/]+/.*commit_id=([[:xdigit:]]{40}).*@\1@p')
+    ;;
+  bitbucket* )
+    commit=$(echo "$QUTE_URL" | sed -En 's@https://[^/]+/.*/commits/([[:xdigit:]]{40}).*@\1@p')
+    ;;
+  esac
 
-  if [ -n "$object" ]; then
-    vim --servername "$project" --remote-send ":<c-u>G show $object<cr>"
-  elif [ -n "$pr" ]; then
-    vim --servername "$project" --remote-send ":<c-u>G checkout <c-r>=trim(system('gh pr view --json headRefName --jq \"\\\"\\(.headRefName)\\\"\" $pr'))<cr>"
+  if [ -n "$commit" ]; then
+    vim --servername "$project" --remote-send ":<c-u>G show $commit<cr>"
   else
-    >&2 echo "No object present in URL: $QUTE_URL"
-    >&2 echo "  object: $object"
-    >&2 echo "  pr: $pr"
+    >&2 echo "No commit present in URL: $QUTE_URL"
+    >&2 echo "  commit: $commit"
     exit 3
   fi
 else
