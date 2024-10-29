@@ -3,7 +3,7 @@
 }:
 {
   config.programs.qutebrowser.aliases = {
-    "start" = "session-load default";
+    "s" = "session-load default";
     "q" = "quit";
     "w" = "session-save";
     "wq" = "quit --save";
