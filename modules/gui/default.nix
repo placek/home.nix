@@ -53,7 +53,7 @@
   imports = [
     ./fonts.nix
 
-    # ./autorandr
+    ./autorandr
     ./dunst.nix
     ./feh.nix
     ./xmobar.nix
@@ -69,7 +69,6 @@
       libnotify
       xf86_input_wacom
 
-      arandr
       discord
       gimp
       inkscape-with-extensions
