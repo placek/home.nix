@@ -37,6 +37,7 @@
           let l:buffer_content = getline(1, '$')
           call <sid>gitComposeCommitMessage(l:buffer_content)
           call <sid>gitCommitMessageTail(l:buffer_content)
+          execute '1'
           redraw!
         endfunction
 
