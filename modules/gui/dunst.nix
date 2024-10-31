@@ -6,9 +6,6 @@
 {
   config = {
     services.dunst.enable = true;
-    services.dunst.iconTheme.package = pkgs.papirus-icon-theme;
-    services.dunst.iconTheme.name = "Papirus Dark";
-    services.dunst.iconTheme.size = "32x32";
     services.dunst.settings = {
       global = {
         follow = "none";
@@ -22,7 +19,6 @@
         horizontal_padding = config.gui.border.size * 2;
         separator_color = config.gui.theme.base08;
         separator_height = config.gui.border.size;
-        icon_position = "left";
         transparency = 0;
 
         font = "${config.gui.font.name} ${builtins.toString config.gui.font.size}";
