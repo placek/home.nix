@@ -11,7 +11,7 @@
           let l:result = split(trim(system("${config.tertiusExec} commit", a:buffer_content)), '\n')
           let l:user_story_id = <sid>gitUserStoryId(<sid>gitLastEmptyCommit())
           let l:header = "[" . l:user_story_id . "] " . l:result[0]
-          if l:user_story_id != ""
+          if !empty(l:user_story_id)
             let l:result[0] = l:header
           endif
           normal! ggVGd

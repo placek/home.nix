@@ -61,12 +61,13 @@
 
         " extract user story id from commit message
         function! s:gitUserStoryId(commit) abort
-          let l:commit_message = system("${config.vcsExec} show --pretty=format:%s -s " . a:commit)
-          let l:matches = matchlist(l:commit_message, '\[\([^\]]\+\)\]')
-          if len(l:matches) > 1
-            return l:matches[1]
+          if !empty(a:commit)
+            let l:commit_message = system("${config.vcsExec} show --pretty=format:%s -s " . a:commit)
+            let l:matches = matchlist(l:commit_message, '\[\([^\]]\+\)\]')
+            if len(l:matches) > 1
+              return l:matches[1]
+            endif
           endif
-          return ""
         endfunction
 
         nmap <localleader>g :<c-u>echo <sid>gitUserStoryId(<sid>gitLastEmptyCommit())<cr>
