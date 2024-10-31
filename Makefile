@@ -30,6 +30,9 @@ gc:
 	nix-collect-garbage --delete-older-than "$(shell echo "$(expiration)" | sed 's/ days/d/')"
 	nix-store --optimise
 
+news:
+	$(hm) news
+
 all: upgrade apply expire gc
 
 .PHONY: apply switch upgrade expire gens gc all
