@@ -153,6 +153,11 @@ in
       tabs.selected.odd.bg = base08;
       tabs.selected.even.fg = base0B;
       tabs.selected.even.bg = base00;
+
+      webpage.darkmode.enabled = true;
+      webpage.darkmode.policy.images = "never";
+      webpage.darkmode.algorithm = "lightness-cielab";
+      webpage.darkmode.contrast = 0.2;
     };
   };
 }

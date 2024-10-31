@@ -28,5 +28,6 @@
 
     "<Ctrl+w>" = "mode-enter passthrough";
     "<Ctrl+h>" = "open -t https://start.duckduckgo.com/";
+    "<Ctrl+r>" = "config-cycle colors.webpage.darkmode.enabled";
   };
 }
