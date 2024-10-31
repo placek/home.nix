@@ -22,6 +22,8 @@ in
     ./quickmarks.nix
     ./settings.nix
     ./search-engines.nix
+
+    ./scripts
   ];
 
   config = {
@@ -47,7 +49,6 @@ in
       "x-scheme-handler/https" = [ "qutebrowser.desktop" ];
     };
 
-    xdg.configFile."qutebrowser/greasemonkey/youtube.js".source = ./youtube.js;
     xdg.configFile."qutebrowser/userscripts/GBrowse" = {
       source = ./GBrowse;
       executable = true;
