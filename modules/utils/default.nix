@@ -90,6 +90,7 @@ in
       bash              # shell
       bind              # DNS server
       cbqn              # BQN interpreter
+      cc65              # 6502 compiler
       croc              # transfer files
       cryptsetup        # manage encrypted volumes
       curl              # download files
