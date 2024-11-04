@@ -1,18 +1,19 @@
 " LOCALLEADER
 nnoremap <localleader><localleader> :CtrlPBuffer<cr>
-nnoremap <buffer><localleader>a <plug>(lsp-code-action-float)
-nnoremap <buffer><localleader>A <plug>(lsp-document-format)
+nnoremap <silent><localleader>a :LspCodeActionFloat<cr>
+nnoremap <silent><localleader>A :LspDocumentFormat<cr>
 nnoremap <silent><localleader>b :lmake %:.<cr>
 nnoremap <silent><localleader>B :lmake %:. line=<c-r>=line('.')<cr><cr>
 nnoremap <silent><localleader>c :G blame<cr>
 nnoremap <silent><localleader>C :0GlLog --pretty=oneline<cr>
-nnoremap <buffer><localleader>d <plug>(lsp-definition)
-nnoremap <buffer><localleader>D <plug>(lsp-type-definition)
+nnoremap <silent><localleader>d :LspDefinition<cr>
+nnoremap <silent><localleader>D :LspTypeDefinition<cr>
 nnoremap <silent><localleader>e :Gedit<cr>
-nnoremap <buffer><localleader>f <plug>(lsp-references)
-nnoremap <silent><localleader>F <plug>(lsp-workspace-symbol-search)
-nnoremap <buffer><localleader>i <plug>(lsp-status)
-nnoremap <buffer><localleader>r <plug>(lsp-rename)
+nnoremap <silent><localleader>f :LspReferences<cr>
+nnoremap <silent><localleader>F :LspWorkspaceSymbol<cr>
+vnoremap <silent><localleader>F :LspWorkspaceSymbolSearch<cr>
+nnoremap <silent><localleader>i :LspStatus<cr>
+nnoremap <silent><localleader>r :LspRename<cr>
 nnoremap <silent><localleader>q :call <sid>toggleLocList()<cr>
 nnoremap <silent><localleader>x :call <sid>altFile()<cr>
 
