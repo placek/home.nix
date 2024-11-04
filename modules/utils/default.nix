@@ -4,7 +4,6 @@
 , ...
 }:
 let
-  vasm = import ./vasm.nix { inherit pkgs; };
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
 #   minipro = import ./minipro.nix { inherit pkgs; };
 in
@@ -82,7 +81,6 @@ in
     home.packages = with pkgs; [
       dcc6502           # 6502 disassembler
 #       minipro           # EEPROM programmer
-      vasm              # 6502 assembler
       # pkgsCross.avr.buildPackages.gcc
 
       ansible           # manage remote machines
