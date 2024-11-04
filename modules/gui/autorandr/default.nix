@@ -10,6 +10,7 @@
 
   config = {
     programs.autorandr.enable = true;
+    services.autorandr.enable = true;
     programs.autorandr.hooks.postswitch.notify = ''
       ${pkgs.libnotify}/bin/notify-send "Display profile changed" $(${pkgs.autorandr}/bin/autorandr --detected)
     '';
