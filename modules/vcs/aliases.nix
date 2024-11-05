@@ -11,6 +11,10 @@
     cp = "cherry-pick";
     wip = "!bash -c 'git commit --no-verify -m \"wip: \$(curl -Ls whatthecommit.com/index.txt)\"'";
     mrg = "merge --commit --edit";
+    default = "config --get core.default";
+    branchoff = "!bash -c 'git merge-base \$(git config --get core.default) HEAD 2>/dev/null'";
+    branchfiles = "!bash -c 'git diff --name-only \$(git branchoff) HEAD'";
+    branchcommits = "!bash -c 'git log --oneline \$(git branchoff)..HEAD'";
 
     # add & commit
     a = "add";
