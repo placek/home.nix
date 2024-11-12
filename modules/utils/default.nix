@@ -84,6 +84,7 @@ in
       pkgsCross.avr.buildPackages.gcc
 
       ansible           # manage remote machines
+      arduino           # electronics prototyping platform
       avrdude           # program AVR microcontrollers
       bash              # shell
       bind              # DNS server
