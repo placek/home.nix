@@ -81,7 +81,7 @@ in
     home.packages = with pkgs; [
       dcc6502           # 6502 disassembler
 #       minipro           # EEPROM programmer
-      # pkgsCross.avr.buildPackages.gcc
+      pkgsCross.avr.buildPackages.gcc
 
       ansible           # manage remote machines
       avrdude           # program AVR microcontrollers
