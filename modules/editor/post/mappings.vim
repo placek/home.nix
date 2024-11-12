@@ -1,7 +1,8 @@
 " LOCALLEADER
 nnoremap <localleader><localleader> :CtrlPBuffer<cr>
-nnoremap <silent><localleader>a :LspCodeActionFloat<cr>
+nnoremap <silent><localleader>a :LspCodeAction --ui=float<cr>
 nnoremap <silent><localleader>A :LspDocumentFormat<cr>
+vnoremap <silent><localleader>A :LspDocumentRangeFormat<cr>
 nnoremap <silent><localleader>b :lmake %:.<cr>
 nnoremap <silent><localleader>B :lmake %:. line=<c-r>=line('.')<cr><cr>
 nnoremap <silent><localleader>c :G blame<cr>
@@ -17,9 +18,8 @@ nnoremap <silent><localleader>r :LspRename<cr>
 nnoremap <silent><localleader>q :call <sid>toggleLocList()<cr>
 nnoremap <silent><localleader>x :call <sid>altFile()<cr>
 
-vnoremap <buffer> <localleader>A <plug>(lsp-document-range-format)
 vnoremap <silent><localleader>f g<c-]>
-nnoremap <buffer> K <plug>(lsp-hover-float)
+nnoremap <silent> K :LspHover --ui=float<cr>
 nnoremap <silent>gc :call <sid>commentToggle()<cr>
 vnoremap <silent>gc :call <sid>commentToggle()<cr>
 
@@ -52,8 +52,8 @@ vnoremap <silent><leader>f <Plug>(GitGrepSelected)
 vnoremap <silent><leader>F <Plug>(GitPickaxeSelected)
 
 " movement
-nnoremap <buffer> [e <plug>(lsp-previous-diagnostic)
-nnoremap <buffer> ]e <plug>(lsp-next-diagnostic)
+nnoremap <buffer> [e :LspPreviousDiagnostic<cr>
+nnoremap <buffer> ]e :LspNextDiagnostic<cr>
 nnoremap <silent> ]h :GitGutterNextHunk<cr>
 nnoremap <silent> [h :GitGutterPrevHunk<cr>
 
