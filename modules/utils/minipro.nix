@@ -3,21 +3,21 @@
 }:
 pkgs.stdenv.mkDerivation rec {
   pname   = "minipro";
-  version = "0.5";
+  version = "0.7.2";
 
   src = pkgs.fetchFromGitLab {
     owner  = "DavidGriffith";
     repo   = "minipro";
-    rev    = "22ec014f6bf0c45741d68d03c99489d0b852ff06";
-    sha256 = "sha256-GehSxHSlTPzOUq+YiZYpmGJyQBv0ufJl7CuboBJ+l3M=";
+    rev    = "8ea3b926a86ff5e2e3111e765d2cccdf5337a8e7";
+    sha256 = "sha256-bAmOWO+q5qeg//xc2bIjvxDI1kgVYzWySenDtxL+46s=";
   };
 
-  nativeBuildInputs = with pkgs; [ pkg-config installShellFiles ];
-  buildInputs       = with pkgs; [ libusb1 ];
+  nativeBuildInputs = with pkgs; [ pkg-config installShellFiles zlib ];
+  buildInputs       = with pkgs; [ libusb1 libb64 ];
 
   preConfigure = ''
     export PKG_CONFIG="${pkgs.pkg-config}/bin/pkg-config";
-    substituteInPlace Makefile --replace '$(shell date "+%Y-%m-%d %H:%M:%S %z")' "1970-01-01 00:00:00 +0000"
+    substituteInPlace Makefile --replace-warn '$(shell date "+%Y-%m-%d %H:%M:%S %z")' "1970-01-01 00:00:00 +0000"
   '';
 
   makeFlags = [ "-e minipro" ];

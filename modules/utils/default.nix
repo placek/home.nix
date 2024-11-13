@@ -5,7 +5,7 @@
 }:
 let
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
-#   minipro = import ./minipro.nix { inherit pkgs; };
+  minipro = import ./minipro.nix { inherit pkgs; };
 in
 {
   options = with lib; {
@@ -80,7 +80,7 @@ in
 
     home.packages = with pkgs; [
       dcc6502           # 6502 disassembler
-#       minipro           # EEPROM programmer
+      minipro           # EEPROM programmer
       pkgsCross.avr.buildPackages.gcc
 
       ansible           # manage remote machines
