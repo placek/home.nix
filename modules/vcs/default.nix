@@ -64,6 +64,7 @@
       package = pkgs.gitFull;
       userName = config.vcs.name;
       userEmail = config.vcs.email;
+      lfs.enable = true;
       signing.signByDefault = true;
       signing.key = config.vcs.signKey;
     };
