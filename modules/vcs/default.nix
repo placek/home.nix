@@ -61,6 +61,7 @@
 
     programs.git = {
       enable = true;
+      package = pkgs.gitFull;
       userName = config.vcs.name;
       userEmail = config.vcs.email;
       signing.signByDefault = true;
