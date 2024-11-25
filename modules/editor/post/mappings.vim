@@ -19,9 +19,6 @@ nnoremap <silent><localleader>q :call <sid>toggleLocList()<cr>
 nnoremap <silent><localleader>x :call <sid>altFile()<cr>
 
 vnoremap <silent><localleader>f g<c-]>
-nnoremap <silent> K :LspHover --ui=float<cr>
-nnoremap <silent>gc :call <sid>commentToggle()<cr>
-vnoremap <silent>gc :call <sid>commentToggle()<cr>
 
 " LEADER
 nnoremap <silent><leader><leader> :CtrlP<cr>
@@ -50,6 +47,13 @@ nnoremap <silent><leader>x <Plug>(TodoToggle)
 
 vnoremap <silent><leader>f <Plug>(GitGrepSelected)
 vnoremap <silent><leader>F <Plug>(GitPickaxeSelected)
+
+" documentation
+nnoremap <silent>K :LspHover --ui=float<cr>
+
+" commenting
+nnoremap <silent>gc :call <sid>commentToggle()<cr>
+vnoremap <silent>gc :call <sid>commentToggle()<cr>
 
 " movement
 nnoremap <buffer> [e :LspPreviousDiagnostic<cr>
@@ -92,18 +96,20 @@ vnoremap <RightMouse> <esc>
 cnoremap <RightMouse> <esc>
 
 " move around buffers with leader key
-nnoremap <localleader><cr>  :argadd<cr>
-nnoremap <localleader><esc> :argdelete<cr>
-nnoremap <localleader>h :previous<cr>
-nnoremap <localleader>l :next<cr>
-nnoremap <localleader>k :bprevious<cr>
-nnoremap <localleader>j :bnext<cr>
+nnoremap <leader><cr>  :argadd<cr>
+nnoremap <leader><esc> :argdelete<cr>
+nnoremap <leader>k :previous<cr>
+nnoremap <leader>j :next<cr>
+nnoremap <leader>h :bprevious<cr>
+nnoremap <leader>l :bnext<cr>
 
-" move around windows with leader key
-nnoremap <silent><leader>h :wincmd h<cr>
-nnoremap <silent><leader>l :wincmd l<cr>
-nnoremap <silent><leader>k :wincmd k<cr>
-nnoremap <silent><leader>j :wincmd j<cr>
+" move around windows
+nnoremap <silent><C-h> :wincmd h<cr>
+nnoremap <silent><C-l> :wincmd l<cr>
+nnoremap <silent><C-k> :wincmd k<cr>
+nnoremap <silent><C-j> :wincmd j<cr>
+nnoremap <silent><C-cr> :wincmd v<cr>
+nnoremap <silent><C-esc> :wincmd x<cr>
 
 " lookup
 vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
