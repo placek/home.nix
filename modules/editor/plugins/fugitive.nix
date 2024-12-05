@@ -234,7 +234,6 @@
         function! s:gitUserStoryWindow() abort
           call <sid>openIntermediateBuffer()
           file /tmp/issue-description
-          nnoremap <buffer> <cr> <Plug>(GitInitFeatureBranch)<cr>
         endfunction
 
         nnoremap <silent> <Plug>(GitUserStoryWindow) :<c-u>call <sid>gitUserStoryWindow()<cr>
@@ -253,8 +252,6 @@
           call system("git commit --no-verify --allow-empty --file -", getline(1, '$'))
           echom "Feature branch " . l:branch . " initialized"
         endfunction
-
-        nnoremap <silent> <Plug>(GitInitFeatureBranch) :<c-u>call <sid>gitInitFeatureBranch()<cr>
 
         " standard fugitive commands, autocommands and mappings
         command! -nargs=0 W Gwrite

@@ -9,6 +9,7 @@ augroup Git
   autocmd FileType    git       nnoremap <buffer> w <Plug>(GitCheckoutFromLine)<cr>
   autocmd FileType    git       nnoremap <buffer> W <Plug>(GitCherryPickToBranchFromLine)<cr>
   autocmd BufReadPost *         call <sid>setBlameLine()
+  autocmd BufUnload   /tmp/issue-description call <sid>gitInitFeatureBranch()
 augroup END
 
 augroup Todo
