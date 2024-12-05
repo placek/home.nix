@@ -42,7 +42,6 @@ autocmd BufWritePost            *  MakeTags
 autocmd FileType                qf nnoremap <buffer> <c-v> :call <sid>openQuickfix("vnew")<cr>
 autocmd FileType                qf nnoremap <buffer> <c-x> :call <sid>openQuickfix("split")<cr>
 autocmd Filetype                qf setlocal statusline=%1*%f%2*
-autocmd TerminalWinOpen         *  tmap <esc> <c-\><c-n>
 autocmd InsertEnter,InsertLeave *  set cul!
 
 if executable('ruby-lsp')
