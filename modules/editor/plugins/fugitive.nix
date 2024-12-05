@@ -230,6 +230,32 @@
         nnoremap <silent> <Plug>(GitPickaxe) :<c-u>call <sid>gitPickaxe(input("pickaxe /", "", "tag"))<cr>
         vnoremap <silent> <Plug>(GitPickaxeSelected) :<c-u>call <sid>gitPickaxe(<sid>selectedText())<cr>
 
+        " open a window for a user story
+        function! s:gitUserStoryWindow() abort
+          call <sid>openIntermediateBuffer()
+          file /tmp/issue-description
+          nnoremap <buffer> <cr> <Plug>(GitInitFeatureBranch)<cr>
+        endfunction
+
+        nnoremap <silent> <Plug>(GitUserStoryWindow) :<c-u>call <sid>gitUserStoryWindow()<cr>
+
+        " initialize feature branch
+        function! s:gitInitFeatureBranch() abort
+          if s:isBufferEmptyButComments()
+            return
+          endif
+          let l:branch = <sid>gitBranchNameFromText(getline(1))
+          execute ":G add ."
+          execute ":G stash"
+          execute ":G fetch --all"
+          execute ":G checkout " . <sid>gitDefaultBranch()
+          execute ":G checkout -B " . l:branch
+          call system("git commit --no-verify --allow-empty --file -", getline(1, '$'))
+          echom "Feature branch " . l:branch . " initialized"
+        endfunction
+
+        nnoremap <silent> <Plug>(GitInitFeatureBranch) :<c-u>call <sid>gitInitFeatureBranch()<cr>
+
         " standard fugitive commands, autocommands and mappings
         command! -nargs=0 W Gwrite
         command! -nargs=0 E Gedit

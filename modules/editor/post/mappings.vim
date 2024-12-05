@@ -23,7 +23,7 @@ vnoremap <silent><localleader>f g<c-]>
 " LEADER
 nnoremap <silent><leader><leader> :CtrlP<cr>
 nnoremap <silent><leader>a <Plug>(TertiusPullRequestWindow)
-nnoremap <silent><leader>A <Plug>(TertiusUserStoryWindow)
+nnoremap <silent><leader>A <Plug>(GitUserStoryWindow)
 nnoremap <silent><leader>b :make<cr>
 nnoremap <silent><leader>B :make all<cr>
 nnoremap <silent><leader>c <Plug>(GitChanges)
@@ -44,6 +44,7 @@ nnoremap <silent><leader>t :vertical terminal<cr>
 nnoremap <silent><leader>T :terminal<cr>
 nnoremap <silent><leader>v :G branch --all<cr>
 nnoremap <silent><leader>x <Plug>(TodoToggle)
+nnoremap <silent><leader>z <Plug>(TertiusUserStoryWindow)
 
 vnoremap <silent><leader>f <Plug>(GitGrepSelected)
 vnoremap <silent><leader>F <Plug>(GitPickaxeSelected)
