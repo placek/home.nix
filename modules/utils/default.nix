@@ -111,7 +111,6 @@ in
       ngrep             # network packet analyzer
       ngrok             # expose local servers to the internet
       nix-direnv-flakes # Nix flakes support
-      nix-doc           # Nix documentation
       nix-prefetch-git  # fetch Git repositories
       openssl           # cryptographic library
       openvpn           # VPN client
