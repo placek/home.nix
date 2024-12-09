@@ -28,8 +28,11 @@ in
     "kitty_mod+shift+b" = "show_last_command_output";
 
     "kitty_mod+q>p" = "kitten hints ${hints} --window-title 'choose path' --type path --program -";
+    "kitty_mod+q>ctrl+p" = "kitten hints ${hints} --window-title 'choose path' --type path --program @";
     "kitty_mod+q>h" = "kitten hints ${hints} --window-title 'choose hash' --regex '([0-9a-fA-F-]+)' --type regex --program -";
-    "kitty_mod+q>e" = "kitten unicode_input";
+    "kitty_mod+q>ctrl+h" = "kitten hints ${hints} --window-title 'choose hash' --regex '([0-9a-fA-F-]+)' --type regex --program @";
     "kitty_mod+q>u" = "kitten hints ${hints} --window-title 'choose hyperlink' --type hyperlink";
+    "kitty_mod+q>ctrl+u" = "kitten hints ${hints} --window-title 'choose hyperlink' --type hyperlink --program @";
+    "kitty_mod+q>e" = "kitten unicode_input";
   };
 }
