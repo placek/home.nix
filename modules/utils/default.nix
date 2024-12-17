@@ -93,6 +93,7 @@ in
       croc              # transfer files
       cryptsetup        # manage encrypted volumes
       curl              # download files
+      discordo          # Discord client
       docker-compose    # manage multi-container Docker applications
       entr              # run arbitrary commands when files change
       fd                # find files

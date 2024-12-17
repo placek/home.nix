@@ -69,7 +69,6 @@
       libnotify
       xf86_input_wacom
 
-      discord
       gimp
       inkscape-with-extensions
       kicad
