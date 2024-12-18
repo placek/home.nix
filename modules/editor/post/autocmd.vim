@@ -29,6 +29,9 @@ augroup AltFile
   autocmd BufReadPost *.rb       call setbufvar(expand('%'), 'altfile', expand('%:.:s/^app/spec/:s/\.rb$/_spec.rb/'))
   autocmd BufReadPost *_spec.rb  call setbufvar(expand('%'), 'altfile', expand('%:.:s/^spec/app/:s/_spec\.rb$/.rb/'))
 
+  autocmd BufReadPost *.hs       call setbufvar(expand('%'), 'altfile', expand('%:.:s/^src/test/:s/\.hs$/Spec.hs/'))
+  autocmd BufReadPost *Spec.hs   call setbufvar(expand('%'), 'altfile', expand('%:.:s/^test/src/:s/Spec\.hs$/.hs/'))
+
   autocmd BufReadPost *.js       call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.js$/.test.js/'))
   autocmd BufReadPost *.ts       call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.ts$/.test.ts/'))
   autocmd BufReadPost *.jsx      call setbufvar(expand('%'), 'altfile', expand('%:.:s/\.jsx$/.test.jsx/'))

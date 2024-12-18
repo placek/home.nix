@@ -11,12 +11,15 @@
     editor.RCs = [
       ''
         function! LinterStatus() abort
+          if !exists('b:lsp')
+            return ""
+          endif
           let l:counts = lsp#get_buffer_diagnostics_counts()
           let l:total = 0
           for value in values(l:counts)
             let l:total += value
           endfor
-          return l:total == 0 ? 'OK' : printf('%dE %dW %dH %dI', l:counts.error, l:counts.warning, l:counts.hint, l:counts.information)
+          return l:total == 0 ? "OK" : printf('%dE %dW %dH %dI', l:counts.error, l:counts.warning, l:counts.hint, l:counts.information)
         endfunction
 
         function! s:lspOnBufferEnabled() abort
@@ -26,6 +29,7 @@
 
           let g:lsp_format_sync_timeout = 1000
           let g:lsp_diagnostics_echo_cursor = 1
+          let b:lsp = 1
         endfunction
 
         hi lspReference cterm=underline
