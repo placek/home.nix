@@ -28,7 +28,7 @@
           if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 
           let g:lsp_format_sync_timeout = 1000
-          let g:lsp_diagnostics_echo_cursor = 1
+          let g:lsp_diagnostics_virtual_text_enabled = 1
           let b:lsp = 1
         endfunction
 
