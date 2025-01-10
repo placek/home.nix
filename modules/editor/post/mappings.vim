@@ -105,12 +105,19 @@ nnoremap <leader>h :bprevious<cr>
 nnoremap <leader>l :bnext<cr>
 
 " move around windows
-nnoremap <silent><C-h> :wincmd h<cr>
-nnoremap <silent><C-l> :wincmd l<cr>
-nnoremap <silent><C-k> :wincmd k<cr>
-nnoremap <silent><C-j> :wincmd j<cr>
-nnoremap <silent><C-cr> :wincmd v<cr>
-nnoremap <silent><C-esc> :wincmd x<cr>
+nnoremap <silent><C-h> <C-w>h
+nnoremap <silent><C-l> <C-w>l
+nnoremap <silent><C-k> <C-w>k
+nnoremap <silent><C-j> <C-w>j
+nnoremap <silent><C-cr> <C-w>v
+nnoremap <silent><C-esc> <C-w>o
+
+tnoremap <silent><C-h> <C-w>h
+tnoremap <silent><C-l> <C-w>l
+tnoremap <silent><C-k> <C-w>k
+tnoremap <silent><C-j> <C-w>j
+tnoremap <silent><C-cr> <C-w>v
+tnoremap <silent><C-esc> <C-w>o
 
 " lookup
 vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
