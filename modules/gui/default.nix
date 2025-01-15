@@ -66,6 +66,8 @@
 
   config = {
     home.packages = with pkgs; [
+      (pkgs.writeShellScriptBin "wallpaper" "feh --bg-fill '${config.gui.wallpaper}'")
+
       libnotify
       xf86_input_wacom
 

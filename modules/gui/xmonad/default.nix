@@ -164,7 +164,7 @@ in
       myStartupHook :: X ()
       myStartupHook = do
         setDefaultCursor xC_left_ptr
-        spawnOnce "exec feh --bg-fill '${config.gui.wallpaper}' &"
+        spawnOnce "exec wallpaper &"
 
       defaults xmproc = desktopConfig { terminal           = myTerminal
                                       , focusFollowsMouse  = myFocusFollowsMouse
