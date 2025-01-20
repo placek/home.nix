@@ -9,7 +9,7 @@ pkgs.stdenv.mkDerivation rec {
     owner  = "DavidGriffith";
     repo   = "minipro";
     rev    = "8ea3b926a86ff5e2e3111e765d2cccdf5337a8e7";
-    sha256 = "sha256-bAmOWO+q5qeg//xc2bIjvxDI1kgVYzWySenDtxL+46s=";
+    sha256 = "sha256-ql2rUVZPAUbBhwpTUhYMVxMeA/kRZBMNIWF05FNFnvU=";
   };
 
   nativeBuildInputs = with pkgs; [ pkg-config installShellFiles zlib ];
