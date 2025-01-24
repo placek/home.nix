@@ -78,6 +78,7 @@
       librecad
       libreoffice
       lilypond
+      musescore
       qcad
       slack
       spotify
