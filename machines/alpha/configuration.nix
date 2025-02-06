@@ -127,57 +127,12 @@
   services.nginx.virtualHosts."placki.cloud".enableACME                        = true;
   services.nginx.virtualHosts."placki.cloud".locations."/"                     = { proxyPass = "http://localhost:8080"; };
 
-  systemd.services.nginx-app-proxy = {
-    description = "Nginx apps reverse proxy";
-    wantedBy    = [ "multi-user.target" ];
-    after       = [ "docker.service" "docker.socket" ];
-    requires    = [ "docker.service" "docker.socket" ];
-    preStop     = "${pkgs.docker}/bin/docker stop nginx-proxy";
-    reload      = "${pkgs.docker}/bin/docker restart nginx-proxy";
-    script      = ''
-      exec ${pkgs.docker}/bin/docker run \
-        --rm \
-        --name nginx-proxy \
-        --network nginx-proxy_net \
-        --publish 8080:80 \
-        --volume /var/run/docker.sock:/tmp/docker.sock:ro \
-        nginxproxy/nginx-proxy:1.4-alpine \
-        "$@"
-    '';
-    serviceConfig.ExecStartPre    = "-${pkgs.docker}/bin/docker network create nginx-proxy_net";
-    serviceConfig.ExecStopPost    = "-${pkgs.docker}/bin/docker rm -f nginx-proxy";
-    serviceConfig.TimeoutStartSec = 0;
-    serviceConfig.TimeoutStopSec  = 120;
-    serviceConfig.Restart         = "always";
-  };
-
-  ################################ NEXTCLOUD ###################################
-  services.nginx.virtualHosts."nextcloud.placki.cloud".forceSSL                = true;
-  services.nginx.virtualHosts."nextcloud.placki.cloud".enableACME              = true;
-
-  services.nextcloud.config.adminpassFile                                      = "/etc/nextcloud-admin-pass";
-  services.nextcloud.enable                                                    = true;
-  services.nextcloud.hostName                                                  = "nextcloud.placki.cloud";
-  services.nextcloud.https                                                     = true;
-  services.nextcloud.package                                                   = pkgs.nextcloud28;
-  services.nextcloud.config.dbtype                                             = "sqlite";
-  services.nextcloud.config.dbname                                             = "nextcloud";
-  services.nextcloud.config.adminuser                                          = "placek";
-  services.nextcloud.config.defaultPhoneRegion                                 = "PL";
-  services.nextcloud.maxUploadSize                                             = "1G";
-  services.nextcloud.extraOptions.mail_smtpmode                                = "sendmail";
-  services.nextcloud.extraOptions.mail_sendmailmode                            = "pipe";
-  services.nextcloud.extraOptions.enabledPreviewProviders                      = [
-    "OC\\Preview\\BMP"
-    "OC\\Preview\\GIF"
-    "OC\\Preview\\JPEG"
-    "OC\\Preview\\Krita"
-    "OC\\Preview\\MarkDown"
-    "OC\\Preview\\MP3"
-    "OC\\Preview\\OpenDocument"
-    "OC\\Preview\\PNG"
-    "OC\\Preview\\TXT"
-    "OC\\Preview\\XBitmap"
-    "OC\\Preview\\HEIC"
-  ];
+  ################################### N8N ######################################
+  services.nginx.virtualHosts."n8n.placki.cloud".forceSSL                      = true;
+  services.nginx.virtualHosts."n8n.placki.cloud".enableACME                    = true;
+  services.nginx.virtualHosts."n8n.placki.cloud".locations."/"                 = { proxyPass = "http://localhost:5678"; };
+  services.n8n.enable                                                          = true;
+  services.n8n.webhookUrl                                                      = "https://n8n.placki.cloud/webhook";
+  services.n8n.settings.listen_address                                         = "127.0.0.1";
+  services.n8n.settings.port                                                   = 5678;
 }
