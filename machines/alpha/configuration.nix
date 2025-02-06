@@ -60,7 +60,6 @@
   services.clamav.daemon.enable                                                = true;
   services.clamav.updater.enable                                               = true;
   services.nfs.server.enable                                                   = true;
-  services.ollama.enable                                                       = true;
 
   ################################### NFS ######################################
   services.nfs.server.exports                                                  = "/var/projects *(rw,sync,no_subtree_check,no_root_squash,nohide,insecure)";
@@ -131,8 +130,4 @@
   services.nginx.virtualHosts."n8n.placki.cloud".forceSSL                      = true;
   services.nginx.virtualHosts."n8n.placki.cloud".enableACME                    = true;
   services.nginx.virtualHosts."n8n.placki.cloud".locations."/"                 = { proxyPass = "http://localhost:5678"; };
-  services.n8n.enable                                                          = true;
-  services.n8n.webhookUrl                                                      = "https://n8n.placki.cloud/webhook";
-  services.n8n.settings.listen_address                                         = "127.0.0.1";
-  services.n8n.settings.port                                                   = 5678;
 }
