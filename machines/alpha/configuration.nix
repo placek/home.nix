@@ -127,7 +127,7 @@
   services.nginx.virtualHosts."placki.cloud".locations."/"                     = { proxyPass = "http://localhost:8080"; };
 
   ################################### N8N ######################################
-  services.nginx.virtualHosts."n8n.placki.cloud".forceSSL                      = true;
-  services.nginx.virtualHosts."n8n.placki.cloud".enableACME                    = true;
-  services.nginx.virtualHosts."n8n.placki.cloud".locations."/"                 = { proxyPass = "http://localhost:5678"; };
+  services.nginx.virtualHosts."auto.placki.cloud".forceSSL                     = true;
+  services.nginx.virtualHosts."auto.placki.cloud".enableACME                   = true;
+  services.nginx.virtualHosts."auto.placki.cloud".locations."/"                = { proxyPass = "http://localhost:5678"; };
 }
