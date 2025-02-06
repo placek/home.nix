@@ -11,13 +11,16 @@
     dspv = "docker system prune --volumes";
     dspa = "docker system prune --volumes --all";
 
-    dcb = "docker-compose -f .local.compose build";
-    dcr = "docker-compose -f .local.compose run --rm";
-    dcu = "docker-compose -f .local.compose up -d";
-    dcl = "docker-compose -f .local.compose logs";
-    dcd = "docker-compose -f .local.compose down --remove-orphans";
-    dcres = "docker-compose -f .local.compose restart";
-    dcps = "docker-compose -f .local.compose ps";
+    dcb = "docker compose build";
+    dce = "docker compose exec";
+    dca = "docker compose attach";
+    dcr = "docker compose run --rm";
+    dcu = "docker compose up --detach";
+    dcl = "docker compose logs";
+    dcd = "docker compose down --remove-orphans";
+    dcdv = "docker compose down --remove-orphans --volumes";
+    dcres = "docker compose restart";
+    dcps = "docker compose ps";
 
     syncp = "rsync -avz --progress ${config.projectsDirectory} placek@placki.cloud:/var/projects/";
 
