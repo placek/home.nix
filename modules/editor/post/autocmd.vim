@@ -64,6 +64,22 @@ if executable('haskell-language-server-wrapper')
     \ })
 endif
 
+if executable('pylsp')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'pylsp',
+    \ 'cmd': ['pylsp'],
+    \ 'allowlist': ['python'],
+    \ 'initialization_options': {
+    \   'pylsp': {
+    \     'plugins': {
+    \       'ruff': {'enabled': v:true},
+    \       'black': {'enabled': v:true},
+    \     }
+    \   }
+    \ }
+    \ })
+endif
+
 augroup lsp_install
   au!
   autocmd User lsp_buffer_enabled call <sid>lspOnBufferEnabled()
