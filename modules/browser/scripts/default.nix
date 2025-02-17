@@ -8,5 +8,5 @@ let
   }) (lib.fileset.toList (lib.fileset.fileFilter (file: file.hasExt "js") ./.));
 in
 {
-  config.xdg.configFile = lib.mkMerge js_files;
+#   config.xdg.configFile = lib.mkMerge js_files;
 }
