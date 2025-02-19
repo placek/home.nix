@@ -127,9 +127,10 @@
   services.nginx.virtualHosts."placki.cloud".locations."/"                     = { proxyPass = "http://localhost:8080"; };
 
   ################################### N8N ######################################
-  services.nginx.virtualHosts."auto.placki.cloud".forceSSL                     = true;
-  services.nginx.virtualHosts."auto.placki.cloud".enableACME                   = true;
-  services.nginx.virtualHosts."auto.placki.cloud".locations."/".proxyPass      = "http://localhost:5678";
-  services.nginx.virtualHosts."auto.placki.cloud".locations."/".proxyWebsockets = true;
-  services.nginx.virtualHosts."qdrant.placki.cloud".locations."/".proxyPass    ="http://localhost:6333";
+  services.nginx.virtualHosts."deepbible.placki.cloud" = {
+    forceSSL = true;
+    enableACME = true;
+    locations."/n8n".proxyPass = "http://localhost:5678";
+    locations."/n8n".proxyWebsockets = true;
+  };
 }
