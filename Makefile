@@ -1,8 +1,7 @@
 expiration ?= 30 days
 
 hm-flake := home-manager/release-24.05
-nix-params ?= --extra-experimental-features nix-command --extra-experimental-features flakes
-hm := nix $(nix-params) run $(hm-flake) -- --impure
+hm := nix run $(hm-flake) --
 rebuild := sudo nixos-rebuild switch
 link := sudo cp --backup --interactive --link
 nixos-config := /etc/nixos/configuration.nix
@@ -34,6 +33,9 @@ gc:
 news:
 	$(hm) news
 
-all: upgrade apply expire gc
+displaylink: files/displaylink-600.zip
+	nix-prefetch-url file://$(shell pwd)/$<
 
-.PHONY: apply switch upgrade expire gens gc all
+all: upgrade displaylink apply expire gc
+
+.PHONY: apply switch upgrade expire displaylink gens gc all
