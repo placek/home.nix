@@ -116,8 +116,8 @@ tnoremap <silent><C-h> <C-w>h
 tnoremap <silent><C-l> <C-w>l
 tnoremap <silent><C-k> <C-w>k
 tnoremap <silent><C-j> <C-w>j
-tnoremap <silent><C-cr> <C-w>v
-tnoremap <silent><C-esc> <C-w>o
+tnoremap <silent><C-cr> <C-w>N:vertical terminal<cr>
+tnoremap <silent><C-esc> <C-w>N
 
 " lookup
 vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
