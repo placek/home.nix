@@ -26,7 +26,7 @@ apply: update
 	$(HOME-MANAGER) switch
 
 .PHONY: update
-update: $(nixos-config)
+update:
 	sudo sudo nix-channel --remove nixos
 	sudo sudo nix-channel --remove home-manager
 	sudo nix-channel --add $(nixos-channel) nixos
@@ -34,7 +34,7 @@ update: $(nixos-config)
 	sudo nix-channel --update
 
 .PHONY: upgrade
-upgrade: update
+upgrade: update $(nixos-config)
 	$(NIXOS) switch --upgrade
 
 .PHONY: install
