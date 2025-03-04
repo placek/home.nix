@@ -62,7 +62,7 @@ in
     ./nnn.nix
     ./clipboard.nix
     ./scripts.nix
-    ./sync_projects.nix
+#     ./sync_projects.nix
   ];
 
   config = {
