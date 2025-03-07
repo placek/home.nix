@@ -183,6 +183,50 @@ let
 
     echo "$psalm_no"
   '';
+
+  transcribe = pkgs.writeShellScriptBin "transcribe" ''
+    LANGUAGE="''${LANGUAGE:-pl}"
+    MODEL="''${MODEL:-medium}"
+    FORMAT="''${FORMAT:-srt}"
+
+    _is_audio_file() {
+      file --mime-type "$1" | grep -qE 'audio/|video/'
+    }
+
+    _transcribe() {
+      INPUT_FILE="''$1"
+
+      if [ ! -f "''${INPUT_FILE}" ]; then
+        >&2 echo "Skipping ''${INPUT_FILE}: file does not exist"
+        return
+      fi
+
+      if ! _is_audio_file "''${INPUT_FILE}"; then
+        >&2 echo "Skipping ''${INPUT_FILE}: not an audio file"
+        return
+      fi
+
+      if [ -f "''${INPUT_FILE%.*}.''${FORMAT}" ]; then
+        >&2 echo "Skipping ''${INPUT_FILE}: transcription already exists"
+        return
+      fi
+
+      >&2 echo "Processing ''${INPUT_FILE}:"
+      >&2 echo "+ language: ''${LANGUAGE}"
+      >&2 echo "+ model: ''${MODEL}"
+      >&2 echo "+ format: ''${FORMAT}"
+
+      ${pkgs.openai-whisper}/bin/whisper "''${INPUT_FILE}" --language "''${LANGUAGE}" --model "''${MODEL}" --output_format "''${FORMAT}" 2>/dev/null
+    }
+
+    if [ $# -ne 1 ]; then
+      for file in *; do
+        _transcribe "$file"
+      done
+    else
+      _transcribe "''${1}"
+    fi
+  '';
 in
 {
   config.home.packages = [
@@ -190,6 +234,7 @@ in
     image
     psalmus
     speak
+    transcribe
     video
   ];
 }
