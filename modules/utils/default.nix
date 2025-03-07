@@ -113,6 +113,7 @@ in
       ngrok             # expose local servers to the internet
       nix-direnv-flakes # Nix flakes support
       nix-prefetch-git  # fetch Git repositories
+      openai-whisper    # speech to text
       openssl           # cryptographic library
       openvpn           # VPN client
       orca-c            # midi sequencer
