@@ -6,7 +6,7 @@
 let
   speak = pkgs.writeShellScriptBin "speak" ''
     OUTPUT=unset
-    LANGUAGE="en"
+    LANGUAGE="''${LANGUAGE:-pl}"
 
     usage()
     {
@@ -14,7 +14,7 @@ let
       exit 2
     }
 
-    PARSED_ARGUMENTS=$(getopt -a -n speak -o ol: --long stdout,lang: -- "$@")
+    PARSED_ARGUMENTS=$(getopt -a -n speak -o o --long stdout -- "$@")
     VALID_ARGUMENTS=$?
     if [ "$VALID_ARGUMENTS" != "0" ]; then
       usage
@@ -25,7 +25,6 @@ let
     do
       case "$1" in
         -o | --stdout)  OUTPUT=1      ; shift   ;;
-        -l | --lang)    LANGUAGE="$2" ; shift 2 ;;
         --)             shift; break ;;
         *)              echo "Unexpected option: $1 - this should not happen."
                         usage ;;
