@@ -10,8 +10,12 @@ NIXOS := sudo nixos-rebuild
 nixos-config := /etc/nixos/configuration.nix
 
 
+.PHONY: apply
+apply: update
+	$(HOME-MANAGER) switch
+
 .PHONY: all
-all: upgrade apply expire gc
+all: upgrade apply gc
 
 .PHONY: $(nixos-config)
 $(nixos-config):
@@ -20,10 +24,6 @@ $(nixos-config):
 .PHONY: switch
 switch: $(nixos-config) displaylink
 	$(NIXOS) switch
-
-.PHONY: apply
-apply: update
-	$(HOME-MANAGER) switch
 
 .PHONY: update
 update:
@@ -41,19 +41,16 @@ upgrade: update $(nixos-config)
 install: update
 	nix-shell '<home-manager>' -A install
 
-.PHONY: expire
-expire:
+.PHONY: gc
+gc:
 	$(HOME-MANAGER) expire-generations "-$(expiration)"
 	nix-collect-garbage --delete-older-than "$(shell echo "$(expiration)" | sed 's/ days/d/')"
+	nix-store --optimise
 
 .PHONY: gens
 gens:
 	$(HOME-MANAGER) generations
 	$(NIXOS) list-generations
-
-.PHONY: gc
-gc:
-	nix-store --optimise
 
 .PHONY: news
 news:
