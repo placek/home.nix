@@ -62,6 +62,7 @@ in
     ./nnn.nix
     ./clipboard.nix
     ./scripts.nix
+    ./transcribe.nix
 #     ./sync_projects.nix
   ];
 
@@ -119,6 +120,7 @@ in
       orca-c            # midi sequencer
       p7zip             # extract 7z archives
       pandoc            # document converter
+      pdftk             # manipulate PDF files
       qFlipper          # flipper control software
       qmk               # keyboard firmware
       rclone            # cloud storage
