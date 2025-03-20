@@ -154,8 +154,8 @@
     group = "docker";
     staticConfigOptions = {
       entryPoints = {
-        web = { address = ":80"; };
-        websecure = { address = ":443"; };
+        web.address = ":80";
+        websecure.address = ":443";
       };
       certificatesResolvers.letsencrypt.acme = {
         email = "placzynski.pawel@gmail.com";
@@ -163,22 +163,17 @@
         httpChallenge.entryPoint = "web";
       };
     };
-    dynamicConfigOptions = {
-      http = {
-        routers = {};
-        services = {};
-      };
-      providers = {
-        docker = {
-          endpoint = "unix:///var/run/docker.sock";
-          exposedByDefault = false; # Only expose containers with explicit labels
-          network = "traefik-public"; # Use a shared Docker network
-        };
-      };
+    dynamicConfigOptions.providers.docker = {
+      endpoint = "unix:///var/run/docker.sock";
+      exposedByDefault = false; # Only expose containers with explicit labels
+      network = "traefik-public"; # Use a shared Docker network
     };
   };
 
-  systemd.services.traefik.preStart = ''
-    ${pkgs.docker}/bin/docker network create traefik-public || true
+  systemd.services.traefik.preStart = let
+    docker = "${pkgs.docker}/bin/docker";
+  in ''
+    ${docker} network inspect traefik-public >/dev/null 2>&1 || \
+    ${docker} network create traefik-public || true
   '';
 }
