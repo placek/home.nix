@@ -164,7 +164,7 @@
       };
     };
     dynamicConfigOptions.providers.docker = {
-      endpoint = "unix:///var/run/docker.sock";
+      endpoint = "unix:///run/docker.sock";
       exposedByDefault = false; # Only expose containers with explicit labels
       network = "traefik-public"; # Use a shared Docker network
     };
