@@ -64,6 +64,7 @@
   ############################# COMMON PACKAGES ################################
   environment.systemPackages = with pkgs; [
     gitFull
+    docker-compose
     htop
   ];
 
