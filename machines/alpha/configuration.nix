@@ -19,9 +19,19 @@
 
   swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
+  ################################### NIX ######################################
+  nix.gc.automatic = true;
+  nix.gc.dates = "daily";
+  nix.gc.options = "--delete-older-than 30d";
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes repl-flake
+    auto-optimise-store = true
+    trusted-users = root @wheel
+  '';
+
   ################################# HARDWARE ###################################
   boot.extraModulePackages = [ ];
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" "ahci" "sd_mod" "sdhci_pci" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.enable = true;
@@ -30,11 +40,8 @@
   hardware.opengl.driSupport = true;
   hardware.opengl.driSupport32Bit = true;
   hardware.opengl.enable = true;
-  services.xserver.resolutions = [ { x = 1920; y = 1080; } ];
   hardware.pulseaudio.enable = true;
   hardware.pulseaudio.package = pkgs.pulseaudioFull;
-  networking.hostName = "alpha";
-  networking.hosts."127.0.0.1" = ["localhost" "dev"];
   services.sshd.enable = true;
   powerManagement.enable = true;
   powerManagement.cpuFreqGovernor = "performance";
@@ -48,18 +55,20 @@
   hardware.keyboard.zsa.enable = true;
   i18n.defaultLocale = "pl_PL.UTF-8";
   nixpkgs.config.allowUnfree = true;
+  security.sudo.wheelNeedsPassword = false;
   services.cron.enable = true;
   services.openssh.extraConfig = "StreamLocalBindUnlink yes";
   services.printing.drivers = [ pkgs.foo2zjs pkgs.mfcl8690cdwcupswrapper ];
   services.printing.enable = true;
   services.udisks2.enable = true;
   sound.enable = true;
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
   time.timeZone = "Europe/Warsaw";
+  users.extraGroups.vboxusers.members = [ "placek" ];
   virtualisation.docker.autoPrune.dates = "daily";
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
-  security.sudo.wheelNeedsPassword = false;
+  virtualisation.virtualbox.host.enable = true;
 
   ############################# COMMON PACKAGES ################################
   environment.systemPackages = with pkgs; [
@@ -109,6 +118,8 @@ uWiIvoes3Ps4kt2Z75hoZ+4+LEucUwop0jees0YxrNoFTbwdbfXH0mBCspeSS65CZ96Og2qdE7s1+t3t
   security.acme.defaults.email = "placzynski.pawel@gmail.com";
   security.acme.acceptTerms = true;
 
+  networking.hostName = "alpha";
+  networking.hosts."127.0.0.1" = ["localhost" "dev"];
   networking.domain = "local";
   networking.nameservers = [ "127.0.0.1" "8.8.8.8" ];
 

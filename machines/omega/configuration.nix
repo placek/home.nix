@@ -8,19 +8,19 @@
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   fileSystems."/" = {
-  device = "/dev/disk/by-label/nixos";
-  fsType = "ext4";
+    device = "/dev/disk/by-label/nixos";
+    fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-  device = "/dev/disk/by-label/boot";
-  fsType = "vfat";
+    device = "/dev/disk/by-label/boot";
+    fsType = "vfat";
   };
 
   fileSystems."/mnt/projects" = {
-  device = "placki.cloud:/var/projects";
-  fsType = "nfs";
-  options = [ "rw" "hard" "timeo=600" "retrans=2" "x-systemd.automount" "noauto" ];
+    device = "placki.cloud:/var/projects";
+    fsType = "nfs";
+    options = [ "rw" "hard" "timeo=600" "retrans=2" "x-systemd.automount" "noauto" ];
   };
 
   swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
@@ -30,16 +30,16 @@
   nix.gc.dates = "daily";
   nix.gc.options = "--delete-older-than 30d";
   nix.extraOptions = ''
-  experimental-features = nix-command flakes repl-flake
-  auto-optimise-store = true
-  trusted-users = root @wheel
+    experimental-features = nix-command flakes repl-flake
+    auto-optimise-store = true
+    trusted-users = root @wheel
   '';
 
   ################################# HARDWARE ###################################
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call nvidia_x11 ];
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "usb_storage" "sd_mod" "nvme" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ "i915" ];
-  boot.kernelModules = [ "acpi_call" "kvm-intel" ];
+  boot.kernelModules = [ "kvm-intel" "acpi_call" ];
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.enable = true;
   hardware.bluetooth.enable = true;
@@ -49,12 +49,6 @@
   hardware.opengl.enable = true;
   hardware.pulseaudio.enable = true;
   hardware.pulseaudio.package = pkgs.pulseaudioFull;
-  networking.firewall.allowPing = false;
-  networking.firewall.allowedTCPPortRanges = [ { from = 3000; to = 3100; } ];
-  networking.firewall.enable = true;
-  networking.hostName = "omega";
-  networking.hosts."127.0.0.1" = ["localhost" "dev"];
-  networking.wlanInterfaces.wlan0 = { device = "wlp82s0"; mac = "01:01:01:01:01:01"; };
   powerManagement.cpuFreqGovernor = "performance";
   powerManagement.enable = true;
   programs.light.enable = true;
@@ -68,7 +62,6 @@
   console.keyMap = "pl";
   hardware.keyboard.zsa.enable = true;
   i18n.defaultLocale = "pl_PL.UTF-8";
-  networking.networkmanager.enable = true;
   nixpkgs.config.allowUnfree = true;
   programs.slock.enable = true;
   security.sudo.wheelNeedsPassword = false;
@@ -121,7 +114,7 @@
   background-image = ""
   window-color = "#32302f"
   border-color = "#fe8019"
-  border-width = 4px
+border-width = 4px
   password-background-color = "#32302f"
   password-border-width = 0px
   '';
@@ -139,7 +132,7 @@
   hardware.nvidia.prime.reverseSync.enable = true;
   services.xserver.videoDrivers = [ "nvidia" "displaylink" ];
 
-  ################################### USER #####################################
+  ################################### USERS ####################################
   programs.fish.enable = true;
   users.users.placek.description = "Paweł Placzyński";
   users.users.placek.extraGroups = [ "dialout" "audio" "disk" "docker" "input" "messagebus" "networkmanager" "plugdev" "systemd-journal" "video" "wheel" "qemu-libvirtd" "libvirtd" "dialout" ];
@@ -149,4 +142,16 @@
   users.users.placek.openssh.authorizedKeys.keys = [
   "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDrSau4Jlq3xQNiiEMkgETh6bU0/gSlG7ecOFOhzNrcYtcLBQzKNfJrk/59JmXNxXws3u3RBYk1oCe3xnCdeqSTpj4sLJEfXHBuGR4hk2kdk1ve+A0SxL2RKMEGUuA8v0O/0oRykv1EV3oh8HwfYVj0AQzHNxSk1H815gPGNRaq9OTJJgQvUtjNx09dtdY071rNV3D5/ozUqGczdeRbvSlSCHkLZ9mHFGJxd9lbfMV6Bs/XxHrHg+Tc3HDOSmJq7UZeX9i0kvKdyGz9qFdhuIZL4nJWrRjbAMgvMGJJxohtdqgrMv9xuz5UveNVotWBojrMU6n4UcgB1ugUkrDmDL1aBJP6zeRcgk5CtisSMt2eq69LmBEwZDWNHqVQg2Kft32urOH82VfEeZLT+sXD1kWvCFVRcmZtZlENmmkqr0axp9gf4mg1IBkyM7eXjxTg1lDeDw5yFVG/cfbtOUc+twWFJ7nFlC6wVE5prnRW+qI6gpGB4gGZVtzODmIT4OeTXKI2MZPTMn2pwjmx3NM3p8ofZawr3c8TZwCStuWiIvoes3Ps4kt2Z75hoZ+4+LEucUwop0jees0YxrNoFTbwdbfXH0mBCspeSS65CZ96Og2qdE7s1+t3tdZrBWPmgziZIPtvBAmYmzH9JKAX1JgmRirf4tG5sZ2JbA8WDUqSADmadw== cardno:000611879902"
   ];
+  
+  ################################# NETWORK ####################################
+  networking.hostName = "omega";
+  networking.hosts."127.0.0.1" = ["localhost" "dev"];
+  networking.domain = "local";
+
+  networking.firewall.enable = true;
+  networking.firewall.allowPing = false;
+  networking.firewall.allowedTCPPortRanges = [ { from = 3000; to = 3100; } ];
+
+  networking.networkmanager.enable = true;
+  networking.wlanInterfaces.wlan0 = { device = "wlp82s0"; mac = "01:01:01:01:01:01"; };
 }
