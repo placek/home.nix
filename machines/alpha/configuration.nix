@@ -141,23 +141,4 @@ uWiIvoes3Ps4kt2Z75hoZ+4+LEucUwop0jees0YxrNoFTbwdbfXH0mBCspeSS65CZ96Og2qdE7s1+t3t
   services.dnsmasq.settings.interface = "eno1";
   services.dnsmasq.settings.bind-interfaces = true;
   services.dnsmasq.settings.dhcp-range = "192.168.2.10,192.168.2.254,24h";
-
-  services.nginx.enable = true;
-  services.nginx.recommendedGzipSettings = true;
-  services.nginx.recommendedOptimisation = true;
-  services.nginx.recommendedProxySettings = true;
-  services.nginx.recommendedTlsSettings = true;
-  services.nginx.sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL";
-
-  services.nginx.virtualHosts."placki.cloud".forceSSL = true;
-  services.nginx.virtualHosts."placki.cloud".enableACME = true;
-  services.nginx.virtualHosts."placki.cloud".locations."/" = { proxyPass = "http://localhost:8080"; };
-
-  ################################### N8N ######################################
-  services.nginx.virtualHosts."deepbible.placki.cloud" = {
-    forceSSL = true;
-    enableACME = true;
-    locations."/n8n".proxyPass = "http://localhost:5678";
-    locations."/n8n".proxyWebsockets = true;
-  };
 }
