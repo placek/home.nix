@@ -64,6 +64,14 @@ if executable('haskell-language-server-wrapper')
     \ })
 endif
 
+if executable('purescript-language-server')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'purescript-language-server',
+    \ 'cmd': {server_info->['purescript-language-server', '--stdio']},
+    \ 'allowlist': ['purescript'],
+    \ })
+endif
+
 if executable('pylsp')
   au User lsp_setup call lsp#register_server({
     \ 'name': 'pylsp',

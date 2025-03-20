@@ -19,5 +19,6 @@ in
     vim-xit
     pkgs.vimPlugins.haskell-vim
     pkgs.vimPlugins.vim-terraform
+    pkgs.vimPlugins.purescript-vim
   ];
 }
