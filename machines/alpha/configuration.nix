@@ -61,6 +61,12 @@
   virtualisation.libvirtd.enable = true;
   security.sudo.wheelNeedsPassword = false;
 
+  ############################# COMMON PACKAGES ################################
+  environment.systemPackages = with pkgs; [
+    gitFull
+    htop
+  ];
+
   ################################# SERVICES ###################################
   services.clamav.daemon.enable = true;
   services.clamav.updater.enable = true;
