@@ -147,4 +147,37 @@
   services.dnsmasq.settings.interface = "eno1";
   services.dnsmasq.settings.bind-interfaces = true;
   services.dnsmasq.settings.dhcp-range = "192.168.2.10,192.168.2.254,24h";
+
+  ################################# TRAEFIK ####################################
+  services.traefik = {
+    enable = true;
+    staticConfigOptions = {
+      entryPoints = {
+        web = { address = ":80"; };
+        websecure = { address = ":443"; };
+      };
+      certificatesResolvers.letsencrypt.acme = {
+        email = "placzynski.pawel@gmail.com";
+        storage = "/srv/proxy/acme.json";
+        httpChallenge.entryPoint = "web";
+      };
+    };
+    dynamicConfigOptions = {
+      http = {
+        routers = {};
+        services = {};
+      };
+      providers = {
+        docker = {
+          endpoint = "unix:///var/run/docker.sock";
+          exposedByDefault = false; # Only expose containers with explicit labels
+          network = "traefik-public"; # Use a shared Docker network
+        };
+      };
+    };
+  };
+
+  systemd.services.traefik.preStart = ''
+    ${pkgs.docker}/bin/docker network create traefik-public || true
+  '';
 }
