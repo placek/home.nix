@@ -151,6 +151,7 @@
   ################################# TRAEFIK ####################################
   services.traefik = {
     enable = true;
+    group = "docker";
     staticConfigOptions = {
       entryPoints = {
         web = { address = ":80"; };
