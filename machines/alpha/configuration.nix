@@ -156,6 +156,11 @@
       entryPoints = {
         web.address = ":80";
         websecure.address = ":443";
+        traefik.address = ":8080"; # Enable dashboard & API
+      };
+      api = {
+        dashboard = true;
+        insecure = true; # For debugging (disable in production)
       };
       certificatesResolvers.letsencrypt.acme = {
         email = "placzynski.pawel@gmail.com";
@@ -163,10 +168,14 @@
         httpChallenge.entryPoint = "web";
       };
     };
-    dynamicConfigOptions.providers.docker = {
-      endpoint = "unix:///run/docker.sock";
-      exposedByDefault = false; # Only expose containers with explicit labels
-      network = "traefik-public"; # Use a shared Docker network
+    dynamicConfigOptions = {
+      providers = {
+        docker = {
+          endpoint = "unix:///run/docker.sock";
+          exposedByDefault = false;
+          network = "traefik-public"; # Ensure this matches the Docker network
+        };
+      };
     };
   };
 
