@@ -192,6 +192,7 @@
           "placek:$2y$05$Z4H0cSxB7/eU6uYV0XFUVO64G8fBijFavJx15N.jBYL2W9U6sIkHe"
         ];
       };
+    };
   };
 
   systemd.services.traefik.preStart = let
