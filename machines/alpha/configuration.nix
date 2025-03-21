@@ -185,7 +185,7 @@
         };
 
         middlewares."dashboard-whitelist".ipWhiteList.sourceRange = [
-          "31.182.118.194/32"
+          "31.182.0.0/15"
         ];
 
         middlewares."dashboard-auth".basicAuth.users = [
