@@ -160,7 +160,7 @@
       };
       api = {
         dashboard = true;
-        insecure = true; # For debugging (disable in production)
+        insecure = false;
       };
       certificatesResolvers.letsencrypt.acme = {
         email = "placzynski.pawel@gmail.com";
@@ -178,7 +178,7 @@
     dynamicConfigOptions = {
       http = {
         routers."traefik" = {
-          rule = "PathPrefix(`/api`) || PathPrefix(`/dashboard`)";
+          rule = "PathPrefix(`/api`) || pathprefix(`/dashboard`)";
           service = "api@internal";
           entryPoints = [ "traefik" ];
           middlewares = [ "dashboard-whitelist" "dashboard-auth" ];
