@@ -181,12 +181,8 @@
           rule = "PathPrefix(`/api`) || pathprefix(`/dashboard`)";
           service = "api@internal";
           entryPoints = [ "traefik" ];
-          middlewares = [ "dashboard-whitelist" "dashboard-auth" ];
+          middlewares = [ "dashboard-auth" ];
         };
-
-        middlewares."dashboard-whitelist".ipWhiteList.sourceRange = [
-          "31.182.0.0/15"
-        ];
 
         middlewares."dashboard-auth".basicAuth.users = [
           "placek:$2y$05$Z4H0cSxB7/eU6uYV0XFUVO64G8fBijFavJx15N.jBYL2W9U6sIkHe"
