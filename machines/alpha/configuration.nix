@@ -167,8 +167,6 @@
         storage = "/srv/proxy/acme.json";
         httpChallenge.entryPoint = "web";
       };
-    };
-    dynamicConfigOptions = {
       providers = {
         docker = {
           endpoint = "unix:///run/docker.sock";
@@ -177,6 +175,19 @@
         };
       };
     };
+    dynamicConfigOptions = {
+      http = {
+        routers."traefik" = {
+          rule = "PathPrefix(`/api`) || PathPrefix(`/dashboard`)";
+          service = "api@internal";
+          entryPoints = [ "traefik" ];
+          middlewares = [ "dashboard-whitelist" ];
+        };
+
+        middlewares."dashboard-whitelist".ipWhiteList.sourceRange = [
+          "31.182.118.194/32"
+        ];
+      };
   };
 
   systemd.services.traefik.preStart = let
