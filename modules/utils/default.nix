@@ -70,6 +70,9 @@ in
     programs.aria2.enable = true;
     programs.bat.config.theme = "gruvbox-dark";
     programs.bat.enable = true;
+    programs.btop.enable = true;
+    programs.btop.settings.theme = "gruvbox";
+    programs.btop.settings.theme_background = false;
     programs.direnv.enable = true;
     programs.fzf.enable = true;
     programs.htop.enable = true;
