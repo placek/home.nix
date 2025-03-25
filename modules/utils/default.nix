@@ -63,7 +63,7 @@ in
     ./clipboard.nix
     ./scripts.nix
     ./transcribe.nix
-#     ./sync_projects.nix
+    ./sync_projects.nix
   ];
 
   config = {

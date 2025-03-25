@@ -4,13 +4,21 @@
 , ...
 }:
 let
-  rsync = "${pkgs.rsync}/bin/rsync";
-  source = "${config.projectsDirectory}/";
-  target = "${config.home.username}@${config.cloudDomain}:${config.projectsSyncDirectory}/";
-  rsyncCommand = "${rsync} --archive --compress --progress ${source} ${target}";
+  syncProjectsName = "sync-projects";
+  syncProjects = pkgs.writeShellScriptBin syncProjectsName ''
+    export PATH=${pkgs.openssh}/bin:$PATH
+    ${pkgs.coreutils}/bin/nice -n 19 ${pkgs.rsync}/bin/rsync --archive --compress --progress ${config.projectsDirectory}/ ${config.home.username}@${config.cloudDomain}:${config.projectsSyncDirectory}/
+  '';
 in
 {
   options = with lib; {
+    syncProjectsExec = mkOption {
+      type = types.str;
+      default = "${syncProjects}/bin/${syncProjectsName}";
+      description = "Path to the executable of the projects sync service";
+      readOnly = true;
+    };
+
     projectsSyncDirectory = mkOption {
       type = types.str;
       default = "/var/projects";
@@ -19,26 +27,5 @@ in
     };
   };
 
-  config = {
-    systemd.user.services.projectsSyncService = {
-      Service = {
-        ExecStart = "${pkgs.coreutils}/bin/nice -n 19 ${rsyncCommand}";
-        Restart = "on-failure";
-        TimeoutStartSec = "10min";
-      };
-      Install = {
-        WantedBy = [ "timers.target" ];
-      };
-    };
-
-    systemd.user.timers.projectsSyncTimer = {
-      Timer = {
-        OnCalendar = "hourly";
-        Persistent = true;
-      };
-      Install = {
-        WantedBy = [ "timers.target" ];
-      };
-    };
-  };
+  config.home.packages = [ syncProjects ];
 }
