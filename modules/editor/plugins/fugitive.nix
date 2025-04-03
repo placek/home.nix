@@ -67,10 +67,12 @@
             if len(l:matches) > 1
               return l:matches[1]
             endif
+            return ""
           endif
+          return ""
         endfunction
 
-        nmap <localleader>g :<c-u>echo <sid>gitUserStoryId(<sid>gitLastEmptyCommit())<cr>
+        nmap <Plug>(GitUserStoryID) :<c-u>echo <sid>gitUserStoryId(<sid>gitLastEmptyCommit())<cr>
 
         " VIM FUNCTIONS
 

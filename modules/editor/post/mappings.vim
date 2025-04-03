@@ -13,6 +13,7 @@ nnoremap <silent><localleader>e :Gedit<cr>
 nnoremap <silent><localleader>f :LspReferences<cr>
 nnoremap <silent><localleader>F :LspWorkspaceSymbol<cr>
 vnoremap <silent><localleader>F :LspWorkspaceSymbolSearch<cr>
+nnoremap <silent><localleader>g <Plug>(GitUserStoryID)
 nnoremap <silent><localleader>i :LspStatus<cr>
 nnoremap <silent><localleader>r :LspRename<cr>
 nnoremap <silent><localleader>q :call <sid>toggleLocList()<cr>
