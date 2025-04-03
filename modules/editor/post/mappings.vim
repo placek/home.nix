@@ -13,7 +13,6 @@ nnoremap <silent><localleader>e :Gedit<cr>
 nnoremap <silent><localleader>f :LspReferences<cr>
 nnoremap <silent><localleader>F :LspWorkspaceSymbol<cr>
 vnoremap <silent><localleader>F :LspWorkspaceSymbolSearch<cr>
-nnoremap <silent><localleader>g <Plug>(GitUserStoryID)
 nnoremap <silent><localleader>i :LspStatus<cr>
 nnoremap <silent><localleader>r :LspRename<cr>
 nnoremap <silent><localleader>q :call <sid>toggleLocList()<cr>
@@ -23,8 +22,6 @@ vnoremap <silent><localleader>f g<c-]>
 
 " LEADER
 nnoremap <silent><leader><leader> :CtrlP<cr>
-nnoremap <silent><leader>a <Plug>(TertiusPullRequestWindow)
-nnoremap <silent><leader>A <Plug>(GitUserStoryWindow)
 nnoremap <silent><leader>b :make<cr>
 nnoremap <silent><leader>B :make all<cr>
 nnoremap <silent><leader>c <Plug>(GitChanges)
@@ -33,7 +30,8 @@ nnoremap <silent><leader>e :edit .<cr>
 nnoremap <silent><leader>f <Plug>(GitGrep)
 nnoremap <silent><leader>F <Plug>(GitPickaxe)
 nnoremap <silent><leader>g <Plug>(GitToggleStatus)
-nnoremap <silent><leader>i :echo "Branch-off commit: " . <sid>gitBranchoffCommit()<cr>
+nnoremap <silent><leader>m <Plug>(GitBranchOffCommit)
+nnoremap <silent><leader>M <Plug>(TertiusMergeRequestWindow)
 nnoremap <silent><leader>n <Plug>(GitCheckoutFromInput)
 nnoremap <silent><leader>N <Plug>(GitBranchOffFromCommit)
 nnoremap <silent><leader>o :G fetch<cr>
@@ -41,6 +39,8 @@ nnoremap <silent><leader>O <Plug>(GitPullAndRebase)
 nnoremap <silent><leader>p :G push<cr>
 nnoremap <silent><leader>P <Plug>(GitPushForce)
 nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
+nnoremap <silent><leader>s <Plug>(GitUserStoryID)
+nnoremap <silent><leader>S <Plug>(GitUserStoryWindow)
 nnoremap <silent><leader>t :vertical terminal<cr>
 nnoremap <silent><leader>T :terminal<cr>
 nnoremap <silent><leader>v :G branch --all<cr>

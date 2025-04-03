@@ -39,6 +39,8 @@
           return trim(system("${config.vcsExec} merge-base " . <sid>gitDefaultBranch() . " HEAD"))
         endfunction
 
+        nmap <silent> <Plug>(GitBranchOffCommit) :<c-u>echom "Branch off commit: " . <sid>gitBranchoffCommit()<cr>
+
         " check if commit is empty
         function! s:gitCommitIsEmpty(commit) abort
           return empty(trim(system("${config.vcsExec} show --pretty=format: --name-only " . a:commit)))
@@ -72,12 +74,12 @@
           return ""
         endfunction
 
-        nmap <Plug>(GitUserStoryID) :<c-u>echo <sid>gitUserStoryId(<sid>gitLastEmptyCommit())<cr>
+        nmap <Plug>(GitUserStoryID) :<c-u>echom "User story ID: " . <sid>gitUserStoryId(<sid>gitLastEmptyCommit())<cr>
 
         " VIM FUNCTIONS
 
         " get the git hosting url of the current file
-        function! s:gitBufferInfo() abort
+        function! s:gitRemoteInfo() abort
           let l:remote = trim(system("${config.vcsExec} remote get-url origin"))
           let l:host = matchlist(l:remote, '@\zs[^/]\+\ze:')
           let l:repo = matchlist(l:remote, '[[:alnum:]_\-]\+/[[:alnum:]_\-]\+')
@@ -91,7 +93,7 @@
         " open a file in a git hosting page in branch context
         function! s:gitOpenFileInHosting() abort
           try
-            let l:info = <sid>gitBufferInfo()
+            let l:info = <sid>gitRemoteInfo()
             if l:info.host =~ "gitlab"
               let l:url = "https://" . l:info.host . "/" . l:info.repo .  "/-/commit/" . l:info.object
             elseif l:info.host =~ "bitbucket"

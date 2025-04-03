@@ -10,9 +10,8 @@
         function! s:gitComposeCommitMessage(buffer_content) abort
           let l:result = split(trim(system("${config.tertiusExec} commit", a:buffer_content)), '\n')
           let l:user_story_id = <sid>gitUserStoryId(<sid>gitLastEmptyCommit())
-          let l:header = "[" . l:user_story_id . "] " . l:result[0]
           if !empty(l:user_story_id)
-            let l:result[0] = l:header
+            let l:result[0] = "[" . l:user_story_id . "] " . l:result[0]
           endif
           normal! ggVGd
           call append(0, l:result)
@@ -44,15 +43,15 @@
         nnoremap <silent> <Plug>(TertiusCommitMessage) :<c-u>call <sid>tertiusCommitMessage()<cr>
 
         " generate a pull request description
-        function! s:tertiusPullRequestWindow() abort
+        function! s:tertiusMergeRequestWindow() abort
           call <sid>openIntermediateBuffer()
-          file /tmp/pull-request-description
+          file /tmp/merge-request-description
           let l:summary = substitute(system("${config.tertiusExec} pull-request"), '\r', "", 'g')
           execute "0put =l:summary"
           redraw!
         endfunction
 
-        nnoremap <silent> <Plug>(TertiusPullRequestWindow) :<c-u>call <sid>tertiusPullRequestWindow()<cr>
+        nnoremap <silent> <Plug>(TertiusMergeRequestWindow) :<c-u>call <sid>tertiusMergeRequestWindow()<cr>
 
         " open a window for issue description
         function! s:tertiusUserStoryWindow() abort
