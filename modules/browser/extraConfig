@@ -2,5 +2,7 @@ config.unbind('<Ctrl+Shift+w>')
 config.unbind('<Ctrl+t>')
 config.unbind('<Ctrl+n>')
 config.unbind('<Ctrl+Shift+n>')
+config.unbind('m')
+config.unbind('M')
 c.statusbar.padding = { 'bottom': 4, 'left': 4, 'right': 4, 'top': 4 };
 c.tabs.padding = { 'bottom': 4, 'left': 8, 'right': 8, 'top': 4 };
