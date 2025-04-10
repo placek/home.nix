@@ -13,9 +13,10 @@ nnoremap <silent><localleader>e :Gedit<cr>
 nnoremap <silent><localleader>f :LspReferences<cr>
 nnoremap <silent><localleader>F :LspWorkspaceSymbol<cr>
 vnoremap <silent><localleader>F :LspWorkspaceSymbolSearch<cr>
+nnoremap <silent><localleader>g :Gdiff<cr>
 nnoremap <silent><localleader>i :LspStatus<cr>
-nnoremap <silent><localleader>r :LspRename<cr>
 nnoremap <silent><localleader>q :call <sid>toggleLocList()<cr>
+nnoremap <silent><localleader>r :LspRename<cr>
 nnoremap <silent><localleader>x :call <sid>altFile()<cr>
 
 vnoremap <silent><localleader>f g<c-]>
@@ -26,6 +27,7 @@ nnoremap <silent><leader>b :make<cr>
 nnoremap <silent><leader>B :make all<cr>
 nnoremap <silent><leader>c <Plug>(GitChanges)
 nnoremap <silent><leader>C :GcLog --pretty=oneline<cr>
+nnoremap <silent><leader>d :GitGutterQuickFix<bar>copen<cr>
 nnoremap <silent><leader>e :edit .<cr>
 nnoremap <silent><leader>f <Plug>(GitGrep)
 nnoremap <silent><leader>F <Plug>(GitPickaxe)
@@ -98,10 +100,13 @@ vnoremap <RightMouse> <esc>
 cnoremap <RightMouse> <esc>
 
 " move around buffers with leader key
+command! NextArg execute (argc() == 0 ? '' : (argidx() == argc() - 1 ? 'first' : 'next'))
+command! PrevArg execute (argc() == 0 ? '' : (argidx() == 0 ? 'last' : 'previous'))
+
 nnoremap <leader><cr>  :argadd<cr>
 nnoremap <leader><esc> :argdelete<cr>
-nnoremap <leader>k :previous<cr>
-nnoremap <leader>j :next<cr>
+nnoremap <leader>k :PrevArg<cr>
+nnoremap <leader>j :NextArg<cr>
 nnoremap <leader>h :bprevious<cr>
 nnoremap <leader>l :bnext<cr>
 
