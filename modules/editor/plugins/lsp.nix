@@ -23,10 +23,6 @@ tools:
     hover-command: 'excitetranslate'
     hover-stdin: true
 
-  blade-blade-formatter: &blade-blade-formatter
-    format-command: 'blade-formatter --stdin'
-    format-stdin: true
-
   css-prettier: &css-prettier
     format-command: './node_modules/.bin/prettier ''${--tab-width:tabWidth} ''${--single-quote:singleQuote} --parser css'
 
@@ -38,14 +34,6 @@ tools:
     lint-formats:
       - '%f:%l %m'
 
-  eruby-erb: &eruby-erb
-    lint-debounce: 2s
-    lint-command: 'erb -x -T - | ruby -c'
-    lint-stdin: true
-    lint-offset: 1
-    format-stdin: true
-    format-command: htmlbeautifier
-
   gitcommit-gitlint: &gitcommit-gitlint
     lint-command: 'gitlint'
     lint-stdin: true
@@ -56,26 +44,11 @@ tools:
   html-prettier: &html-prettier
     format-command: './node_modules/.bin/prettier ''${--tab-width:tabWidth} ''${--single-quote:singleQuote} --parser html'
 
-  javascript-eslint: &javascript-eslint
-    lint-command: 'eslint -f visualstudio --stdin --stdin-filename ''${INPUT}'
-    lint-ignore-exit-code: true
-    lint-stdin: true
-    lint-formats:
-      - "%f(%l,%c): %tarning %m"
-      - "%f(%l,%c): %rror %m"
-
   json-fixjson: &json-fixjson
     format-command: 'fixjson'
 
   json-jq: &json-jq
     lint-command: 'jq .'
-
-  json-prettier: &json-prettier
-    format-command: './node_modules/.bin/prettier ''${--tab-width:tabWidth} --parser json'
-
-  lua-lua-format: &lua-lua-format
-    format-command: 'lua-format -i'
-    format-stdin: true
 
   make-checkmake: &make-checkmake
     lint-command: 'checkmake'
@@ -102,94 +75,6 @@ tools:
       - mix.lock
       - mix.exs
 
-  perl-perlcritic: &perl-perlcritic
-    lint-command: 'perlcritic --nocolor -3 --verbose "%l:%c %m\n"'
-    lint-ignore-exit-code: true
-    lint-formats:
-      - '%l:%c %m'
-
-  perl-perltidy: &perl-perltidy
-    format-command: "perltidy -b"
-    format-stdin: true
-
-  php-phpstan: &php-phpstan
-    lint-command: './vendor/bin/phpstan analyze --error-format raw --no-progress'
-
-  php-psalm: &php-psalm
-    lint-command: './vendor/bin/psalm --output-format=emacs --no-progress'
-    lint-formats:
-      - '%f:%l:%c:%trror - %m'
-      - '%f:%l:%c:%tarning - %m'
-
-  prettierd: &prettierd
-    format-command: >
-      prettierd ''${INPUT} ''${--range-start=charStart} ''${--range-end=charEnd} ''${--tab-width=tabSize}
-    format-stdin: true
-    root-markers:
-      - .prettierrc
-      - .prettierrc.json
-      - .prettierrc.js
-      - .prettierrc.yml
-      - .prettierrc.yaml
-      - .prettierrc.json5
-      - .prettierrc.mjs
-      - .prettierrc.cjs
-      - .prettierrc.toml
-
-  python-autopep8: &python-autopep8
-    format-command: 'autopep8 -'
-    format-stdin: true
-
-  python-black: &python-black
-    format-command: 'black --quiet -'
-    format-stdin: true
-
-  python-flake8: &python-flake8
-    lint-command: 'flake8 --stdin-display-name ''${INPUT} -'
-    lint-stdin: true
-    lint-formats:
-      - '%f:%l:%c: %m'
-
-  python-isort: &python-isort
-    format-command: 'isort --quiet -'
-    format-stdin: true
-
-  python-mypy: &python-mypy
-    lint-command: 'mypy --show-column-numbers'
-    lint-formats:
-      - '%f:%l:%c: %trror: %m'
-      - '%f:%l:%c: %tarning: %m'
-      - '%f:%l:%c: %tote: %m'
-
-  python-pylint: &python-pylint
-    lint-command: 'pylint --output-format text --score no --msg-template {path}:{line}:{column}:{C}:{msg} ''${INPUT}'
-    lint-stdin: false
-    lint-formats:
-      - '%f:%l:%c:%t:%m'
-    lint-offset-columns: 1
-    lint-category-map:
-      I: H
-      R: I
-      C: I
-      W: W
-      E: E
-      F: E
-
-  python-yapf: &python-yapf
-    format-command: 'yapf --quiet'
-    format-stdin: true
-
-  rst-lint: &rst-lint
-    lint-command: 'rst-lint'
-    lint-formats:
-      - '%tNFO %f:%l %m'
-      - '%tARNING %f:%l %m'
-      - '%tRROR %f:%l %m'
-      - '%tEVERE %f:%l %m'
-
-  rst-pandoc: &rst-pandoc
-    format-command: 'pandoc -f rst -t rst -s --columns=79'
-
   sh-shellcheck: &sh-shellcheck
     lint-command: 'shellcheck -f gcc -x'
     lint-source: 'shellcheck'
@@ -213,9 +98,6 @@ tools:
     lint-stdin: true
 
 languages:
-  blade:
-    - <<: *blade-blade-formatter
-
   css:
     - <<: *css-prettier
 
@@ -225,29 +107,15 @@ languages:
   dockerfile:
     - <<: *dockerfile-hadolint
 
-  elixir:
-    - <<: *mix_credo
-
-  eruby:
-    - <<: *eruby-erb
-
   gitcommit:
     - <<: *gitcommit-gitlint
 
   html:
     - <<: *html-prettier
 
-  javascript:
-    - <<: *javascript-eslint
-    - <<: *prettierd
-
   json:
     - <<: *json-fixjson
     - <<: *json-jq
-    # - <<: *json-prettier
-
-  lua:
-    - <<: *lua-lua-format
 
   make:
     - <<: *make-checkmake
@@ -255,26 +123,6 @@ languages:
   markdown:
     - <<: *markdown-markdownlint
     - <<: *markdown-pandoc
-
-  perl:
-    - <<: *perl-perltidy
-    - <<: *perl-perlcritic
-
-  php:
-    - <<: *php-phpstan
-    - <<: *php-psalm
-
-  python:
-    - <<: *python-black
-    - <<: *python-flake8
-    - <<: *python-isort
-    - <<: *python-mypy
-    # - <<: *python-autopep8
-    # - <<: *python-yapf
-
-  rst:
-    - <<: *rst-lint
-    - <<: *rst-pandoc
 
   sh:
     - <<: *sh-shellcheck
@@ -298,6 +146,8 @@ languages:
     programs.vim.plugins = [
       pkgs.vimPlugins.vim-lsp
     ];
+
+    home.packages = [ pkgs.efm-langserver ];
 
     editor.RCs = [
       ''
