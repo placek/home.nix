@@ -21,8 +21,8 @@ let
     remote_projects_dir="${config.projectsSyncDirectory}"
     run_dir="/srv/run"
     etc_dir="/srv/etc"
-
     current_dir="$(pwd)"
+
     if [[ "$current_dir" != "$projects_dir"* ]]; then
       >&2 echo -e "''${RED}E>''${RESET} you are outside of the projects directory"
       exit 1
@@ -37,51 +37,17 @@ let
     project_name="''${git_root#"$projects_dir/"}"
 
     case "$subcommand" in
-      deploy)
-        revision="$(git -C "$git_root" rev-parse HEAD)"
-        echo -e "''${BLUE}>>''${RESET} syncing project to server"
-        ${pkgs.coreutils}/bin/nice -n 19 ${pkgs.rsync}/bin/rsync --archive --compress --progress "$git_root/" "$server_user@$server_host:$remote_projects_dir/$project_name/"
+      run)
+        command="''${1:-up -d}"
 
-        echo -e "''${BLUE}>>''${RESET} deploying ''${BOLD}$project_name''${RESET} @ ''${YELLOW}$revision''${RESET}"
-        ssh "$server_user@$server_host" bash <<EOF
-set -e
-mkdir -p "$run_dir/$project_name"
-cd "$run_dir/$project_name"
+        echo -e "''${BLUE}>>''${RESET} syncing ''${BOLD}$project_name''${RESET} to ''${YELLOW}$server_user@$server_host:$run_dir/$project_name''${RESET}..."
+        ${pkgs.coreutils}/bin/nice -n 19 ${pkgs.rsync}/bin/rsync --archive --compress --progress "$git_root/" "$server_user@$server_host:$run_dir/$project_name/"
 
-if [ ! -d .git ]; then
-  git clone "$remote_projects_dir/$project_name" .
-fi
-
-echo -e "\033[0;34m>>\033[0m storing current revision for rollback (if any)..."
-if git rev-parse HEAD > /dev/null 2>&1; then
-  git rev-parse HEAD > .last-rev || true
-fi
-
-git fetch
-git checkout "$revision"
-
-docker compose -f docker-compose.placki.yaml build --pull
-docker compose -f docker-compose.placki.yaml up -d
-EOF
-        ;;
-
-      rollback)
-        echo -e "''${BLUE}>>''${RESET} rolling back ''${BOLD}$project_name''${RESET} on ''${YELLOW}$server_host''${RESET}..."
+        echo -e "''${BLUE}>>''${RESET} running ''${BOLD}$project_name''${RESET} with ''${YELLOW}$command''${RESET}"
         ssh "$server_user@$server_host" bash <<EOF
 set -e
 cd "$run_dir/$project_name"
-
-if [ ! -f .last-rev ]; then
-  echo -e "\033[0;31mE>\033[0m no .last-rev found, cannot rollback"
-  exit 1
-fi
-
-last_rev="$(cat .last-rev)"
-echo -e "\033[0;34m>>\033[0m rolling back to revision \033[1;33m$last_rev\033[0m"
-
-git checkout "$last_rev"
-docker compose -f docker-compose.placki.yaml build --pull
-docker compose -f docker-compose.placki.yaml up -d
+docker compose -f docker-compose.placki.yaml $command
 EOF
         ;;
 
@@ -104,7 +70,7 @@ EOF
 
       *)
         echo -e "''${RED}E>''${RESET} unknown subcommand: ''${YELLOW}$subcommand''${RESET}"
-        echo "Usage: placki [deploy|rollback|sync|sync-all|etc]"
+        echo "Usage: placki [deploy|sync|sync-all|etc]"
         exit 1
         ;;
     esac
