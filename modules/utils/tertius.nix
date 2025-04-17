@@ -13,8 +13,10 @@ let
       exit 1
     fi
 
-    model="''${OPENAI_MODEL:-gpt-4o-mini}"
+    model="''${OPENAI_MODEL:-o4-mini}"
     language="''${OPENAI_LANGUAGE:-english}"
+    api_url="https://api.openai.com/v1"
+    responses_endpoint="/responses"
     data="[]"
 
 ##################################### GIT ######################################
@@ -41,11 +43,11 @@ let
 ################################### OPEN AI ####################################
 
     _ai_apply_instruction() {
-      data="$(${pkgs.jq}/bin/jq -n --arg instructions "$1" --argjson data "$data" '$data + [ { role: "system", content: $instructions } ]')"
+      data="$(${pkgs.jq}/bin/jq -n --arg instructions "$1" --argjson data "$data" '$data + [ { role: "developer", content: [ { "type": "input_text", "text": $instructions } ] } ]')"
     }
 
     _ai_apply_context() {
-      data="$(${pkgs.jq}/bin/jq -n --arg context "$1" --argjson data "$data" '$data + [ { role: "user", content: $context } ]')"
+      data="$(${pkgs.jq}/bin/jq -n --arg content "$1" --argjson data "$data" '$data + [ { role: "user", content: [ { "type": "input_text", "text": $content } ] } ]')"
     }
 
     _ai_apply_context_from_stdin() {
@@ -76,43 +78,43 @@ let
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $OPENAI_API_KEY" \
         -d "$2" \
-        "https://api.openai.com/v1/$1"
+        "$api_url$1"
     }
 
     _ai_chat_request() {
-      payload_template='{ model: $model, temperature: 1, max_tokens: 4095, top_p: 1, frequency_penalty: 0, presence_penalty: 0, messages: $data }'
+      payload_template='{ model: $model, input: $data, "text": { "format": { "type": "text" } }, "reasoning": { "effort": "medium" }, "tools": [], "store": false }'
       payload=$(${pkgs.jq}/bin/jq -n --arg model "$model" --argjson data "$data" "$payload_template")
-      response=$(_ai_request "chat/completions" "$payload")
+      response=$(_ai_request "$responses_endpoint" "$payload")
       if [ $? -ne 0 ]; then
         >&2 echo "tertius: failed to get response from OpenAI API"
         exit 1
       fi
-      echo "$response" | ${pkgs.jq}/bin/jq -M -r '.choices[0].message.content'
+      echo "$response" | ${pkgs.jq}/bin/jq -M -r '.output | map(select(.role == "assistant") | .content[]? | select(.type == "output_text") | .text) | .[-1]'
     }
 
 ################################### TERTIUS ####################################
 
     _tertius_print_info() {
-      echo "Model: $model"
-      echo "Language: $language"
-      echo "Branchoff commit: $(_git_branchoff_commit)"
+      echo "+ model: $model"
+      echo "+ language: $language"
+      echo "+ branchoff commit: $(_git_branchoff_commit)"
     }
 
     _tertius_compose_commit_message() {
-      _ai_apply_instruction "Compose a Git commit message. To draft a Git commit message review the context in which the modifications have been made. This should include a brief explanation of the changes and a diff that showcases these modifications. Your task is to ensure that there is a clear connection between the requirements specified in the user story and the changes made in the commit. The objective is to create a concise and informative commit message that effectively communicates the reasoning behind the changes and high-level explanation of the alterations. The message should comprise a succinct title, followed by a paragraph explaining the reason for the changes. The title and the following paragraph should be separated by a blank line. Avoid using 'Title:' or similar headers."
+      _ai_apply_instruction "You are a Git repository maitenance assistant. Compose a Git commit message. To draft a Git commit message review the context in which the modifications have been made. This should include a brief explanation of the changes and a diff that showcases these modifications. Your task is to ensure that there is a clear connection between the requirements specified in the user story and the changes made in the commit. The objective is to create a concise and informative commit message that effectively communicates the reasoning behind the changes and high-level explanation of the alterations. The message should comprise a succinct title, followed by a paragraph explaining the reason for the changes. The title and the following paragraph should be separated by a blank line. Avoid using 'Title:' or similar headers."
       _ai_apply_commits
       _ai_apply_context_from_stdin
       _ai_chat_request
     }
 
     _tertius_compose_user_story() {
-      _ai_apply_instruction "Compose a user story. To draft a user story, review the context in which the problem occurs. This should include a brief explanation of the problem and any relevant background information. Your task is to ensure that there is a clear connection between the problem and the context in which it occurs. The objective is to create a concise and informative user story that effectively communicates the problem and its context. The user story should have a title, a paragraph with a user story formatted scenario (As <actor>, I want to <action>, so <outcome>.), a 'Summary' paragraph explaining the problem, and an 'Acceptance criteria' paragraph with the tasks that has to be done to solve problem."
+      _ai_apply_instruction "You are a project manager assistant. Compose a user story. To draft a user story, review the context in which the problem occurs. This should include a brief explanation of the problem and any relevant background information. Your task is to ensure that there is a clear connection between the problem and the context in which it occurs. The objective is to create a concise and informative user story that effectively communicates the problem and its context. The user story should have a title, a paragraph with a user story formatted scenario (As <actor>, I want to <action>, so <outcome>.), a 'Summary' paragraph explaining the problem, and an 'Acceptance criteria' paragraph with the tasks that has to be done to solve problem."
       _ai_apply_context_from_stdin
       _ai_chat_request
     }
 
     _tertius_compose_pull_request_description() {
-      _ai_apply_instruction "Compose a pull request description by analyzing any given commit messages. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outcome of the changes themselves - each such component has to be separated by two newlines and have no header."
+      _ai_apply_instruction "You are a software developer assistant. Compose a pull request description by analyzing any given commit messages. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the purpose of the changes, and a paragraph explaining the outcome of the changes themselves - each such component has to be separated by two newlines and have no header."
       _ai_apply_commits
       _ai_chat_request
     }
