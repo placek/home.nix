@@ -37,7 +37,7 @@ let
     }
 
     _git_is_not_empty_commit() {
-      git show --stat --format="" "$1" | grep -q .
+      ${config.vcsExec} show --stat --format="" "$1" | grep -q .
     }
 
 ################################### OPEN AI ####################################
