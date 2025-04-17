@@ -11,7 +11,6 @@
           if empty(l:prompt)
             return
           endif
-
           execute 'vertical terminal codex "' . shellescape(l:prompt) . '"'
         endfunction
 
@@ -22,7 +21,6 @@
           if empty(l:prompt)
             return
           endif
-
           execute 'vertical terminal codex "In context of the file ' . expand('%:.') . ': ' . shellescape(l:prompt) . '"'
         endfunction
 
