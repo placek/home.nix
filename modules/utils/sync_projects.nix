@@ -70,7 +70,7 @@ EOF
 
       *)
         echo -e "''${RED}E>''${RESET} unknown subcommand: ''${YELLOW}$subcommand''${RESET}"
-        echo "Usage: placki [deploy|sync|sync-all|etc]"
+        echo "Usage: placki [run|sync|sync-all|etc]"
         exit 1
         ;;
     esac
