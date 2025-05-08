@@ -58,7 +58,6 @@ in
   };
 
   imports = [
-#     ./freetube.nix
     ./tertius.nix
     ./nnn.nix
     ./clipboard.nix
