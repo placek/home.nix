@@ -16,7 +16,7 @@ let
     model="''${OPENAI_MODEL:-o4-mini}"
     language="''${OPENAI_LANGUAGE:-english}"
     api_url="https://api.openai.com/v1"
-    responses_endpoint="/responses"
+    completions_endpoint="/chat/completions"
     data="[]"
 
 ##################################### GIT ######################################
@@ -43,11 +43,11 @@ let
 ################################### OPEN AI ####################################
 
     _ai_apply_instruction() {
-      data="$(${pkgs.jq}/bin/jq -n --arg instructions "$1" --argjson data "$data" '$data + [ { role: "developer", content: [ { "type": "input_text", "text": $instructions } ] } ]')"
+      data="$(${pkgs.jq}/bin/jq -n --arg instructions "$1" --argjson data "$data" '$data + [ { role: "developer", content: [ { "type": "text", "text": $instructions } ] } ]')"
     }
 
     _ai_apply_context() {
-      data="$(${pkgs.jq}/bin/jq -n --arg content "$1" --argjson data "$data" '$data + [ { role: "user", content: [ { "type": "input_text", "text": $content } ] } ]')"
+      data="$(${pkgs.jq}/bin/jq -n --arg context "$1" --argjson data "$data" '$data + [ { role: "user", content: [ { "type": "text", "text": $context } ] } ]')"
     }
 
     _ai_apply_context_from_stdin() {
@@ -82,14 +82,20 @@ let
     }
 
     _ai_chat_request() {
-      payload_template='{ model: $model, input: $data, "text": { "format": { "type": "text" } }, "reasoning": { "effort": "medium" }, "tools": [], "store": false }'
+      payload_template='{ model: $model, messages: $data, "response_format": { "type": "text" }, "reasoning_effort": "medium", "store": false }'
       payload=$(${pkgs.jq}/bin/jq -n --arg model "$model" --argjson data "$data" "$payload_template")
-      response=$(_ai_request "$responses_endpoint" "$payload")
+      for attempt in {1..3}; do
+        response=$(_ai_request "$completions_endpoint" "$payload")
+        if ! echo "$response" | jq -e '.error' > /dev/null; then
+          break
+        fi
+        sleep 2
+      done
       if [ $? -ne 0 ]; then
         >&2 echo "tertius: failed to get response from OpenAI API"
         exit 1
       fi
-      echo "$response" | ${pkgs.jq}/bin/jq -M -r '.output | map(select(.role == "assistant") | .content[]? | select(.type == "output_text") | .text) | .[-1]'
+      echo "$response" | ${pkgs.jq}/bin/jq -M -r '.choices[0].message.content'
     }
 
 ################################### TERTIUS ####################################
