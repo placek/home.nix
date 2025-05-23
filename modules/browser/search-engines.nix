@@ -19,7 +19,6 @@
       np = "https://search.nixos.org/packages?query={}";
       npv = "https://lazamar.co.uk/nix-versions/?channel=nixpkgs-unstable&package={}";
       nf = "https://noogle.dev/q?term={}";
-      p = "https://getpocket.com/my-list/search?query={}";
       rb = "https://ruby-doc.com/search.html?q={}";
       stack = "https://stackexchange.com/search?q={}";
       we = "https://en.wikipedia.org/wiki/{}";

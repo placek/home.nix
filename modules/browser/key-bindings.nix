@@ -17,7 +17,6 @@
     ";v" = "hint links spawn ${config.terminalExec} -e ${config.ytDownloaderExec} {hint-url} -o ${config.downloadsDirectory}/%(title)s.%(ext)s";
     ";g" = "hint links userscript GBrowse";
 
-    ",s" = "open -t https://getpocket.com/edit?url={url}";
     ",re" = "spawn speak -len {primary}";
     ",rp" = "spawn speak -lpl {primary}";
     ",rs" = "spawn summarize -s {primary}";
