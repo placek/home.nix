@@ -33,7 +33,7 @@
         bind \ec fzf-cd-widget
         bind \ez undo
         bind \eu togglecase_char
-        bind \[23~ accept-autosuggestion
+        bind f11 accept-autosuggestion
 
         set --universal pure_show_system_time true
         set --universal pure_color_primary yellow

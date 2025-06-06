@@ -1,5 +1,5 @@
 expiration ?= 30 days
-version ?= 24.05
+version ?= 25.05
 
 nixos-channel := https://nixos.org/channels/nixos-$(version)
 home-manager-channel := https://github.com/nix-community/home-manager/archive/release-$(version).tar.gz
@@ -56,5 +56,5 @@ gens:
 news:
 	$(HOME-MANAGER) news
 
-displaylink: files/displaylink-600.zip
-	nix-prefetch-url file://$(shell pwd)/$<
+displaylink:
+	nix-prefetch-url --name displaylink-610.zip https://www.synaptics.com/sites/default/files/exe_files/2024-10/DisplayLink%20USB%20Graphics%20Software%20for%20Ubuntu6.1-EXE.zip

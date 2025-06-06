@@ -164,8 +164,5 @@ hi! Number       ctermfg=7  cterm=bold
 hi! Float        ctermfg=7  cterm=bold
 
 """""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""""
-" use `open` command to open a current buffer
-command! -nargs=0 Open !open %
-
 " leave only the current buffer - delete others
 command! -nargs=0 BufOnly execute '%bdelete|edit #|normal `"'

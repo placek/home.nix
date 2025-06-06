@@ -33,9 +33,9 @@ let
     TEXT="$@"
 
     if [ "$OUTPUT" == "1" ]; then
-      ${pkgs.python39Packages.gtts}/bin/gtts-cli --lang "$LANGUAGE" "$TEXT"
+      ${pkgs.python312Packages.gtts}/bin/gtts-cli --lang "$LANGUAGE" "$TEXT"
     else
-      ${pkgs.python39Packages.gtts}/bin/gtts-cli --lang "$LANGUAGE" "$TEXT" | ${pkgs.sox}/bin/play -q -t mp3 -
+      ${pkgs.python312Packages.gtts}/bin/gtts-cli --lang "$LANGUAGE" "$TEXT" | ${pkgs.sox}/bin/play -q -t mp3 -
     fi
   '';
 

@@ -1,9 +1,10 @@
 { config
+, lib
 , ...
 }:
 {
   config.programs.fish.shellAliases = {
-    ls = "lsd --icon-theme unicode --hyperlink auto";
+    ls = lib.mkForce "lsd --icon-theme unicode --hyperlink auto";
     tree = "lsd --icon-theme unicode --tree --hyperlink auto";
   };
   config.programs.fish.shellAbbrs = {

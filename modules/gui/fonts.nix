@@ -39,9 +39,9 @@ in
     fonts.fontconfig.enable = true;
 
     home.packages = with pkgs; [
-      (pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; })
       customFonts
 
+      nerd-fonts.iosevka
       ubuntu_font_family
       google-fonts
       font-awesome
