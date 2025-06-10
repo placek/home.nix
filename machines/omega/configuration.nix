@@ -44,8 +44,6 @@
   boot.loader.systemd-boot.enable = true;
   hardware.bluetooth.enable = true;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-#   hardware.opengl.driSupport = true;
-#   hardware.opengl.driSupport32Bit = true;
   hardware.graphics.enable = true;
 #   hardware.pulseaudio.enable = true;
 #   hardware.pulseaudio.package = pkgs.pulseaudioFull;
@@ -57,7 +55,7 @@
 
   ################################## SYSTEM ####################################
   boot.consoleLogLevel = 0;
-  boot.supportedFilesystems = [ "ntfs" ];
+  boot.supportedFilesystems = [ "ntfs3" ];
   boot.tmp.cleanOnBoot = true;
   console.keyMap = "pl";
   hardware.keyboard.zsa.enable = true;
@@ -70,7 +68,6 @@
   services.printing.drivers = [ pkgs.foo2zjs pkgs.mfcl8690cdwcupswrapper ];
   services.printing.enable = true;
   services.udisks2.enable = true;
-#   sound.enable = true;
   system.stateVersion = "24.05";
   time.timeZone = "Europe/Warsaw";
   users.extraGroups.vboxusers.members = [ "placek" ];
@@ -118,6 +115,14 @@ border-width = 4px
   password-background-color = "#32302f"
   password-border-width = 0px
   '';
+
+  services.pipewire = {
+    enable = true;
+    audio.enable = true;
+    alsa.enable = true;
+    pulse.enable = true;
+    jack.enable = true;
+  };
 
   ################################## NVIDIA ####################################
   hardware.nvidia.modesetting.enable = true;
