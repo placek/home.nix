@@ -141,6 +141,7 @@ in
       vagrant           # virtual machine manager
       wget              # download files
       wrk2              # HTTP benchmarking tool
+      xh                # HTTP client
       yq                # YAML processor
     ];
   };
