@@ -6,7 +6,6 @@
 let
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
   minipro = import ./minipro.nix { inherit pkgs; };
-  codex-cli = import ./codex-cli.nix { inherit pkgs; };
 in
 {
   options = with lib; {
@@ -85,7 +84,7 @@ in
     home.packages = with pkgs; [
       dcc6502           # 6502 disassembler
       minipro           # EEPROM programmer
-      codex-cli         # OpenAI Codex CLI
+      codex             # OpenAI Codex CLI
       pkgsCross.avr.buildPackages.gcc
 
       ansible           # manage remote machines
