@@ -159,4 +159,22 @@ border-width = 4px
 
   networking.networkmanager.enable = true;
   networking.wlanInterfaces.wlan0 = { device = "wlp82s0"; mac = "01:01:01:01:01:01"; };
+  networking.resolvconf.useLocalResolver = true;
+  networking.networkmanager.dns = "none"; # Prevent NM from overriding resolv.conf
+  services.resolved.enable = false;       # Disable systemd-resolved if present
+
+  services.dnscrypt-proxy2 = {
+    enable = true;
+    settings = {
+      listen_addresses = [ "127.0.0.1:53" ]; # Ensure it handles DNS on localhost
+      server_names = [ "NextDNS-a4eea8" ];
+      static = {
+        "NextDNS-a4eea8" = {
+          stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HL2E0ZWVhOA";
+        };
+      };
+    };
+  };
+
+  networking.nameservers = [ "127.0.0.1" ]; # Force usage of dnscrypt-proxy
 }
