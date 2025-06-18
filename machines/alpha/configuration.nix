@@ -138,8 +138,8 @@
     enable = true;
     settings = {
       listen_addresses = [ "127.0.0.1:53" ];
-      server_names = [ "NextDNS-a4eea8" ];
-      static."NextDNS-a4eea8".stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HL2E0ZWVhOA";
+      server_names = [ "NextDNS-94c1a5" ];
+      static."NextDNS-94c1a5".stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HLzk0YzFhNQ";
     };
   };
 
