@@ -105,7 +105,7 @@
   networking.hostName = "alpha";
   networking.hosts."127.0.0.1" = ["localhost" "dev"];
   networking.domain = "local";
-  networking.nameservers = [ "127.0.0.1" "8.8.8.8" ];
+  networking.nameservers = [ "127.0.0.1" ];
 
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
@@ -132,11 +132,21 @@
   networking.interfaces.eno1.ipv4.addresses = [ { address = "192.168.2.1"; prefixLength = 24; } ];
 
   services.dnsmasq.enable = true;
-  services.dnsmasq.settings.server = [ "8.8.8.8" "8.8.4.4" ];
+  services.dnsmasq.settings.server = [ "127.0.0.1" ];
   services.dnsmasq.settings.domain = "lan";
   services.dnsmasq.settings.interface = "eno1";
   services.dnsmasq.settings.bind-interfaces = true;
   services.dnsmasq.settings.dhcp-range = "192.168.2.10,192.168.2.254,24h";
+
+  # Use NextDNS parental control via dnscrypt-proxy2
+  services.dnscrypt-proxy2 = {
+    enable = true;
+    settings = {
+      listen_addresses = [ "127.0.0.1:53" ];
+      server_names = [ "NextDNS-a4eea8" ];
+      static."NextDNS-a4eea8".stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HL2E0ZWVhOA";
+    };
+  };
 
   ################################# TRAEFIK ####################################
   services.traefik = {
