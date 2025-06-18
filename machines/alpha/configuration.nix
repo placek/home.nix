@@ -24,7 +24,7 @@
   nix.gc.dates = "daily";
   nix.gc.options = "--delete-older-than 30d";
   nix.extraOptions = ''
-    experimental-features = nix-command flakes repl-flake
+    experimental-features = nix-command flakes
     auto-optimise-store = true
     trusted-users = root @wheel
   '';
@@ -37,11 +37,7 @@
   boot.loader.systemd-boot.enable = true;
   hardware.bluetooth.enable = true;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-  hardware.opengl.driSupport = true;
-  hardware.opengl.driSupport32Bit = true;
-  hardware.opengl.enable = true;
-  hardware.pulseaudio.enable = true;
-  hardware.pulseaudio.package = pkgs.pulseaudioFull;
+  hardware.graphics.enable = true;
   services.sshd.enable = true;
   powerManagement.enable = true;
   powerManagement.cpuFreqGovernor = "performance";
@@ -61,8 +57,7 @@
   services.printing.drivers = [ pkgs.foo2zjs pkgs.mfcl8690cdwcupswrapper ];
   services.printing.enable = true;
   services.udisks2.enable = true;
-  sound.enable = true;
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.05";
   time.timeZone = "Europe/Warsaw";
   users.extraGroups.vboxusers.members = [ "placek" ];
   virtualisation.docker.autoPrune.dates = "daily";

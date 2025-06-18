@@ -66,7 +66,7 @@
   services.printing.drivers = [ pkgs.foo2zjs pkgs.mfcl8690cdwcupswrapper ];
   services.printing.enable = true;
   services.udisks2.enable = true;
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.05";
   time.timeZone = "Europe/Warsaw";
   users.extraGroups.vboxusers.members = [ "placek" ];
   virtualisation.docker.autoPrune.dates = "daily";
