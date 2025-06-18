@@ -54,19 +54,19 @@
     ./fonts.nix
 
     ./autorandr
-    ./dunst.nix
+    ./mako.nix
     ./feh.nix
-    ./xmobar.nix
     ./mpv.nix
     ./zathura.nix
 
-    ./xmonad
+    ./hyprland
     ./games.nix
   ];
 
   config = {
     home.packages = with pkgs; [
-      (pkgs.writeShellScriptBin "wallpaper" "feh --bg-fill '${config.gui.wallpaper}'")
+      swaybg
+      (pkgs.writeShellScriptBin "wallpaper" "swaybg --mode fill --image '${config.gui.wallpaper}'")
 
       libnotify
       xf86_input_wacom

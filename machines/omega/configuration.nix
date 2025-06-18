@@ -89,8 +89,9 @@
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.displayManager.lightdm.greeters.mini.enable = true;
   services.xserver.displayManager.lightdm.greeters.mini.user = "placek";
-  services.xserver.enable = true;
-  services.xserver.windowManager.xmonad.enable = true;
+  services.xserver.enable = false;
+  services.xserver.windowManager.xmonad.enable = lib.mkForce false;
+  programs.hyprland.enable = true;
   services.xserver.xkb.layout = "pl";
   services.xserver.displayManager.lightdm.greeters.mini.extraConfig = ''
   [greeter]
