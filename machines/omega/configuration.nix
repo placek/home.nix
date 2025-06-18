@@ -86,34 +86,18 @@
   services.libinput.touchpad.tapping = false;
   services.logind.extraConfig = "HandlePowerKey=ignore";
   services.logind.lidSwitch = "ignore";
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.displayManager.lightdm.greeters.mini.enable = true;
-  services.xserver.displayManager.lightdm.greeters.mini.user = "placek";
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "Hyprland";
+        user = "placek";
+      };
+    };
+  };
   services.xserver.enable = false;
-  services.xserver.windowManager.xmonad.enable = lib.mkForce false;
   programs.hyprland.enable = true;
   services.xserver.xkb.layout = "pl";
-  services.xserver.displayManager.lightdm.greeters.mini.extraConfig = ''
-  [greeter]
-  show-password-label = false
-  invalid-password-text = nope!
-  show-input-cursor = false
-  password-alignment = left
-  password-input-width = 24
-
-  [greeter-theme]
-  font = "Iosevka"
-  font-weight = normal
-  error-color = "#d5c4a1"
-  password-color = "#d5c4a1"
-  background-color = "#32302f"
-  background-image = ""
-  window-color = "#32302f"
-  border-color = "#fe8019"
-border-width = 4px
-  password-background-color = "#32302f"
-  password-border-width = 0px
-  '';
 
   services.pipewire = {
     enable = true;
