@@ -127,7 +127,7 @@
   networking.interfaces.eno1.ipv4.addresses = [ { address = "192.168.2.1"; prefixLength = 24; } ];
 
   services.dnsmasq.enable = true;
-  services.dnsmasq.settings.server = [ "127.0.0.1" ];
+  services.dnsmasq.settings.server = [ "127.0.0.1#5353" ];
   services.dnsmasq.settings.domain = "lan";
   services.dnsmasq.settings.interface = "eno1";
   services.dnsmasq.settings.bind-interfaces = true;
@@ -137,7 +137,7 @@
   services.dnscrypt-proxy2 = {
     enable = true;
     settings = {
-      listen_addresses = [ "127.0.0.1:53" ];
+      listen_addresses = [ "127.0.0.1:5353" ];
       server_names = [ "NextDNS-94c1a5" ];
       static."NextDNS-94c1a5".stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HLzk0YzFhNQ";
     };
