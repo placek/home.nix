@@ -56,6 +56,7 @@
     ./autorandr
     ./mako.nix
     ./feh.nix
+    ./xmobar.nix
     ./mpv.nix
     ./zathura.nix
 
