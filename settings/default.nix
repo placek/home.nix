@@ -23,8 +23,8 @@
     gui.theme = import ./theme.nix;
     gui.font.name = "Iosevka Nerd Font";
     gui.font.size = 12;
-    gui.showBattery = true;
-    gui.showWiFi = true;
+    # gui.showBattery = true;
+    # gui.showWiFi = true;
 
     vcs.name = "Paweł Placzyński";
     vcs.email = "placzynski.pawel@gmail.com";

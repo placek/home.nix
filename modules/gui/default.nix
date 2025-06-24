@@ -60,7 +60,7 @@
     ./mpv.nix
     ./zathura.nix
 
-    ./xmonad
+    ./hyprland
     ./games.nix
   ];
 
