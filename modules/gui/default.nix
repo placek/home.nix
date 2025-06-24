@@ -56,11 +56,11 @@
     ./autorandr
     ./dunst.nix
     ./feh.nix
-    ./xmobar.nix
+    ./eww.nix
     ./mpv.nix
     ./zathura.nix
 
-    ./xmonad
+    ./hyprland.nix
     ./games.nix
   ];
 
