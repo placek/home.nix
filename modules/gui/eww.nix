@@ -15,3 +15,4 @@
     Install = { WantedBy = [ "graphical-session.target" ]; };
   };
 }
+
