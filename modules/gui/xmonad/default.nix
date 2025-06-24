@@ -144,19 +144,9 @@ in
                                 , isFullscreen --> doFullFloat
                                 ]
 
-      myLogHook xmproc = dynamicLogWithPP xmobarPP { ppOutput          = hPutStrLn xmproc
-                                                   , ppHiddenNoWindows = xmobarColor "${config.gui.theme.base08}" "" . wrap " <fn=1>" "</fn> "
-                                                   , ppHidden          = xmobarColor "${config.gui.theme.base07}" "" . wrap " <fn=1>" "</fn> "
-                                                   , ppCurrent         = xmobarColor "${config.gui.theme.base0B}" "" . wrap " <fn=1>" "</fn> "
-                                                   , ppVisible         = xmobarColor "${config.gui.theme.base03}" "" . wrap " <fn=1>" "</fn> "
-                                                   , ppTitle           = const ""
-                                                   , ppLayout          = layout
-                                                   , ppUrgent          = xmobarColor "${config.gui.theme.base08}" "${config.gui.theme.base0F}"
-                                                   , ppWsSep           = ""
-                                                   , ppSep             = " \xE0B1 "
-                                                   , ppExtras          = []
-                                                   }
-        where layout a = case a of
+      myLogHook = return ()
+
+      layoutName a = case a of
                 "Spacing Full"        -> "<fn=1>\xf31e</fn>"
                 "Spacing Tall"        -> "<fn=1>\xf338</fn>"
                 "Spacing Mirror Tall" -> "<fn=1>\xf337</fn>"
@@ -166,7 +156,7 @@ in
         setDefaultCursor xC_left_ptr
         spawnOnce "exec wallpaper &"
 
-      defaults xmproc = desktopConfig { terminal           = myTerminal
+      defaults = desktopConfig { terminal           = myTerminal
                                       , focusFollowsMouse  = myFocusFollowsMouse
                                       , clickJustFocuses   = myClickJustFocuses
                                       , borderWidth        = myBorderWidth
@@ -179,13 +169,13 @@ in
                                       , layoutHook         = myLayout
                                       , manageHook         = myManageHook <+> manageDocks <+> manageHook desktopConfig
                                       , handleEventHook    = myEventHook
-                                      , logHook            = myLogHook xmproc
+                                      , logHook            = myLogHook
                                       , startupHook        = myStartupHook
                                       }
 
       main = do
-        xmproc <- spawnPipe "xmobar"
-        xmonad . docks . defaults $ xmproc
+        spawn "${pkgs.eww}/bin/eww open bar"
+        xmonad . docks $ defaults
     '';
   };
 }

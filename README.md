@@ -68,7 +68,7 @@ applications, custom scripts, and system services tailored to specific machines.
 ### GUI
 
 - **Configuration**: `modules/gui`
-- **Description**: Manages graphical user interface settings.
+- **Description**: Manages graphical user interface settings. The bar is powered by [Eww](https://github.com/elkowar/eww).
 
 ### Utilities
 
