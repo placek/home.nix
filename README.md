@@ -68,7 +68,11 @@ applications, custom scripts, and system services tailored to specific machines.
 ### GUI
 
 - **Configuration**: `modules/gui`
+<<<<<<< ours
 - **Description**: Manages graphical user interface settings. The bar is powered by [Eww](https://github.com/elkowar/eww).
+=======
+- **Description**: Manages graphical user interface settings. The bar is powered by [Eww](https://github.com/elkowar/eww) and mimics the former Xmobar layout.
+>>>>>>> theirs
 
 ### Utilities
 
