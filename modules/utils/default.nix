@@ -134,6 +134,7 @@ in
       sox               # audio processing
       sshfs             # mount remote filesystems
       tmate             # terminal sharing
+      typst             # typesetting system
       unrar             # extract RAR archives
       unzip             # extract ZIP archives
       usbutils          # USB device management
