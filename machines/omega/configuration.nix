@@ -20,7 +20,7 @@
   fileSystems."/mnt/projects" = {
     device = "placki.cloud:/var/projects";
     fsType = "nfs";
-    options = [ "rw" "hard" "timeo=600" "retrans=2" "x-systemd.automount" "noauto" ];
+    options = [ "rw" "hard" "timeo=600" "retrans=2" "x-systemd.automount" "noauto" "noatime" "nfsvers=4.2" ];
   };
 
   swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
@@ -28,7 +28,7 @@
   ################################### NIX ######################################
   nix.gc.automatic = true;
   nix.gc.dates = "daily";
-  nix.gc.options = "--delete-older-than 30d";
+  nix.gc.options = "--delete-older-than 14d";
   nix.extraOptions = ''
     experimental-features = nix-command flakes
     auto-optimise-store = true
@@ -45,9 +45,10 @@
   hardware.bluetooth.enable = true;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.graphics.enable = true;
-  powerManagement.cpuFreqGovernor = "performance";
+  powerManagement.cpuFreqGovernor = "schedutil";
   powerManagement.enable = true;
   programs.light.enable = true;
+  services.power-profiles-daemon.enable = true;
   services.throttled.enable = true;
   services.xserver.resolutions = [ { x = 1920; y = 1080; } ];
 
@@ -71,8 +72,9 @@
   users.extraGroups.vboxusers.members = [ "placek" ];
   virtualisation.docker.autoPrune.dates = "daily";
   virtualisation.docker.enable = true;
-  virtualisation.libvirtd.enable = true;
-  virtualisation.virtualbox.host.enable = true;
+  virtualisation.docker.logDriver = "journald";
+  virtualisation.libvirtd.enable = false;
+  virtualisation.virtualbox.host.enable = false;
 
   ################################# SERVICES ###################################
   services.acpid.enable = true;
@@ -93,25 +95,25 @@
   services.xserver.windowManager.xmonad.enable = true;
   services.xserver.xkb.layout = "pl";
   services.xserver.displayManager.lightdm.greeters.mini.extraConfig = ''
-  [greeter]
-  show-password-label = false
-  invalid-password-text = nope!
-  show-input-cursor = false
-  password-alignment = left
-  password-input-width = 24
+    [greeter]
+    show-password-label = false
+    invalid-password-text = nope!
+    show-input-cursor = false
+    password-alignment = left
+    password-input-width = 24
 
-  [greeter-theme]
-  font = "Iosevka"
-  font-weight = normal
-  error-color = "#d5c4a1"
-  password-color = "#d5c4a1"
-  background-color = "#32302f"
-  background-image = ""
-  window-color = "#32302f"
-  border-color = "#fe8019"
-border-width = 4px
-  password-background-color = "#32302f"
-  password-border-width = 0px
+    [greeter-theme]
+    font = "Iosevka"
+    font-weight = normal
+    error-color = "#d5c4a1"
+    password-color = "#d5c4a1"
+    background-color = "#32302f"
+    background-image = ""
+    window-color = "#32302f"
+    border-color = "#fe8019"
+    border-width = 4px
+    password-background-color = "#32302f"
+    password-border-width = 0px
   '';
 
   services.pipewire = {
@@ -165,7 +167,7 @@ border-width = 4px
     enable = true;
     settings = {
       listen_addresses = [ "127.0.0.1:53" ]; # Ensure it handles DNS on localhost
-      server_names = [ "NextDNS-a4eea8" ];
+      server_names = [ "NextDNS-a4eea8" "cloudflare" ];
       static."NextDNS-a4eea8".stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HL2E0ZWVhOA";
     };
   };
