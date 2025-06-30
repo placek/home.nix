@@ -54,6 +54,8 @@ in
     fonts.prompts = fontSetting;
     fonts.statusbar = fontSetting;
 
+    zoom.mouse_divider = 0;
+
     colors = with theme; {
       completion.fg = base0F;
       completion.odd.bg = base08;
