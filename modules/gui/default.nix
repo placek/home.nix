@@ -65,6 +65,7 @@
   ];
 
   config = {
+    services.clipcat.enable = true;
     home.packages = with pkgs; [
       (pkgs.writeShellScriptBin "wallpaper" "feh --bg-fill '${config.gui.wallpaper}'")
 
