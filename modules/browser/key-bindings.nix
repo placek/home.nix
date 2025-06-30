@@ -30,11 +30,11 @@
     "gd" = "cmd-set-text -s :tab-take";
     "gl" = "tab-focus last";
 
-    "<Space>l" = "tab-next";
-    "<Space>h" = "tab-prev";
+    "<Ctrl+l>" = "tab-next";
+    "<Ctrl+h>" = "tab-prev";
 
     "<Return>" = "mode-enter passthrough";
-    "<Ctrl+h>" = "open -t https://start.duckduckgo.com/";
+    "<Ctrl+n>" = "open -t https://start.duckduckgo.com/";
 
     "ta" = "config-cycle content.blocking.enabled";
     "tr" = "config-cycle colors.webpage.darkmode.enabled";
