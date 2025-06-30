@@ -5,6 +5,15 @@
 }:
 let
   sshot = import ./sshot.nix { inherit config pkgs; };
+
+  dunstTogglePause = pkgs.writeShellScriptBin "dunst-toggle-pause" ''
+    if [ $(${pkgs.dunst}/bin/dunstctl is-paused) == "true" ]; then
+      ${pkgs.dunst}/bin/dunstctl set-pause-level 0
+    else
+      ${pkgs.dunst}/bin/dunstctl set-pause-level 100
+    fi
+    exit 0
+  '';
 in
 {
   imports = [
@@ -97,8 +106,10 @@ in
           , ((modm                , xK_c         ), clipboardPrompt myXPConfig)                                                                                -- clipboard history prompt
           , ((modm                , xK_p         ), passPrompt myXPConfig)                                                                                     -- pass prompt
           , ((modm                , xK_m         ), udisksPrompt myXPConfig)                                                                                   -- udisks prompt
-          -- others
-          , ((modm, xK_Escape                    ), safeSpawn "${pkgs.dunst}/bin/dunstctl" ["history-pop"])                                                    -- pop notification from history
+          -- notifications
+          , ((modm                , xK_Escape    ), safeSpawn "${pkgs.dunst}/bin/dunstctl" ["history-pop"])                                                    -- pop notification from history
+          , ((modm .|. shiftMask  , xK_Escape    ), safeSpawn "${dunstTogglePause}/bin/dunst-toggle-pause" [])                                                 -- pause all notifications
+          -- multimedia
           , ((shiftMask, xK_Print                ), safeSpawn "${sshot}/bin/sshot" ["window"])
           , ((0, xK_Print                        ), safeSpawn "${sshot}/bin/sshot" ["selection"])
           , ((0, xF86XK_AudioPrev                ), safeSpawn "${pkgs.playerctl}/bin/playerctl" ["previous"])
