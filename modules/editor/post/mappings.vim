@@ -45,8 +45,6 @@ nnoremap <silent><leader>P <Plug>(GitPushForce)
 nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
 nnoremap <silent><leader>s <Plug>(GitUserStoryID)
 nnoremap <silent><leader>S <Plug>(GitUserStoryWindow)
-nnoremap <silent><leader>t :vertical terminal<cr>
-nnoremap <silent><leader>T :terminal<cr>
 nnoremap <silent><leader>v :G branch --all<cr>
 nnoremap <silent><leader>x <Plug>(TodoToggle)
 nnoremap <silent><leader>z <Plug>(CodexPrompt)
@@ -113,18 +111,10 @@ nnoremap <leader>h :bprevious<cr>
 nnoremap <leader>l :bnext<cr>
 
 " move around windows
-nnoremap <silent><C-h> <C-w>h
-nnoremap <silent><C-l> <C-w>l
-nnoremap <silent><C-k> <C-w>k
-nnoremap <silent><C-j> <C-w>j
-tnoremap <silent><C-h> <C-w>h
-tnoremap <silent><C-l> <C-w>l
-tnoremap <silent><C-k> <C-w>k
-tnoremap <silent><C-j> <C-w>j
-
-nnoremap <silent><C-cr> <C-w>v
-nnoremap <silent><C-space> <C-w>o
-tnoremap <silent><C-cr> <C-w>N:vertical terminal<cr>
+nnoremap <silent><C-j> <C-w>w
+nnoremap <silent><C-k> <C-w>W
+nnoremap <silent><C-space> <C-w>v
+nnoremap <silent><C-backspace> <C-w>o
 
 " lookup
 vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n

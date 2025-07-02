@@ -18,11 +18,13 @@ in
     "kitty_mod+shift+v" = "paste_from_clipboard";
     "kitty_mod+shift+x" = "paste_from_selection";
 
-    "kitty_mod+k" = "scroll_line_up";
-    "kitty_mod+j" = "scroll_line_down";
+    "kitty_mod+enter" = "launch --type=window --cwd=current";
+    "kitty_mod+shift+enter" = "next_layout";
 
-    "kitty_mod+shift+k" = "scroll_to_prompt -1";
-    "kitty_mod+shift+j" = "scroll_to_prompt +1";
+    "kitty_mod+h" = "next_window";
+    "kitty_mod+l" = "previous_window";
+    "kitty_mod+k" = "scroll_to_prompt -1";
+    "kitty_mod+j" = "scroll_to_prompt +1";
 
     "kitty_mod+b" = "show_scrollback";
     "kitty_mod+shift+b" = "show_last_command_output";

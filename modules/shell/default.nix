@@ -41,7 +41,6 @@
         bind ctrl-x echo\ -n\ \(clear\ \|\ string\ replace\ \\e\\\[3J\ \"\"\)\;\ commandline\ -f\ repaint
         bind ctrl-a fzf-cd-widget
         bind ctrl-z undo
-        bind ctrl-backspace backward-kill-path-component
         bind f11 accept-autosuggestion
       '';
 

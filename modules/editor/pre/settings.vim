@@ -26,7 +26,6 @@ set autowrite                                                                  "
 set backspace=indent,eol,start                                                 " set the behavious of backspace
 set clipboard=unnamedplus                                                      " linux standard clipboard
 set encoding=utf-8                                                             " encoding
-set termencoding=utf-8                                                         " encoding for terminal
 set hidden                                                                     " allow hidden buffers
 set incsearch                                                                  " show search results while typing regex
 set matchpairs+=<:>                                                            " use % to jump between < and > as well
