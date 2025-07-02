@@ -68,6 +68,7 @@
 
         tt = "nc termbin.com 9999";
         tf = "nc oshi.at 7777";
+        t = "tldr";
 
         sshh = "TERM=xterm-256color ssh";
         cdt = "cd (mktemp -d)";

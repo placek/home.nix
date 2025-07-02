@@ -80,6 +80,8 @@ in
     programs.nix-your-shell.enable = true;
     programs.yt-dlp.enable = true;
 
+    services.tldr-update.enable = true;
+
     home.packages = with pkgs; [
       dcc6502           # 6502 disassembler
       minipro           # EEPROM programmer
@@ -132,6 +134,7 @@ in
       rsync             # file synchronization
       sox               # audio processing
       sshfs             # mount remote filesystems
+      tldr              # community-driven command-line help
       tmate             # terminal sharing
       typst             # typesetting system
       unrar             # extract RAR archives
