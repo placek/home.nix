@@ -38,10 +38,10 @@
     programs.fish = {
       enable = true;
       interactiveShellInit = ''
-        bind \ex echo\ -n\ \(clear\ \|\ string\ replace\ \\e\\\[3J\ \"\"\)\;\ commandline\ -f\ repaint
-        bind \ec fzf-cd-widget
-        bind \ez undo
-        bind \eu togglecase_char
+        bind ctrl-x echo\ -n\ \(clear\ \|\ string\ replace\ \\e\\\[3J\ \"\"\)\;\ commandline\ -f\ repaint
+        bind ctrl-a fzf-cd-widget
+        bind ctrl-z undo
+        bind ctrl-backspace backward-kill-path-component
         bind f11 accept-autosuggestion
       '';
 
