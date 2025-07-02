@@ -10,13 +10,6 @@ in
 {
   config.programs.kitty.font.name = font.name;
   config.programs.kitty.font.size = font.size;
-  config.programs.kitty.extraConfig = ''
-    mouse_map left  press       ungrabbed mouse_selection normal
-    mouse_map left  click       ungrabbed mouse_handle_click selection link prompt
-    mouse_map left  doublepress ungrabbed mouse_selection word
-    mouse_map left  triplepress ungrabbed mouse_selection line
-    mouse_map right press       ungrabbed mouse_selection extend
-  '';
   config.programs.kitty.settings = with theme; {
     force_ltr = "no";
     disable_ligatures = "always";

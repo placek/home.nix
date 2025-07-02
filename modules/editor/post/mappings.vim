@@ -114,7 +114,6 @@ nnoremap <leader>l :bnext<cr>
 nnoremap <silent><C-j> <C-w>w
 nnoremap <silent><C-k> <C-w>W
 nnoremap <silent><C-space> <C-w>v
-nnoremap <silent><C-backspace> <C-w>o
 
 " lookup
 vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n

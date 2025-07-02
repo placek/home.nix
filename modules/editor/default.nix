@@ -3,6 +3,16 @@
 , pkgs
 , ...
 }:
+let
+  editor = pkgs.writeShellScriptBin "editor" ''
+    servername=$(git remote get-url origin | awk -F'[:/]' '{print $(NF-1) "/" $NF}' | sed 's/\.git$//')
+    if [ -n "$servername" ]; then
+      exec ${config.editorExec} --servername $servername
+    else
+      exec ${config.editorExec}
+    fi
+  '';
+in
 {
   options = with lib; {
     editorExec = mkOption {
@@ -30,8 +40,7 @@
 
   config = {
     home.sessionVariables.EDITOR = "vim";
-
-    programs.fish.shellAliases.editor = "${config.editorExec} --servername (${config.vcsExec} remote get-url origin | awk -F'[:/]' '{print $(NF-1) \"/\" $(NF)}' | sed 's/\\.git$//')";
+    home.packages = [ editor ];
 
     programs.vim = {
       enable = true;

@@ -95,23 +95,23 @@ in
           , ((modm .|. shiftMask  , xK_j         ), rotAllDown  )                                                                                              -- swap the focused window with the next window
           , ((modm .|. controlMask, xK_k         ), sendMessage Shrink)                                                                                        -- shrink the master area
           , ((modm .|. controlMask, xK_j         ), sendMessage Expand)                                                                                        -- expand the master area
-          , ((modm                , xK_space     ), sendMessage NextLayout)                                                                                    -- rotate through the available layouts
-          , ((modm .|. controlMask, xK_space     ), sendMessage ToggleStruts)                                                                                  -- toggle the status bar gap
-          , ((modm .|. shiftMask  , xK_space     ), withFocused $ windows . sink)                                                                              -- push window back into tiling
+          , ((modm                , xK_BackSpace ), sendMessage NextLayout)                                                                                    -- rotate through the available layouts
+          , ((modm .|. controlMask, xK_BackSpace ), sendMessage ToggleStruts)                                                                                  -- toggle the status bar gap
+          , ((modm .|. shiftMask  , xK_BackSpace ), withFocused $ windows . sink)                                                                              -- push window back into tiling
           , ((modm                , xK_q         ), kill)                                                                                                      -- close focused window
           , ((modm .|. shiftMask  , xK_q         ), confirmPrompt myXPConfig "logout" $ io (exitWith ExitSuccess))                                             -- quit xmonad
           -- utils
           , ((modm                , xK_Return    ), spawn $ XMonad.terminal conf)                                                                              -- launch a terminal
-          , ((modm                , xK_BackSpace ), runPrompt myXPConfig)                                                                                      -- run application prompt
-          , ((modm                , xK_c         ), clipboardPrompt myXPConfig)                                                                                -- clipboard history prompt
-          , ((modm                , xK_p         ), passPrompt myXPConfig)                                                                                     -- pass prompt
+          , ((modm                , xK_space     ), runPrompt myXPConfig)                                                                                      -- run application prompt
+          , ((modm                , xK_b         ), passPrompt myXPConfig)                                                                                     -- pass prompt
+          , ((modm                , xK_n         ), clipboardPrompt myXPConfig)                                                                                -- clipboard history prompt
           , ((modm                , xK_m         ), udisksPrompt myXPConfig)                                                                                   -- udisks prompt
           -- notifications
           , ((modm                , xK_Escape    ), safeSpawn "${pkgs.dunst}/bin/dunstctl" ["history-pop"])                                                    -- pop notification from history
-          , ((modm .|. shiftMask  , xK_Escape    ), safeSpawn "${dunstTogglePause}/bin/dunst-toggle-pause" [])                                                 -- pause all notifications
+          , ((modm .|. controlMask, xK_Escape    ), safeSpawn "${dunstTogglePause}/bin/dunst-toggle-pause" [])                                                 -- pause all notifications
           -- multimedia
-          , ((shiftMask, xK_Print                ), safeSpawn "${sshot}/bin/sshot" ["window"])
-          , ((0, xK_Print                        ), safeSpawn "${sshot}/bin/sshot" ["selection"])
+          , ((0, xK_Print                        ), safeSpawn "${sshot}/bin/sshot" ["window"])
+          , ((controlMask, xK_Print              ), safeSpawn "${sshot}/bin/sshot" ["selection"])
           , ((0, xF86XK_AudioPrev                ), safeSpawn "${pkgs.playerctl}/bin/playerctl" ["previous"])
           , ((0, xF86XK_AudioPlay                ), safeSpawn "${pkgs.playerctl}/bin/playerctl" ["play-pause"])
           , ((0, xF86XK_AudioNext                ), safeSpawn "${pkgs.playerctl}/bin/playerctl" ["next"])

@@ -75,6 +75,7 @@ set wildmode=longest:full,full                                                 "
 " status line
 set statusline=%1*\ %{toupper(mode())}\ %2*\ %F:%l:%c%=
 set statusline+=\ %Y\ %{LinterStatus()}\ %1*\ %m%r[%n]\ %{strlen(&fenc)?&fenc:'none'}\ 
+set statusline+=%3*\ %{v:servername}\ 
 
 """"""""""""""""""""""""""""""""""" LEADERS """""""""""""""""""""""""""""""""""<
 let g:mapleader      = "\<space>"                                              " main leader set to space
@@ -103,6 +104,7 @@ hi StatusLineNC ctermbg=0  ctermfg=0  cterm=none
 hi TabLine      ctermbg=8  ctermfg=7  cterm=none
 hi User1        ctermbg=3  ctermfg=0  cterm=bold
 hi User2        ctermbg=0  ctermfg=15 cterm=bold
+hi User3        ctermbg=4  ctermfg=0  cterm=bold
 hi VertSplit    ctermbg=8  ctermfg=8
 hi Visual       ctermbg=7  ctermfg=0
 
