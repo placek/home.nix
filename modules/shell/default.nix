@@ -24,6 +24,7 @@
     programs.nix-index.enableFishIntegration = true;      # nix package search
     programs.zoxide.enableFishIntegration = true;         # directory navigation
     programs.nix-your-shell.enableFishIntegration = true; # nix shell management
+    programs.lsd.enable = true;
     programs.lsd.enableFishIntegration = true;            # replacement for ls
     programs.carapace.enable = true;                      # shell completion
     programs.carapace.enableFishIntegration = true;
@@ -32,6 +33,7 @@
     programs.thefuck.enable = true;                       # command correction
     programs.thefuck.enableFishIntegration = true;
     programs.starship.enableFishIntegration = true;
+    programs.zoxide.enable = true;
 
     services.gpg-agent.enableFishIntegration = true;
 
