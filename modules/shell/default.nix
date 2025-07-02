@@ -14,15 +14,24 @@
   };
 
   imports = [
-    ./aliases.nix
-    ./plugins.nix
+    ./prompt.nix
   ];
 
   config = {
     home.sessionVariables.SHELL = "fish";
 
-    programs.fzf.enableFishIntegration = true;
-    programs.nix-index.enableFishIntegration = true;
+    programs.fzf.enableFishIntegration = true;            # fuzzy finder
+    programs.nix-index.enableFishIntegration = true;      # nix package search
+    programs.zoxide.enableFishIntegration = true;         # directory navigation
+    programs.nix-your-shell.enableFishIntegration = true; # nix shell management
+    programs.lsd.enableFishIntegration = true;            # replacement for ls
+    programs.carapace.enable = true;                      # shell completion
+    programs.carapace.enableFishIntegration = true;
+    programs.mcfly.enable = true;                         # command history
+    programs.mcfly.enableFishIntegration = true;
+    programs.thefuck.enable = true;                       # command correction
+    programs.thefuck.enableFishIntegration = true;
+    programs.starship.enableFishIntegration = true;
 
     services.gpg-agent.enableFishIntegration = true;
 
@@ -34,16 +43,34 @@
         bind \ez undo
         bind \eu togglecase_char
         bind f11 accept-autosuggestion
-
-        set --universal pure_show_system_time true
-        set --universal pure_color_primary yellow
-        set --universal pure_color_success green
-        set --universal pure_color_danger red
-        set --universal pure_enable_nixdevshell true
-        set --universal pure_color_nixdevshell_prefix brblack
-        set --universal pure_symbol_nixdevshell_prefix '''
-        set --universal pure_enable_git true
       '';
+
+      functions.fish_greeting.body = "";
+      shellAbbrs = {
+        dsp = "docker system prune";
+        dspv = "docker system prune --volumes";
+        dspa = "docker system prune --volumes --all";
+
+        dcb = "docker compose build";
+        dce = "docker compose exec";
+        dca = "docker compose attach";
+        dcr = "docker compose run --rm";
+        dcu = "docker compose up --detach";
+        dcl = "docker compose logs";
+        dcd = "docker compose down --remove-orphans";
+        dcdv = "docker compose down --remove-orphans --volumes";
+        dcres = "docker compose restart";
+        dcps = "docker compose ps";
+
+        j = "journalctl";
+        s = "systemctl";
+
+        tt = "nc termbin.com 9999";
+        tf = "nc oshi.at 7777";
+
+        sshh = "TERM=xterm-256color ssh";
+        cdt = "cd (mktemp -d)";
+      };
     };
   };
 }

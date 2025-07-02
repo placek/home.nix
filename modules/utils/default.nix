@@ -78,6 +78,7 @@ in
     programs.jq.enable = true;
     programs.lsd.enable = true;
     programs.nix-index.enable = true;
+    programs.nix-your-shell.enable = true;
     programs.yt-dlp.enable = true;
     programs.zoxide.enable = true;
 

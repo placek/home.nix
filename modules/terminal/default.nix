@@ -31,6 +31,7 @@
     };
 
     programs.fish.shellAliases.icat = "kitty +kitten icat";
+    programs.kitty.shellIntegration.enableFishIntegration = true;
 
     programs.kitty.enable = true;
   };
