@@ -137,7 +137,7 @@ in
           ]
 
       workspaceNames :: [String]
-      workspaceNames = ["\xf43f", "\xf445", "\xf447", "\xf441", "\xf443"]
+      workspaceNames = ["\xed62", "\xed65", "\xed66", "\xed60", "\xed63", "\xed64"]
 
       myWorkspaces :: [String]
       myWorkspaces = fmap clickable (zip [1..] workspaceNames)
@@ -156,10 +156,10 @@ in
                                 ]
 
       myLogHook xmproc = dynamicLogWithPP xmobarPP { ppOutput          = hPutStrLn xmproc
-                                                   , ppHiddenNoWindows = xmobarColor "${config.gui.theme.base08}" "" . wrap " <fn=1>" "</fn> "
-                                                   , ppHidden          = xmobarColor "${config.gui.theme.base07}" "" . wrap " <fn=1>" "</fn> "
-                                                   , ppCurrent         = xmobarColor "${config.gui.theme.base0B}" "" . wrap " <fn=1>" "</fn> "
-                                                   , ppVisible         = xmobarColor "${config.gui.theme.base03}" "" . wrap " <fn=1>" "</fn> "
+                                                   , ppHiddenNoWindows = xmobarColor "${config.gui.theme.base08}" "" . wrap " " " "
+                                                   , ppHidden          = xmobarColor "${config.gui.theme.base07}" "" . wrap " " " "
+                                                   , ppCurrent         = xmobarColor "${config.gui.theme.base0B}" "" . wrap " " " "
+                                                   , ppVisible         = xmobarColor "${config.gui.theme.base03}" "" . wrap " " " "
                                                    , ppTitle           = const ""
                                                    , ppLayout          = layout
                                                    , ppUrgent          = xmobarColor "${config.gui.theme.base08}" "${config.gui.theme.base0F}"
@@ -168,9 +168,9 @@ in
                                                    , ppExtras          = []
                                                    }
         where layout a = case a of
-                "Spacing Full"        -> "<fn=1>\xf31e</fn>"
-                "Spacing Tall"        -> "<fn=1>\xf338</fn>"
-                "Spacing Mirror Tall" -> "<fn=1>\xf337</fn>"
+                "Spacing Full"        -> "\xf047"
+                "Spacing Tall"        -> "\xf07d"
+                "Spacing Mirror Tall" -> "\xf07e"
 
       myStartupHook :: X ()
       myStartupHook = do

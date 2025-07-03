@@ -4,21 +4,11 @@
 , ...
 }:
 let
-  wrap = a: b: c: if a == "" then c else "<action=`${a}` button=${builtins.toString b}>${c}</action>";
-  wrapEsc = a: b: c: if a == "" then c else "<action=\\`${a}\\` button=${builtins.toString b}>${c}</action>";
-  actionCmd = a1: a2: a3: text: wrap a1 1 (wrap a2 2 (wrap a3 3 text));
-  actionCmdEsc = a1: a2: a3: text: wrapEsc a1 1 (wrapEsc a2 2 (wrapEsc a3 3 text));
+  actionCmd = action: text: if action == "" then text else "<action=`${action}` button=1>${text}</action>";
 
   toggleAudioCmd = "${pkgs.alsa-utils}/bin/amixer set Master toggle";
-  upAudioCmd = "${pkgs.alsa-utils}/bin/amixer set Master 5%+ unmute";
-  downAudioCmd = "${pkgs.alsa-utils}/bin/amixer set Master 5%- unmute";
   toggleMicCmd = "${pkgs.alsa-utils}/bin/amixer set Capture toggle";
-  openUrlCmd = url: "${config.browserExec} ${url}";
-
-  pauseCmd = "${pkgs.playerctl}/bin/playerctl pause";
-  playCmd = "${pkgs.playerctl}/bin/playerctl play";
-  nextCmd = "${pkgs.playerctl}/bin/playerctl next";
-  prevCmd = "${pkgs.playerctl}/bin/playerctl previous";
+  openWeatherUrlCmd = "${config.browserExec} https://www.meteo.pl/";
 
   statuses = pkgs.writeShellScriptBin "statuses" ''
     # right separator
@@ -26,18 +16,25 @@ let
 
     # playerctl status
     case $(${pkgs.playerctl}/bin/playerctl status) in
-      Playing) printf "${actionCmdEsc prevCmd pauseCmd nextCmd "<fn=1>\\uf04c</fn> <fc=${config.gui.theme.base0C}>%s</fc> "}" "$(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,10) }}: {{ trunc(title,30) }}")" ;;
-      Paused)  printf "${actionCmdEsc prevCmd playCmd  nextCmd  "<fn=1>\\uf04b</fn> <fc=${config.gui.theme.base04}>%s</fc> "}" "$(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,10) }}: {{ trunc(title,30) }}")" ;;
+      Playing)
+        printf "<fc=${config.gui.theme.base0C}>%s</fc> \\ue0b3 " "$(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,15) }}: {{ trunc(title,40) }}")"
+        ;;
+      Paused)
+        printf "<fc=${config.gui.theme.base04}>%s</fc> \\ue0b3 " "$(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,15) }}: {{ trunc(title,40) }}")"
+        ;;
     esac
 
     # dunst notifications status
-    if [ $(${pkgs.dunst}/bin/dunstctl is-paused) == "true" ]; then
-      count=$(${pkgs.dunst}/bin/dunstctl count waiting)
-      [ "$count" != "0" ] && printf "<fc=${config.gui.theme.base01}><fn=1>\\uf0f3</fn> $count</fc> "
-    else
-      count=$(${pkgs.dunst}/bin/dunstctl count displayed)
-      [ "$count" != "0" ] && printf "<fn=1>\\uf0f3</fn> $count "
-    fi
+    case $(${pkgs.dunst}/bin/dunstctl is-paused) in
+      true )
+        count=$(${pkgs.dunst}/bin/dunstctl count waiting)
+        [ "$count" != "0" ] && printf "<fc=${config.gui.theme.base01}>  $count</fc> "
+        ;;
+      false )
+        count=$(${pkgs.dunst}/bin/dunstctl count displayed)
+        [ "$count" != "0" ] && printf "  $count "
+        ;;
+    esac
 
     exit 0
   '';
@@ -54,59 +51,58 @@ in
     programs.xmobar.extraConfig = ''
       Config
         { font            = "${config.gui.font.name} ${builtins.toString config.gui.font.size}"
-        , additionalFonts = [ "Font Awesome 6 Free ${builtins.toString config.gui.font.size}" ]
         , bgColor         = "${config.gui.theme.base00}"
         , fgColor         = "${config.gui.theme.base0F}"
         , position        = Static { xpos = 0 , ypos = 0, width = 1920, height = 24 }
         , lowerOnStart    = True
         , sepChar         = "%"
         , alignSep        = "}{"
-        , template        = "%UnsafeStdinReader%}{%mail%%statuses%%multicpu%%memory%%disku%%default:Capture%%default:Master%${if config.gui.showBattery then "%battery%" else ""}%dynnetwork%${if config.gui.showWiFi then "%wlan0wi%" else ""}%EPLL%%date%"
-        , commands        = [ Run NotmuchMail "mail"         [ MailItem "\xf0e0  " "" "tag:unread"
+        , template        = "%UnsafeStdinReader%}{%statuses%%mail%%multicpu%%memory%%disku%%default:Capture%%default:Master%${if config.gui.showBattery then "%battery%" else ""}%dynnetwork%${if config.gui.showWiFi then "%wlan0wi%" else ""}%EPLL%%date%"
+        , commands        = [ Run NotmuchMail "mail"         [ MailItem "  " "" "tag:unread"
                                                              ] 50
 
                             , Run ComX "statuses"            [] " " "${statuses}/bin/statuses" 10
 
-                            , Run MultiCpu                   [ "-t", "\xE0B3 <fn=1>\xf2db</fn> <vbar> "
+                            , Run MultiCpu                   [ "-t", " \xE0B3   <vbar> "
                                                              , "-L", "30", "-H", "70"
                                                              , "-l", "${config.gui.theme.base02}"
                                                              , "-n", "${config.gui.theme.base03}"
                                                              , "-h", "${config.gui.theme.base01}"
                                                              ] 10
 
-                            , Run Memory                     [ "-t", "\xE0B3 <fn=1>\xf538</fn> <usedvbar> "
+                            , Run Memory                     [ "-t", "\xE0B3   <usedvbar> "
                                                              , "-L", "30", "-H", "70"
                                                              , "-l", "${config.gui.theme.base02}"
                                                              , "-n", "${config.gui.theme.base03}"
                                                              , "-h", "${config.gui.theme.base01}"
                                                              ] 10
 
-                            , Run DiskU                      [ ("/", "\xE0B3 <fn=1>\xf0a0</fn> <usedvbar> ") ]
+                            , Run DiskU                      [ ("/", "\xE0B3   <usedvbar> ") ]
                                                              [ "-L", "30", "-H", "70"
                                                              , "-l", "${config.gui.theme.base02}"
                                                              , "-n", "${config.gui.theme.base03}"
                                                              , "-h", "${config.gui.theme.base01}"
                                                              ] 100
 
-                            , Run Volume "default" "Capture" [ "-t", "\xE0B3 ${actionCmd "" toggleMicCmd "" "<fn=1><status></fn>"} "
+                            , Run Volume "default" "Capture" [ "-t", "\xE0B3 ${actionCmd toggleMicCmd "<status>"} "
                                                              , "--"
                                                              , "-C", "${config.gui.theme.base0F}"
                                                              , "-c", "${config.gui.theme.base0F}"
-                                                             , "-O", "\xf130", "-o", "\xf131"
+                                                             , "-O", "", "-o", " "
                                                              ] 10
 
-                            , Run Volume "default" "Master"  [ "-t", "${actionCmd downAudioCmd toggleAudioCmd upAudioCmd "<fn=1><status></fn>"} <volumevbar> "
+                            , Run Volume "default" "Master"  [ "-t", "${actionCmd toggleAudioCmd "<status>"} <volumevbar> "
                                                              , "--"
                                                              , "-C", "${config.gui.theme.base0F}"
                                                              , "-c", "${config.gui.theme.base0F}"
-                                                             , "-O", "\xf028", "-o", "\xf6a9"
+                                                             , "-O", " ", "-o", " "
                                                              ] 10
 
                             , Run Battery                    [ "-t", "\xE0B3 <acstatus> "
                                                              , "--"
-                                                             , "-O", "<fn=1>\xf0e7</fn> <leftvbar>"
-                                                             , "-i", "<fn=1>\xf0e7</fn> <leftvbar>"
-                                                             , "-o", "<fn=1>\xf242</fn> <timeleft> <leftvbar>"
+                                                             , "-O", "󱊥  <leftvbar>"
+                                                             , "-i", "󱊦  <leftvbar>"
+                                                             , "-o", "󱊢 <timeleft> <leftvbar>"
                                                              , "-a", "notify-send -u critical 'battery' 'below 10%'", "-A", "10"
                                                              ] 50
 
@@ -131,7 +127,7 @@ in
                                                              , ("mostly cloudy",           "overcast")
                                                              , ("considerable cloudiness", "overcast")
                                                              ]
-                                                             [ "-t", "<fc=${config.gui.theme.base07},${config.gui.theme.base08}>\xE0B2</fc><fc=${config.gui.theme.base00},${config.gui.theme.base07}> ${actionCmd (openUrlCmd "https://www.meteo.pl/") "" "" "<skyConditionS> <tempC>\\x2103 <rh>% <windKnots>kn <windCardinal>"} </fc>"
+                                                             [ "-t", "<fc=${config.gui.theme.base07},${config.gui.theme.base08}>\xE0B2</fc><fc=${config.gui.theme.base00},${config.gui.theme.base07}> ${actionCmd openWeatherUrlCmd "<skyConditionS> <tempC>\\x2103 <rh>% <windKnots>kn <windCardinal>"} </fc>"
                                                              ] 18000
 
                             , Run UnsafeStdinReader
