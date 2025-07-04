@@ -7,9 +7,9 @@ let
   editor = pkgs.writeShellScriptBin "editor" ''
     servername=$(git remote get-url origin | awk -F'[:/]' '{print $(NF-1) "/" $NF}' | sed 's/\.git$//')
     if [ -n "$servername" ]; then
-      exec ${config.editorExec} --servername $servername
+      exec ${config.editorExec} --servername $servername $@
     else
-      exec ${config.editorExec}
+      exec ${config.editorExec} $@
     fi
   '';
 in
@@ -41,6 +41,7 @@ in
   config = {
     home.sessionVariables.EDITOR = "vim";
     home.packages = [ editor ];
+    programs.fish.shellAbbrs.e = "editor";
 
     programs.vim = {
       enable = true;
