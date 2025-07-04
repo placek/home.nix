@@ -125,6 +125,12 @@ let
       _ai_chat_request
     }
 
+    _tertius_compose_todo_list() {
+      _ai_apply_instruction "You are a software developer assistant. Compose a todo list for the software developer to complete. To draft a todo list, review the context in which the tasks have to be done and the proposed main goals. This should include a brief explanation of the tasks and any relevant background information. Ensure that there is a clear connection between the tasks and the context in which they occur. The objective is to create a concise and informative todo list that effectively communicates the tasks and their context. The todo list should be formatted in the xit format. Where necessary, use paragraphs to split relevant sections of the todo list."
+      _ai_apply_context_from_stdin
+      _ai_chat_request
+    }
+
 ##################################### MAIN #####################################
     command="$1"
 
@@ -135,6 +141,7 @@ let
     commit ) _tertius_compose_commit_message ;;
     story ) _tertius_compose_user_story ;;
     pull-request ) _tertius_compose_pull_request_description ;;
+    todo ) _tertius_compose_todo_list ;;
 
     * )
       >&2 echo "tertius: unknown command $command"
@@ -142,6 +149,7 @@ let
       >&2 echo "       tertius commit"
       >&2 echo "       tertius pull-request"
       >&2 echo "       tertius story"
+      >&2 echo "       tertius todo"
       exit 1
       ;;
     esac

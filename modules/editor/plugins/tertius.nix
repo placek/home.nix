@@ -66,6 +66,13 @@
         endfunction
 
         nnoremap <silent> <Plug>(TertiusUserStory) :<c-u>call <sid>tertiusUserStory()<cr>
+
+        function! s:tertiusTodo() abort
+          execute ":%!${config.tertiusExec} todo"
+          redraw!
+        endfunction
+
+        nnoremap <silent> <Plug>(TertiusTodo) :<c-u>call <sid>tertiusTodo()<cr>
       ''
     ];
   };
