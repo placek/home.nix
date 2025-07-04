@@ -1,19 +1,23 @@
 augroup Git
-  autocmd FileType    fugitive  nnoremap <buffer> rU <Plug>(GitAbsorb)<cr>
-  autocmd FileType    fugitive  nnoremap <buffer> rI <Plug>(GitRebaseBranch)<cr>
-  autocmd FileType    gitcommit setlocal spell spelllang=en_us
-  autocmd FileType    gitcommit nnoremap <buffer> <cr> <Plug>(TertiusCommitMessage)<cr>
-  autocmd FileType    git       nnoremap <buffer> o <Plug>(GitOpen)<cr>
-  autocmd FileType    git       nnoremap <buffer> O <Plug>(GitOpen)<cr>
-  autocmd FileType    git       nnoremap <buffer> w <Plug>(GitCheckoutFromLine)<cr>
-  autocmd FileType    git       nnoremap <buffer> W <Plug>(GitCherryPickToBranchFromLine)<cr>
-  autocmd BufReadPost *         call <sid>setBlameLine()
-  autocmd BufUnload   /tmp/issue-description call <sid>gitInitFeatureBranch()
-  autocmd BufReadPost COMMIT_EDITMSG call <SID>todoPutNote()
+  autocmd FileType    fugitive       nnoremap <buffer> rU <Plug>(GitAbsorb)<cr>
+  autocmd FileType    fugitive       nnoremap <buffer> rI <Plug>(GitRebaseBranch)<cr>
+  autocmd FileType    gitcommit      setlocal spell spelllang=en_us
+  autocmd FileType    gitcommit      nnoremap <buffer> <cr> <Plug>(TertiusCommitMessage)<cr>
+  autocmd FileType    git            nnoremap <buffer> o <Plug>(GitOpen)<cr>
+  autocmd FileType    git            nnoremap <buffer> O <Plug>(GitOpen)<cr>
+  autocmd FileType    git            nnoremap <buffer> w <Plug>(GitCheckoutFromLine)<cr>
+  autocmd FileType    git            nnoremap <buffer> W <Plug>(GitCherryPickToBranchFromLine)<cr>
+  autocmd BufReadPost *              call <sid>setBlameLine()
+  autocmd BufReadPost COMMIT_EDITMSG silent call <sid>todoPutNote()
 augroup END
 
 augroup Todo
-  autocmd FileType xit nnoremap <buffer> gt <Plug>(TodoToggleItem)<cr>
+  autocmd FileType xit nnoremap <buffer> <cr> <Plug>(TertiusTodo)<cr>
+augroup END
+
+augroup Tertius
+  autocmd FileType  tertius_user_story      nnoremap <buffer> <cr> <Plug>(TertiusUserStory)<cr>
+  autocmd BufUnload /tmp/tertius_user_story call <sid>gitInitFeatureBranch()
 augroup END
 
 augroup MakePrg

@@ -43,12 +43,14 @@ function! s:toggleQuickFix()
 endfunction
 
 " open a new buffer for intermediate operations
-function! s:openIntermediateBuffer()
+function! s:openIntermediateBuffer(type)
   wincmd n
   setlocal buftype=nofile
   setlocal bufhidden=delete
   setlocal noswapfile
   setlocal syntax=markdown
+  execute 'setlocal filetype=' . a:type
+  execute 'file /tmp/' . a:type
 endfunction
 
 " checks if a buffer is empty
