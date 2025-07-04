@@ -17,8 +17,6 @@ in
 {
   config.programs.vim.plugins = [
     vim-xit
-    pkgs.vimPlugins.haskell-vim
-    pkgs.vimPlugins.vim-terraform
-    pkgs.vimPlugins.purescript-vim
+    pkgs.vimPlugins.vim-polyglot
   ];
 }
