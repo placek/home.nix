@@ -33,7 +33,6 @@ nnoremap <silent><leader>e :edit .<cr>
 nnoremap <silent><leader>f <Plug>(GitGrep)
 nnoremap <silent><leader>F <Plug>(GitPickaxe)
 nnoremap <silent><leader>g <Plug>(GitToggleStatus)
-nnoremap <silent><leader>i <Plug>(TertiusUserStoryWindow)
 nnoremap <silent><leader>m <Plug>(GitBranchOffCommit)
 nnoremap <silent><leader>M <Plug>(TertiusMergeRequestWindow)
 nnoremap <silent><leader>n <Plug>(GitCheckoutFromInput)
@@ -44,7 +43,7 @@ nnoremap <silent><leader>p :G push<cr>
 nnoremap <silent><leader>P <Plug>(GitPushForce)
 nnoremap <silent><leader>q :call <sid>toggleQuickFix()<cr>
 nnoremap <silent><leader>s <Plug>(GitUserStoryID)
-nnoremap <silent><leader>S <Plug>(GitUserStoryWindow)
+nnoremap <silent><leader>S <Plug>(TertiusUserStoryWindow)
 nnoremap <silent><leader>v :G branch --all<cr>
 nnoremap <silent><leader>x <Plug>(TodoToggle)
 nnoremap <silent><leader>z <Plug>(CodexPrompt)

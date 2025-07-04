@@ -3,13 +3,13 @@ augroup Git
   autocmd FileType    fugitive  nnoremap <buffer> rI <Plug>(GitRebaseBranch)<cr>
   autocmd FileType    gitcommit setlocal spell spelllang=en_us
   autocmd FileType    gitcommit nnoremap <buffer> <cr> <Plug>(TertiusCommitMessage)<cr>
-  autocmd FileType    gitcommit nnoremap <buffer> n <Plug>(TodoPutNote)<cr>
   autocmd FileType    git       nnoremap <buffer> o <Plug>(GitOpen)<cr>
   autocmd FileType    git       nnoremap <buffer> O <Plug>(GitOpen)<cr>
   autocmd FileType    git       nnoremap <buffer> w <Plug>(GitCheckoutFromLine)<cr>
   autocmd FileType    git       nnoremap <buffer> W <Plug>(GitCherryPickToBranchFromLine)<cr>
   autocmd BufReadPost *         call <sid>setBlameLine()
   autocmd BufUnload   /tmp/issue-description call <sid>gitInitFeatureBranch()
+  autocmd BufReadPost COMMIT_EDITMSG call <SID>todoPutNote()
 augroup END
 
 augroup Todo

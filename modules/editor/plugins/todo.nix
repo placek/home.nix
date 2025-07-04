@@ -22,18 +22,22 @@
         nnoremap <silent> <Plug>(TodoToggle) :<c-u>call <sid>todoToggleWindow()<cr>
 
         function! s:todoGetNote()
-          let l:note = system('${config.vcsExec} notes --ref=todo show HEAD')
-          return l:note
+          let l:note = system('${config.vcsExec} notes --ref=todo show HEAD 2>/dev/null')
+          return substitute(l:note, '\n\+$', ''', ''')
         endfunction
 
         function! s:todoPutNote()
-          let l:note = <sid>todoGetNote()
-          let lines = split(l:note, "\n")
-          let commented_lines = []
-          for line in lines
-            call add(commented_lines, '# ' . line)
-          endfor
-          let l:commented_note = join(commented_lines, "\n")
+          let l:note = <SID>todoGetNote()
+          " check if note is empty or contains only whitespace
+          if empty(trim(l:note))
+            return
+          endif
+
+          let l:lines = split(l:note, "\n")
+          " prefix every line with #
+          let l:commented_lines = map(l:lines, {_, val -> '# ' . val})
+          let l:commented_note = join(l:commented_lines, "\n")
+
           execute "put ='# Actual TODOs:'"
           execute "put =l:commented_note"
           execute "put ='# ------------------------ 8< ------------------------'"

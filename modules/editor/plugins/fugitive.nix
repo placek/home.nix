@@ -234,14 +234,6 @@
         nnoremap <silent> <Plug>(GitPickaxe) :<c-u>call <sid>gitPickaxe(input("pickaxe /", "", "tag"))<cr>
         vnoremap <silent> <Plug>(GitPickaxeSelected) :<c-u>call <sid>gitPickaxe(<sid>selectedText())<cr>
 
-        " open a window for a user story
-        function! s:gitUserStoryWindow() abort
-          call <sid>openIntermediateBuffer()
-          file /tmp/issue-description
-        endfunction
-
-        nnoremap <silent> <Plug>(GitUserStoryWindow) :<c-u>call <sid>gitUserStoryWindow()<cr>
-
         " initialize feature branch
         function! s:gitInitFeatureBranch() abort
           if s:isBufferEmptyButComments()
