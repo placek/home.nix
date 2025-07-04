@@ -11,16 +11,13 @@ let
   openWeatherUrlCmd = "${config.browserExec} https://www.meteo.pl/";
 
   statuses = pkgs.writeShellScriptBin "statuses" ''
-    # right separator
-    printf " "
-
     # playerctl status
     case $(${pkgs.playerctl}/bin/playerctl status) in
       Playing)
-        printf "<fc=${config.gui.theme.base0C}>%s</fc> \\ue0b3 " "$(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,15) }}: {{ trunc(title,40) }}")"
+        printf "<fc=${config.gui.theme.base04}>%s</fc> " "$(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,15) }}: {{ trunc(title,40) }}")"
         ;;
       Paused)
-        printf "<fc=${config.gui.theme.base04}>%s</fc> \\ue0b3 " "$(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,15) }}: {{ trunc(title,40) }}")"
+        printf "<fc=${config.gui.theme.base08}>%s</fc> " "$(${pkgs.playerctl}/bin/playerctl metadata --format "{{ trunc(artist,15) }}: {{ trunc(title,40) }}")"
         ;;
     esac
 
@@ -28,11 +25,11 @@ let
     case $(${pkgs.dunst}/bin/dunstctl is-paused) in
       true )
         count=$(${pkgs.dunst}/bin/dunstctl count waiting)
-        [ "$count" != "0" ] && printf "<fc=${config.gui.theme.base01}>  $count</fc> "
+        [ "$count" != "0" ] && printf "\\ue0b3 <fc=${config.gui.theme.base01}>  $count</fc> "
         ;;
       false )
         count=$(${pkgs.dunst}/bin/dunstctl count displayed)
-        [ "$count" != "0" ] && printf "  $count "
+        [ "$count" != "0" ] && printf "\\ue0b3   $count "
         ;;
     esac
 
@@ -57,13 +54,13 @@ in
         , lowerOnStart    = True
         , sepChar         = "%"
         , alignSep        = "}{"
-        , template        = "%UnsafeStdinReader%}{%statuses%%mail%%multicpu%%memory%%disku%%default:Capture%%default:Master%${if config.gui.showBattery then "%battery%" else ""}%dynnetwork%${if config.gui.showWiFi then "%wlan0wi%" else ""}%EPLL%%date%"
+        , template        = "%UnsafeStdinReader%}{%statuses%%mail% %multicpu%%memory%%disku%%default:Capture%%default:Master%${if config.gui.showBattery then "%battery%" else ""}%dynnetwork%${if config.gui.showWiFi then "%wlan0wi%" else ""}%EPLL%%date%"
         , commands        = [ Run NotmuchMail "mail"         [ MailItem "  " "" "tag:unread"
                                                              ] 50
 
                             , Run ComX "statuses"            [] " " "${statuses}/bin/statuses" 10
 
-                            , Run MultiCpu                   [ "-t", " \xE0B3   <vbar> "
+                            , Run MultiCpu                   [ "-t", "\xE0B3   <vbar> "
                                                              , "-L", "30", "-H", "70"
                                                              , "-l", "${config.gui.theme.base02}"
                                                              , "-n", "${config.gui.theme.base03}"
