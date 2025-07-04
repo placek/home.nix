@@ -44,8 +44,7 @@
 
         " generate a pull request description
         function! s:tertiusMergeRequestWindow() abort
-          call <sid>openIntermediateBuffer()
-          file /tmp/merge-request-description
+          call <sid>openIntermediateBuffer('tertius_merge_request')
           let l:summary = substitute(system("${config.tertiusExec} pull-request"), '\r', "", 'g')
           execute "0put =l:summary"
           redraw!
@@ -55,9 +54,7 @@
 
         " open a window for issue description
         function! s:tertiusUserStoryWindow() abort
-          call <sid>openIntermediateBuffer()
-          file /tmp/issue-description
-          nnoremap <buffer> <cr> <Plug>(TertiusUserStory)<cr>
+          call <sid>openIntermediateBuffer('tertius_user_story')
         endfunction
 
         nnoremap <silent> <Plug>(TertiusUserStoryWindow) :<c-u>call <sid>tertiusUserStoryWindow()<cr>

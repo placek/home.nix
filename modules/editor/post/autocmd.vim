@@ -8,13 +8,17 @@ augroup Git
   autocmd FileType    git       nnoremap <buffer> w <Plug>(GitCheckoutFromLine)<cr>
   autocmd FileType    git       nnoremap <buffer> W <Plug>(GitCherryPickToBranchFromLine)<cr>
   autocmd BufReadPost *         call <sid>setBlameLine()
-  autocmd BufUnload   /tmp/issue-description call <sid>gitInitFeatureBranch()
   autocmd BufReadPost COMMIT_EDITMSG call <SID>todoPutNote()
 augroup END
 
 augroup Todo
   autocmd FileType xit nnoremap <buffer> gt <Plug>(TodoToggleItem)<cr>
 augroup END
+
+augroup Tertius
+  autocmd FileType tertius_user_story nnoremap <buffer> <cr> <Plug>(TertiusUserStory)<cr>
+  autocmd BufUnload /tmp/tertius_user_story call <sid>gitInitFeatureBranch()
+autocmd END
 
 augroup MakePrg
   autocmd BufEnter *_spec.rb  setlocal efm=rspec\ %f:%l\ #\ %m
