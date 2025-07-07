@@ -55,6 +55,10 @@
         " open a window for issue description
         function! s:tertiusUserStoryWindow() abort
           call <sid>openIntermediateBuffer('tertius_user_story')
+          if <sid>isBufferEmpty()
+            let l:commit_message = <sid>gitUserStoryFromCommit(<sid>gitLastEmptyCommit())
+            call setline(1, l:commit_message)
+          endif
         endfunction
 
         nnoremap <silent> <Plug>(TertiusUserStoryWindow) :<c-u>call <sid>tertiusUserStoryWindow()<cr>

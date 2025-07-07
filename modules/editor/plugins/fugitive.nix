@@ -61,15 +61,20 @@
           endfor
         endfunction
 
+        " extract user story from the commit
+        function! s:gitUserStoryFromCommit(commit) abort
+          if !empty(a:commit)
+            return system("${config.vcsExec} show --pretty=format:%s -s " . a:commit)
+          endif
+          return ""
+        endfunction
+
         " extract user story id from commit message
         function! s:gitUserStoryId(commit) abort
-          if !empty(a:commit)
-            let l:commit_message = system("${config.vcsExec} show --pretty=format:%s -s " . a:commit)
-            let l:matches = matchlist(l:commit_message, '\[\([^\]]\+\)\]')
-            if len(l:matches) > 1
-              return l:matches[1]
-            endif
-            return ""
+          let l:commit_message = <sid>gitUserStoryFromCommit(a:commit)
+          let l:matches = matchlist(l:commit_message, '\[\([^\]]\+\)\]')
+          if len(l:matches) > 1
+            return l:matches[1]
           endif
           return ""
         endfunction
