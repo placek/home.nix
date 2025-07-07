@@ -77,6 +77,14 @@
         endfunction
 
         nnoremap <silent> <Plug>(TertiusTodo) :<c-u>call <sid>tertiusTodo()<cr>
+
+        function! s:tertiusReviewWindow() abort
+          call <sid>openIntermediateBuffer('tertius_review')
+          execute ":%!${config.tertiusExec} review"
+          redraw!
+        endfunction
+
+        nnoremap <silent> <Plug>(TertiusReviewWindow) :<c-u>call <sid>tertiusReviewWindow()<cr>
       ''
     ];
   };

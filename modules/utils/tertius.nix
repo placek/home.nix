@@ -58,7 +58,7 @@ let
       hash="$1"
       commit_message="$(${config.vcsExec} show -s --format=%B "$hash")"
       if _git_is_not_empty_commit "$hash"; then
-        _ai_apply_context "This is a message of a commit that introduces a part of implementation of the user story:\n$commit_message"
+        _ai_apply_context "This is a message of a commit $hash that introduces a part of implementation of the user story:\n$commit_message"
       else
         _ai_apply_context "This are the details of the task that is to be done:\n$commit_message"
       fi
@@ -131,6 +131,12 @@ let
       _ai_chat_request
     }
 
+    _tertius_review_feature_branch() {
+      _ai_apply_instruction "You are a software developer assistant. Review the feature branch. To draft a review, analyze the context in which the changes have been made. This should include a brief explanation of the changes and any relevant background information. Ensure that there is a clear connection between the changes and the context in which they occur.  The objective is to create a concise yet comprehensive review that effectively communicates the doubts and questions about the changes. Focus on the implementation details, and the connection between the user story: is the implementation correct, does it cover all the edge cases, is it full in terms of the user story, is it well tested, etc. The review should be formatted in the markdown format."
+      _ai_apply_commits
+      _ai_chat_request
+    }
+
 ##################################### MAIN #####################################
     command="$1"
 
@@ -142,6 +148,7 @@ let
     story ) _tertius_compose_user_story ;;
     pull-request ) _tertius_compose_pull_request_description ;;
     todo ) _tertius_compose_todo_list ;;
+    review ) _tertius_review_feature_branch ;;
 
     * )
       >&2 echo "tertius: unknown command $command"
@@ -150,6 +157,7 @@ let
       >&2 echo "       tertius pull-request"
       >&2 echo "       tertius story"
       >&2 echo "       tertius todo"
+      >&2 echo "       tertius review"
       exit 1
       ;;
     esac
