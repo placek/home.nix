@@ -25,9 +25,9 @@ in
     "kitty_mod+shift+v" = "paste_from_clipboard";
     "kitty_mod+shift+x" = "paste_from_selection";
 
-    "super+c" = "copy_to_clipboard";
-    "super+v" = "paste_from_clipboard";
-    "super+x" = "paste_from_selection";
+    "0x1008ff57" = "copy_to_clipboard";    # XF86Copy
+    "0x1008ff6d" = "paste_from_clipboard"; # XF86Paste
+    "0x1008ff58" = "paste_from_selection"; # XF86Cut
 
     "kitty_mod+enter" = "launch --type=window --cwd=current";
     "kitty_mod+backspace" = "next_layout";

@@ -167,3 +167,6 @@ hi! Float        ctermfg=7  cterm=bold
 """""""""""""""""""""""""""""""""""" UTILS """"""""""""""""""""""""""""""""""""
 " leave only the current buffer - delete others
 command! -nargs=0 BufOnly execute '%bdelete|edit #|normal `"'
+
+" copy selected text to clipboard
+vnoremap <C-Insert> y
