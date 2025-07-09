@@ -36,7 +36,9 @@ in
     };
   };
 
-  imports = lib.filesystem.listFilesRecursive ./plugins;
+  imports = lib.filter
+    (path: lib.hasSuffix ".nix" (toString path))
+    (lib.filesystem.listFilesRecursive ./plugins);
 
   config = {
     home.sessionVariables.EDITOR = "vim";
