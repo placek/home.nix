@@ -13,6 +13,9 @@ in
   config.programs.qutebrowser.loadAutoconfig = false;
   config.programs.qutebrowser.extraConfig = builtins.readFile ./extraConfig;
   config.programs.qutebrowser.settings = {
+    qt.args = [
+      "disable-features=PermissionElement"
+    ];
     confirm_quit = [ "multiple-tabs" "downloads" ];
 
     content.desktop_capture = true;
