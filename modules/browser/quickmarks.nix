@@ -21,6 +21,7 @@
     "Allegro" = "https://allegro.pl/";
     "GitHub" = "https://github.com/";
     "LiChess" = "https://lichess.org/";
+    "Raindrop" = "https://app.raindrop.io/";
     "YouTube" = "https://www.youtube.com/";
   };
 }
