@@ -182,4 +182,14 @@
   };
 
   networking.nameservers = [ "127.0.0.1" ]; # Force usage of dnscrypt-proxy
+
+  services.avahi = {
+    enable = true;          # Enable Avahi daemon
+    nssmdns = true;         # Enable resolving .local names
+    publish = {
+      enable = true;
+      addresses = true;
+      workstation = true;   # Advertise host as workstation
+    };
+  };
 }
