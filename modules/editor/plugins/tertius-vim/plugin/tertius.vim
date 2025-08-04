@@ -15,10 +15,11 @@ let g:tertius_config = {
   \ 'gitExec': 'git',
   \ 'curlExec': 'curl',
   \ 'defaultBranch': 'origin/master',
+  \ 'llmBaseUrl': 'https://api.openai.com/v1',
   \ 'llmModel': 'gpt-4o',
   \ 'userStoryIdPattern': '\[\([^\]]\+\)\]',
   \ 'prompts': {
-  \   'commit_message': 'Compose a Git commit message by reviewing the context in which the modifications have been made. There are two types of context: the business context, which explains the high-level purpose of the changes (most likely the user story, bug description, etc.), and the implementation context, which explains what has already been done to fulfill the feature (these are most likely the commit messages of the previously committed changes). The changes should contain a diff that showcases these modifications and could also include a brief explanation of them. Your task is to clearly express the reason between the requirements specified in the context and the changes made in the commit. The main objective is to create a concise and informative commit message that effectively communicates the reasoning behind the changes and a high-level explanation of them. The message should comprise a succinct title, followed by a paragraph explaining the reason for the changes. The title and the following paragraph should be separated by a blank line. Avoid using "Title:" or similar headers.',
+\   'commit_message': "You are assisting with writing a Git commit message. The input you receive contains three parts: (1) business context — a user story, ticket, or problem description explaining why the change is needed; (2) implementation context — previous commit messages and relevant details about what has already been done; and (3) a diff — the code changes introduced in this commit. Using this information, write a Git commit message that follows these principles:\n- Start with a concise, imperative title summarizing what this commit does (ideally 50 characters or less).\n- Optionally follow with one short paragraph (1–2 sentences) explaining why this change is needed or valuable, focusing on the reasoning rather than detailed code descriptions.\n- Do not include any headers like 'Title:' or 'Summary:'.\n- Maintain an imperative tone and avoid trailing periods in the title.\n- Follow conventional commit best practices (clarity, conciseness, focus on intent and value).",
   \  'user_story': 'Compose a user story, by reviewing the context in which the problem occurs. This should include a brief explanation of the problem and any relevant background information. Your task is to ensure that there is a clear connection between the problem and the context in which it occurs. The objective is to create a concise and informative user story that effectively communicates the problem and its context. The user story should have a title, a paragraph with a user story formatted scenario (As <actor>, I want to <action>, so <outcome>.), a "Summary" paragraph explaining the problem, and an "Acceptance criteria" paragraph with the tasks that has to be done to solve problem.',
   \  'pull_request': 'Compose a pull request description by analyzing any given commit messages. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the business purpose of the changes, and a paragraph explaining the outcome of the changes themselves - each such component has to be separated by two newlines and have no header.',
   \  'todo_list': 'Compose a todo list for the software developer to complete. To draft a todo list, review the context in which the tasks have to be done and the proposed main goals. This should include a brief explanation of the tasks and any relevant background information. Ensure that there is a clear connection between the tasks and the context in which they occur. The objective is to create a concise and informative todo list that effectively communicates the tasks and their context. The todo list should be formatted in the xit format. Where necessary, use paragraphs to split relevant sections of the todo list.',
@@ -149,6 +150,7 @@ function! s:_tertius_tool_caller(call) abort
   else
     let answer = 'unknown tool'
   endif
+  echo "Tertius: Calling tool " . fname . " with args: " . string(args)
   return json_encode({ 'role': 'function', 'name': fname, 'content': json_encode(answer) })
 endfunction
 
@@ -182,16 +184,18 @@ function! s:_tertius_request(cmd, messages) abort
     return
   endif
   let l:api_key = $OPENAI_API_KEY
+  let l:base_url = !empty($OPENAI_BASE_URL) ? $OPENAI_BASE_URL : g:tertius_config.llmBaseUrl
   let l:model = !empty($OPENAI_MODEL) ? $OPENAI_MODEL : g:tertius_config.llmModel
   let l:body = json_encode({ 'model': l:model, 'messages': a:messages, 'tools': s:_tertius_tools })
-  let l:response = <sid>_tertius_curl('-s -H "Authorization: Bearer ' . l:api_key . '" -H "Content-Type: application/json" -d ' . shellescape(l:body) . ' https://api.openai.com/v1/chat/completions')
+  let l:response = <sid>_tertius_curl('-s -H "Authorization: Bearer ' . l:api_key . '" -H "Content-Type: application/json" -d ' . shellescape(l:body) . ' ' . l:base_url . '/chat/completions')
   return json_decode(l:response)
 endfunction
 
 function! Tertius(cmd, content) abort
+  let l:joined_content = type(a:content) == type([]) ? join(a:content, "\n") : a:content
   let l:messages = [
-    \ { 'role': 'system', 'content': 'You are a helpful software developer asistant. ' . g:tertius_config.prompts[a:cmd] },
-    \ { 'role': 'user', 'content': a:content }
+    \ { 'role': 'system', 'content': [ { 'type': 'text', 'text': 'You are a helpful software developer assistant. ' . g:tertius_config.prompts[a:cmd] } ] },
+    \ { 'role': 'user', 'content': [ { 'type': 'text', 'text': l:joined_content } ] }
     \ ]
   while 1
     let l:result = <sid>_tertius_request(a:cmd, l:messages)
