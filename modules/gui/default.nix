@@ -72,7 +72,7 @@
       libnotify
       xf86_input_wacom
 
-      discord
+#       discord
       gimp
       (import (builtins.fetchTarball { url = "https://github.com/NixOS/nixpkgs/archive/882842d2a908700540d206baa79efb922ac1c33d.tar.gz"; }) {}).inkscape-with-extensions
       kicad
