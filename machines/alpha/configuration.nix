@@ -143,16 +143,6 @@
     };
   };
 
-  services.avahi = {
-    enable = true;          # Enable Avahi daemon
-    nssmdns = true;         # Enable resolving .local names
-    publish = {
-      enable = true;
-      addresses = true;
-      workstation = true;   # Advertise host as workstation
-    };
-  };
-
   ################################# TRAEFIK ####################################
   services.traefik = {
     enable = true;
