@@ -18,6 +18,18 @@ let g:tertius_config = {
   \ 'llmBaseUrl': 'https://api.openai.com/v1',
   \ 'llmModel': 'gpt-4o',
   \ 'userStoryIdPattern': '\[\([^\]]\+\)\]',
+  \ 'tools': [
+  \   { 'type': 'function', 'function': {
+  \       'name': 'list_commits',
+  \       'description': 'List commits on current feature branch',
+  \       'parameters': { 'type': 'object', 'properties': {}, 'required': [] }
+  \   } },
+  \   { 'type': 'function', 'function': {
+  \       'name': 'get_commit_message',
+  \       'description': 'Get feature context from the commit with a given hash',
+  \       'parameters': { 'type': 'object', 'properties': { 'hash': { 'type': 'string' } }, 'required': ['hash'] }
+  \   } }
+  \ ],
   \ 'prompts': {
 \   'commit_message': "You are assisting with writing a Git commit message. Fetch list of commits and analyze their details in order to understand context of the changes you will discribe. The commits to analyze contain context info: (1) business context — a user story, ticket, or problem description explaining why the change is needed; (2) implementation context — previous commit messages and relevant details about what has already been done. Additionaly, the input you receive contains a diff — the code changes introduced in this commit together with optional comment from user. Using this information, write a Git commit message that follows these principles:\n- Start with a concise, imperative title summarizing what this commit does (ideally 50 characters or less).\n- Optionally follow with one short paragraph (1–2 sentences) explaining why this change is needed or valuable, focusing on the reasoning rather than detailed code descriptions.\n- Do not include any headers like 'Title:' or 'Summary:'.\n- Maintain an imperative tone and avoid trailing periods in the title.\n- Follow conventional commit best practices (clarity, conciseness, focus on intent and value).",
   \  'user_story': 'Compose a user story, by reviewing the context in which the problem occurs. This should include a brief explanation of the problem and any relevant background information. Your task is to ensure that there is a clear connection between the problem and the context in which it occurs. The objective is to create a concise and informative user story that effectively communicates the problem and its context. The user story should have a title, a paragraph with a user story formatted scenario (As <actor>, I want to <action>, so <outcome>.), a "Summary" paragraph explaining the problem, and an "Acceptance criteria" paragraph with the tasks that has to be done to solve problem.',
@@ -32,7 +44,7 @@ let g:tertius_config = {
 " curl command wrapper
 function! s:_tertius_curl(cmd) abort
   if !executable(g:tertius_config.curlExec)
-    echoerr 'Tertius: Curl executable not found: ' . g:tertius_config.curlExec
+    echoerr 'Tertius: curl executable not found: ' . g:tertius_config.curlExec
   endif
   return system(g:tertius_config.curlExec . ' ' . a:cmd)
 endfunction
@@ -40,7 +52,7 @@ endfunction
 " git command wrapper
 function! s:_tertius_git(cmd, ...) abort
   if !executable(g:tertius_config.gitExec)
-    echoerr 'Tertius: Git executable not found: ' . g:tertius_config.gitExec
+    echoerr 'Tertius: git executable not found: ' . g:tertius_config.gitExec
     return ''
   endif
   if a:0 > 0
@@ -89,7 +101,7 @@ endfunction
 " check if commit is empty
 function! s:_tertius_git_commit_is_empty(commit) abort
   if empty(a:commit)
-    echoerr 'Tertius: Commit is not specified'
+    echoerr 'Tertius: commit is not specified'
   endif
   return empty(trim(<sid>_tertius_git("show --pretty=format: --name-only " . a:commit)))
 endfunction
@@ -142,47 +154,31 @@ function! s:_tertius_git_init_feature_branch() abort
   call <sid>_tertius_git('checkout ' . <sid>_tertius_git_default_branch())
   call <sid>_tertius_git('checkout -B ' . l:branch)
   call <sid>_tertius_git('commit --no-verify --allow-empty --file -', getline(1, '$'))
-  echom "Tertius: Feature branch " . l:branch . " initialized"
+  echom "Tertius: feature branch " . l:branch . " initialized"
 endfunction
 
 """""""""""""""""""""""""""""""""" LLM tools """""""""""""""""""""""""""""""""""
 " call LLM tools
-function! s:_tertius_tool_caller(call) abort
-  let fname = a:call.function.name
-  let args = json_decode(a:call.function.arguments)
+function! s:_tertius_tool_caller(tool_call) abort
+  let fname = a:tool_call.function.name
+  let args = empty(a:tool_call.function.arguments) ? {} : json_decode(a:tool_call.function.arguments)
+  echom "Tertius: calling tool " . fname . " with args: " . string(args)
   if fname ==# 'list_commits'
-    let answer = <sid>_tertius_git_current_branch_commits()
+    let result = <sid>_tertius_git_current_branch_commits()
   elseif fname ==# 'get_commit_message'
-    let answer = <sid>_tertius_git_commit_message(args.hash)
+    let result = <sid>_tertius_git_commit_message(args.hash)
   else
-    let answer = 'unknown tool'
+    let result = 'unknown tool'
   endif
-  echom "Tertius: Calling tool " . fname . " with args: " . string(args)
-  return {
-        \ 'role': 'tool',
-        \ 'tool_call_id': a:call.id,
-        \ 'content': json_encode(answer)
-        \ }
+  return { 'role': 'tool',
+         \ 'tool_call_id': a:tool_call.id,
+         \ 'name': fname,
+         \ 'content': type(result)==type([]) ? json_encode(result) : string(result)
+         \ }
 endfunction
 
-" define the tools for the LLM to use
-let s:_tertius_tools = [
-  \ { 'type': 'function', 'function': {
-  \     'name': 'list_commits',
-  \     'description': 'List commits on current feature branch',
-  \     'parameters': { 'type': 'object', 'properties': {}, 'required': [] }
-  \ } },
-  \ { 'type': 'function', 'function': {
-  \     'name': 'get_commit_message',
-  \     'description': 'Get feature context from the commit with a given hash',
-  \     'parameters': {
-  \       'type': 'object',
-  \       'properties': { 'hash': { 'type': 'string' } },
-  \       'required': ['hash']
-  \ } } }
-  \ ]
-
-function! s:_tertius_request(cmd, messages) abort
+" process LLM request
+function! s:_tertius_request(messages) abort
   if empty($OPENAI_API_KEY)
     echoerr "Tertius: OPENAI_API_KEY not set"
     return
@@ -190,72 +186,43 @@ function! s:_tertius_request(cmd, messages) abort
   let l:api_key = $OPENAI_API_KEY
   let l:base_url = !empty($OPENAI_BASE_URL) ? $OPENAI_BASE_URL : g:tertius_config.llmBaseUrl
   let l:model = !empty($OPENAI_MODEL) ? $OPENAI_MODEL : g:tertius_config.llmModel
-  let l:body = json_encode({ 'model': l:model, 'messages': a:messages, 'tools': s:_tertius_tools })
+  let l:body = json_encode({ 'model': l:model, 'messages': a:messages, 'tools': g:tertius_config.tools, 'tool_choice': 'auto' })
   let l:response = <sid>_tertius_curl('-s -H "Authorization: Bearer ' . l:api_key . '" -H "Content-Type: application/json" -d ' . shellescape(l:body) . ' ' . l:base_url . '/chat/completions')
   return json_decode(l:response)
 endfunction
 
+function! s:_tertius_system_message(msg) abort
+  return { 'role': 'system', 'content': [ { 'type': 'text', 'text': a:msg } ] }
+endfunction
+
+function! s:_tertius_user_message(msg) abort
+  return { 'role': 'user', 'content': [ { 'type': 'text', 'text': a:msg } ] }
+endfunction
+
+" generic Tertius function to handle commands
 function! Tertius(cmd, content) abort
-  let l:joined_content = type(a:content) == type([]) ? join(a:content, "\n") : a:content
-
-  let l:system_prompt = 'You are a helpful software developer assistant. ' .
-        \ 'You have access to the following tools to get Git information: ' .
-        \ '- list_commits: list commits on the current feature branch ' .
-        \ '- get_commit_message: fetch commit details by hash ' .
-        \ 'Use these tools whenever you need commit context before answering. ' .
-        \ g:tertius_config.prompts[a:cmd]
-
-  let l:messages = [
-        \ { 'role': 'system', 'content': [ { 'type': 'text', 'text': l:system_prompt } ] },
-        \ { 'role': 'user',   'content': [ { 'type': 'text', 'text': l:joined_content } ] }
-        \ ]
-
+  let l:messages = [ <sid>_tertius_system_message(g:tertius_config.prompts[a:cmd]),
+                   \ <sid>_tertius_user_message(type(a:content) == type([]) ? join(a:content, "\n") : a:content)
+                   \ ]
   while 1
-    let l:body = json_encode({
-          \ 'model': !empty($OPENAI_MODEL) ? $OPENAI_MODEL : g:tertius_config.llmModel,
-          \ 'messages': l:messages,
-          \ 'tools': s:_tertius_tools,
-          \ 'tool_choice': 'auto'
-          \ })
-
-    " Send request
-    let l:base_url = !empty($OPENAI_BASE_URL) ? $OPENAI_BASE_URL : g:tertius_config.llmBaseUrl
-    let l:api_key  = $OPENAI_API_KEY
-    if empty(l:api_key)
-      echoerr "Tertius: OPENAI_API_KEY not set"
-      return
+    let l:response = <sid>_tertius_request(l:messages)
+    if has_key(l:response, 'error')
+      echoerr l:response.error.message | return
     endif
-
-    let l:response = <sid>_tertius_curl(
-          \ '-s -H "Authorization: Bearer ' . l:api_key . '" ' .
-          \ '-H "Content-Type: application/json" ' .
-          \ '-d ' . shellescape(l:body) . ' ' . l:base_url . '/chat/completions'
-          \ )
-
-    let l:result = json_decode(l:response)
-
-    " Handle API error
-    if has_key(l:result, 'error')
-      echoerr l:result.error.message
-      return
-    endif
-
-    let l:choice = l:result.choices[0].message
-
-    " If the model requests tools, call them and continue loop
-    if has_key(l:choice, 'tool_calls')
-      call add(l:messages, l:choice)                " <-- to jest kluczowe
-      for tool_call in l:choice.tool_calls
+    let l:message = l:response.choices[0].message
+    if has_key(l:message, 'tool_calls')
+      call add(l:messages, l:message)
+      for tool_call in l:message.tool_calls
         call add(l:messages, <sid>_tertius_tool_caller(tool_call))
       endfor
       continue
     endif
-
-    " Otherwise, final answer
-    if has_key(l:choice, 'content')
-      call setline(1, split(l:choice.content, "\n"))
+    if has_key(l:message, 'content') && type(l:message.content)==type('')
+      call setline(1, split(l:message.content, "\n"))
+    else
+      echoerr "Tertius: no content in response message"
+      return
     endif
-    return
   endwhile
 endfunction
 
