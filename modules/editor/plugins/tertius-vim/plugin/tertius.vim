@@ -29,6 +29,7 @@ let g:tertius_config = {
 
 """""""""""""""""""" VCS utility functions for Tertius plugin """"""""""""""""""
 
+" curl command wrapper
 function! s:_tertius_curl(cmd) abort
   if !executable(g:tertius_config.curlExec)
     echoerr 'Tertius: Curl executable not found: ' . g:tertius_config.curlExec
@@ -36,11 +37,17 @@ function! s:_tertius_curl(cmd) abort
   return system(g:tertius_config.curlExec . ' ' . a:cmd)
 endfunction
 
-function! s:_tertius_git(cmd) abort
+" git command wrapper
+function! s:_tertius_git(cmd, ...) abort
   if !executable(g:tertius_config.gitExec)
     echoerr 'Tertius: Git executable not found: ' . g:tertius_config.gitExec
+    return ''
   endif
-  return system(g:tertius_config.gitExec . ' ' . a:cmd)
+  if a:0 > 0
+    return system(g:tertius_config.gitExec . ' ' . a:cmd, a:1)
+  else
+    return system(g:tertius_config.gitExec . ' ' . a:cmd)
+  endif
 endfunction
 
 " open a new buffer for intermediate operations
@@ -95,7 +102,7 @@ function! s:_tertius_git_commit_message(commit) abort
     let l:msg = "Implementation context:\n"
   endif
   let l:msg = l:msg . <sid>_tertius_git("show --pretty=format:%H\\n%B --name-only " . a:commit)
-  return trim(msg)
+  return trim(l:msg)
 endfunction
 
 " get the branch name from the buffer text
@@ -105,7 +112,7 @@ endfunction
 
 " extract user story id from text
 function! s:_tertius_git_user_story_id(text) abort
-  let l:matches = matchlist(l:text, g:tertius_config.userStoryIdPattern)
+  let l:matches = matchlist(a:text, g:tertius_config.userStoryIdPattern)
   if len(l:matches) > 1
     return l:matches[1]
   endif
@@ -141,8 +148,8 @@ endfunction
 """""""""""""""""""""""""""""""""" LLM tools """""""""""""""""""""""""""""""""""
 " call LLM tools
 function! s:_tertius_tool_caller(call) abort
-  let fname = call.function.name
-  let args = json_decode(call.function.arguments)
+  let fname = a:call.function.name
+  let args = json_decode(a:call.function.arguments)
   if fname ==# 'list_commits'
     let answer = <sid>_tertius_git_current_branch_commits()
   elseif fname ==# 'get_commit_message'
@@ -151,31 +158,28 @@ function! s:_tertius_tool_caller(call) abort
     let answer = 'unknown tool'
   endif
   echom "Tertius: Calling tool " . fname . " with args: " . string(args)
-  return json_encode({ 'role': 'function', 'name': fname, 'content': json_encode(answer) })
+  return {
+        \ 'role': 'tool',
+        \ 'tool_call_id': a:call.id,
+        \ 'content': json_encode(answer)
+        \ }
 endfunction
 
 " define the tools for the LLM to use
 let s:_tertius_tools = [
-  \ {
-  \   'type': 'function',
-  \   'function': {
+  \ { 'type': 'function', 'function': {
   \     'name': 'list_commits',
   \     'description': 'List commits on current feature branch',
-  \     'parameters': {'type': 'object', 'properties': {}}
-  \   }
-  \ },
-  \ {
-  \   'type': 'function',
-  \   'function': {
+  \     'parameters': { 'type': 'object', 'properties': {}, 'required': [] }
+  \ } },
+  \ { 'type': 'function', 'function': {
   \     'name': 'get_commit_message',
   \     'description': 'Get feature context from the commit with a given hash',
   \     'parameters': {
   \       'type': 'object',
   \       'properties': { 'hash': { 'type': 'string' } },
   \       'required': ['hash']
-  \     }
-  \   }
-  \ }
+  \ } } }
   \ ]
 
 function! s:_tertius_request(cmd, messages) abort
@@ -193,25 +197,65 @@ endfunction
 
 function! Tertius(cmd, content) abort
   let l:joined_content = type(a:content) == type([]) ? join(a:content, "\n") : a:content
+
+  let l:system_prompt = 'You are a helpful software developer assistant. ' .
+        \ 'You have access to the following tools to get Git information: ' .
+        \ '- list_commits: list commits on the current feature branch ' .
+        \ '- get_commit_message: fetch commit details by hash ' .
+        \ 'Use these tools whenever you need commit context before answering. ' .
+        \ g:tertius_config.prompts[a:cmd]
+
   let l:messages = [
-    \ { 'role': 'system', 'content': [ { 'type': 'text', 'text': 'You are a helpful software developer assistant. ' . g:tertius_config.prompts[a:cmd] } ] },
-    \ { 'role': 'user', 'content': [ { 'type': 'text', 'text': l:joined_content } ] }
-    \ ]
+        \ { 'role': 'system', 'content': [ { 'type': 'text', 'text': l:system_prompt } ] },
+        \ { 'role': 'user',   'content': [ { 'type': 'text', 'text': l:joined_content } ] }
+        \ ]
+
   while 1
-    let l:result = <sid>_tertius_request(a:cmd, l:messages)
+    let l:body = json_encode({
+          \ 'model': !empty($OPENAI_MODEL) ? $OPENAI_MODEL : g:tertius_config.llmModel,
+          \ 'messages': l:messages,
+          \ 'tools': s:_tertius_tools,
+          \ 'tool_choice': 'auto'
+          \ })
+
+    " Send request
+    let l:base_url = !empty($OPENAI_BASE_URL) ? $OPENAI_BASE_URL : g:tertius_config.llmBaseUrl
+    let l:api_key  = $OPENAI_API_KEY
+    if empty(l:api_key)
+      echoerr "Tertius: OPENAI_API_KEY not set"
+      return
+    endif
+
+    let l:response = <sid>_tertius_curl(
+          \ '-s -H "Authorization: Bearer ' . l:api_key . '" ' .
+          \ '-H "Content-Type: application/json" ' .
+          \ '-d ' . shellescape(l:body) . ' ' . l:base_url . '/chat/completions'
+          \ )
+
+    let l:result = json_decode(l:response)
+
+    " Handle API error
     if has_key(l:result, 'error')
       echoerr l:result.error.message
       return
     endif
+
     let l:choice = l:result.choices[0].message
+
+    " If the model requests tools, call them and continue loop
     if has_key(l:choice, 'tool_calls')
+      call add(l:messages, l:choice)                " <-- to jest kluczowe
       for tool_call in l:choice.tool_calls
         call add(l:messages, <sid>_tertius_tool_caller(tool_call))
       endfor
-    else
-      call setline(1, split(l:choice.content, "\n"))
-      return
+      continue
     endif
+
+    " Otherwise, final answer
+    if has_key(l:choice, 'content')
+      call setline(1, split(l:choice.content, "\n"))
+    endif
+    return
   endwhile
 endfunction
 
