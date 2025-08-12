@@ -221,8 +221,8 @@ function! Tertius(cmd, content) abort
       call setline(1, split(l:message.content, "\n"))
     else
       echoerr "Tertius: no content in response message"
-      return
     endif
+    return
   endwhile
 endfunction
 
