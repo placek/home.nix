@@ -162,12 +162,14 @@ endfunction
 function! s:_tertius_tool_caller(tool_call) abort
   let fname = a:tool_call.function.name
   let args = empty(a:tool_call.function.arguments) ? {} : json_decode(a:tool_call.function.arguments)
-  echom "Tertius: calling tool " . fname . " with args: " . string(args)
   if fname ==# 'list_commits'
+    echom "Tertius: listing commits on current feature branch"
     let result = <sid>_tertius_git_current_branch_commits()
   elseif fname ==# 'get_commit_message'
+    echom "Tertius: getting commit message for commit " . args.hash
     let result = <sid>_tertius_git_commit_message(args.hash)
   else
+    echoerr "Tertius: unknown tool function: " . fname
     let result = 'unknown tool'
   endif
   return { 'role': 'tool',
@@ -185,9 +187,10 @@ function! s:_tertius_request(messages) abort
   endif
   let l:api_key = $OPENAI_API_KEY
   let l:base_url = !empty($OPENAI_BASE_URL) ? $OPENAI_BASE_URL : g:tertius_config.llmBaseUrl
+  let l:endpoint = '/chat/completions'
   let l:model = !empty($OPENAI_MODEL) ? $OPENAI_MODEL : g:tertius_config.llmModel
-  let l:body = json_encode({ 'model': l:model, 'messages': a:messages, 'tools': g:tertius_config.tools, 'tool_choice': 'auto' })
-  let l:response = <sid>_tertius_curl('-s -H "Authorization: Bearer ' . l:api_key . '" -H "Content-Type: application/json" -d ' . shellescape(l:body) . ' ' . l:base_url . '/chat/completions')
+  let l:body = json_encode({ 'model': l:model, 'messages': a:messages, 'tools': g:tertius_config.tools, 'tool_choice': 'auto', 'stream': v:false })
+  let l:response = <sid>_tertius_curl('-s -H "Authorization: Bearer ' . l:api_key . '" -H "Content-Type: application/json" -d ' . shellescape(l:body) . ' ' . l:base_url . l:endpoint)
   return json_decode(l:response)
 endfunction
 
@@ -199,30 +202,32 @@ function! s:_tertius_user_message(msg) abort
   return { 'role': 'user', 'content': [ { 'type': 'text', 'text': a:msg } ] }
 endfunction
 
+function! s:_tertius_handle_response(response) abort
+  if has_key(a:response, 'error')
+    echoerr a:response.error.message
+    return v:false
+  endif
+  let l:message = a:response.choices[0].message
+  if has_key(l:message, 'tool_calls')
+    for tool_call in l:message.tool_calls
+      call add(a:response.messages, <sid>_tertius_tool_caller(tool_call))
+    endfor
+    return v:true
+  endif
+  if has_key(l:message, 'content') && type(l:message.content)==type('')
+    call setline(1, split(l:message.content, "\n"))
+  else
+    echoerr "Tertius: no content in response message"
+  endif
+  return v:false
+endfunction
+
 " generic Tertius function to handle commands
 function! Tertius(cmd, content) abort
   let l:messages = [ <sid>_tertius_system_message(g:tertius_config.prompts[a:cmd]),
                    \ <sid>_tertius_user_message(type(a:content) == type([]) ? join(a:content, "\n") : a:content)
                    \ ]
-  while 1
-    let l:response = <sid>_tertius_request(l:messages)
-    if has_key(l:response, 'error')
-      echoerr l:response.error.message | return
-    endif
-    let l:message = l:response.choices[0].message
-    if has_key(l:message, 'tool_calls')
-      call add(l:messages, l:message)
-      for tool_call in l:message.tool_calls
-        call add(l:messages, <sid>_tertius_tool_caller(tool_call))
-      endfor
-      continue
-    endif
-    if has_key(l:message, 'content') && type(l:message.content)==type('')
-      call setline(1, split(l:message.content, "\n"))
-    else
-      echoerr "Tertius: no content in response message"
-    endif
-    return
+  while <sid>_tertius_handle_response(<sid>_tertius_request(l:messages))
   endwhile
 endfunction
 
