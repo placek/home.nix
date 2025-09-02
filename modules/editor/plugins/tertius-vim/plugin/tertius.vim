@@ -43,6 +43,7 @@ let g:tertius_config = {
 function! s:_tertius_curl(cmd) abort
   if !executable(g:tertius_config.curlExec)
     echoerr 'Tertius: curl executable not found: ' . g:tertius_config.curlExec
+    return ''
   endif
   return system(g:tertius_config.curlExec . ' ' . a:cmd)
 endfunction
@@ -100,6 +101,7 @@ endfunction
 function! s:_tertius_git_commit_is_empty(commit) abort
   if empty(a:commit)
     echoerr 'Tertius: commit is not specified'
+    return ''
   endif
   return empty(trim(<sid>_tertius_git("show --pretty=format: --name-only " . a:commit)))
 endfunction
@@ -226,7 +228,6 @@ endfunction
 
 function! s:_tertius_handle_response(messages) abort
   let l:response = <sid>_tertius_request(a:messages)
-  echom "Tertius: response ". string(l:response)
 
   if type(l:response) == type({}) && has_key(l:response, 'error')
     echoerr 'Tertius: ' . get(l:response.error, 'message', 'unknown error')
