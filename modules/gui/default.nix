@@ -57,6 +57,7 @@
     ./clipcat.nix
     ./dunst.nix
     ./feh.nix
+    ./flameshot.nix
     ./xmobar.nix
     ./mpv.nix
     ./zathura.nix

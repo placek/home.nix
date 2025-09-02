@@ -108,7 +108,7 @@ in
           , ((modm                , xK_Escape    ), safeSpawn "${pkgs.dunst}/bin/dunstctl" ["history-pop"])                                                    -- pop notification from history
           , ((modm .|. controlMask, xK_Escape    ), safeSpawn "${dunstTogglePause}/bin/dunst-toggle-pause" [])                                                 -- pause all notifications
           -- multimedia
-          , ((0, xK_Print                        ), safeSpawn "${pkgs.flameshot}/bin/flameshot" ["gui"])
+          , ((0, xK_Print                        ), safeSpawn "${config.services.flameshot.package}/bin/flameshot" ["gui"])
           , ((0, xF86XK_AudioPrev                ), safeSpawn "${pkgs.playerctl}/bin/playerctl" ["previous"])
           , ((0, xF86XK_AudioPlay                ), safeSpawn "${pkgs.playerctl}/bin/playerctl" ["play-pause"])
           , ((0, xF86XK_AudioNext                ), safeSpawn "${pkgs.playerctl}/bin/playerctl" ["next"])
