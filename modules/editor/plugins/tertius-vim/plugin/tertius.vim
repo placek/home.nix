@@ -184,11 +184,12 @@ endfunction
 " process LLM request
 function! s:_tertius_request(messages) abort
   let l:body = <sid>_tertius_llm_request_body(a:messages)
-  let l:cmd = '--silent ' .
+  let l:cmd = '--silent --fail ' .
             \ '--request POST ' .
             \ '--header "Content-Type: application/json" ' .
             \ '--data ' . shellescape(l:body) . ' ' .
             \ '"' . g:tertius_config.llmBaseUrl . g:tertius_config.llmEndpoint . '"'
+
   if g:tertius_config.llmType == 'openai'
     let l:cmd = l:cmd . ' --header "Authorization: Bearer ' . $OPENAI_API_KEY . '"'
   endif
@@ -213,7 +214,6 @@ function! s:_tertius_tool_caller(tool_call) abort
   if g:tertius_config.llmType == 'openai'
     return { 'role': 'tool',
            \ 'tool_call_id': a:tool_call.id,
-           \ 'name': fname,
            \ 'content': type(result)==type([]) ? json_encode(result) : string(result)
            \ }
   elseif g:tertius_config.llmType == 'ollama'
@@ -227,19 +227,32 @@ endfunction
 function! s:_tertius_handle_response(messages) abort
   let l:response = <sid>_tertius_request(a:messages)
   echom "Tertius: response ". string(l:response)
+
+  if type(l:response) == type({}) && has_key(l:response, 'error')
+    echoerr 'Tertius: ' . get(l:response.error, 'message', 'unknown error')
+    return
+  endif
+
   if g:tertius_config.llmType ==# 'ollama'
     let l:message = l:response.message
   elseif g:tertius_config.llmType ==# 'openai'
+    if !(type(l:response) == type({}) && has_key(l:response, 'choices') && len(l:response.choices) > 0)
+      echoerr 'Tertius: unexpected response (no choices)'
+      return
+    endif
     let l:message = l:response.choices[0].message
   endif
+
   if has_key(l:message, 'tool_calls')
     let l:result = deepcopy(a:messages)
+    call add(l:result, l:message)
     for tool_call in l:message.tool_calls
       call add(l:result, <sid>_tertius_tool_caller(tool_call))
     endfor
-    call <sid>_tertius_handle_response(l:result)
+    return <sid>_tertius_handle_response(l:result)
   endif
-  if has_key(l:message, 'content') && type(l:message.content)==type('')
+
+  if has_key(l:message, 'content') && type(l:message.content) == type('')
     call setline(1, split(l:message.content, "\n"))
   else
     echoerr "Tertius: no content in response message"
