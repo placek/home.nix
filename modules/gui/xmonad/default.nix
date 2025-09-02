@@ -4,8 +4,6 @@
 , ...
 }:
 let
-  sshot = import ./sshot.nix { inherit config pkgs; };
-
   dunstTogglePause = pkgs.writeShellScriptBin "dunst-toggle-pause" ''
     if [ $(${pkgs.dunst}/bin/dunstctl is-paused) == "true" ]; then
       ${pkgs.dunst}/bin/dunstctl set-pause-level 0
@@ -110,8 +108,7 @@ in
           , ((modm                , xK_Escape    ), safeSpawn "${pkgs.dunst}/bin/dunstctl" ["history-pop"])                                                    -- pop notification from history
           , ((modm .|. controlMask, xK_Escape    ), safeSpawn "${dunstTogglePause}/bin/dunst-toggle-pause" [])                                                 -- pause all notifications
           -- multimedia
-          , ((0, xK_Print                        ), safeSpawn "${sshot}/bin/sshot" ["window"])
-          , ((controlMask, xK_Print              ), safeSpawn "${sshot}/bin/sshot" ["selection"])
+          , ((0, xK_Print                        ), safeSpawn "${pkgs.flameshot}/bin/flameshot" ["gui"])
           , ((0, xF86XK_AudioPrev                ), safeSpawn "${pkgs.playerctl}/bin/playerctl" ["previous"])
           , ((0, xF86XK_AudioPlay                ), safeSpawn "${pkgs.playerctl}/bin/playerctl" ["play-pause"])
           , ((0, xF86XK_AudioNext                ), safeSpawn "${pkgs.playerctl}/bin/playerctl" ["next"])
