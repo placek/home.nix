@@ -77,10 +77,8 @@
   virtualisation.libvirtd.enable = false;
   virtualisation.virtualbox.host.enable = false;
 
-  ################################# SERVICES ###################################
+  ################################# LAPTOP #####################################
   services.acpid.enable = true;
-  services.clamav.daemon.enable = true;
-  services.clamav.updater.enable = true;
   services.libinput.enable = true;
   services.libinput.mouse.middleEmulation = false;
   services.libinput.touchpad.naturalScrolling = true;
@@ -88,34 +86,44 @@
   services.libinput.touchpad.tapping = false;
   services.logind.extraConfig = "HandlePowerKey=ignore";
   services.logind.lidSwitch = "ignore";
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.displayManager.lightdm.greeters.mini.enable = true;
-  services.xserver.displayManager.lightdm.greeters.mini.user = "placek";
+
+  ################################### GUI ######################################
   services.xserver.enable = true;
+
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.displayManager.sddm.wayland.enable = true;
+  services.xserver.displayManager.defaultSession = "none+xmonad";
+
   services.xserver.windowManager.xmonad.enable = true;
+  programs.hyprland.enable = true;
+
   services.xserver.xkb.layout = "pl";
-  services.xserver.displayManager.lightdm.greeters.mini.extraConfig = ''
-    [greeter]
-    show-password-label = false
-    invalid-password-text = nope!
-    show-input-cursor = false
-    password-alignment = left
-    password-input-width = 24
+#   services.xserver.displayManager.lightdm.enable = true;
+#   services.xserver.displayManager.lightdm.greeters.mini.enable = true;
+#   services.xserver.displayManager.lightdm.greeters.mini.user = "placek";
+#   services.xserver.displayManager.lightdm.greeters.mini.extraConfig = ''
+#     [greeter]
+#     show-password-label = false
+#     invalid-password-text = nope!
+#     show-input-cursor = false
+#     password-alignment = left
+#     password-input-width = 24
+# 
+#     [greeter-theme]
+#     font = "Iosevka"
+#     font-weight = normal
+#     error-color = "#d5c4a1"
+#     password-color = "#d5c4a1"
+#     background-color = "#32302f"
+#     background-image = ""
+#     window-color = "#32302f"
+#     border-color = "#fe8019"
+#     border-width = 4px
+#     password-background-color = "#32302f"
+#     password-border-width = 0px
+#   '';
 
-    [greeter-theme]
-    font = "Iosevka"
-    font-weight = normal
-    error-color = "#d5c4a1"
-    password-color = "#d5c4a1"
-    background-color = "#32302f"
-    background-image = ""
-    window-color = "#32302f"
-    border-color = "#fe8019"
-    border-width = 4px
-    password-background-color = "#32302f"
-    password-border-width = 0px
-  '';
-
+  ################################# MULTIMEDIA #################################
   services.pipewire = {
     enable = true;
     audio.enable = true;
@@ -138,9 +146,7 @@
   hardware.nvidia.prime.reverseSync.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
   services.xserver.videoDrivers = [ "nvidia" "displaylink" ];
-  environment.systemPackages = with pkgs; [
-    nvidia-container-toolkit
-  ];
+  environment.systemPackages = with pkgs; [ nvidia-container-toolkit ];
 
   ################################@## OLLAMA ###################################
   services.ollama.enable = true;
@@ -171,6 +177,9 @@
   networking.resolvconf.useLocalResolver = true;
   networking.networkmanager.dns = "none"; # Prevent NM from overriding resolv.conf
   services.resolved.enable = false;       # Disable systemd-resolved if present
+
+  services.clamav.daemon.enable = true;
+  services.clamav.updater.enable = true;
 
   services.dnscrypt-proxy2 = {
     enable = true;
