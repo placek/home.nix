@@ -59,6 +59,7 @@
     ./feh.nix
     ./flameshot.nix
     ./xmobar.nix
+    ./hyprland.nix
     ./mpv.nix
     ./zathura.nix
 
