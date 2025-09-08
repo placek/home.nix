@@ -5,7 +5,7 @@
 }:
 {
   config = {
-    home.stateVersion = "23.11";
+    home.stateVersion = "25.05";
     home.username = "placek";
     home.homeDirectory = "/home/placek";
     home.packages = [ pkgs.gnumake ];
@@ -23,8 +23,6 @@
     gui.theme = import ./theme.nix;
     gui.font.name = "Iosevka Nerd Font";
     gui.font.size = 12;
-    gui.showBattery = true;
-    gui.showWiFi = true;
 
     vcs.name = "Paweł Placzyński";
     vcs.email = "placzynski.pawel@gmail.com";

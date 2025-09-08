@@ -53,23 +53,18 @@
   imports = [
     ./fonts.nix
 
-    ./autorandr
     ./clipcat.nix
     ./dunst.nix
     ./feh.nix
-    ./xmobar.nix
     ./hyprland.nix
     ./mpv.nix
     ./zathura.nix
 
-    ./xmonad
     ./games.nix
   ];
 
   config = {
     home.packages = with pkgs; [
-      (pkgs.writeShellScriptBin "wallpaper" "feh --bg-fill '${config.gui.wallpaper}'")
-
       libnotify
       xf86_input_wacom
 
