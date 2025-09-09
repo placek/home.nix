@@ -89,6 +89,7 @@ in
               "spotify" = "";
               "steam" = "";
               "office" = "";
+              "musescore" = "";
             };
             on-click = "activate";
             disable-scroll = false;
