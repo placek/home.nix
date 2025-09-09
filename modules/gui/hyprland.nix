@@ -33,7 +33,6 @@ in
   config = {
     home.packages = with pkgs; [
       wofi-pass cliphist wl-clipboard
-      swaynotificationcenter   # swaync + swaync-client
       udiskie
       waybar
     ];
@@ -128,7 +127,7 @@ in
   #         "$mod, m,      exec, sh -c '${udisksMenu}'"
 
           # Notifications: history “pop” (panel) / toggle DND
-#           "$mod, Escape, exec, ${notifHistoryPop}"
+          "$mod, Escape, exec, ${pkgs.dunst}/bin/dunstctl history-pop"
 #           "$mod CTRL, Escape, exec, ${swayncctl} --toggle-dnd"
 
           # Multimedia
@@ -151,22 +150,6 @@ in
         ];
       };
     };
-
-    # swaync theming to your palette
-#     xdg.configFile."swaync/style.css".text = ''
-#       * { font-family: "${fontName}", "Nerd Font"; font-size: ${fontSize}px; }
-#       .notification-row { background: ${c.base00}; color: ${c.base0F}; border: 1px solid ${c.base03}; border-radius: 6px; }
-#       .control-center { background: ${c.base00}; color: ${c.base0F}; }
-#       .close-button, .action-button { background: ${c.base0B}; color: ${c.base00}; }
-#       .dnd-indicator { color: ${c.base08}; }
-#     '';
-#     xdg.configFile."swaync/config.json".text = builtins.toJSON {
-#       "$schema" = "https://raw.githubusercontent.com/ErikReider/SwayNotificationCenter/master/resources/schemas/config.schema.json";
-#       positionX = "right";
-#       positionY = "top";
-#       control-center-on-notif = false;
-#       widgets = [ "inhibitors" "dnd" "notifications" ];
-#     };
 
     # Hyprlock minimal theme with your colors (optional)
     xdg.configFile."hypr/hyprlock.conf".text = ''

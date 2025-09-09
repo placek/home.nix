@@ -13,7 +13,7 @@
 
         width = 500;
         origin = "top-right";
-        offset = "0x24";
+        offset = "8x8";
         padding = config.gui.border.size * 2;
         frame_width = config.gui.border.size;
         horizontal_padding = config.gui.border.size * 2;
@@ -48,14 +48,14 @@
       };
 
       urgency_low = {
-        frame_color = config.gui.theme.base07;
+        frame_color = config.gui.theme.base03;
         background = config.gui.theme.base00;
         foreground = config.gui.theme.base07;
         msg_urgency = "low";
       };
 
       urgency_normal = {
-        frame_color = config.gui.theme.base03;
+        frame_color = config.gui.theme.base02;
         background = config.gui.theme.base00;
         foreground = config.gui.theme.base07;
         msg_urgency = "normal";
