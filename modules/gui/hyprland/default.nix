@@ -27,7 +27,7 @@ in
   imports = [
     ./wallpaper
     ./waybar
-    ./wofi.nix
+    ./wofi
   ];
 
   config = {
