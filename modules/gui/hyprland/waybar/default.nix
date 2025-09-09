@@ -76,7 +76,7 @@ in
           };
 
           "hyprland/workspaces" = {
-            format = "{windows}";
+            format = "{windows} ";
             format-window-separator = "  ";
             window-rewrite-default = "";
             window-rewrite = {
@@ -87,6 +87,8 @@ in
               "gimp" = "";
               "cad" = "";
               "spotify" = "";
+              "steam" = "";
+              "office" = "";
             };
             on-click = "activate";
             disable-scroll = false;
