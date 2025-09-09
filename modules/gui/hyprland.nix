@@ -48,7 +48,7 @@ in
         general.gaps_out = 8;
         general.border_size = 4;
         general."col.active_border" = "rgb(${lib.removePrefix "#" config.gui.theme.base0B})";
-        general."col.inactive_border" = "rgb(${lib.removePrefix "#" config.gui.theme.base00})";
+        general."col.inactive_border" = "rgb(${lib.removePrefix "#" config.gui.theme.base08})";
         general.layout = "master";
         decoration.rounding = 4;
         decoration.active_opacity = 1.0;
