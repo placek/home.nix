@@ -55,7 +55,6 @@
 
     ./clipcat.nix
     ./dunst.nix
-    ./feh.nix
     ./hyprland
     ./mpv.nix
     ./zathura.nix
