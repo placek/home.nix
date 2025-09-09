@@ -3,8 +3,8 @@
 , ...
 }:
 let
-  cliphistMenu = ''
-    ${pkgs.cliphist}/bin/cliphist list | ${pkgs.wofi}/bin/wofi --dmenu | ${pkgs.cliphist}/bin/cliphist decode | ${pkgs.wl-clipboard}/bin/wl-copy
+  clipboard_menu = pkgs.writeShellScriptBin "clipboard_menu" ''
+    exec ${config.services.clipcat.package}/bin/clipcat-menu --finder=custom insert "$@"
   '';
   udisksMenu = ''
     ${pkgs.udiskie}/bin/udiskie-umount -a; ${pkgs.udiskie}/bin/udiskie-mount -a
@@ -12,6 +12,7 @@ let
 in
 {
   config = {
+    home.packages = [ clipboard_menu ];
     wayland.windowManager.hyprland.settings = {
       "$mod" = "SUPER";
 
@@ -63,7 +64,7 @@ in
         "$mod, Return, exec, ${config.terminalExec}"
         "$mod, space,  exec, ${pkgs.wofi}/bin/wofi --show drun"
         "$mod, b,      exec, ${pkgs.wofi-pass}/bin/wofi-pass"
-#           "$mod, n,      exec, ${cliphistMenu}"
+        "$mod, n,      exec, ${clipboard_menu}/bin/clipboard_menu"
 #         "$mod, m,      exec, sh -c '${udisksMenu}'"
 
         # Notifications: history “pop” (panel) / toggle DND
@@ -83,10 +84,6 @@ in
         # Sleep/PowerOff keys → lock (like slock)
         ", XF86Sleep,    exec, ${pkgs.hyprlock}/bin/hyprlock"
         ", XF86PowerOff, exec, ${pkgs.hyprlock}/bin/hyprlock"
-
-        # TODO
-        # Next layout (BackSpace)
-        "$mod SHIFT, BackSpace, layoutmsg, cyclenext"
       ];
     };
   };
