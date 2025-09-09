@@ -26,7 +26,7 @@ in
 {
   imports = [
     ./wallpaper.nix
-    ./waybar.nix
+    ./waybar
     ./wofi.nix
   ];
 
