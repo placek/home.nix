@@ -16,11 +16,36 @@
 
     programs.notmuch = {
       enable = true;
+
       hooks.postNew = ''
-        ${pkgs.notmuch}/bin/notmuch tag -inbox -- tag:inbox and not tag:unread
-        ${pkgs.notmuch}/bin/notmuch tag +github -- from:noreply@github.com or from:notifications@github.com
-        ${pkgs.notmuch}/bin/notmuch tag +gitlab -- from:gitlab@gitlab.binarapps.com
-        ${pkgs.notmuch}/bin/notmuch tag -Inbox -- not folder:placzynski/Inbox and not folder:silquenarmo/Inbox and not folder:binarapps/Inbox and not folder:byron/Inbox and tag:Inbox
+        #!/usr/bin/env ${pkgs.bash}/bin/bash
+        set -euo pipefail
+
+        nm=${pkgs.notmuch}/bin/notmuch
+
+        $nm tag -inbox -- tag:inbox and not tag:unread
+        $nm tag +github -- from:noreply@github.com or from:notifications@github.com
+        $nm tag +gitlab -- from:gitlab@gitlab.binarapps.com
+        # --- No Inbox ---
+        $nm tag -Inbox -- not folder:placzynski/Inbox and not folder:silquenarmo/Inbox and not folder:binarapps/Inbox and not folder:byron/Inbox and tag:Inbox
+
+        # --- Account tagging ---
+        # Clear all previous account:* tags (safe: re-compute right after)
+        $nm tag -account:* -- '*'
+
+        # Tag by PATH (relative to database.path).
+        # Given your accounts.email.maildirBasePath = ~/.mail,
+        # these match ~/.mail/<account>/** (all folders of that account).
+
+        $nm tag +account:silquenarmo -- 'path:silquenarmo/**'
+        $nm tag +account:placzynski  -- 'path:placzynski/**'
+        $nm tag +account:binarapps   -- 'path:binarapps/**'
+
+        # (Optional) Also tag by address for robustness (deliveries, sent mail, etc.)
+        # Replace addresses with the identities you actually use for each account.
+        $nm tag +account:silquenarmo -- '(to:silquenarmo@example.org OR from:silquenarmo@example.org)'
+        $nm tag +account:placzynski  -- '(to:placzynski@example.com  OR from:placzynski@example.com)'
+        $nm tag +account:binarapps   -- '(to:p.placzynski@binarapps.com OR from:p.placzynski@binarapps.com)'
       '';
     };
 
@@ -47,7 +72,6 @@
         silquenarmo = import ./accounts/silquenarmo.nix { inherit pkgs; };
         placzynski = import ./accounts/placzynski-pawel.nix { inherit pkgs; };
         binarapps = import ./accounts/p-placzynski-binarapps.nix { inherit pkgs; };
-        byron = import ./accounts/pawel-placzynski-byron.nix { inherit pkgs; };
       };
     };
   };
