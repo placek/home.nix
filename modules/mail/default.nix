@@ -33,18 +33,12 @@
         # Clear all previous account:* tags (safe: re-compute right after)
         $nm tag -account:* -- '*'
 
-        # Tag by PATH (relative to database.path).
-        # Given your accounts.email.maildirBasePath = ~/.mail,
-        # these match ~/.mail/<account>/** (all folders of that account).
-
         $nm tag +account:silquenarmo -- 'path:silquenarmo/**'
         $nm tag +account:placzynski  -- 'path:placzynski/**'
         $nm tag +account:binarapps   -- 'path:binarapps/**'
 
-        # (Optional) Also tag by address for robustness (deliveries, sent mail, etc.)
-        # Replace addresses with the identities you actually use for each account.
-        $nm tag +account:silquenarmo -- '(to:silquenarmo@example.org OR from:silquenarmo@example.org)'
-        $nm tag +account:placzynski  -- '(to:placzynski@example.com  OR from:placzynski@example.com)'
+        $nm tag +account:silquenarmo -- '(to:silquenarmo@gmail.com OR from:silquenarmo@gmail.com)'
+        $nm tag +account:placzynski  -- '(to:placzynski.pawel@gmail.com OR from:placzynski.pawel@gmail.com)'
         $nm tag +account:binarapps   -- '(to:p.placzynski@binarapps.com OR from:p.placzynski@binarapps.com)'
       '';
     };
@@ -63,7 +57,7 @@
     services.mbsync = {
       enable = true;
       postExec = "${config.xdg.configHome}/mbsync/postExec";
-      frequency = "*:0/10";
+      frequency = "*:0/5"; # every 5 minutes
     };
 
     accounts.email = {
