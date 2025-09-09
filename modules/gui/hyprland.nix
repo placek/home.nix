@@ -25,7 +25,7 @@ let
 in
 {
   imports = [
-    ./wallpaper.nix
+    ./wallpaper
     ./waybar
     ./wofi.nix
   ];
