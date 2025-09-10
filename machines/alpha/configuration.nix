@@ -8,16 +8,24 @@
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
+    device = "/dev/disk/by-uuid/2917badf-6e6e-400d-bcb5-6396d41d9b62";
     fsType = "ext4";
   };
 
+  boot.initrd.luks.devices."luks-5704bf90-b11f-45cd-a3f7-1888298cbc2c".device = "/dev/disk/by-uuid/5704bf90-b11f-45cd-a3f7-1888298cbc2c";
+
   fileSystems."/boot" = {
-    device = "/dev/disk/by-label/boot";
+    device = "/dev/disk/by-uuid/13C1-6204";
     fsType = "vfat";
+    options = [ "fmask=0077" "dmask=0077" ];
   };
 
-  swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
+  swapDevices = [ { device = "/dev/disk/by-uuid/2fd23668-a0f3-4adc-a6d5-e0eea9aff2c8"; } ];
+
+  networking.useDHCP = lib.mkDefault true;
+
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   ################################### NIX ######################################
   nix.gc.automatic = true;
@@ -32,16 +40,17 @@
   ################################# HARDWARE ###################################
   boot.extraModulePackages = [ ];
   boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" "ahci" "sd_mod" "sdhci_pci" ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.initrd.kernelModules = [];
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.enable = true;
-  hardware.bluetooth.enable = true;
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.graphics.enable = true;
   services.sshd.enable = true;
   powerManagement.enable = true;
   powerManagement.cpuFreqGovernor = "performance";
-  services.throttled.enable = true;
+  boot.kernelParams = [
+    "nvidia-drm.modeset=1"
+    "nvidia_drm.fbdev=1"
+  ];
 
   ################################## SYSTEM ####################################
   boot.consoleLogLevel = 0;
@@ -59,18 +68,8 @@
   services.udisks2.enable = true;
   system.stateVersion = "25.05";
   time.timeZone = "Europe/Warsaw";
-  users.extraGroups.vboxusers.members = [ "placek" ];
   virtualisation.docker.autoPrune.dates = "daily";
   virtualisation.docker.enable = true;
-  virtualisation.libvirtd.enable = true;
-  virtualisation.virtualbox.host.enable = true;
-
-  ############################# COMMON PACKAGES ################################
-  environment.systemPackages = with pkgs; [
-    gitFull
-    docker-compose
-    htop
-  ];
 
   ################################# SERVICES ###################################
   services.clamav.daemon.enable = true;
@@ -78,7 +77,50 @@
   services.nfs.server.enable = true;
 
   ################################### NFS ######################################
-  services.nfs.server.exports = "/var/projects *(rw,sync,no_subtree_check,no_root_squash,nohide,insecure)";
+#   services.nfs.server.exports = "/var/projects *(rw,sync,no_subtree_check,no_root_squash,nohide,insecure)";
+
+  ################################### GUI ######################################
+  boot.plymouth.enable = true;
+
+  services.xserver.enable = true;
+
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.displayManager.sddm.wayland.enable = false;
+  services.xserver.displayManager.defaultSession = "hyprland";
+  programs.hyprland.enable = true;
+  services.xserver.xkb.layout = "pl";
+  environment.sessionVariables = {
+    WLR_RENDERER = "vulkan";
+    WLR_NO_HARDWARE_CURSORS = "1";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    LIBVA_DRIVER_NAME = "nvidia";
+    GBM_BACKEND = "nvidia-drm";
+  };
+
+  ################################# MULTIMEDIA #################################
+  services.pipewire = {
+    enable = true;
+    audio.enable = true;
+    alsa.enable = true;
+    pulse.enable = true;
+    jack.enable = true;
+  };
+
+  ################################## NVIDIA ####################################
+  nixpkgs.config.cudaSupport = true;
+  hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia.nvidiaSettings = true;
+  hardware.nvidia.open = true;
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
+  hardware.nvidia.powerManagement.enable = false;
+  hardware.nvidia.powerManagement.finegrained = false;
+  hardware.nvidia-container-toolkit.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+  environment.systemPackages = with pkgs; [ nvidia-container-toolkit ];
+
+  ################################@## OLLAMA ###################################
+  services.ollama.enable = true;
+  services.ollama.acceleration = "cuda"; # Use default acceleration
 
   ################################### USERS ####################################
   programs.fish.enable = true;
@@ -121,15 +163,15 @@
 
   networking.nat.enable = true;
   networking.nat.internalIPs = [ "192.168.2.0/24" ];
-  networking.nat.externalInterface = "enp0s20f0u2";
+  networking.nat.externalInterface = "enp2s0f0";
 
-  networking.interfaces.enp0s20f0u2.useDHCP = true;
-  networking.interfaces.eno1.ipv4.addresses = [ { address = "192.168.2.1"; prefixLength = 24; } ];
+  networking.interfaces.enp2s0f0.useDHCP = true;
+  networking.interfaces.enp2s0f1.ipv4.addresses = [ { address = "192.168.2.1"; prefixLength = 24; } ];
 
   services.dnsmasq.enable = true;
   services.dnsmasq.settings.server = [ "127.0.0.1#5353" ];
   services.dnsmasq.settings.domain = "lan";
-  services.dnsmasq.settings.interface = "eno1";
+  services.dnsmasq.settings.interface = "enp2s0f1";
   services.dnsmasq.settings.bind-interfaces = true;
   services.dnsmasq.settings.dhcp-range = "192.168.2.10,192.168.2.254,24h";
 
