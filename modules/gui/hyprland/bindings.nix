@@ -12,7 +12,6 @@ let
 in
 {
   config = {
-    home.packages = [ clipboard_menu ];
     wayland.windowManager.hyprland.settings = {
       "$mod" = "SUPER";
 
@@ -27,36 +26,36 @@ in
       bind = [
         # FOCUS
         # Windows
-        "$mod, j, cyclenext"
-        "$mod, k, cyclenext, prev"
+        "$mod, h, cyclenext"
+        "$mod, l, cyclenext, prev"
         # Workspaces
-        "$mod CTRL, j, workspace, r+1"
-        "$mod CTRL, k, workspace, r-1"
+        "$mod CTRL, h, workspace, r-1"
+        "$mod CTRL, l, workspace, r+1"
         # Monitors
-        "$mod SHIFT, j, focusmonitor, +1"
-        "$mod SHIFT, k, focusmonitor, -2"
+        "$mod SHIFT, h, focusmonitor, -1"
+        "$mod SHIFT, l, focusmonitor, +1"
 
         # MOVE
         # Reorder windows
-        "$mod, h, swapnext"
-        "$mod, l, swapnext, prev"
+        "$mod, y, swapnext"
+        "$mod, o, swapnext, prev"
         # Between workspaces
-        "$mod CTRL, h, movetoworkspace, r-1"
-        "$mod CTRL, l, movetoworkspace, r+1"
+        "$mod CTRL, y, movetoworkspace, r-1"
+        "$mod CTRL, o, movetoworkspace, r+1"
         # Between monitors
-        "$mod SHIFT, h, movewindow, mon:-1"
-        "$mod SHIFT, l, movewindow, mon:+1"
+        "$mod SHIFT, y, movewindow, mon:-1"
+        "$mod SHIFT, o, movewindow, mon:+1"
 
         # Toggle floating
         "$mod, mouse:274, togglefloating"
 
-        # Shrink/Expand master area (Ctrl+j/k)
-        "$mod CTRL SHIFT, h, layoutmsg, mfact -0.02"
-        "$mod CTRL SHIFT, l, layoutmsg, mfact +0.02"
+        # Shrink/Expand master area
+        "$mod, j, layoutmsg, mfact -0.02"
+        "$mod, k, layoutmsg, mfact +0.02"
         "$mod, mouse_down, layoutmsg, mfact -0.02"
         "$mod, mouse_up,   layoutmsg, mfact +0.02"
 
-        # Close / Quit (q / Shift+q)
+        # Close / Quit
         "$mod, q, killactive"
         "$mod SHIFT, q, exec, hyprctl dispatch exit"
 
