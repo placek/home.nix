@@ -76,6 +76,7 @@
       lilypond
       musescore
       qcad
+      qimgv
       slack
       spotify
     ];
