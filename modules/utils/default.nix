@@ -59,7 +59,6 @@ in
   imports = [
     ./tertius.nix
     ./nnn.nix
-    ./clipboard.nix
     ./scripts.nix
   ];
 
