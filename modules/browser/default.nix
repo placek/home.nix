@@ -33,7 +33,7 @@ in
     programs.firefox.enable = true;
 
     xdg.desktopEntries.qutebrowser = {
-      name = "qutebrowser";
+      name = "QuteBrowser";
       genericName = "qutebrowser";
       type = "Application";
       exec = config.browserExec;
