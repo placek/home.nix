@@ -2,14 +2,6 @@
 , config
 , ...
 }:
-let
-  clipboard_menu = pkgs.writeShellScriptBin "clipboard_menu" ''
-    exec ${config.services.clipcat.package}/bin/clipcat-menu --finder=custom insert "$@"
-  '';
-  udisksMenu = ''
-    ${pkgs.udiskie}/bin/udiskie-umount -a; ${pkgs.udiskie}/bin/udiskie-mount -a
-  '';
-in
 {
   config = {
     wayland.windowManager.hyprland.settings = {
@@ -63,12 +55,12 @@ in
         "$mod, Return, exec, ${config.terminalExec}"
         "$mod, space,  exec, ${pkgs.wofi}/bin/wofi --show drun"
         "$mod, b,      exec, ${pkgs.wofi-pass}/bin/wofi-pass"
-        "$mod, n,      exec, ${clipboard_menu}/bin/clipboard_menu"
-#         "$mod, m,      exec, sh -c '${udisksMenu}'"
+        "$mod, n,      exec, ${config.services.clipcat.package}/bin/clipcat-menu --finder=custom insert"
+        "$mod, m,      exec, ${pkgs.udiskie}/bin/udiskie-mount -a"
+        "$mod, M,      exec, ${pkgs.udiskie}/bin/udiskie-umount -a"
 
         # Notifications: history “pop” (panel) / toggle DND
         "$mod, Escape, exec, ${pkgs.dunst}/bin/dunstctl history-pop"
-#           "$mod CTRL, Escape, exec, ${swayncctl} --toggle-dnd"
 
         # Multimedia
         ", Print, exec, ${pkgs.hyprshot}/bin/hyprshot -m region -o ${config.downloadsDirectory} -f 'screenshot_%Y-%m-%d_%H-%M-%S.png' -c"
