@@ -4,6 +4,12 @@
 , modulesPath
 , ...
 }:
+let
+  wan_interface = "enp2s0f0";
+  lan_interface = "enp2s0f1";
+  aux_interface = "enp7s0";
+  traefik_docker_network = "traefik-public";
+in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -22,12 +28,8 @@
 
   swapDevices = [ { device = "/dev/disk/by-uuid/2fd23668-a0f3-4adc-a6d5-e0eea9aff2c8"; } ];
 
-  networking.useDHCP = lib.mkDefault true;
-
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
   ################################### NIX ######################################
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   nix.gc.automatic = true;
   nix.gc.dates = "daily";
   nix.gc.options = "--delete-older-than 30d";
@@ -38,52 +40,51 @@
   '';
 
   ################################# HARDWARE ###################################
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.keyboard.zsa.enable = true;
+  powerManagement.enable = true;
+  powerManagement.cpuFreqGovernor = "performance";
+
+  ################################## BOOT ######################################
   boot.extraModulePackages = [ ];
   boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" "ahci" "sd_mod" "sdhci_pci" ];
   boot.initrd.kernelModules = [];
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.enable = true;
-  hardware.graphics.enable = true;
-  services.sshd.enable = true;
-  powerManagement.enable = true;
-  powerManagement.cpuFreqGovernor = "performance";
+  boot.consoleLogLevel = 0;
+  boot.supportedFilesystems = [ "ntfs" ];
+  boot.tmp.cleanOnBoot = true;
   boot.kernelParams = [
     "nvidia-drm.modeset=1"
     "nvidia_drm.fbdev=1"
   ];
 
   ################################## SYSTEM ####################################
-  boot.consoleLogLevel = 0;
-  boot.supportedFilesystems = [ "ntfs" ];
-  boot.tmp.cleanOnBoot = true;
   console.keyMap = "pl";
-  hardware.keyboard.zsa.enable = true;
   i18n.defaultLocale = "pl_PL.UTF-8";
   nixpkgs.config.allowUnfree = true;
   security.sudo.wheelNeedsPassword = false;
+  system.stateVersion = "25.05";
+  time.timeZone = "Europe/Warsaw";
+
+  ################################# SERVICES ###################################
+  services.sshd.enable = true;
   services.cron.enable = true;
   services.openssh.extraConfig = "StreamLocalBindUnlink yes";
   services.printing.drivers = [ pkgs.foo2zjs pkgs.mfcl8690cdwcupswrapper ];
   services.printing.enable = true;
   services.udisks2.enable = true;
-  system.stateVersion = "25.05";
-  time.timeZone = "Europe/Warsaw";
-  virtualisation.docker.autoPrune.dates = "daily";
-  virtualisation.docker.enable = true;
-
-  ################################# SERVICES ###################################
   services.clamav.daemon.enable = true;
   services.clamav.updater.enable = true;
-  services.nfs.server.enable = true;
-
-  ################################### NFS ######################################
-#   services.nfs.server.exports = "/var/projects *(rw,sync,no_subtree_check,no_root_squash,nohide,insecure)";
+  services.ollama.enable = true;
+  services.ollama.acceleration = "cuda"; # Use default acceleration
+  virtualisation.docker.autoPrune.dates = "daily";
+  virtualisation.docker.enable = true;
 
   ################################### GUI ######################################
   boot.plymouth.enable = true;
 
   services.xserver.enable = true;
-
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.displayManager.sddm.wayland.enable = false;
   services.xserver.displayManager.defaultSession = "hyprland";
@@ -107,6 +108,8 @@
   };
 
   ################################## NVIDIA ####################################
+  hardware.graphics.enable = true;
+  hardware.graphics.enable32Bit = true;
   nixpkgs.config.cudaSupport = true;
   hardware.nvidia.modesetting.enable = true;
   hardware.nvidia.nvidiaSettings = true;
@@ -117,10 +120,6 @@
   hardware.nvidia-container-toolkit.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
   environment.systemPackages = with pkgs; [ nvidia-container-toolkit ];
-
-  ################################@## OLLAMA ###################################
-  services.ollama.enable = true;
-  services.ollama.acceleration = "cuda"; # Use default acceleration
 
   ################################### USERS ####################################
   programs.fish.enable = true;
@@ -134,6 +133,8 @@
   ];
 
   ################################# NETWORK ####################################
+  networking.useDHCP = lib.mkDefault true;
+
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
   security.acme.defaults.email = "placzynski.pawel@gmail.com";
@@ -146,7 +147,7 @@
 
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
-  networking.firewall.trustedInterfaces = [ "eno1" ];
+  networking.firewall.trustedInterfaces = [ lan_interface ];
   networking.firewall.checkReversePath = false;
   networking.firewall.allowedUDPPorts = [
     111 # rpcbind
@@ -163,15 +164,16 @@
 
   networking.nat.enable = true;
   networking.nat.internalIPs = [ "192.168.2.0/24" ];
-  networking.nat.externalInterface = "enp2s0f0";
+  networking.nat.externalInterface = wan_interface;
 
-  networking.interfaces.enp2s0f0.useDHCP = true;
-  networking.interfaces.enp2s0f1.ipv4.addresses = [ { address = "192.168.2.1"; prefixLength = 24; } ];
+  networking.interfaces."${wan_interface}".useDHCP = true;
+  networking.interfaces."${lan_interface}".ipv4.addresses = [ { address = "192.168.2.1"; prefixLength = 24; } ];
+  networking.interfaces."${aux_interface}".ipv4.addresses = [ { address = "192.168.3.1"; prefixLength = 24; } ];
 
   services.dnsmasq.enable = true;
   services.dnsmasq.settings.server = [ "127.0.0.1#5353" ];
   services.dnsmasq.settings.domain = "lan";
-  services.dnsmasq.settings.interface = "enp2s0f1";
+  services.dnsmasq.settings.interface = lan_interface;
   services.dnsmasq.settings.bind-interfaces = true;
   services.dnsmasq.settings.dhcp-range = "192.168.2.10,192.168.2.254,24h";
 
@@ -208,7 +210,7 @@
         docker = {
           endpoint = "unix:///run/docker.sock";
           exposedByDefault = false;
-          network = "traefik-public"; # Ensure this matches the Docker network
+          network = traefik_docker_network;
         };
       };
     };
@@ -228,10 +230,8 @@
     };
   };
 
-  systemd.services.traefik.preStart = let
-    docker = "${pkgs.docker}/bin/docker";
-  in ''
-    ${docker} network inspect traefik-public >/dev/null 2>&1 || \
-    ${docker} network create traefik-public || true
+  systemd.services.traefik.preStart = ''
+    ${pkgs.docker}/bin/docker network inspect ${traefik_docker_network} >/dev/null 2>&1 || \
+    ${pkgs.docker}/bin/docker network create ${traefik_docker_network} || true
   '';
 }
