@@ -61,8 +61,6 @@ in
     ./nnn.nix
     ./clipboard.nix
     ./scripts.nix
-    ./transcribe.nix
-    ./sync_projects.nix
   ];
 
   config = {
