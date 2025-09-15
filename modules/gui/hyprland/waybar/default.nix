@@ -57,11 +57,11 @@ in
           network = {
             format-wifi = " 󰖩  {essid} ";
             format-ethernet = " 󱘖  {ifname} ";
+            format-alt = " 󱘖  {ipaddr} ";
             format-linked = " 󱘖  {ifname} (no IP) ";
-            format-disconnected = "   disconnected ";
-            format-alt = " 󰅧  {bandwidthUpBytes} 󰅢  {bandwidthDownBytes} ";
+            format-disconnected = " 󱘖  disconnected ";
+            tooltip-format = " 󰅧  {bandwidthUpBytes} 󰅢  {bandwidthDownBytes} ";
             interval = 1;
-            tooltip = false;
           };
 
           battery = {
@@ -133,8 +133,17 @@ in
           clock = {
             interval = 1;
             timezone = "Europe/Warsaw";
-            format = " {:L%A %Y-%m-%d %H:%M} ";
-            tooltip = false;
+            format = " {:L%F %R} ";
+            format-alt = " {:L%H:%M %z (%Z), %A (%W) %d %B %Y} ";
+            tooltip-format = "{calendar}";
+            actions.on-scroll-up = "shift_up";
+            actions.on-scroll-down = "shift_down";
+            calendar = {
+              mode = "month";
+              on-scroll = 1;
+              weeks-pos = "right";
+              format.today = "<b><u>{}</u></b>";
+            };
           };
         };
       };
