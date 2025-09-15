@@ -99,7 +99,6 @@ in
           "custom/playnow" = {
             exec = "${player_status}/bin/player_status";
             format = " {} ";
-            hide-empty-text = true;
             interval = 1;
             tooltip = false;
             return-type = "json";

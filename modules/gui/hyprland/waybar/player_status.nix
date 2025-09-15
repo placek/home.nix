@@ -16,13 +16,12 @@ pkgs.writeScriptBin "player_status" ''
       artist = run(["${pkgs.playerctl}/bin/playerctl", "metadata", "artist"])
       title  = run(["${pkgs.playerctl}/bin/playerctl", "metadata", "title"])
       if not status or status == "Stopped":
-          print(json.dumps({"text": ""}))
+          print(json.dumps({"text": ""}))
           return
 
       icon = {
           "Playing": "",
           "Paused":  "",
-          "Stopped": "",
       }.get(status, "")
 
       text = f"{icon} {artist} - {title}"
