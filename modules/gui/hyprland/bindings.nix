@@ -72,9 +72,6 @@
         ", XF86AudioMute,         exec, ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
         ", XF86AudioLowerVolume,  exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
         ", XF86AudioRaiseVolume,  exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1.0"
-        # Sleep/PowerOff keys → lock (like slock)
-        ", XF86Sleep,    exec, ${pkgs.hyprlock}/bin/hyprlock"
-        ", XF86PowerOff, exec, ${pkgs.hyprlock}/bin/hyprlock"
       ];
     };
   };
