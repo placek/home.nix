@@ -29,19 +29,6 @@
       description = "A color scheme.";
     };
 
-    gui.border.size = mkOption {
-      type = types.int;
-      default = 4;
-      description = "A border size.";
-    };
-
-    gui.wallpaper = mkOption {
-      type = types.path;
-      default = ./wallpaper.jpg;
-      description = "A wallpaper.";
-      readOnly = true;
-    };
-
     menuExec = mkOption {
       type = types.str;
       default = "${pkgs.xprompt}/bin/xprompt";

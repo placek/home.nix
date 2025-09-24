@@ -27,7 +27,7 @@
   #custom-gpu,
   #cpu {
     background-color: ${config.gui.theme.base00};
-    padding: 4px 6px;
+    padding: ${builtins.toString config.gui.border.size}px ${builtins.toString config.gui.border.size}px;
     margin-top: 0px;
     margin: 0px;
     border-width: 0px;
@@ -35,19 +35,19 @@
 
   #custom-playnow,
   #clock {
-    border-radius: 0px 0px 0px 6px;
+    border-radius: 0px 0px 0px ${builtins.toString config.gui.border.radius}px;
   }
 
   #disk,
   #pulseaudio {
-    border-radius: 0px 0px 6px 0px;
-    margin-right: 6px;
+    border-radius: 0px 0px ${builtins.toString config.gui.border.radius}px 0px;
+    margin-right: ${builtins.toString config.gui.border.size}px;
   }
 
   #network,
   #custom-notmuch {
-    border-radius: 0px 0px 6px 6px;
-    margin-right: 6px;
+    border-radius: 0px 0px ${builtins.toString config.gui.border.radius}px ${builtins.toString config.gui.border.radius}px;
+    margin-right: ${builtins.toString config.gui.border.size}px;
   }
 
   #network:hover,
@@ -67,32 +67,32 @@
   #workspaces button {
     background-color: ${config.gui.theme.base00};
     color: ${config.gui.theme.base03};
-    padding: 6px 12px;
+    padding: ${builtins.toString config.gui.border.size}px ${builtins.toString (config.gui.border.size * 2)}px;
     margin-top: 0px;
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: ${builtins.toString config.gui.border.size}px;
+    margin-right: ${builtins.toString config.gui.border.size}px;
     border-width: 0px;
-    border-radius: 0px 0px 6px 6px;
-    border-top: 4px solid ${config.gui.theme.base00};
+    border-radius: 0px 0px ${builtins.toString config.gui.border.radius}px ${builtins.toString config.gui.border.radius}px;
+    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base00};
   }
 
   #workspaces button.visible {
-    border-top: 4px solid ${config.gui.theme.base08};
+    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
   }
 
   #workspaces button.active {
-    border-top: 4px solid ${config.gui.theme.base03};
+    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
   }
 
   window#waybar #workspaces button:hover {
     background: ${config.gui.theme.base08};
-    border-top: 4px solid ${config.gui.theme.base08};
+    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
     background-image: none;
     box-shadow: none;
   }
 
   window#waybar #workspaces button.active:hover {
-    border-top: 4px solid ${config.gui.theme.base03};
+    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
   }
 
   window#waybar #workspaces button:hover > * {
@@ -101,9 +101,9 @@
 
   tooltip {
     background: ${config.gui.theme.base00};
-    border: 1px solid ${config.gui.theme.base03};
-    border-radius: 6px;
-    padding: 6px;
-    font-size: 12px;
+    border: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
+    border-radius: ${builtins.toString config.gui.border.radius}px;
+    padding: ${builtins.toString config.gui.border.size}px;
+    font-size: 14px;
   }
 ''
