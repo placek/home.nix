@@ -78,6 +78,7 @@ in
   services.clamav.updater.enable = true;
   services.ollama.enable = true;
   services.ollama.acceleration = "cuda"; # Use default acceleration
+  services.ollama.host = "0.0.0.0"; # Listen on all interfaces
   virtualisation.docker.autoPrune.dates = "daily";
   virtualisation.docker.enable = true;
 
@@ -147,8 +148,11 @@ in
 
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
-  networking.firewall.trustedInterfaces = [ lan_interface ];
-  networking.firewall.checkReversePath = false;
+  networking.firewall.trustedInterfaces = [ lan_interface "docker0" ];
+  networking.firewall.interfaces."docker0".allowedTCPPorts = [ 11434 ];
+  networking.firewall.interfaces."br-859ab30c4da2".allowedTCPPorts = [ 11434 ];
+  networking.firewall.interfaces."br-a34935e25dbb".allowedTCPPorts = [ 11434 ];
+  networking.firewall.checkReversePath = "loose";
   networking.firewall.allowedUDPPorts = [
     111 # rpcbind
     2049 # nfs
