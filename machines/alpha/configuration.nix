@@ -86,11 +86,11 @@ in
   boot.plymouth.enable = true;
 
   services.xserver.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.displayManager.sddm.wayland.enable = false;
-  services.xserver.displayManager.defaultSession = "hyprland";
-  programs.hyprland.enable = true;
   services.xserver.xkb.layout = "pl";
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = false;
+  services.displayManager.defaultSession = "hyprland";
+  programs.hyprland.enable = true;
   environment.sessionVariables = {
     WLR_RENDERER = "vulkan";
     WLR_NO_HARDWARE_CURSORS = "1";
