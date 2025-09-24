@@ -114,7 +114,6 @@ in
       ngrok             # expose local servers to the internet
       nix-direnv-flakes # Nix flakes support
       nix-prefetch-git  # fetch Git repositories
-      openai-whisper    # speech to text
       openssl           # cryptographic library
       openvpn           # VPN client
       orca-c            # midi sequencer
@@ -137,8 +136,8 @@ in
       unzip             # extract ZIP archives
       usbutils          # USB device management
       uucp              # Unix-to-Unix copy
-      vagrant           # virtual machine manager
       wget              # download files
+      whisper-cpp       # speech to text
       wrk2              # HTTP benchmarking tool
       xh                # HTTP client
       yq                # YAML processor
