@@ -29,28 +29,25 @@
     background-color: ${config.gui.theme.base00};
     padding: 4px 6px;
     margin-top: 0px;
-    margin-left: 6px;
-    margin-right: 6px;
-    border-width: 0px;
-    border-radius: 0px 0px 10px 10px;
-  }
-
-  #custom-gpu,
-  #memory {
-    border-radius: 0px;
     margin: 0px;
+    border-width: 0px;
   }
 
-  #cpu,
-  #custom-playnow {
-    border-radius: 0px 0px 0px 10px;
-    margin-right: 0px;
+  #custom-playnow,
+  #clock {
+    border-radius: 0px 0px 0px 6px;
   }
 
   #disk,
   #pulseaudio {
-    border-radius: 0px 0px 10px 0px;
-    margin-left: 0px;
+    border-radius: 0px 0px 6px 0px;
+    margin-right: 6px;
+  }
+
+  #network,
+  #custom-notmuch {
+    border-radius: 0px 0px 6px 6px;
+    margin-right: 6px;
   }
 
   #network:hover,
@@ -75,31 +72,33 @@
     margin-left: 6px;
     margin-right: 6px;
     border-width: 0px;
-    border-radius: 10px;
-    border: 4px solid ${config.gui.theme.base00};
+    border-radius: 0px 0px 6px 6px;
+    border-top: 4px solid ${config.gui.theme.base00};
   }
 
   #workspaces button.visible {
-    border: 4px solid ${config.gui.theme.base08};
+    border-top: 4px solid ${config.gui.theme.base08};
   }
 
   #workspaces button.active {
-    border: 4px solid ${config.gui.theme.base03};
+    border-top: 4px solid ${config.gui.theme.base03};
   }
 
-  window#waybar #workspaces button:hover,
-  window#waybar #workspaces button:hover:active,
-  window#waybar #workspaces button:hover:checked,
-  window#waybar:backdrop #workspaces button:hover {
+  window#waybar #workspaces button:hover {
     background: ${config.gui.theme.base08};
-    border: 4px solid ${config.gui.theme.base08};
+    border-top: 4px solid ${config.gui.theme.base08};
     background-image: none;
     box-shadow: none;
+  }
+
+  window#waybar #workspaces button.active:hover {
+    border-top: 4px solid ${config.gui.theme.base03};
   }
 
   window#waybar #workspaces button:hover > * {
     background: transparent;
   }
+
   tooltip {
     background: ${config.gui.theme.base00};
     border: 1px solid ${config.gui.theme.base03};
