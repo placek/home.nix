@@ -57,7 +57,7 @@ in
           network = {
             format-wifi = " 󰖩  {essid} ";
             format-ethernet = " 󱘖  {ifname} ";
-            format-alt = " 󱘖  {ipaddr} ";
+            format-alt = " 󱘖  {ipaddr}/{cidr} ";
             format-linked = " 󱘖  {ifname} (no IP) ";
             format-disconnected = " 󱘖  disconnected ";
             tooltip-format = " 󰅧  {bandwidthUpBytes} 󰅢  {bandwidthDownBytes} ";
@@ -100,9 +100,11 @@ in
             exec = "${player_status}/bin/player_status";
             format = " {} ";
             interval = 1;
-            tooltip = false;
+            tooltip = true;
             return-type = "json";
             on-click = "${pkgs.playerctl}/bin/playerctl play-pause";
+            on-click-middle = "${pkgs.playerctl}/bin/playerctl play-pause --all-players";
+            on-click-right = "${pkgs.playerctl}/bin/playerctl pause --all-players";
           };
 
           pulseaudio = {
@@ -134,7 +136,7 @@ in
             interval = 1;
             timezone = "Europe/Warsaw";
             format = " {:L%F %R} ";
-            format-alt = " {:L%H:%M %z (%Z), %A (%W) %d %B %Y} ";
+            format-alt = " {:L%A (%W) %d %B %Y, %H:%M %z (%Z)} ";
             tooltip-format = "{calendar}";
             actions.on-scroll-up = "shift_up";
             actions.on-scroll-down = "shift_down";
@@ -142,7 +144,7 @@ in
               mode = "month";
               on-scroll = 1;
               weeks-pos = "right";
-              format.today = "<b><u>{}</u></b>";
+              format.today = "<span color=\"${config.gui.theme.base0F}\">{}</span>";
             };
           };
         };

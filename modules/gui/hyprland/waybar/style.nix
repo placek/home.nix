@@ -10,44 +10,24 @@
   }
 
   window#waybar {
-    background: rgba(0, 0, 0, 0.0);
+    background: ${config.gui.theme.base00};
     border: none;
+    margin: 0px;
   }
 
-  #clock,
-  #memory,
-  #network,
-  #disk,
-  #pulseaudio,
-  #battery,
-  #backlight,
-  #memory,
-  #custom-playnow,
-  #custom-notmuch,
+  #cpu,
   #custom-gpu,
-  #cpu {
-    background-color: ${config.gui.theme.base00};
+  #memory,
+  #disk,
+  #network,
+  #custom-playnow,
+  #pulseaudio,
+  #custom-notmuch,
+  #clock {
     padding: ${builtins.toString config.gui.border.size}px ${builtins.toString config.gui.border.size}px;
-    margin-top: 0px;
     margin: 0px;
     border-width: 0px;
-  }
-
-  #custom-playnow,
-  #clock {
-    border-radius: 0px 0px 0px ${builtins.toString config.gui.border.radius}px;
-  }
-
-  #disk,
-  #pulseaudio {
-    border-radius: 0px 0px ${builtins.toString config.gui.border.radius}px 0px;
-    margin-right: ${builtins.toString config.gui.border.size}px;
-  }
-
-  #network,
-  #custom-notmuch {
-    border-radius: 0px 0px ${builtins.toString config.gui.border.radius}px ${builtins.toString config.gui.border.radius}px;
-    margin-right: ${builtins.toString config.gui.border.size}px;
+    border-radius: 0px;
   }
 
   #network:hover,
@@ -62,48 +42,68 @@
   #custom-notmuch:hover,
   #clock:hover {
     background-color: ${config.gui.theme.base08};
+    color: ${config.gui.theme.base0F};
   }
 
   #workspaces button {
     background-color: ${config.gui.theme.base00};
     color: ${config.gui.theme.base03};
-    padding: ${builtins.toString config.gui.border.size}px ${builtins.toString (config.gui.border.size * 2)}px;
-    margin-top: 0px;
-    margin-left: ${builtins.toString config.gui.border.size}px;
-    margin-right: ${builtins.toString config.gui.border.size}px;
+    padding: ${builtins.toString config.gui.border.size}px ${builtins.toString (config.gui.border.size * 3)}px;
+    margin: 0px;
     border-width: 0px;
-    border-radius: 0px 0px ${builtins.toString config.gui.border.radius}px ${builtins.toString config.gui.border.radius}px;
-    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base00};
+    border-bottom: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base00};
+    border-radius: 0px;
   }
 
   #workspaces button.visible {
-    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
+    border-bottom: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
   }
 
   #workspaces button.active {
-    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
+    border-bottom: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
   }
 
   window#waybar #workspaces button:hover {
     background: ${config.gui.theme.base08};
-    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
+    border-bottom: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
     background-image: none;
     box-shadow: none;
+    text-shadow: none;
+    outline: none;
+  }
+
+  window#waybar #workspaces button:hover * {
+    color: ${config.gui.theme.base0F};
+    box-shadow: none;
+    text-shadow: none;
+    outline: none;
   }
 
   window#waybar #workspaces button.active:hover {
-    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
+    border-bottom: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
+    box-shadow: none;
+    text-shadow: none;
+    outline: none;
   }
 
   window#waybar #workspaces button:hover > * {
     background: transparent;
+    box-shadow: none;
+    text-shadow: none;
+    outline: none;
+    color: ${config.gui.theme.base0F};
   }
 
   tooltip {
     background: ${config.gui.theme.base00};
-    border: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
-    border-radius: ${builtins.toString config.gui.border.radius}px;
     padding: ${builtins.toString config.gui.border.size}px;
+    border-width: 0px;
+    border-radius: 0px;
+    box-shadow: none;
+    text-shadow: none;
+    outline: none;
     font-size: 14px;
+    border: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
+    margin: 0px;
   }
 ''
