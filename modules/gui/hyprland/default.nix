@@ -22,14 +22,12 @@
     gui.border.radius = mkOption {
       type = types.int;
       default = 6;
-      description = "A border size.";
+      description = "A border radius size.";
     };
   };
 
   config = {
-    home.packages = with pkgs; [
-      wl-clipboard
-    ];
+    home.packages = with pkgs; [ wl-clipboard ];
 
     # Start services/utilities on session start
     wayland.windowManager.hyprland = {
@@ -54,13 +52,7 @@
         master.orientation = "left";
         master.mfact = 0.66;
 
-        windowrulev2 = [
-          "tile, class:^(kitty)$"
-        ];
-
-        exec-once = [
-          "${config.programs.waybar.package}/bin/waybar &"
-        ];
+        windowrulev2 = [ "tile, class:^(kitty)$" ];
       };
     };
   };

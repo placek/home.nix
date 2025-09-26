@@ -120,6 +120,7 @@ in
       p7zip             # extract 7z archives
       pandoc            # document converter
       pdftk             # manipulate PDF files
+      playerctl         # control media players
       qFlipper          # flipper control software
       qmk               # keyboard firmware
       rclone            # cloud storage

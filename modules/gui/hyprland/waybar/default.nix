@@ -4,13 +4,15 @@
 , ...
 }:
 let
-  gpu_status = import ./gpu_status.nix { inherit pkgs; };
-  player_status = import ./player_status.nix { inherit pkgs; };
+  gpu_status = import ./gpu_status.nix { inherit pkgs config; };
   mail_status = import ./mail_status.nix { inherit pkgs; };
+  weather_status = import ./weather_status.nix { inherit pkgs config; };
 in
 {
   config = {
+    home.packages = with pkgs; [ weather_status ];
     programs.waybar = {
+      systemd.enable = true;
       enable = true;
       settings = {
         mainBar = {
@@ -19,31 +21,68 @@ in
           height = 30;
           spacing = 0;
 
-          modules-left = [ "cpu" "custom/gpu" "memory" "disk" "network" "battery" ];
+          modules-left = [ "group/stats" ];
           modules-center = [ "hyprland/workspaces" ];
-          modules-right = [ "custom/playnow" "pulseaudio" "custom/notmuch" "clock" ];
+          modules-right = [ "custom/notmuch" "battery" "group/media" "group/here" ];
+
+          "group/stats" = {
+            orientation = "inherit";
+            modules = [ "cpu" "custom/gpu" "memory" "disk" "network" ];
+            drawer = {
+              transition-duration = 500;
+              transition-left-to-right = true;
+            };
+          };
+
+          "group/media" = {
+            orientation = "inherit";
+            modules = [ "pulseaudio" "mpris" ];
+            drawer = {
+              transition-duration = 500;
+              transition-left-to-right = false;
+            };
+          };
+
+          "group/here" = {
+            orientation = "inherit";
+            modules = [ "clock" "custom/weather" ];
+            drawer = {
+              transition-duration = 500;
+              transition-left-to-right = false;
+            };
+          };
 
           cpu = {
-            format = "   {usage}% ";
-            format-alt = "   {load} ";
+            format = " {icon} {usage}% ";
+            format-alt = " {icon} {avg_frequency}/{max_frequency} GHz ({load}) ";
             tooltip = false;
             interval = 1;
+            format-icons = [
+              "<span color=\"${config.gui.theme.base02}\"> </span>"
+              "<span color=\"${config.gui.theme.base03}\"> </span>"
+              "<span color=\"${config.gui.theme.base01}\"> </span>"
+            ];
           };
 
           "custom/gpu" = {
             exec = "${gpu_status}/bin/gpu_status";
-            format = "   {text} ";
-            format-alt = "   {alt} ";
+            format = " {text} ";
+            format-alt = " {alt} ";
             interval = 1;
             tooltip = false;
             return-type = "json";
           };
 
           memory = {
-            format = "   {percentage}% ";
-            format-alt = "   {used:0.1f}G/{total:0.1f}G ";
+            format = " {icon} {percentage}% ";
+            format-alt = " {icon} {used:0.1f}/{total:0.1f} GB ";
             tooltip = false;
             interval = 1;
+            format-icons = [
+              "<span color=\"${config.gui.theme.base02}\"> </span>"
+              "<span color=\"${config.gui.theme.base03}\"> </span>"
+              "<span color=\"${config.gui.theme.base01}\"> </span>"
+            ];
           };
 
           disk = {
@@ -86,7 +125,7 @@ in
               "inkscape" = "";
               "gimp" = "";
               "cad" = "";
-              "spotify" = "";
+              "spotify" = "";
               "steam" = "";
               "office" = "";
               "musescore" = "";
@@ -96,12 +135,18 @@ in
             all-outputs = false;
           };
 
-          "custom/playnow" = {
-            exec = "${player_status}/bin/player_status";
-            format = " {} ";
-            interval = 1;
-            tooltip = true;
-            return-type = "json";
+          mpris = {
+            format = " <span color=\"${config.gui.theme.base03}\">{player_icon}</span> ";
+            format-paused = " {status_icon} ";
+            player-icons = {
+              default = "▶";
+              mpv = " ";
+              spotify = " ";
+              chromium = " ";
+            };
+            status-icons = {
+              paused = "";
+            };
             on-click = "${pkgs.playerctl}/bin/playerctl play-pause";
             on-click-middle = "${pkgs.playerctl}/bin/playerctl play-pause --all-players";
             on-click-right = "${pkgs.playerctl}/bin/playerctl pause --all-players";
@@ -117,7 +162,11 @@ in
               phone = "  ";
               portable = "  ";
               car = "  ";
-              default = [ "  " "  " "  " ];
+              default = [
+                " <span color=\"${config.gui.theme.base02}\"> </span>"
+                " <span color=\"${config.gui.theme.base03}\"> </span>"
+                " <span color=\"${config.gui.theme.base01}\"> </span>"
+              ];
             };
             tooltip = true;
             on-click = "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
@@ -127,7 +176,16 @@ in
             exec = "${mail_status}/bin/mail_status";
             interval = 60;
             hide-empty-text = true;
-            format = "   {} ";
+            format = " <span color=\"${config.gui.theme.base03}\"> </span> {} ";
+            tooltip = true;
+            return-type = "json";
+            on-click = "${pkgs.kitty}/bin/kitty -e ${pkgs.alot}/bin/alot";
+          };
+
+          "custom/weather" = {
+            exec = "${weather_status}/bin/weather_status";
+            interval = 3600;
+            format = " {} ";
             tooltip = true;
             return-type = "json";
           };

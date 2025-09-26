@@ -21,7 +21,7 @@
 
     services.hyprpaper.enable = true;
     services.hyprpaper.settings = {
-      ipc = "off";
+      ipc = "on";
       splash = false;
       preload = [ "~/.wallpaper.jpg" ];
       wallpaper = [ ",~/.wallpaper.jpg" ];

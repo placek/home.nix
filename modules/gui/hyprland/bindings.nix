@@ -63,7 +63,7 @@
         "$mod, Escape, exec, ${pkgs.dunst}/bin/dunstctl history-pop"
 
         # Multimedia
-        ", Print, exec, ${pkgs.hyprshot}/bin/hyprshot -m region -o ${config.downloadsDirectory} -f 'screenshot_%Y-%m-%d_%H-%M-%S.png' -c"
+        ", Print, exec, ${pkgs.hyprshot}/bin/hyprshot -m region -o ${config.downloadsDirectory} -c"
         # Player
         ", XF86AudioPrev,  exec, ${pkgs.playerctl}/bin/playerctl previous"
         ", XF86AudioPlay,  exec, ${pkgs.playerctl}/bin/playerctl play-pause"

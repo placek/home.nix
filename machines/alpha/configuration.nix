@@ -181,16 +181,16 @@ in
   services.dnsmasq.settings.bind-interfaces = true;
   services.dnsmasq.settings.dhcp-range = "192.168.2.10,192.168.2.254,24h";
 
-  # Use NextDNS parental control via dnscrypt-proxy2
-  services.dnscrypt-proxy2 = {
-    enable = true;
-    settings = {
-      listen_addresses = [ "127.0.0.1:5353" ];
-      server_names = [ "NextDNS-94c1a5" ];
-      static."NextDNS-94c1a5".stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HLzk0YzFhNQ";
-    };
-  };
-
+#   Use NextDNS parental control via dnscrypt-proxy2
+#   services.dnscrypt-proxy2 = {
+#     enable = true;
+#     settings = {
+#       listen_addresses = [ "127.0.0.1:5353" ];
+#       server_names = [ "NextDNS-94c1a5" ];
+#       static."NextDNS-94c1a5".stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HLzk0YzFhNQ";
+#     };
+#   };
+# 
   ################################# TRAEFIK ####################################
   services.traefik = {
     enable = true;

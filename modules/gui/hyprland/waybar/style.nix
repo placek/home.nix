@@ -10,7 +10,7 @@
   }
 
   window#waybar {
-    background: ${config.gui.theme.base00};
+    background: rgba(0, 0, 0, 0);
     border: none;
     margin: 0px;
   }
@@ -20,7 +20,7 @@
   #memory,
   #disk,
   #network,
-  #custom-playnow,
+  #mpris,
   #pulseaudio,
   #custom-notmuch,
   #clock {
@@ -30,6 +30,10 @@
     border-radius: 0px;
   }
 
+  #clock {
+    color: ${config.gui.theme.base0F};
+  }
+
   #network:hover,
   #disk:hover,
   #battery:hover,
@@ -37,7 +41,7 @@
   #custom-temperature:hover,
   #memory:hover,
   #cpu:hover,
-  #custom-playnow:hover,
+  #mpris:hover,
   #custom-gpu:hover,
   #custom-notmuch:hover,
   #clock:hover {
@@ -46,26 +50,28 @@
   }
 
   #workspaces button {
-    background-color: ${config.gui.theme.base00};
-    color: ${config.gui.theme.base03};
     padding: ${builtins.toString config.gui.border.size}px ${builtins.toString (config.gui.border.size * 3)}px;
     margin: 0px;
     border-width: 0px;
-    border-bottom: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base00};
+    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base00};
     border-radius: 0px;
   }
 
+  window#waybar #workspaces button * {
+    color: ${config.gui.theme.base0F};
+  }
+
   #workspaces button.visible {
-    border-bottom: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
+    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
   }
 
   #workspaces button.active {
-    border-bottom: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
+    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
   }
 
   window#waybar #workspaces button:hover {
     background: ${config.gui.theme.base08};
-    border-bottom: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
+    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
     background-image: none;
     box-shadow: none;
     text-shadow: none;
@@ -80,7 +86,7 @@
   }
 
   window#waybar #workspaces button.active:hover {
-    border-bottom: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
+    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
     box-shadow: none;
     text-shadow: none;
     outline: none;
