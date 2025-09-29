@@ -10,7 +10,6 @@ let
 in
 {
   config = {
-    home.packages = with pkgs; [ weather_status ];
     programs.waybar = {
       systemd.enable = true;
       enable = true;
