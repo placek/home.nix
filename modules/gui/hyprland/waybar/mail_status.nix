@@ -42,37 +42,42 @@ pkgs.writeScriptBin "mail_status" ''
       # fallback to auto-detection from tags
       return auto_accounts_from_tags()
 
-  total_s = nm_count("tag:unread")
-  if not total_s:
-      print(json.dumps({"text": ""}))
-      return
-  try:
-      total = int(total_s)
-  except ValueError:
-      total = 0
-
-  accounts = load_account_queries()
-  per = {}
-  for name, q in accounts.items():
-      c = nm_count(f"tag:unread and ({q})")
+  def main():
+      total_s = nm_count("tag:unread")
+      if not total_s:
+          print(json.dumps({"text": ""}))
+          sys.exit(0)
       try:
-          per[name] = int(c) if c is not None else 0
+          total = int(total_s)
       except ValueError:
-          per[name] = 0
+          total = 0
 
-  # build tooltip
-  if per:
-      # sort by count desc, then name
-      lines = [f"{name}: {cnt}" for name, cnt in sorted(per.items(), key=lambda kv: (-kv[1], kv[0])) if cnt > 0]
-      if not lines:
-          lines = [f"{name}: 0" for name in sorted(per)]
-      tooltip = "\n".join(lines)
-  else:
-      tooltip = f"Unread: {total}"
+      accounts = load_account_queries()
+      per = {}
+      for name, q in accounts.items():
+          c = nm_count(f"tag:unread and ({q})")
+          try:
+              per[name] = int(c) if c is not None else 0
+          except ValueError:
+              per[name] = 0
 
-  if total == 0:
-      print(json.dumps({"text": ""}))
-      return
-  text = f"{total}"
-  print(json.dumps({"text": text, "tooltip": tooltip}))
+      # build tooltip
+      if per:
+          # sort by count desc, then name
+          lines = [f"{name}: {cnt}" for name, cnt in sorted(per.items(), key=lambda kv: (-kv[1], kv[0])) if cnt > 0]
+          if not lines:
+              lines = [f"{name}: 0" for name in sorted(per)]
+          tooltip = "\n".join(lines)
+      else:
+          tooltip = f"Unread: {total}"
+
+      if total == 0:
+          print(json.dumps({"text": ""}))
+          sys.exit(0)
+
+      text = f"{total}"
+      print(json.dumps({"text": text, "tooltip": tooltip}))
+
+  if __name__ == "__main__":
+      main()
 ''
