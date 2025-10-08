@@ -104,6 +104,8 @@ in
       go-jira           # interact with Jira
       htmlq             # extract data from HTML
       imagemagick       # manipulate images
+      immich-cli        # Immich command line client
+      immich-go         # Immich command line client google
       killall           # kill processes by name
       libinput          # input device management
       lightburn         # laser cutter software
