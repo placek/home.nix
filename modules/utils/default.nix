@@ -116,6 +116,8 @@ in
       ngrok             # expose local servers to the internet
       nix-direnv-flakes # Nix flakes support
       nix-prefetch-git  # fetch Git repositories
+      nvidia-container-toolkit
+      nvidia-docker     # Docker integration for NVIDIA GPUs
       openssl           # cryptographic library
       openvpn           # VPN client
       orca-c            # midi sequencer
