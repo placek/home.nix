@@ -115,12 +115,19 @@ in
   hardware.nvidia.modesetting.enable = true;
   hardware.nvidia.nvidiaSettings = true;
   hardware.nvidia.open = true;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.production;
   hardware.nvidia.powerManagement.enable = false;
   hardware.nvidia.powerManagement.finegrained = false;
   hardware.nvidia-container-toolkit.enable = true;
+  virtualisation.podman.enable = lib.mkForce false;
   services.xserver.videoDrivers = [ "nvidia" ];
-  environment.systemPackages = with pkgs; [ nvidia-container-toolkit ];
+  environment.systemPackages = with pkgs; [
+    nvidia-container-toolkit        # provides nvidia-ctk (and, on NixOS, nvidia-cdi-hook)
+    libnvidia-container             # library used by the CLI/hook
+    (writeShellScriptBin "nvidia-cdi-hook" ''
+      exec ${pkgs.nvidia-container-toolkit}/bin/nvidia-ctk cdi "$@"
+    '')
+  ];
 
   ################################### USERS ####################################
   programs.fish.enable = true;
