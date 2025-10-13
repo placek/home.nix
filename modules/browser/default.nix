@@ -5,6 +5,9 @@
 }:
 let
   qutebrowser = pkgs.qutebrowser;
+  hyprBrowser = pkgs.writeShellScriptBin "hypr-browser" ''
+    hyprctl dispatch exec "[workspace 1 silent] ${qutebrowser}/bin/qutebrowser" "$@"
+  '';
 in
 {
   options = with lib; {
@@ -36,7 +39,7 @@ in
       name = "QuteBrowser";
       genericName = "qutebrowser";
       type = "Application";
-      exec = config.browserExec;
+      exec = "${hyprBrowser}/bin/hypr-browser %u";
       terminal = false;
       icon = "browser";
     };
