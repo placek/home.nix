@@ -62,10 +62,20 @@
       libreoffice
       lilypond
       musescore
-      qcad
+      (pkgs.writeShellScriptBin "qcad-xcb" ''
+        exec env QT_QPA_PLATFORM=xcb ${pkgs.qcad}/bin/qcad "$@"
+      '')
       qimgv
       slack
       spotify
     ];
+
+    xdg.desktopEntries.qcad-xcb = {
+      name = "QCAD";
+      exec = "qcad-xcb %F";
+      icon = "qcad";
+      terminal = false;
+      categories = [ "Graphics" "Engineering" ];
+    };
   };
 }
