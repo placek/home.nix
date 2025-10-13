@@ -46,7 +46,7 @@
     ./mpv.nix
     ./zathura.nix
 
-    ./games.nix
+    ./games
   ];
 
   config = {

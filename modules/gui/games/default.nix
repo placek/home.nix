@@ -35,6 +35,7 @@ let
   };
 in
 {
+  imports = [ ./dwarf-fortress ];
   config = {
     home.packages = [
       wine-rome-total-war
@@ -43,6 +44,7 @@ in
       wine-rome-total-war-enhancement
 
       (pkgs.prismlauncher.override { jdks = [ pkgs.temurin-bin ]; })
+
       pkgs.wineWowPackages.stable
       pkgs.steam
     ];
