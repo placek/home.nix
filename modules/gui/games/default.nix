@@ -35,7 +35,8 @@ let
   };
 in
 {
-  imports = [ ./dwarf-fortress ];
+  imports = [ ./dwarves ];
+
   config = {
     home.packages = [
       wine-rome-total-war
