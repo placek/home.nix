@@ -51,6 +51,7 @@ in
   boot.initrd.kernelModules = [];
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.enable = true;
+  boot.kernel.sysctl."kernel.unprivileged_userns_clone" = 1;
   boot.consoleLogLevel = 0;
   boot.supportedFilesystems = [ "ntfs" ];
   boot.tmp.cleanOnBoot = true;
@@ -98,6 +99,7 @@ in
     LIBVA_DRIVER_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
   };
+  security.chromiumSuidSandbox.enable = true;
 
   ################################# MULTIMEDIA #################################
   services.pipewire = {
@@ -189,15 +191,15 @@ in
   services.dnsmasq.settings.dhcp-range = "192.168.2.10,192.168.2.254,24h";
 
 #   Use NextDNS parental control via dnscrypt-proxy2
-#   services.dnscrypt-proxy2 = {
-#     enable = true;
-#     settings = {
-#       listen_addresses = [ "127.0.0.1:5353" ];
-#       server_names = [ "NextDNS-94c1a5" ];
-#       static."NextDNS-94c1a5".stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HLzk0YzFhNQ";
-#     };
-#   };
-# 
+  services.dnscrypt-proxy2 = {
+    enable = true;
+    settings = {
+      listen_addresses = [ "127.0.0.1:5353" ];
+      server_names = [ "NextDNS-94c1a5" ];
+      static."NextDNS-94c1a5".stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HLzk0YzFhNQ";
+    };
+  };
+
   ################################# TRAEFIK ####################################
   services.traefik = {
     enable = true;
@@ -206,6 +208,11 @@ in
       entryPoints = {
         web.address = ":80";
         websecure.address = ":443";
+        websecure.transport.respondingTimeouts = {
+          readTimeout  = "0s";
+          writeTimeout = "0s";
+          idleTimeout  = "600s";
+        };
         traefik.address = ":8080"; # Enable dashboard & API
       };
       api = {
