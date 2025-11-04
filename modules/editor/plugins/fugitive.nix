@@ -124,7 +124,11 @@
             execute ":bdelete" bufname('fugitive:///*/.git//$')
           else
             Git
-            resize 10
+            let buflines = line('$')
+            let screen_rows = &lines - &cmdheight - (&laststatus ? 1 : 0) - (&showtabline ? 1 : 0)
+            if buflines <= screen_rows
+              execute 'resize ' . buflines
+            endif
             setlocal winfixheight
             setlocal nonumber
             setlocal norelativenumber
