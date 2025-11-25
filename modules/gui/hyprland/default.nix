@@ -51,6 +51,10 @@
         master.new_on_top = true;
         master.orientation = "left";
         master.mfact = 0.66;
+        monitor = [
+          "DP-5,1920x1080@60,0x0,1"
+          "DP-4,1920x1080@60,1920x0,1"
+        ];
 
         windowrulev2 = [ "tile, class:^(kitty)$" ];
       };
