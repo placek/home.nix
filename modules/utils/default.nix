@@ -36,7 +36,7 @@ in
 
     downloaderExec = mkOption {
       type = types.str;
-      default = "${pkgs.aria}/bin/aria2c";
+      default = "${pkgs.aria2}/bin/aria2c";
       description = "Downloader executable.";
       readOnly = true;
     };
@@ -114,7 +114,7 @@ in
       nfs-utils         # NFS client
       ngrep             # network packet analyzer
       ngrok             # expose local servers to the internet
-      nix-direnv-flakes # Nix flakes support
+      nix-direnv        # Nix flakes support
       nix-prefetch-git  # fetch Git repositories
       nvidia-container-toolkit
       nvidia-docker     # Docker integration for NVIDIA GPUs

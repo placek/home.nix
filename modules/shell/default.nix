@@ -30,8 +30,6 @@
     programs.carapace.enableFishIntegration = true;
     programs.mcfly.enable = true;                         # command history
     programs.mcfly.enableFishIntegration = true;
-    programs.thefuck.enable = true;                       # command correction
-    programs.thefuck.enableFishIntegration = true;
     programs.starship.enableFishIntegration = true;
     programs.zoxide.enable = true;
 

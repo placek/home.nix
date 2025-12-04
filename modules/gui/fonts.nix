@@ -42,7 +42,7 @@ in
       customFonts
 
       nerd-fonts.iosevka
-      ubuntu_font_family
+      ubuntu-classic
       google-fonts
       font-awesome
     ];
