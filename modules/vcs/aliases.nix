@@ -2,7 +2,7 @@
 , ...
 }:
 {
-  config.programs.git.aliases = {
+  config.programs.git.settings.alias = {
     root = "rev-parse --show-toplevel";
     changes = "log origin/HEAD..";
     ch = "l origin/HEAD..";

@@ -17,9 +17,12 @@
 
     programs.ssh = {
       enable = true;
-      controlMaster = "auto";
-      controlPersist = "10m";
+      enableDefaultConfig = false;
       matchBlocks = {
+        "*" = {
+          controlMaster = "auto";
+          controlPersist = "10m";
+        };
         dev = {
           user = "byron";
           hostname = "185.48.176.109";

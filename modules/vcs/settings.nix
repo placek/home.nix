@@ -2,7 +2,7 @@
 , ...
 }:
 {
-  config.programs.git.extraConfig = {
+  config.programs.git.settings = {
     apply.whitespace = "nowarn";
     commit.verbose = true;
     core.attributesfile = config.vcs.gitAttributesFilePath;

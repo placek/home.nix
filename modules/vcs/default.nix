@@ -62,11 +62,15 @@
     programs.git = {
       enable = true;
       package = pkgs.gitFull;
-      userName = config.vcs.name;
-      userEmail = config.vcs.email;
       lfs.enable = true;
       signing.signByDefault = true;
       signing.key = config.vcs.signKey;
+      settings = {
+        user = {
+          name = config.vcs.name;
+          email = config.vcs.email;
+        };
+      };
     };
   };
 }
