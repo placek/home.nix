@@ -50,11 +50,12 @@
   ];
 
   config = {
+    programs.discord.enable = true;
+
     home.packages = with pkgs; [
       libnotify
       xf86_input_wacom
 
-      discord
       gimp
       inkscape-with-extensions
       kicad
