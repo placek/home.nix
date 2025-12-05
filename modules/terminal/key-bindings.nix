@@ -30,6 +30,7 @@ in
     "0x1008ff58" = "paste_from_selection"; # XF86Cut
 
     "kitty_mod+enter" = "launch --type=window --cwd=current";
+    "ctrl+q" = "launch --type=window --location=split --cwd=current codex";
     "kitty_mod+backspace" = "next_layout";
 
     "kitty_mod+h" = "next_window";
