@@ -3,6 +3,19 @@
 , pkgs
 , ...
 }:
+let
+  mySlack = pkgs.writeShellScriptBin "my-slack" ''
+    hyprctl dispatch exec "[workspace 2 silent] ${pkgs.slack}/bin/slack"
+  '';
+
+  mySpotify = pkgs.writeShellScriptBin "my-spotify" ''
+    hyprctl dispatch exec "[workspace 3 silent] ${pkgs.spotify}/bin/spotify"
+  '';
+
+  myQcad = pkgs.writeShellScriptBin "my-qcad" ''
+    exec env QT_QPA_PLATFORM=xcb ${pkgs.qcad}/bin/qcad "$@"
+  '';
+in
 {
   options = with lib; {
     gui.theme = mkOption {
@@ -63,20 +76,36 @@
       libreoffice
       lilypond
       musescore
-      (pkgs.writeShellScriptBin "qcad-xcb" ''
-        exec env QT_QPA_PLATFORM=xcb ${pkgs.qcad}/bin/qcad "$@"
-      '')
       qimgv
-      slack
-      spotify
     ];
 
-    xdg.desktopEntries.qcad-xcb = {
-      name = "QCAD";
-      exec = "qcad-xcb %F";
-      icon = "qcad";
-      terminal = false;
-      categories = [ "Graphics" "Engineering" ];
+    xdg.desktopEntries =  {
+      my-slack = {
+        name = "Slack";
+        genericName = "slack";
+        type = "Application";
+        exec = "${mySlack}/bin/my-slack";
+        icon = "slack";
+        terminal = false;
+      };
+
+      my-spotify = {
+        name = "Spotify";
+        genericName = "spotify";
+        type = "Application";
+        exec = "${mySpotify}/bin/my-spotify";
+        icon = "spotify";
+        terminal = false;
+      };
+
+      my-qcad = {
+        name = "QCAD";
+        genericName = "qcad";
+        type = "Application";
+        exec = "${myQcad}/bin/my-qcad %F";
+        icon = "qcad";
+        terminal = false;
+      };
     };
   };
 }
