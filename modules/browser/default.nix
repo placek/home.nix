@@ -6,14 +6,14 @@
 let
   qutebrowser = pkgs.qutebrowser;
   hyprBrowser = pkgs.writeShellScriptBin "hypr-browser" ''
-    hyprctl dispatch exec "[workspace 1 silent] ${qutebrowser}/bin/qutebrowser" "$@"
+    hyprctl dispatch exec "[workspace 1 silent] ${config.browserExec}" "$@"
   '';
 in
 {
   options = with lib; {
     browserExec = mkOption {
       type = types.str;
-      default = "${qutebrowser}/bin/qutebrowser";
+      default = "${config.programs.qutebrowser.package}/bin/qutebrowser";
       description = "Browser executable.";
       readOnly = true;
     };
@@ -30,8 +30,6 @@ in
   ];
 
   config = {
-    home.packages = [ qutebrowser ];
-
     # backup browser
     programs.firefox.enable = true;
 
@@ -59,7 +57,6 @@ in
 
     programs.qutebrowser = {
       enable = true;
-      package = qutebrowser;
       searchEngines = config.browser.searchEngines;
     };
   };
