@@ -5,22 +5,29 @@
 }:
 let
   customFonts = pkgs.stdenv.mkDerivation rec {
-    name = "custom-fonts-${version}";
+    pname = "custom-fonts";
     version = builtins.substring 0 6 src.rev;
+
     src = pkgs.fetchFromGitHub {
       owner = "placek";
       repo = "custom-fonts";
       rev = "2d271f1793f662f2d93ecc852abac9b180bac17b";
       sha256 = "sha256-nPsXxEZKc7Auf+EadzVQAgdQUEIvaXu7lSxZUImGDhQ=";
     };
-    phases = [ "installPhase" ];
+
+    dontBuild = true;
+
     installPhase = ''
-      mkdir -p $out
-      cp -r * $out
+      mkdir -p $out/share/fonts
+
+      # fonts from the GitHub repo
+      cp -r ./* $out/share/fonts/
+
+      # your extra font file from this repo
+      cp ${./grcmnsclix.otf} $out/share/fonts/
     '';
   };
-in
-{
+in {
   options = with lib; {
     gui.font.name = mkOption {
       type = types.str;
