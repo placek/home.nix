@@ -54,7 +54,7 @@
         dce = "docker compose exec";
         dca = "docker compose attach";
         dcr = "docker compose run --rm";
-        dcu = "docker compose up --detach";
+        dcu = "docker compose up --detach --remove-orphans";
         dcl = "docker compose logs";
         dcd = "docker compose down --remove-orphans";
         dcdv = "docker compose down --remove-orphans --volumes";
@@ -64,8 +64,6 @@
         j = "journalctl";
         s = "systemctl";
 
-        tt = "nc termbin.com 9999";
-        tf = "nc oshi.at 7777";
         t = "tldr";
 
         sshh = "TERM=xterm-256color ssh";
