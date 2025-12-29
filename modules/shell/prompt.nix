@@ -16,6 +16,7 @@
           "$git_status"
           "$direnv"
           "$nix_shell"
+          "$jobs"
           "$cmd_duration"
           "$line_break"
           "$character"
@@ -64,6 +65,13 @@
           style = "white";
           stashed = "≡";
           modified = "*";
+        };
+        jobs = {
+          disabled = false;
+          symbol_threshold = 1;
+          number_threshold = 1;
+          format = "[with](bright-black) [$number$symbol ]($style) ";
+          style = "white";
         };
         cmd_duration = {
           disabled = false;
