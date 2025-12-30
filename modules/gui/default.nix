@@ -63,7 +63,7 @@ in
   ];
 
   config = {
-    programs.discord.enable = true;
+#     programs.discord.enable = true;
 
     home.packages = with pkgs; [
       libnotify

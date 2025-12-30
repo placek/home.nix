@@ -1,29 +1,43 @@
-{ pkgs
+{ config
+, pkgs
 , ...
 }:
+let
+  email = "silquenarmo@gmail.com";
+  identity = "silquenarmo";
+  key = "s";
+  notmuchSteps = [
+    "tag +account:${identity} -- 'path:${identity}/**'"
+    "tag +account:${identity} -- '(to:${email} OR from:${email})'"
+  ];
+in
 {
-  address = "silquenarmo@gmail.com";
-  userName = "silquenarmo@gmail.com";
-  realName = "Paweł Placzyński";
-  passwordCommand = "${pkgs.pass}/bin/pass MAIL/silquenarmo@gmail.com";
-  imap.host = "imap.gmail.com";
-  smtp.host = "smtp.gmail.com";
-  mbsync = {
-    enable = true;
-    create = "both";
-    expunge = "both";
-    patterns = [ "*" "![Gmail]*" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" ];
-    extraConfig = {
-      channel = {
-        Sync = "All";
-      };
-      account = {
-        Timeout = 120;
-        PipelineDepth = 1;
+  config.accounts.email.accounts."${identity}" = {
+    address = email;
+    userName = email;
+    realName = "Paweł Placzyński";
+    passwordCommand = "${pkgs.pass}/bin/pass MAIL/${email}";
+    imap.host = "imap.gmail.com";
+    smtp.host = "smtp.gmail.com";
+    mbsync = {
+      enable = true;
+      create = "both";
+      expunge = "both";
+      patterns = [ "*" "![Gmail]*" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" ];
+      extraConfig = {
+        channel = {
+          Sync = "All";
+        };
+        account = {
+          Timeout = 120;
+          PipelineDepth = 1;
+        };
       };
     };
+    notmuch.enable = true;
+    astroid.enable = true;
+    msmtp.enable = true;
   };
-  notmuch.enable = true;
-  astroid.enable = true;
-  msmtp.enable = true;
+
+  config.programs.alot.bindings.search."${key}" = "search account:${identity}";
 }

@@ -3,9 +3,9 @@
 , ...
 }:
 let
-  email = "placzynski.pawel@gmail.com";
-  identity = "placzynski";
-  key = "a";
+  email = "p.placzynski@binarapps.com";
+  identity = "binarapps";
+  key = "d";
   notmuchSteps = [
     "tag +account:${identity} -- 'path:${identity}/**'"
     "tag +account:${identity} -- '(to:${email} OR from:${email})'"
@@ -13,7 +13,6 @@ let
 in
 {
   config.accounts.email.accounts."${identity}" = {
-    primary = true;
     address = email;
     userName = email;
     realName = "Paweł Placzyński";
