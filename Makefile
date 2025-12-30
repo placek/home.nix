@@ -43,8 +43,7 @@ install: update
 
 .PHONY: repair-store
 repair-store:
-	sudo nix-store --verify --check-contents
-	sudo nix-store --repair
+	sudo nix-store --verify --check-contents --repair
 
 .PHONY: gc
 gc: repair-store
