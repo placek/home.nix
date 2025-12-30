@@ -1,6 +1,8 @@
 let
-  notmuchTag = notmuch: tag: criteria: "${notmuch}/bin/notmuch tag ${tag} -- '${criteria}'";
-  details = { pass , name , identity , email , isPrimary ? false }: {
+  notmuchTag = notmuch: tag: criteria:
+    "${notmuch}/bin/notmuch tag ${tag} -- '${criteria}'";
+
+  details = pass: name: identity: email: isPrimary: {
     primary = isPrimary;
     address = email;
     userName = email;

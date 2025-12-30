@@ -31,12 +31,8 @@ in
     programs.msmtp.enable = true;
 
     accounts.email.maildirBasePath = "${config.home.homeDirectory}/.mail";
-    accounts.email.accounts = lib.mapAttrs (key: value: account.details {
-      isPrimary = key == config.mail.primaryAccount;
-      pass = pkgs.pass;
-      name = config.vcs.name;
-      identity = key;
-      email = value.email;
-    }) config.mail.accounts;
+    accounts.email.accounts = lib.mapAttrs
+      (key: value: account.details pkgs.pass config.vcs.name key value.email (key == config.mail.primaryAccount))
+      config.mail.accounts;
   };
 }
