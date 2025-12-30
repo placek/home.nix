@@ -41,8 +41,13 @@ upgrade: update $(nixos-config)
 install: update
 	nix-shell '<home-manager>' -A install
 
+.PHONY: repair-store
+repair-store:
+	sudo nix-store --verify --check-contents
+	sudo nix-store --repair
+
 .PHONY: gc
-gc:
+gc: repair-store
 	$(HOME-MANAGER) expire-generations "-$(expiration)"
 	nix-collect-garbage --delete-older-than "$(shell echo "$(expiration)" | sed 's/ days/d/')"
 	nix-store --optimise
