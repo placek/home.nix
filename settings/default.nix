@@ -35,5 +35,14 @@
 
     security.gpgKeyID = "0xE624230BAE5B5299";
     security.passwordStore = "${config.home.homeDirectory}/.password-store";
+
+    mail.accounts = {
+      placzynski.email = "placzynski.pawel@gmail.com";
+      placzynski.key = "a";
+      silquenarmo.email = "silquenarmo@gmail.com";
+      silquenarmo.key = "s";
+      binarapps.email = "p.placzynski@binarapps.com";
+      binarapps.key = "d";
+    };
   };
 }
