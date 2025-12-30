@@ -6,8 +6,6 @@
 let
   qutebrowser = config.programs.qutebrowser.package;
   browser = pkgs.writeShellScriptBin "browser" ''
-    export QTWEBENGINE_DISABLE_SANDBOX=1
-    export QTWEBENGINE_CHROMIUM_FLAGS="--no-sandbox --disable-seccomp-filter-sandbox"
     ${qutebrowser}/bin/qutebrowser --backend webengine "$@"
   '';
   hyprBrowser = pkgs.writeShellScriptBin "hypr-browser" ''
