@@ -4,16 +4,21 @@
 , ...
 }:
 let
-  qutebrowser = pkgs.qutebrowser;
+  qutebrowser = config.programs.qutebrowser.package;
+  browser = pkgs.writeShellScriptBin "browser" ''
+    export QTWEBENGINE_DISABLE_SANDBOX=1
+    export QTWEBENGINE_CHROMIUM_FLAGS="--no-sandbox --disable-seccomp-filter-sandbox"
+    ${qutebrowser}/bin/qutebrowser --backend webengine "$@"
+  '';
   hyprBrowser = pkgs.writeShellScriptBin "hypr-browser" ''
-    hyprctl dispatch exec "[workspace 1 silent] ${config.browserExec}" "$@"
+    hyprctl dispatch exec "[workspace 1 silent] ${browser}/bin/browser" "$@"
   '';
 in
 {
   options = with lib; {
     browserExec = mkOption {
       type = types.str;
-      default = "${config.programs.qutebrowser.package}/bin/qutebrowser";
+      default = "${hyprBrowser}/bin/hypr-browser";
       description = "Browser executable.";
       readOnly = true;
     };
