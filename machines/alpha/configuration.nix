@@ -252,4 +252,42 @@ in
     ${pkgs.docker}/bin/docker network inspect ${traefik_docker_network} >/dev/null 2>&1 || \
     ${pkgs.docker}/bin/docker network create ${traefik_docker_network} || true
   '';
+
+  # POSTGRES
+  services.postgresql = {
+    enable = true;
+
+    package = pkgs.postgresql_17.withPackages (ps: with ps; [
+      pgsql-http
+      pgvector
+      age
+    ]);
+
+    dataDir = "/var/lib/postgresql/17";
+    enableTCPIP = true;
+
+    settings = {
+      listen_addresses = lib.mkForce "127.0.0.1";
+      shared_preload_libraries = "age";
+      password_encryption = "scram-sha-256";
+    };
+
+    authentication = pkgs.lib.mkOverride 10 ''
+      local   all             all                                     peer
+      host    all             all             127.0.0.1/32            scram-sha-256
+      host    all             all             ::1/128                 scram-sha-256
+    '';
+  };
+
+  services.pgadmin = {
+    enable = true;
+    initialEmail = "placzynski.pawel@gmail.com";
+    initialPasswordFile = "/etc/pgadmin-initial-password";
+    port = 5050;
+  };
+
+  systemd.services.pgadmin.serviceConfig.Environment = [
+    "PGADMIN_LISTEN_ADDRESS=127.0.0.1"
+    "PGADMIN_LISTEN_PORT=5050"
+  ];
 }
