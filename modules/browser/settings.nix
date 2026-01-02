@@ -159,10 +159,10 @@ in
       tabs.selected.even.fg = base0B;
       tabs.selected.even.bg = base00;
 
-      webpage.darkmode.enabled = true;
-      webpage.darkmode.policy.images = "never";
+      webpage.darkmode.enabled = false;
+      webpage.darkmode.policy.images = "smart";
       webpage.darkmode.algorithm = "lightness-cielab";
-      webpage.darkmode.contrast = 0.2;
+      webpage.darkmode.contrast = 0.3;
     };
   };
 }
