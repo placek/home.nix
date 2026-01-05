@@ -59,7 +59,7 @@ in
     ./mpv.nix
     ./zathura.nix
 
-    ./games
+#     ./games
   ];
 
   config = {
