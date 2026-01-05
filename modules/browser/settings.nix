@@ -26,6 +26,7 @@ in
     content.persistent_storage = true;
     content.register_protocol_handler = true;
     content.javascript.clipboard = "access-paste";
+    content.tls.certificate_errors = "block";
 
     downloads.location.directory = downloadsDirectory;
 
