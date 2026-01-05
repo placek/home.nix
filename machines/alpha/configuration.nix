@@ -257,13 +257,13 @@ in
   services.postgresql = {
     enable = true;
 
-    package = pkgs.postgresql_17.withPackages (ps: with ps; [
+    package = pkgs.postgresql_16.withPackages (ps: with ps; [
       pgsql-http
       pgvector
       age
     ]);
 
-    dataDir = "/var/lib/postgresql/17";
+    dataDir = "/var/lib/postgresql/16";
     enableTCPIP = true;
 
     settings = {
