@@ -5,28 +5,34 @@
 , ...
 }:
 let
+  domain = "placki.cloud";
   wan_interface = "enp2s0f0";
   lan_interface = "enp2s0f1";
   aux_interface = "enp7s0";
   traefik_docker_network = "traefik-public";
 in
 {
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  imports =
+    [ (modulesPath + "/installer/scan/not-detected.nix")
+    ];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/2917badf-6e6e-400d-bcb5-6396d41d9b62";
-    fsType = "ext4";
-  };
+  boot.kernelModules = [ "kvm-amd" ];
 
-  boot.initrd.luks.devices."luks-5704bf90-b11f-45cd-a3f7-1888298cbc2c".device = "/dev/disk/by-uuid/5704bf90-b11f-45cd-a3f7-1888298cbc2c";
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/e83d2b9c-470d-41dd-9f09-6d193b3c9ced";
+      fsType = "ext4";
+    };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/13C1-6204";
-    fsType = "vfat";
-    options = [ "fmask=0077" "dmask=0077" ];
-  };
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/BBC1-D424";
+      fsType = "vfat";
+      options = [ "fmask=0077" "dmask=0077" ];
+    };
 
-  swapDevices = [ { device = "/dev/disk/by-uuid/2fd23668-a0f3-4adc-a6d5-e0eea9aff2c8"; } ];
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/c76b99d5-5ae2-4e21-924a-077d48dbc096"; }
+    ];
+
 
   ################################### NIX ######################################
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
@@ -152,7 +158,7 @@ in
 
   networking.hostName = "alpha";
   networking.hosts."127.0.0.1" = ["localhost" "dev"];
-  networking.domain = "local";
+  networking.domain = domain;
   networking.nameservers = [ "127.0.0.1" ];
 
   networking.firewall.enable = true;
