@@ -24,10 +24,16 @@
       type = types.str;
       description = "A public GPG key ID.";
     };
+
+    security.gpgKeyFP = mkOption {
+      type = types.str;
+      description = "A public GPG key fingerprint.";
+    };
   };
 
   config = {
     home.sessionVariables.KEYID = config.security.gpgKeyID;
+    home.sessionVariables.KEYFP = config.security.gpgKeyFP;
 
     home.packages = with pkgs; [
       pinentry-gtk2

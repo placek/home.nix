@@ -27,13 +27,14 @@
     vcs.name = "Paweł Placzyński";
     vcs.email = "placzynski.pawel@gmail.com";
     vcs.login = "placek";
-    vcs.signKey = "1D95E554315BC053";
+    vcs.signKey = "28D17527E92093C9";
 
     ssh.authSocket = "$XDG_RUNTIME_DIR/gnupg/S.gpg-agent.ssh";
-    ssh.secretKeyID = "D75BFE7D95CB0CB4B3FE0B64E624230BAE5B5299";
+    ssh.secretKeyID = "C9ADBD2287A0D484"; # TODO
     ssh.publicKey = ./placek.asc;
 
-    security.gpgKeyID = "0xE624230BAE5B5299";
+    security.gpgKeyID = "84958051223BF9D6";
+    security.gpgKeyFP = "EC134A7FE2EACDA6D82A1FA084958051223BF9D6";
     security.passwordStore = "${config.home.homeDirectory}/.password-store";
 
     mail.accounts = {
