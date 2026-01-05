@@ -168,15 +168,9 @@ in
   networking.firewall.interfaces."br-859ab30c4da2".allowedTCPPorts = [ 11434 ];
   networking.firewall.interfaces."br-a34935e25dbb".allowedTCPPorts = [ 11434 ];
   networking.firewall.checkReversePath = "loose";
-  networking.firewall.allowedUDPPorts = [
-    111 # rpcbind
-    2049 # nfs
-  ];
   networking.firewall.allowedTCPPorts = [
     22 # ssh
     80 # http
-    111 # rpcbind
-    2049 # nfs
     443 # https
     2222 # git
   ];
