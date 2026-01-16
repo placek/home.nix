@@ -191,7 +191,7 @@ in
   services.dnsmasq.settings.dhcp-range = "192.168.2.10,192.168.2.254,24h";
 
 #   Use NextDNS parental control via dnscrypt-proxy2
-  services.dnscrypt-proxy = {
+  services.dnscrypt-proxy2 = {
     enable = true;
     settings = {
       listen_addresses = [ "127.0.0.1:5353" ];
