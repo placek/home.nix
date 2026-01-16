@@ -110,13 +110,11 @@ in
   security.chromiumSuidSandbox.enable = true;
 
   ################################# MULTIMEDIA #################################
-  services.pipewire = {
-    enable = true;
-    audio.enable = true;
-    alsa.enable = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
+  services.pipewire.enable = true;
+  services.pipewire.audio.enable = true;
+  services.pipewire.alsa.enable = true;
+  services.pipewire.pulse.enable = true;
+  services.pipewire.jack.enable = true;
 
   ################################## NVIDIA ####################################
   hardware.graphics.enable = true;
@@ -201,15 +199,11 @@ in
   services.dnsmasq.settings.bind-interfaces = true;
   services.dnsmasq.settings.dhcp-range = "192.168.2.10,192.168.2.254,24h";
 
-#   Use NextDNS parental control via dnscrypt-proxy2
-  services.dnscrypt-proxy2 = {
-    enable = true;
-    settings = {
-      listen_addresses = [ "127.0.0.1:5353" ];
-      server_names = [ "NextDNS-94c1a5" ];
-      static."NextDNS-94c1a5".stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HLzk0YzFhNQ";
-    };
-  };
+  # Use NextDNS parental control via dnscrypt-proxy2
+  services.dnscrypt-proxy.enable = true;
+  services.dnscrypt-proxy.settings.listen_addresses = [ "127.0.0.1:5353" ];
+  services.dnscrypt-proxy.settings.server_names = [ "NextDNS-94c1a5" ];
+  services.dnscrypt-proxy.settings.static."NextDNS-94c1a5".stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HLzk0YzFhNQ";
 
   ################################# TRAEFIK ####################################
   services.traefik = {
