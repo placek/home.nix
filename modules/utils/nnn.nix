@@ -24,9 +24,11 @@ in
     enable = true;
     package = pkgs.nnn.override ({ withNerdIcons = true; });
     bookmarks = {
+      b = config.home.homeDirectory;
       D = config.documentsDirectory;
       d = config.downloadsDirectory;
       p = config.projectsDirectory;
+      m = "${config.home.homeDirectory}/Media";
     };
     plugins.src = "${plugins}/bin";
     plugins.mappings = {
