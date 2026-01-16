@@ -297,4 +297,21 @@ in
     "PGADMIN_LISTEN_ADDRESS=127.0.0.1"
     "PGADMIN_LISTEN_PORT=5050"
   ];
+
+  #### POSTGREST (systemd service) ####
+  services.postgrest = {
+    enable = true;
+
+    settings = {
+      server-host = "127.0.0.1";
+      server-port = 3000;
+      server-unix-socket = null;
+
+      db-uri.dbname = "bible";
+      db-uri.host="/run/postgresql";
+      db-schema = "public";
+      db-anon-role = "web_anon";
+      openapi-mode = "follow-privileges";
+    };
+  };
 }
