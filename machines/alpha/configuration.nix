@@ -285,10 +285,11 @@ in
     ];
   };
 
+  # PGADMIN
   services.pgadmin = {
     enable = true;
     initialEmail = "placzynski.pawel@gmail.com";
-    initialPasswordFile = "/etc/pgadmin-initial-password";
+    initialPasswordFile = "/srv/data/.pgadmin-pass";
     port = 5050;
   };
 
