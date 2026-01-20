@@ -285,6 +285,13 @@ in
     dataDir = "/var/lib/postgresql/17";
     enableTCPIP = true;
 
+    ensureDatabases = [ "bible" ];
+
+    ensureUsers = [
+      { name = "postgrest"; }
+      { name = "web_anon"; ensureClauses.login = false; }
+    ];
+
     settings = {
       listen_addresses = lib.mkForce "127.0.0.1";
 #       shared_preload_libraries = "age";
@@ -321,10 +328,15 @@ in
       server-unix-socket = null;
 
       db-uri.dbname = "bible";
-      db-uri.host="/run/postgresql";
+      db-uri.host = "/run/postgresql";
+      db-uri.user = "postgrest";
       db-schema = "public";
       db-anon-role = "web_anon";
       openapi-mode = "follow-privileges";
     };
   };
+
+  systemd.services.postgresql-setup.script = lib.mkAfter ''
+    psql -tAc 'GRANT "web_anon" TO "postgrest"'
+  '';
 }
