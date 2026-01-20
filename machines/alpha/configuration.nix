@@ -276,18 +276,18 @@ in
   services.postgresql = {
     enable = true;
 
-    package = pkgs.postgresql_16.withPackages (ps: with ps; [
-      pgsql-http
-      pgvector
-      age
+    package = pkgs.postgresql_17.withPackages (ps: with ps; [
+#       pgsql-http
+#       pgvector
+#       age
     ]);
 
-    dataDir = "/var/lib/postgresql/16";
+    dataDir = "/var/lib/postgresql/17";
     enableTCPIP = true;
 
     settings = {
       listen_addresses = lib.mkForce "127.0.0.1";
-      shared_preload_libraries = "age";
+#       shared_preload_libraries = "age";
       password_encryption = "scram-sha-256";
     };
 
@@ -296,12 +296,6 @@ in
       host    all             all             127.0.0.1/32            scram-sha-256
       host    all             all             ::1/128                 scram-sha-256
     '';
-
-    ensureDatabases = [ "bible" ];
-    ensureUsers = [
-      { name = "postgrest"; }
-      { name = "anon"; }
-    ];
   };
 
   # PGADMIN
