@@ -152,6 +152,7 @@ in
   systemd.tmpfiles.rules = [
     "d ${user_data_directory} 0755 placek placek -"
     "d ${traefik_proxy_directory} 0755 traefik docker -"
+    "f ${traefik_proxy_directory}/acme.json 0600 traefik docker -"
     "d ${user_data_directory}/projects 0700 placek placek -"
     "L /home/placek/Projects - - - - ${user_data_directory}/projects"
     "L /home/placek/Media - - - - /run/media/placek"
@@ -244,6 +245,19 @@ in
           service = "api@internal";
           entryPoints = [ "traefik" ];
           middlewares = [ "dashboard-auth" ];
+        };
+
+        routers."bible-api" = {
+          rule = "Host(`api.bible.${domain}`)";
+          service = "bible-api";
+          entryPoints = [ "websecure" ];
+          tls.certResolver = "letsencrypt";
+        };
+
+        services."bible-api".loadBalancer = {
+          servers = [
+            { url = "http://localhost:3000"; }
+          ];
         };
 
         middlewares."dashboard-auth".basicAuth.users = [
