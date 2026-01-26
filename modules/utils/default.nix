@@ -82,7 +82,9 @@ in
     home.packages = with pkgs; [
       dcc6502           # 6502 disassembler
       minipro           # EEPROM programmer
-      codex             # OpenAI Codex CLI
+      (import (builtins.fetchTarball { url =
+        "https://github.com/NixOS/nixpkgs/archive/0a8db1ea10ac3c7ba2987a324b7f5d9de06dd864.tar.gz";
+      }) {}).codex     # OpenAI Codex CLI
       pkgsCross.avr.buildPackages.gcc
 
       ansible           # manage remote machines
