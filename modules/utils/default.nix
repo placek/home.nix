@@ -5,7 +5,6 @@
 }:
 let
   dcc6502 = import ./dcc6502.nix { inherit pkgs; };
-  minipro = import ./minipro.nix { inherit pkgs; };
 in
 {
   options = with lib; {
@@ -81,7 +80,6 @@ in
 
     home.packages = with pkgs; [
       dcc6502           # 6502 disassembler
-      minipro           # EEPROM programmer
       (import (builtins.fetchTarball { url =
         "https://github.com/NixOS/nixpkgs/archive/0a8db1ea10ac3c7ba2987a324b7f5d9de06dd864.tar.gz";
       }) {}).codex     # OpenAI Codex CLI
@@ -112,6 +110,7 @@ in
       libinput          # input device management
       lightburn         # laser cutter software
       mdcat             # render markdown
+      minipro           # EEPROM programmer
       netpbm            # image processing tools
       nfs-utils         # NFS client
       ngrep             # network packet analyzer
