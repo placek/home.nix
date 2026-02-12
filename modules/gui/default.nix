@@ -74,7 +74,6 @@ in
       kicad
       librecad
       libreoffice
-      lilypond
       musescore
       qimgv
     ];
