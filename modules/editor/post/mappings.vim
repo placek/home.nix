@@ -113,7 +113,7 @@ nnoremap <leader>l :bnext<cr>
 " move around windows
 nnoremap <silent><C-j> <C-w>w
 nnoremap <silent><C-k> <C-w>W
-nnoremap <silent><C-space> <C-w>v
+nnoremap <silent><C-space> :vsplit \| setlocal noscrollbind nocursorbind<CR>
 
 " lookup
 vnoremap <silent>* :<c-u>call <sid>findTextInBuffer("/", <sid>selectedText())<cr>n
