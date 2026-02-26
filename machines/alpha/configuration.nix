@@ -123,7 +123,7 @@ in
   hardware.nvidia.modesetting.enable = true;
   hardware.nvidia.nvidiaSettings = true;
   hardware.nvidia.open = true;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.production;
+#   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.production;
   hardware.nvidia.powerManagement.enable = false;
   hardware.nvidia.powerManagement.finegrained = false;
   hardware.nvidia-container-toolkit.enable = true;
@@ -173,7 +173,7 @@ in
 
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
-  networking.firewall.trustedInterfaces = [ lan_interface "docker0" ];
+  networking.firewall.trustedInterfaces = [ lan_interface aux_interface "docker0" ];
   networking.firewall.interfaces."docker0".allowedTCPPorts = [ 11434 ];
   networking.firewall.interfaces."br-859ab30c4da2".allowedTCPPorts = [ 11434 ];
   networking.firewall.interfaces."br-a34935e25dbb".allowedTCPPorts = [ 11434 ];
@@ -186,7 +186,10 @@ in
   ];
 
   networking.nat.enable = true;
-  networking.nat.internalIPs = [ "192.168.2.0/24" ];
+  networking.nat.internalIPs = [
+    "192.168.2.0/24"
+    "192.168.3.0/24"
+  ];
   networking.nat.externalInterface = wan_interface;
 
   networking.interfaces."${wan_interface}".useDHCP = true;
