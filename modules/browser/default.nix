@@ -6,7 +6,7 @@
 let
   qutebrowser = config.programs.qutebrowser.package;
   browser = pkgs.writeShellScriptBin "browser" ''
-    ${qutebrowser}/bin/qutebrowser --backend webengine "$@"
+    ${qutebrowser}/bin/qutebrowser "@" # --backend webengine "$@"
   '';
   hyprBrowser = pkgs.writeShellScriptBin "hypr-browser" ''
     hyprctl dispatch exec "[workspace 1 silent] ${browser}/bin/browser" "$@"
