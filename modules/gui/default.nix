@@ -76,6 +76,7 @@ in
       libreoffice
       musescore
       qimgv
+      qalculate-gtk
     ];
 
     xdg.desktopEntries =  {
