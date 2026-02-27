@@ -30,17 +30,25 @@ let
       b = hexPairToInt (pair 4);
     in
       "rgba(${toString r}, ${toString g}, ${toString b}, ${toString alpha})";
+
+  normal_color = config.gui.theme.base07;
+  dim_color = config.gui.theme.base08;
+  dark_color = config.gui.theme.base00;
+  hover_color = config.gui.theme.base0F;
+  accent_color = config.gui.theme.base03;
+
+  border_size = builtins.toString config.gui.border.size;
 in
 ''
   * {
     font-family: ${config.gui.font.name}, "Font Awesome 6 Free", "Font Awesome 6 Free Solid";
     font-weight: bold;
     font-size: 14px;
-    color: ${config.gui.theme.base07};
+    color: ${normal_color};
   }
 
   window#waybar {
-    background: ${hexToRgba config.gui.theme.base00 0.6};
+    background: ${hexToRgba dark_color 0.6};
     border: none;
     margin: 0px;
   }
@@ -55,14 +63,14 @@ in
   #custom-notmuch,
   #custom-weather,
   #clock {
-    padding: ${builtins.toString config.gui.border.size}px ${builtins.toString config.gui.border.size}px;
+    padding: ${border_size}px ${border_size}px;
     margin: 0px;
     border-width: 0px;
     border-radius: 0px;
   }
 
   #clock {
-    color: ${config.gui.theme.base0F};
+    color: ${hover_color};
   }
 
   #network:hover,
@@ -77,33 +85,33 @@ in
   #custom-notmuch:hover,
   #custom-weather:hover,
   #clock:hover {
-    background-color: ${config.gui.theme.base08};
-    color: ${config.gui.theme.base0F};
+    background-color: ${dim_color};
+    color: ${hover_color};
   }
 
   #workspaces button {
-    padding: ${builtins.toString config.gui.border.size}px ${builtins.toString (config.gui.border.size * 3)}px;
+    padding: ${border_size}px ${builtins.toString (config.gui.border.size * 3)}px;
     margin: 0px;
     border-width: 0px;
-    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base00};
+    border-top: ${border_size}px solid ${dark_color};
     border-radius: 0px;
   }
 
   window#waybar #workspaces button * {
-    color: ${config.gui.theme.base0F};
+    color: ${hover_color};
   }
 
   #workspaces button.visible {
-    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
+    border-top: ${border_size}px solid ${dim_color};
   }
 
   #workspaces button.active {
-    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
+    border-top: ${border_size}px solid ${accent_color};
   }
 
   window#waybar #workspaces button:hover {
-    background: ${config.gui.theme.base08};
-    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
+    background: ${dim_color};
+    border-top: ${border_size}px solid ${dim_color};
     background-image: none;
     box-shadow: none;
     text-shadow: none;
@@ -111,14 +119,14 @@ in
   }
 
   window#waybar #workspaces button:hover * {
-    color: ${config.gui.theme.base0F};
+    color: ${hover_color};
     box-shadow: none;
     text-shadow: none;
     outline: none;
   }
 
   window#waybar #workspaces button.active:hover {
-    border-top: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base03};
+    border-top: ${border_size}px solid ${accent_color};
     box-shadow: none;
     text-shadow: none;
     outline: none;
@@ -129,19 +137,19 @@ in
     box-shadow: none;
     text-shadow: none;
     outline: none;
-    color: ${config.gui.theme.base0F};
+    color: ${hover_color};
   }
 
   tooltip {
-    background: ${config.gui.theme.base00};
-    padding: ${builtins.toString config.gui.border.size}px;
+    background: ${dark_color};
+    padding: ${border_size}px;
     border-width: 0px;
     border-radius: 0px;
     box-shadow: none;
     text-shadow: none;
     outline: none;
     font-size: 14px;
-    border: ${builtins.toString config.gui.border.size}px solid ${config.gui.theme.base08};
+    border: ${border_size}px solid ${dim_color};
     margin: 0px;
   }
 ''
