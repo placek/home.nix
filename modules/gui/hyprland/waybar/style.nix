@@ -93,16 +93,24 @@ in
     padding: ${border_size}px ${builtins.toString (config.gui.border.size * 3)}px;
     margin: 0px;
     border-width: 0px;
-    border-top: ${border_size}px solid ${dark_color};
+    border-top: ${border_size}px solid ${dim_color};
     border-radius: 0px;
   }
 
   window#waybar #workspaces button * {
-    color: ${hover_color};
+    color: ${dim_color};
+  }
+
+  window#waybar #workspaces button.active * {
+    color: ${accent_color};
+  }
+
+  window#waybar #workspaces button.visible * {
+    color: ${normal_color};
   }
 
   #workspaces button.visible {
-    border-top: ${border_size}px solid ${dim_color};
+    border-top: ${border_size}px solid ${normal_color};
   }
 
   #workspaces button.active {
