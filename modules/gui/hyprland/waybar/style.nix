@@ -98,7 +98,7 @@ in
   }
 
   window#waybar #workspaces button * {
-    color: ${dim_color};
+    color: ${normal_color};
   }
 
   window#waybar #workspaces button.active * {
