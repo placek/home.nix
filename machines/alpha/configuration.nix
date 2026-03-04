@@ -12,6 +12,9 @@ let
   traefik_docker_network = "traefik-public";
   traefik_proxy_directory = "/srv/proxy";
   user_data_directory = "/srv/data";
+  dev_services = {
+    pga = 5050;
+  };
 in
 {
   imports =
@@ -167,7 +170,7 @@ in
   security.acme.acceptTerms = true;
 
   networking.hostName = "alpha";
-  networking.hosts."127.0.0.1" = ["localhost" "dev"];
+  networking.hosts."127.0.0.1" = ["localhost" "dev"] ++ (lib.mapAttrsToList (name: _: "${name}.dev") dev_services);
   networking.domain = domain;
   networking.nameservers = [ "127.0.0.1" ];
 
@@ -243,22 +246,29 @@ in
     };
     dynamicConfigOptions = {
       http = {
-        routers."traefik" = {
-          rule = "PathPrefix(`/api`) || pathprefix(`/dashboard`)";
-          service = "api@internal";
-          entryPoints = [ "traefik" ];
-          middlewares = [ "dashboard-auth" ];
+        routers = (lib.mapAttrs' (name: port: lib.nameValuePair name {
+          rule = "Host(`${name}.dev`)";
+          service = name;
+          entryPoints = [ "web" ];
+        }) dev_services) // {
+          "traefik" = {
+            rule = "PathPrefix(`/api`) || PathPrefix(`/dashboard`)";
+            service = "api@internal";
+            entryPoints = [ "traefik" ];
+            middlewares = [ "dashboard-auth" ];
+          };
+          "bible-api" = {
+            rule = "Host(`api.bible.${domain}`)";
+            service = "bible-api";
+            entryPoints = [ "websecure" ];
+            tls.certResolver = "letsencrypt";
+          };
         };
 
-        routers."bible-api" = {
-          rule = "Host(`api.bible.${domain}`)";
-          service = "bible-api";
-          entryPoints = [ "websecure" ];
-          tls.certResolver = "letsencrypt";
-        };
-
-        services."bible-api".loadBalancer = {
-          servers = [
+        services = (lib.mapAttrs' (name: port: lib.nameValuePair name {
+          loadBalancer.servers = [ { url = "http://127.0.0.1:${toString port}"; } ];
+        }) dev_services) // {
+          "bible-api".loadBalancer.servers = [
             { url = "http://localhost:3000"; }
           ];
         };
