@@ -291,7 +291,6 @@ in
     package = pkgs.postgresql_17.withPackages (ps: with ps; [
 #       pgsql-http
 #       pgvector
-#       age
     ]);
 
     dataDir = "/var/lib/postgresql/17";
@@ -306,7 +305,6 @@ in
 
     settings = {
       listen_addresses = lib.mkForce "127.0.0.1";
-#       shared_preload_libraries = "age";
       password_encryption = "scram-sha-256";
     };
 
