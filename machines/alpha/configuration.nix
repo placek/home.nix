@@ -156,6 +156,7 @@ in
     "d ${traefik_proxy_directory} 0755 traefik docker -"
     "f ${traefik_proxy_directory}/acme.json 0600 traefik docker -"
     "d ${user_data_directory}/projects 0700 placek placek -"
+    "d ${user_data_directory}/immich 0750 immich immich -"
     "L /home/placek/Projects - - - - ${user_data_directory}/projects"
     "L /home/placek/Media - - - - /run/media/placek"
   ];
@@ -262,13 +263,22 @@ in
             entryPoints = [ "websecure" ];
             tls.certResolver = "letsencrypt";
           };
+          "immich" = {
+            rule = "Host(`immich.${domain}`)";
+            service = "immich";
+            entryPoints = [ "websecure" ];
+            tls.certResolver = "letsencrypt";
+          };
         };
 
         services = (lib.mapAttrs' (name: port: lib.nameValuePair name {
           loadBalancer.servers = [ { url = "http://127.0.0.1:${toString port}"; } ];
         }) dev_services) // {
           "bible-api".loadBalancer.servers = [
-            { url = "http://localhost:3000"; }
+            { url = "http://${toString config.services.postgrest.settings.server-host}:${toString config.services.postgrest.settings.server-port}"; }
+          ];
+          "immich".loadBalancer.servers = [
+            { url = "http://${toString config.services.immich.host}:${toString config.services.immich.port}"; }
           ];
         };
 
@@ -327,6 +337,15 @@ in
     "PGADMIN_LISTEN_ADDRESS=127.0.0.1"
     "PGADMIN_LISTEN_PORT=5050"
   ];
+
+  #### IMMICH
+  services.immich = {
+    enable = true;
+    host = "127.0.0.1";
+    port = 2283;
+    mediaLocation = "${user_data_directory}/immich";
+    database.enableVectors = false;
+  };
 
   #### POSTGREST (systemd service) ####
   services.postgrest = {
