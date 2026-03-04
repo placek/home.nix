@@ -76,7 +76,6 @@ in
   i18n.defaultLocale = "pl_PL.UTF-8";
   nixpkgs.config.allowUnfree = true;
   security.sudo.wheelNeedsPassword = false;
-  system.stateVersion = "25.05";
   time.timeZone = "Europe/Warsaw";
 
   ################################# SERVICES ###################################
