@@ -21,8 +21,6 @@ in
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.kernelModules = [ "kvm-amd" ];
-
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/e83d2b9c-470d-41dd-9f09-6d193b3c9ced";
       fsType = "ext4";
@@ -38,8 +36,8 @@ in
     [ { device = "/dev/disk/by-uuid/c76b99d5-5ae2-4e21-924a-077d48dbc096"; }
     ];
 
-
   ################################### NIX ######################################
+  system.stateVersion = "25.11";
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   nix.gc.automatic = true;
   nix.gc.dates = "daily";
@@ -57,19 +55,17 @@ in
   powerManagement.cpuFreqGovernor = "performance";
 
   ################################## BOOT ######################################
+  boot.kernelModules = [ "kvm-amd" ];
+  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.kernelParams = [ "nvidia_drm.fbdev=1" ];
   boot.extraModulePackages = [ ];
   boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" "ahci" "sd_mod" "sdhci_pci" ];
-  boot.initrd.kernelModules = [];
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.enable = true;
   boot.kernel.sysctl."kernel.unprivileged_userns_clone" = 1;
   boot.consoleLogLevel = 0;
   boot.supportedFilesystems = [ "ntfs" ];
   boot.tmp.cleanOnBoot = true;
-  boot.kernelParams = [
-    "nvidia-drm.modeset=1"
-    "nvidia_drm.fbdev=1"
-  ];
 
   ################################## SYSTEM ####################################
   console.keyMap = "pl";
@@ -99,15 +95,16 @@ in
   services.xserver.enable = true;
   services.xserver.xkb.layout = "pl";
   services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = false;
+  services.displayManager.sddm.wayland.enable = true;
   services.displayManager.defaultSession = "hyprland";
   programs.hyprland.enable = true;
   environment.sessionVariables = {
-    WLR_RENDERER = "vulkan";
-    WLR_NO_HARDWARE_CURSORS = "1";
+    GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     LIBVA_DRIVER_NAME = "nvidia";
-    GBM_BACKEND = "nvidia-drm";
+    XDG_SESSION_TYPE = "wayland";
+    NIXOS_OZONE_WL = "1";
+    WLR_NO_HARDWARE_CURSORS = "1";
   };
   security.chromiumSuidSandbox.enable = true;
 
@@ -118,26 +115,21 @@ in
   services.pipewire.pulse.enable = true;
   services.pipewire.jack.enable = true;
 
+  ######################### POWERMANAGEMENT DISABLE ############################
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
+
   ################################## NVIDIA ####################################
   hardware.graphics.enable = true;
   hardware.graphics.enable32Bit = true;
-  nixpkgs.config.cudaSupport = true;
   hardware.nvidia.modesetting.enable = true;
-  hardware.nvidia.nvidiaSettings = true;
+  hardware.nvidia.nvidiaSettings = false;
   hardware.nvidia.open = true;
-#   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.production;
   hardware.nvidia.powerManagement.enable = false;
-  hardware.nvidia.powerManagement.finegrained = false;
-  hardware.nvidia-container-toolkit.enable = true;
   virtualisation.podman.enable = lib.mkForce false;
   services.xserver.videoDrivers = [ "nvidia" ];
-  environment.systemPackages = with pkgs; [
-    nvidia-container-toolkit        # provides nvidia-ctk (and, on NixOS, nvidia-cdi-hook)
-    libnvidia-container             # library used by the CLI/hook
-    (writeShellScriptBin "nvidia-cdi-hook" ''
-      exec ${pkgs.nvidia-container-toolkit}/bin/nvidia-ctk cdi "$@"
-    '')
-  ];
 
   ################################### USERS ####################################
   programs.fish.enable = true;
