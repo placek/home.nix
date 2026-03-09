@@ -130,6 +130,7 @@ in
   hardware.nvidia.powerManagement.enable = false;
   virtualisation.podman.enable = lib.mkForce false;
   services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia-container-toolkit.enable = true;
 
   ################################### USERS ####################################
   programs.fish.enable = true;
