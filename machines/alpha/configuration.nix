@@ -46,6 +46,7 @@ in
     experimental-features = nix-command flakes
     auto-optimise-store = true
     trusted-users = root @wheel
+    download-buffer-size = 524288000
   '';
 
   ################################# HARDWARE ###################################
