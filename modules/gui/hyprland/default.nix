@@ -52,13 +52,13 @@
         master.orientation = "left";
         master.mfact = 0.66;
         monitor = [
-          "DP-5,1920x1080@60,0x0,1"
-          "DP-4,1920x1080@60,1920x0,1"
+          "DP-2,1920x1080@60,0x0,1"
+          "DP-1,1920x1080@60,1920x0,1"
         ];
         workspace = [
-          "1, monitor:DP-5"
-          "2, monitor:DP-5"
-          "3, monitor:DP-5"
+          "1, monitor:DP-2"
+          "2, monitor:DP-2"
+          "3, monitor:DP-2"
         ];
 
         windowrulev2 = [ "tile, class:^(kitty)$" ];
