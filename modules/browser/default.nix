@@ -30,9 +30,6 @@ in
   ];
 
   config = {
-    home.sessionVariables.QT_QPA_PLATFORM = "xcb";
-    home.sessionVariables.QTWEBENGINE_CHROMIUM_FLAGS = "--disable-gpu-sandbox";
-
     # backup browser
     programs.firefox.enable = true;
 
