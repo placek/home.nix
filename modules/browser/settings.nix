@@ -17,7 +17,6 @@ in
       "disable-features=PermissionElement"
     ];
     confirm_quit = [ "multiple-tabs" "downloads" ];
-    qt.force_software_rendering = "qt-quick";
 
     content.desktop_capture = true;
     content.geolocation = true;

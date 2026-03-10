@@ -5,11 +5,8 @@
 }:
 let
   qutebrowser = config.programs.qutebrowser.package;
-  browser = pkgs.writeShellScriptBin "browser" ''
-    ${qutebrowser}/bin/qutebrowser "$@" # --backend webengine "$@"
-  '';
   hyprBrowser = pkgs.writeShellScriptBin "hypr-browser" ''
-    hyprctl dispatch exec "[workspace 1 silent] ${browser}/bin/browser" "$@"
+    hyprctl dispatch exec "[workspace 1 silent] ${qutebrowser}/bin/qutebrowser" "$@"
   '';
 in
 {
@@ -33,6 +30,9 @@ in
   ];
 
   config = {
+    home.sessionVariables.QT_QPA_PLATFORM = "xcb";
+    home.sessionVariables.QTWEBENGINE_CHROMIUM_FLAGS = "--disable-gpu-sandbox";
+
     # backup browser
     programs.firefox.enable = true;
 
