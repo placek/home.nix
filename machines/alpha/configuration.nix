@@ -79,7 +79,6 @@ in
   services.sshd.enable = true;
   services.cron.enable = true;
   services.openssh.extraConfig = "StreamLocalBindUnlink yes";
-  services.printing.drivers = [ pkgs.foo2zjs pkgs.mfcl8690cdwcupswrapper ];
   services.printing.enable = true;
   services.udisks2.enable = true;
   services.clamav.daemon.enable = true;
