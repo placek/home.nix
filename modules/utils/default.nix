@@ -79,74 +79,80 @@ in
     services.tldr-update.enable = true;
 
     home.packages = with pkgs; [
+      # 6502 toolchain
+      cc65              # 6502 compiler
       dcc6502           # 6502 disassembler
-      (import (builtins.fetchTarball { url =
-        "https://github.com/NixOS/nixpkgs/archive/0a8db1ea10ac3c7ba2987a324b7f5d9de06dd864.tar.gz";
-      }) {}).codex     # OpenAI Codex CLI
-      pkgsCross.avr.buildPackages.gcc
+      minipro           # EEPROM programmer
+      picocom           # serial terminal
 
-      ansible           # manage remote machines
+      # arduino and related tools
       arduino           # electronics prototyping platform
       avrdude           # program AVR microcontrollers
-      bash              # shell
+      pkgsCross.avr.buildPackages.gcc
+
+      # networking and remote management
       bind              # DNS server
-      cbqn              # BQN interpreter
-      cc65              # 6502 compiler
       croc              # transfer files
-      cryptsetup        # manage encrypted volumes
-      curl              # download files
-      docker-compose    # manage multi-container Docker applications
-      entr              # run arbitrary commands when files change
-      fd                # find files
-      ffmpeg-full       # multimedia framework
-      file              # determine file type
-      ghostscript       # manipulate PDF files
-      go-jira           # interact with Jira
-      htmlq             # extract data from HTML
-      imagemagick       # manipulate images
-      immich-cli        # Immich command line client
-      immich-go         # Immich command line client google
-      killall           # kill processes by name
-      libinput          # input device management
-      lightburn         # laser cutter software
-      mdcat             # render markdown
-      minipro           # EEPROM programmer
-      netpbm            # image processing tools
-      nfs-utils         # NFS client
+      curl              # request URLs
       ngrep             # network packet analyzer
       ngrok             # expose local servers to the internet
-      nix-direnv        # Nix flakes support
-      nix-prefetch-git  # fetch Git repositories
-      nvidia-container-toolkit
-      nvidia-docker     # Docker integration for NVIDIA GPUs
-      openssl           # cryptographic library
       openvpn           # VPN client
-      orca-c            # midi sequencer
-      p7zip             # extract 7z archives
-      pandoc            # document converter
-      pdftk             # manipulate PDF files
-      playerctl         # control media players
-      qFlipper          # flipper control software
-      qmk               # keyboard firmware
       rclone            # cloud storage
-      ripgrep           # search tool
-      rlwrap            # readline wrapper
-      rpi-imager        # Raspberry Pi OS image writer
       rsync             # file synchronization
-      sox               # audio processing
-      sshfs             # mount remote filesystems
-      tldr              # community-driven command-line help
-      tmate             # terminal sharing
-      typst             # typesetting system
-      unrar             # extract RAR archives
-      unzip             # extract ZIP archives
-      usbutils          # USB device management
       uucp              # Unix-to-Unix copy
       wget              # download files
-      whisper-cpp       # speech to text
       wrk2              # HTTP benchmarking tool
       xh                # HTTP client
+
+      # filesystem and file management
+      cryptsetup        # manage encrypted volumes
+      fd                # find files
+      file              # determine file type
+      nfs-utils         # NFS client
+      ripgrep           # search tool
+      sshfs             # mount remote filesystems
+
+      # file processing and manipulation
+      ghostscript       # manipulate PDF files
+      htmlq             # extract data from HTML
+      imagemagick       # manipulate images
+      jq                # JSON processor
+      mdcat             # render markdown
+      netpbm            # image processing tools
+      pandoc            # document converter
+      pdftk             # manipulate PDF files
+      typst             # typesetting system
       yq                # YAML processor
+
+      # utilities and command-line tools
+      bash              # auxilary shell
+      docker-compose    # manage multi-container Docker applications
+      entr              # run arbitrary commands when files change
+      killall           # kill processes by name
+      libinput          # input device management
+      nix-direnv        # Nix flakes support
+      nix-prefetch-git  # fetch Git repositories
+      openssl           # cryptographic library
+      qmk               # keyboard firmware
+      rlwrap            # readline wrapper
+      usbutils          # USB device management
+
+      # multimedia and entertainment
+      ffmpeg-full       # multimedia framework
+      orca-c            # midi sequencer
+      playerctl         # control media players
+      sox               # audio processing
+
+      # archive extraction tools
+      p7zip             # extract 7z archives
+      unrar             # extract RAR archives
+      unzip             # extract ZIP archives
+
+      # AI tools
+      (import (builtins.fetchTarball { url =
+        "https://github.com/NixOS/nixpkgs/archive/0a8db1ea10ac3c7ba2987a324b7f5d9de06dd864.tar.gz";
+      }) {}).codex      # OpenAI Codex CLI
+      whisper-cpp       # speech to text
     ];
   };
 }

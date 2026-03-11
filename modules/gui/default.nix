@@ -74,9 +74,11 @@ in
       kicad
       librecad
       libreoffice
+      lightburn
       musescore
       qimgv
       qalculate-gtk
+      qFlipper
     ];
 
     xdg.desktopEntries =  {
