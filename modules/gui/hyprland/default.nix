@@ -62,6 +62,10 @@
         ];
 
         windowrulev2 = [ "tile, class:^(kitty)$" ];
+
+        exec-once = [
+          "${pkgs.wayvnc}/bin/wayvnc 0.0.0.0 5900"
+        ];
       };
     };
   };
