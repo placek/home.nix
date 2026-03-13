@@ -22,7 +22,7 @@ $(nixos-config):
 	sudo cp --backup --interactive --link machines/$$(hostname)/configuration.nix $@
 
 .PHONY: switch
-switch: $(nixos-config) displaylink
+switch: $(nixos-config)
 	$(NIXOS) switch
 
 .PHONY: update
@@ -59,6 +59,3 @@ gens:
 .PHONY: news
 news:
 	$(HOME-MANAGER) news
-
-displaylink:
-	nix-prefetch-url --name displaylink-610.zip https://www.synaptics.com/sites/default/files/exe_files/2024-10/DisplayLink%20USB%20Graphics%20Software%20for%20Ubuntu6.1-EXE.zip

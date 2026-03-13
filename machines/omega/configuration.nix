@@ -119,7 +119,7 @@
   hardware.nvidia.prime.nvidiaBusId = "PCI:1:0:0";
   hardware.nvidia.prime.reverseSync.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" "displaylink" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
   environment.systemPackages = with pkgs; [ nvidia-container-toolkit ];
 
   ################################@## OLLAMA ###################################
