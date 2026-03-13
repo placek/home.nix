@@ -80,79 +80,77 @@ in
 
     home.packages = with pkgs; [
       # 6502 toolchain
-      cc65              # 6502 compiler
-      dcc6502           # 6502 disassembler
-      minipro           # EEPROM programmer
-      picocom           # serial terminal
+      cc65               # 6502 compiler
+      dcc6502            # 6502 disassembler
+      minipro            # EEPROM programmer
+      picocom            # serial terminal
 
       # arduino and related tools
-      arduino           # electronics prototyping platform
-      avrdude           # program AVR microcontrollers
+      arduino            # electronics prototyping platform
+      avrdude            # program AVR microcontrollers
       pkgsCross.avr.buildPackages.gcc
 
       # networking and remote management
-      bind              # DNS server
-      croc              # transfer files
-      curl              # request URLs
-      ngrep             # network packet analyzer
-      ngrok             # expose local servers to the internet
-      openvpn           # VPN client
-      rclone            # cloud storage
-      rsync             # file synchronization
-      uucp              # Unix-to-Unix copy
-      wget              # download files
-      wrk2              # HTTP benchmarking tool
-      xh                # HTTP client
+      bind               # DNS server
+      croc               # transfer files
+      curl               # request URLs
+      ngrep              # network packet analyzer
+      ngrok              # expose local servers to the internet
+      openvpn            # VPN client
+      rclone             # cloud storage
+      rsync              # file synchronization
+      uucp               # Unix-to-Unix copy
+      wget               # download files
+      wrk2               # HTTP benchmarking tool
+      xh                 # HTTP client
 
       # filesystem and file management
-      cryptsetup        # manage encrypted volumes
-      fd                # find files
-      file              # determine file type
-      nfs-utils         # NFS client
-      ripgrep           # search tool
-      sshfs             # mount remote filesystems
+      cryptsetup         # manage encrypted volumes
+      fd                 # find files
+      file               # determine file type
+      nfs-utils          # NFS client
+      ripgrep            # search tool
+      sshfs              # mount remote filesystems
 
       # file processing and manipulation
-      ghostscript       # manipulate PDF files
-      htmlq             # extract data from HTML
-      imagemagick       # manipulate images
-      jq                # JSON processor
-      mdcat             # render markdown
-      netpbm            # image processing tools
-      pandoc            # document converter
-      pdftk             # manipulate PDF files
-      typst             # typesetting system
-      yq                # YAML processor
+      ghostscript        # manipulate PDF files
+      htmlq              # extract data from HTML
+      imagemagick        # manipulate images
+      jq                 # JSON processor
+      mdcat              # render markdown
+      netpbm             # image processing tools
+      pandoc             # document converter
+      pdftk              # manipulate PDF files
+      typst              # typesetting system
+      yq                 # YAML processor
 
       # utilities and command-line tools
-      bash              # auxilary shell
-      docker-compose    # manage multi-container Docker applications
-      entr              # run arbitrary commands when files change
-      killall           # kill processes by name
-      libinput          # input device management
-      nix-direnv        # Nix flakes support
-      nix-prefetch-git  # fetch Git repositories
-      openssl           # cryptographic library
-      qmk               # keyboard firmware
-      rlwrap            # readline wrapper
-      usbutils          # USB device management
+      bash               # auxilary shell
+      docker-compose     # manage multi-container Docker applications
+      entr               # run arbitrary commands when files change
+      killall            # kill processes by name
+      libinput           # input device management
+      nix-direnv         # Nix flakes support
+      nix-prefetch-git   # fetch Git repositories
+      openssl            # cryptographic library
+      qmk                # keyboard firmware
+      rlwrap             # readline wrapper
+      usbutils           # USB device management
 
       # multimedia and entertainment
-      ffmpeg-full       # multimedia framework
-      orca-c            # midi sequencer
-      playerctl         # control media players
-      sox               # audio processing
+      ffmpeg-full        # multimedia framework
+      orca-c             # midi sequencer
+      playerctl          # control media players
+      sox                # audio processing
 
       # archive extraction tools
-      p7zip             # extract 7z archives
-      unrar             # extract RAR archives
-      unzip             # extract ZIP archives
+      p7zip              # extract 7z archives
+      unrar              # extract RAR archives
+      unzip              # extract ZIP archives
 
       # AI tools
-      (import (builtins.fetchTarball { url =
-        "https://github.com/NixOS/nixpkgs/archive/0a8db1ea10ac3c7ba2987a324b7f5d9de06dd864.tar.gz";
-      }) {}).codex      # OpenAI Codex CLI
-      whisper-cpp       # speech to text
+      codex              # OpenAI Codex CLI
+      whisper-cpp-vulkan # speech to text
     ];
   };
 }
