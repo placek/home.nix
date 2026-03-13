@@ -160,7 +160,8 @@ endfunction
 """""""""""""""""""""""""""""""""" LLM tools """""""""""""""""""""""""""""""""""
 " prepare the LLM settings
 function! s:_tertius_llm_init() abort
-  if !empty($OPENAI_API_KEY)
+  let l:llm_type = !empty($TERTIUS_LLM_TYPE) ? tolower($TERTIUS_LLM_TYPE) : ''
+  if l:llm_type ==# 'openai' && !empty($OPENAI_API_KEY)
     let g:tertius_config.llmType = 'openai'
     let g:tertius_config.llmBaseUrl = !empty($OPENAI_BASE_URL) ? $OPENAI_BASE_URL : 'https://api.openai.com/v1'
     let g:tertius_config.llmEndpoint = '/chat/completions'
