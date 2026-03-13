@@ -176,11 +176,15 @@ endfunction
 
 " request LLM body
 function! s:_tertius_llm_request_body(messages) abort
-  return json_encode({ 'model': g:tertius_config.llmModel,
-                     \ 'messages': a:messages,
-                     \ 'tools': g:tertius_config.tools,
-                     \ 'tool_choice': 'auto', 'stream': v:false
-                     \ })
+  let l:body = { 'model': g:tertius_config.llmModel,
+               \ 'messages': a:messages,
+               \ 'tools': g:tertius_config.tools,
+               \ 'stream': v:false
+               \ }
+  if g:tertius_config.llmType ==# 'openai'
+    let l:body.tool_choice = 'auto'
+  endif
+  return json_encode(l:body)
 endfunction
 
 " process LLM request
@@ -202,7 +206,14 @@ endfunction
 " call LLM tools
 function! s:_tertius_tool_caller(tool_call) abort
   let fname = a:tool_call.function.name
-  let args = empty(a:tool_call.function.arguments) ? {} : json_decode(a:tool_call.function.arguments)
+  let l:raw_args = get(a:tool_call.function, 'arguments', '')
+  if empty(l:raw_args)
+    let args = {}
+  elseif type(l:raw_args) == type('')
+    let args = json_decode(l:raw_args)
+  else
+    let args = l:raw_args
+  endif
   if fname ==# 'list_commits'
     echom "Tertius: listing commits on current feature branch"
     let result = <sid>_tertius_git_current_branch_commits()
@@ -213,16 +224,21 @@ function! s:_tertius_tool_caller(tool_call) abort
     echoerr "Tertius: unknown tool function: " . fname
     let result = 'unknown tool'
   endif
+  let l:content = type(result) == type([]) || type(result) == type({}) ? json_encode(result) : result
   if g:tertius_config.llmType == 'openai'
     return { 'role': 'tool',
-           \ 'tool_call_id': a:tool_call.id,
-           \ 'content': type(result)==type([]) ? json_encode(result) : string(result)
+           \ 'tool_call_id': get(a:tool_call, 'id', ''),
+           \ 'content': l:content
            \ }
   elseif g:tertius_config.llmType == 'ollama'
-    return { 'role': 'assistant',
-           \ 'tool_name': fname,
-           \ 'content': type(result)==type([]) ? json_encode(result) : string(result)
-           \ }
+    let l:tool_message = { 'role': 'tool',
+                         \ 'tool_name': fname,
+                         \ 'content': l:content
+                         \ }
+    if has_key(a:tool_call, 'id')
+      let l:tool_message.tool_call_id = a:tool_call.id
+    endif
+    return l:tool_message
   endif
 endfunction
 
