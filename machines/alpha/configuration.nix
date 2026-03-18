@@ -292,8 +292,8 @@ in
     enable = true;
 
     package = pkgs.postgresql_17.withPackages (ps: with ps; [
-#       pgsql-http
-#       pgvector
+      pgsql-http
+      pgvector
     ]);
 
     dataDir = "/var/lib/postgresql/17";
