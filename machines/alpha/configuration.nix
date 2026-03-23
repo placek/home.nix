@@ -352,7 +352,7 @@ in
       db-uri.dbname = "bible";
       db-uri.host = "/run/postgresql";
       db-uri.user = "postgrest";
-      db-schema = "public";
+      db-schema = "api";
       db-anon-role = "web_anon";
       openapi-mode = "follow-privileges";
     };
