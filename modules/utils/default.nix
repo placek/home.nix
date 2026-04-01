@@ -149,6 +149,7 @@ in
       unzip              # extract ZIP archives
 
       # AI tools
+      claude-code        # Anthropic Claude CLI
       codex              # OpenAI Codex CLI
       whisper-cpp-vulkan # speech to text
     ];
