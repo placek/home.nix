@@ -10,8 +10,10 @@
       allegro = "https://allegro.pl/listing?string={}";
       alpha = "http://www.wolframalpha.com/input/?i={}";
       ang = "https://context.reverso.net/t%C5%82umaczenie/polski-angielski/{}";
+      bible = "https://deepbible.online/?q={}";
       d = "https://hub.docker.com/search?q={}&type=image";
       duck = "https://duckduckgo.com/?q={}";
+      ollama = "https://ollama.com/search?q={}";
       h = "https://hoogle.haskell.org/?hoogle={}";
       hm = "https://home-manager-options.extranix.com/?query={}&release=master";
       m = "http://maps.google.com/maps?q={}";
