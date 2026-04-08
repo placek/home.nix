@@ -27,7 +27,8 @@ in
     editor.RCs = [
       ''
         set runtimepath+=~/.config/vim
-        set spelllang=pl
+        set spelllang=pl,en
+        set spell
       ''
     ];
   };
