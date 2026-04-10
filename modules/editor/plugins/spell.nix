@@ -28,7 +28,6 @@ in
       ''
         set runtimepath+=~/.config/vim
         set spelllang=pl,en
-        set spell
       ''
     ];
   };
