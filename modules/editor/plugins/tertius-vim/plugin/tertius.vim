@@ -171,7 +171,7 @@ function! s:_tertius_llm_init() abort
     let g:tertius_config.llmType = 'ollama'
     let g:tertius_config.llmBaseUrl = !empty($OLLAMA_BASE_URL) ? $OLLAMA_BASE_URL : 'http://localhost:11434/api'
     let g:tertius_config.llmEndpoint = '/chat'
-    let g:tertius_config.llmModel = !empty($OLLAMA_MODEL) ? $OLLAMA_MODEL : 'qwen3:latest'
+    let g:tertius_config.llmModel = !empty($OLLAMA_MODEL) ? $OLLAMA_MODEL : 'qwen3.5:9b'
   endif
 endfunction
 
