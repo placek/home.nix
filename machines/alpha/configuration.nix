@@ -84,6 +84,9 @@ in
   services.clamav.daemon.enable = true;
   services.clamav.updater.enable = true;
   services.ollama.enable = true;
+  services.ollama.package = (import (builtins.fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz";
+  }) { config.allowUnfree = true; }).ollama-cuda;
   services.ollama.acceleration = "cuda"; # Use default acceleration
   services.ollama.host = "0.0.0.0"; # Listen on all interfaces
   virtualisation.docker.autoPrune.dates = "daily";
