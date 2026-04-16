@@ -6,7 +6,8 @@
   options.browser.searchEngines = with lib; mkOption {
     type = types.attrs;
     default = {
-      DEFAULT = "https://www.google.com/search?q={}";
+      DEFAULT = "https://www.perplexity.ai/search/?q={}";
+      g = "https://www.google.com/search?q={}";
       allegro = "https://allegro.pl/listing?string={}";
       alpha = "http://www.wolframalpha.com/input/?i={}";
       ang = "https://context.reverso.net/t%C5%82umaczenie/polski-angielski/{}";
