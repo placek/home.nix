@@ -13,7 +13,7 @@ let
     mbsync.enable = true;
     mbsync.create = "both";
     mbsync.expunge = "both";
-    mbsync.patterns = [ "*" "![Gmail]*" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" ];
+    mbsync.patterns = [ "*" "![Gmail]*" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "!Drafts" "!Sent" ];
     mbsync.extraConfig.channel.Sync = "All";
     mbsync.extraConfig.account.Timeout = 120;
     mbsync.extraConfig.account.PipelineDepth = 1;
