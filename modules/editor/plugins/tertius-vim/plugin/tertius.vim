@@ -33,7 +33,8 @@ let g:tertius_config = {
   \  'user_story': 'Compose a user story, by reviewing the context in which the problem occurs. This should include a brief explanation of the problem and any relevant background information. Your task is to ensure that there is a clear connection between the problem and the context in which it occurs. The objective is to create a concise and informative user story that effectively communicates the problem and its context. The user story should have a title, a paragraph with a user story formatted scenario (As <actor>, I want to <action>, so <outcome>.), a "Summary" paragraph explaining the problem, and an "Acceptance criteria" paragraph with the tasks that has to be done to solve problem.',
   \  'pull_request': 'Compose a pull request description by analyzing any given commit messages. Ensure a thorough understanding of the changes and the context in which they occur. The goal is to generate a clear, concise pull request description that provides all the necessary information to understand the changes and their context. The pull request description should have a paragraph explaining the business purpose of the changes, and a paragraph explaining the outcome of the changes themselves - each such component has to be separated by two newlines and have no header.',
   \  'todo_list': 'Compose a todo list for the software developer to complete. To draft a todo list, review the context in which the tasks have to be done and the proposed main goals. This should include a brief explanation of the tasks and any relevant background information. Ensure that there is a clear connection between the tasks and the context in which they occur. The objective is to create a concise and informative todo list that effectively communicates the tasks and their context. The todo list should be formatted in the xit format. Where necessary, use paragraphs to split relevant sections of the todo list.',
-  \  'code_review': 'Review the feature branch. To draft a review, analyze the context in which the changes have been made. This should include a brief explanation of the changes and any relevant background information. Ensure that there is a clear connection between the changes and the context in which they occur.  The objective is to create a concise yet comprehensive review that effectively communicates the doubts and questions about the changes. Focus on the implementation details, and the connection between the user story: is the implementation correct, does it cover all the edge cases, is it full in terms of the user story, is it well tested, etc. The review should be formatted in the markdown format.'
+  \  'code_review': 'Review the feature branch. To draft a review, analyze the context in which the changes have been made. This should include a brief explanation of the changes and any relevant background information. Ensure that there is a clear connection between the changes and the context in which they occur.  The objective is to create a concise yet comprehensive review that effectively communicates the doubts and questions about the changes. Focus on the implementation details, and the connection between the user story: is the implementation correct, does it cover all the edge cases, is it full in terms of the user story, is it well tested, etc. The review should be formatted in the markdown format.',
+  \  'merge_message': "Compose a merge commit message summarizing the feature branch. Fetch the list of commits and analyze their details to understand the full scope of changes. The merge message should:\n- Start with a concise title summarizing what this feature branch accomplishes.\n- Follow with a brief paragraph explaining the business purpose and outcome of the changes.\n- Do not include any headers like 'Title:' or 'Summary:'.\n- Maintain an imperative tone.\n- Be concise but comprehensive enough to serve as a historical record of the merged feature."
   \   }
   \ }
 
@@ -334,11 +335,49 @@ function! TertiusTodoList() abort
 endfunction
 nnoremap <plug>(TertiusTodoList) :call TertiusTodoList()<cr>
 
+let s:tertius_merge_branch = ''
+
+function! TertiusMergeFeatureBranch() abort
+  let l:status = trim(<sid>_tertius_git('status --porcelain'))
+  if !empty(l:status)
+    echoerr 'Tertius: there are uncommitted changes on the branch'
+    return
+  endif
+  let l:current = <sid>_tertius_git_current_branch()
+  let l:default = substitute(<sid>_tertius_git_default_branch(), '^origin/', '', '')
+  if l:current ==# l:default
+    echoerr 'Tertius: already on the main branch'
+    return
+  endif
+  let s:tertius_merge_branch = l:current
+  call <sid>_tertius_open_intermediate_buffer('merge_message')
+  call Tertius('merge_message', '')
+endfunction
+nnoremap <plug>(TertiusMergeFeatureBranch) :call TertiusMergeFeatureBranch()<cr>
+
+function! s:_tertius_git_merge_feature_branch() abort
+  if <sid>_tertius_is_buffer_empty_but_comments()
+    return
+  endif
+  if empty(s:tertius_merge_branch)
+    echoerr 'Tertius: no feature branch to merge'
+    return
+  endif
+  let l:branch = s:tertius_merge_branch
+  let l:default = substitute(<sid>_tertius_git_default_branch(), '^origin/', '', '')
+  call <sid>_tertius_git('checkout ' . l:default)
+  call <sid>_tertius_git('merge --no-ff --no-commit ' . l:branch)
+  call <sid>_tertius_git('commit --file -', getline(1, '$'))
+  echom "Tertius: feature branch " . l:branch . " merged into " . l:default
+  let s:tertius_merge_branch = ''
+endfunction
+
 """"""""""""""""""""""""""""""""""" AUTOCMDs """""""""""""""""""""""""""""""""""
 
 augroup Tertius
   autocmd!
-  autocmd FileType  gitcommit               nnoremap <buffer> <cr> <Plug>(TertiusCommitMessage)<cr>
-  autocmd FileType  tertius_user_story      nnoremap <buffer> <cr> <Plug>(TertiusUserStory)<cr>
-  autocmd BufUnload /tmp/tertius_user_story call <sid>_tertius_git_init_feature_branch()
+  autocmd FileType  gitcommit                  nnoremap <buffer> <cr> <Plug>(TertiusCommitMessage)<cr>
+  autocmd FileType  tertius_user_story         nnoremap <buffer> <cr> <Plug>(TertiusUserStory)<cr>
+  autocmd BufUnload /tmp/tertius_user_story    call <sid>_tertius_git_init_feature_branch()
+  autocmd BufUnload /tmp/tertius_merge_message call <sid>_tertius_git_merge_feature_branch()
 augroup END

@@ -33,6 +33,7 @@ nnoremap <silent><leader>e :edit .<cr>
 nnoremap <silent><leader>f <Plug>(GitGrep)
 nnoremap <silent><leader>F <Plug>(GitPickaxe)
 nnoremap <silent><leader>g <Plug>(GitToggleStatus)
+nnoremap <silent><leader>G <Plug>(TertiusMergeFeatureBranch)
 nnoremap <silent><leader>m <Plug>(GitBranchOffCommit)
 nnoremap <silent><leader>M <Plug>(TertiusMergeRequestWindow)
 nnoremap <silent><leader>n <Plug>(GitCheckoutFromInput)
