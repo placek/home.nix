@@ -4,7 +4,7 @@
 " the feature branch.
 " Author: Paweł Placzyński
 " License: MIT License
-" Version: 0.1.0
+" Version: 0.2.0
 
 if exists('g:loaded_tertius')
   finish
@@ -16,6 +16,7 @@ let g:tertius_config = {
   \ 'curlExec': 'curl',
   \ 'defaultBranch': 'origin/master',
   \ 'userStoryIdPattern': '\[\([^\]]\+\)\]',
+  \ 'maxToolCallDepth': 10,
   \ 'tools': [
   \   { 'type': 'function', 'function': {
   \       'name': 'list_commits',
@@ -62,6 +63,11 @@ function! s:_tertius_git(cmd, ...) abort
   endif
 endfunction
 
+" check the exit status of the last shell command
+function! s:_tertius_git_ok() abort
+  return v:shell_error == 0
+endfunction
+
 " open a new buffer for intermediate operations
 function! s:_tertius_open_intermediate_buffer(type) abort
   wincmd n
@@ -75,7 +81,7 @@ endfunction
 
 " get the default branch of the current git repository
 function! s:_tertius_git_default_branch() abort
-  let l:result = trim(<sid>_tertius_git("config --get core.default"))
+  let l:result = trim(<sid>_tertius_git("config --get core.defaultBranch"))
   if empty(l:result)
     return g:tertius_config.defaultBranch
   else
@@ -98,18 +104,21 @@ function! s:_tertius_git_current_branch_commits() abort
   return split(<sid>_tertius_git("log --format=%H " . <sid>_tertius_git_branchoff_commit() . "..HEAD"), "\n")
 endfunction
 
-" check if commit is empty
+" check if commit is empty (has no file changes)
 function! s:_tertius_git_commit_is_empty(commit) abort
   if empty(a:commit)
     echoerr 'Tertius: commit is not specified'
-    return ''
+    return -1
   endif
   return empty(trim(<sid>_tertius_git("show --pretty=format: --name-only " . a:commit)))
 endfunction
 
 " extract commit message
 function! s:_tertius_git_commit_message(commit) abort
-  if <sid>_tertius_git_commit_is_empty(a:commit)
+  let l:empty = <sid>_tertius_git_commit_is_empty(a:commit)
+  if l:empty == -1
+    return ''
+  elseif l:empty
     let l:msg = "Business context:\n"
   else
     let l:msg = "Implementation context:\n"
@@ -145,20 +154,30 @@ endfunction
 
 " initialize feature branch
 function! s:_tertius_git_init_feature_branch() abort
-  if s:_tertius_is_buffer_empty_but_comments()
+  if <sid>_tertius_is_buffer_empty_but_comments()
     return
   endif
   let l:branch = <sid>_tertius_git_branch_name_from_buffer_text()
-  call <sid>_tertius_git('add .')
-  call <sid>_tertius_git('stash')
+  let l:has_changes = !empty(trim(<sid>_tertius_git('status --porcelain')))
+  if l:has_changes
+    call <sid>_tertius_git('add .')
+    call <sid>_tertius_git('stash')
+  endif
   call <sid>_tertius_git('fetch --all')
   call <sid>_tertius_git('checkout ' . <sid>_tertius_git_default_branch())
   call <sid>_tertius_git('checkout -B ' . l:branch)
   call <sid>_tertius_git('commit --no-verify --allow-empty --file -', getline(1, '$'))
+  if !<sid>_tertius_git_ok()
+    echoerr 'Tertius: failed to create initial commit on branch ' . l:branch
+    return
+  endif
+  if l:has_changes
+    call <sid>_tertius_git('stash pop')
+  endif
   echom "Tertius: feature branch " . l:branch . " initialized"
 endfunction
 
-"""""""""""""""""""""""""""""""""" LLM tools """""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""" LLM tools """""""""""""""""""""""""""""""""""""
 " prepare the LLM settings
 function! s:_tertius_llm_init() abort
   let l:llm_type = !empty($TERTIUS_LLM_TYPE) ? tolower($TERTIUS_LLM_TYPE) : ''
@@ -202,7 +221,16 @@ function! s:_tertius_request(messages) abort
     let l:cmd = l:cmd . ' --header "Authorization: Bearer ' . $OPENAI_API_KEY . '"'
   endif
   let l:response = <sid>_tertius_curl(l:cmd)
-  return json_decode(l:response)
+  if empty(l:response)
+    echoerr 'Tertius: empty response from LLM'
+    return v:null
+  endif
+  try
+    return json_decode(l:response)
+  catch
+    echoerr 'Tertius: failed to parse LLM response: ' . v:exception
+    return v:null
+  endtry
 endfunction
 
 " call LLM tools
@@ -244,8 +272,18 @@ function! s:_tertius_tool_caller(tool_call) abort
   endif
 endfunction
 
-function! s:_tertius_handle_response(messages) abort
+function! s:_tertius_handle_response(messages, ...) abort
+  let l:depth = a:0 > 0 ? a:1 : 0
+  if l:depth >= g:tertius_config.maxToolCallDepth
+    echoerr 'Tertius: maximum tool call depth reached (' . g:tertius_config.maxToolCallDepth . ')'
+    return
+  endif
+
   let l:response = <sid>_tertius_request(a:messages)
+
+  if l:response is v:null
+    return
+  endif
 
   if type(l:response) == type({}) && has_key(l:response, 'error')
     echoerr 'Tertius: ' . get(l:response.error, 'message', 'unknown error')
@@ -268,7 +306,7 @@ function! s:_tertius_handle_response(messages) abort
     for tool_call in l:message.tool_calls
       call add(l:result, <sid>_tertius_tool_caller(tool_call))
     endfor
-    return <sid>_tertius_handle_response(l:result)
+    return <sid>_tertius_handle_response(l:result, l:depth + 1)
   endif
 
   if has_key(l:message, 'content') && type(l:message.content) == type('')
@@ -298,7 +336,7 @@ function! Tertius(cmd, content) abort
   call <sid>_tertius_handle_response(l:messages)
 endfunction
 
-""""""""""""""""""""""""" TERTIUS commands and mappings """"""""""""""""""""""""
+""""""""""""""""""""""""" TERTIUS commands and mappings """""""""""""""""""""""""
 function! TertiusOpenUserStoryWindow() abort
   call <sid>_tertius_open_intermediate_buffer('user_story')
 endfunction
@@ -330,10 +368,20 @@ function! TertiusCommitMessage() abort
 endfunction
 nnoremap <plug>(TertiusCommitMessage) :call TertiusCommitMessage()<cr>
 
+function! TertiusOpenTodoListWindow() abort
+  call <sid>_tertius_open_intermediate_buffer('todo_list')
+endfunction
+nnoremap <plug>(TertiusOpenTodoListWindow) :call TertiusOpenTodoListWindow()<cr>
+
 function! TertiusTodoList() abort
   call Tertius('todo_list', getline(1, '$'))
 endfunction
 nnoremap <plug>(TertiusTodoList) :call TertiusTodoList()<cr>
+
+function! TertiusMergeMessage() abort
+  call Tertius('merge_message', '')
+endfunction
+nnoremap <plug>(TertiusMergeMessage) :call TertiusMergeMessage()<cr>
 
 let s:tertius_merge_branch = ''
 
@@ -364,20 +412,36 @@ function! s:_tertius_git_merge_feature_branch() abort
     return
   endif
   let l:branch = s:tertius_merge_branch
+  let s:tertius_merge_branch = ''
   let l:default = substitute(<sid>_tertius_git_default_branch(), '^origin/', '', '')
   call <sid>_tertius_git('checkout ' . l:default)
+  if !<sid>_tertius_git_ok()
+    echoerr 'Tertius: failed to checkout ' . l:default
+    return
+  endif
   call <sid>_tertius_git('merge --no-ff --no-commit ' . l:branch)
+  if !<sid>_tertius_git_ok()
+    call <sid>_tertius_git('merge --abort')
+    call <sid>_tertius_git('checkout ' . l:branch)
+    echoerr 'Tertius: merge failed (conflicts?), returned to ' . l:branch
+    return
+  endif
   call <sid>_tertius_git('commit --file -', getline(1, '$'))
+  if !<sid>_tertius_git_ok()
+    echoerr 'Tertius: failed to create merge commit'
+    return
+  endif
   echom "Tertius: feature branch " . l:branch . " merged into " . l:default
-  let s:tertius_merge_branch = ''
 endfunction
 
-""""""""""""""""""""""""""""""""""" AUTOCMDs """""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""" AUTOCMDs """"""""""""""""""""""""""""""""""""""
 
 augroup Tertius
   autocmd!
   autocmd FileType  gitcommit                  nnoremap <buffer> <cr> <Plug>(TertiusCommitMessage)<cr>
   autocmd FileType  tertius_user_story         nnoremap <buffer> <cr> <Plug>(TertiusUserStory)<cr>
+  autocmd FileType  tertius_merge_message      nnoremap <buffer> <cr> <Plug>(TertiusMergeMessage)<cr>
+  autocmd FileType  tertius_todo_list          nnoremap <buffer> <cr> <Plug>(TertiusTodoList)<cr>
   autocmd BufUnload /tmp/tertius_user_story    call <sid>_tertius_git_init_feature_branch()
   autocmd BufUnload /tmp/tertius_merge_message call <sid>_tertius_git_merge_feature_branch()
 augroup END
