@@ -16,6 +16,10 @@
     programs.bash = {
       enable = true;
       initExtra = ''
+        source ${pkgs.blesh}/share/blesh/ble.sh
+        ble-face -s auto_complete fg=240
+        ble-bind -m auto_complete -f f11 auto_complete/insert
+        ble-bind -m emacs -f f11 complete
         bind '"\C-z": undo'
       '';
 
