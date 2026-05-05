@@ -15,6 +15,7 @@
 
   imports = [
     ./prompt.nix
+    ./bash.nix
   ];
 
   config = {
