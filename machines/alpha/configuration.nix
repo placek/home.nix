@@ -157,7 +157,6 @@ in
     "L /home/placek/Brain - - - - ${user_data_directory}/brain"
     "L /home/placek/Projects - - - - ${user_data_directory}/projects"
     "L /home/placek/Media - - - - /run/media/placek"
-    "d ${user_data_directory}/obsidian-config 0750 placek users -"
   ];
 
   ################################# NETWORK ####################################
@@ -368,43 +367,30 @@ in
     psql -tAc 'GRANT "web_anon" TO "postgrest"'
   '';
 
-  #### OBSIDIAN ####
-  virtualisation.oci-containers.backend = "docker";
-  virtualisation.oci-containers.containers.obsidian = {
-    image = "lscr.io/linuxserver/obsidian:latest";
-    autoStart = true;
+  ################################# HERMES #####################################
+  # Zależności systemowe pod hermesa
+  environment.systemPackages = with pkgs; [
+    uv
+    python311
+    nodejs_22       # potrzebny do browser tools / serwerów MCP po npx
+    git
+    ripgrep
+    ffmpeg
+    gcc             # przy budowaniu sporadycznych wheeli z C-extensions
+  ];
 
-    environment = {
-      PUID = "1000";      # placek
-      PGID = "100";       # users
-      TZ = "Europe/Warsaw";
-      TITLE = "Brain";
-    };
+  # Dla wheeli z natywnymi binariami linkowanymi do FHS-owego ld-linux
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc.lib
+    zlib
+    openssl
+    libffi
+    glib
+  ];
 
-    # CUSTOM_USER + PASSWORD trzymamy poza configiem
-    environmentFiles = [ "${user_data_directory}/.obsidian-env" ];
-
-    volumes = [
-      "${user_data_directory}/brain:/vaults/brain"
-      "${user_data_directory}/obsidian-config:/config"
-    ];
-
-    extraOptions = [
-      "--network=${traefik_docker_network}"
-      "--shm-size=1gb"
-      "--security-opt=seccomp=unconfined"
-      "--label=traefik.enable=true"
-      "--label=traefik.docker.network=${traefik_docker_network}"
-      "--label=traefik.http.routers.brain.rule=Host(`brain.${domain}`)"
-      "--label=traefik.http.routers.brain.entrypoints=websecure"
-      "--label=traefik.http.routers.brain.tls.certresolver=letsencrypt"
-      "--label=traefik.http.services.brain.loadbalancer.server.port=3000"
-    ];
-  };
-
-  # Niech kontener startuje po Traefiku (sieć jest tworzona w jego preStart)
-  systemd.services.docker-obsidian = {
-    after = [ "traefik.service" "docker.service" ];
-    requires = [ "docker.service" ];
-  };
+  # Auto-pull modelu dla ollamy z sensownym kontekstem (≥64k wymagane przez hermesa)
+  services.ollama.loadModels = [
+    "gemma4:latest"
+  ];
 }
