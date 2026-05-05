@@ -153,8 +153,11 @@ in
     "f ${traefik_proxy_directory}/acme.json 0600 traefik docker -"
     "d ${user_data_directory}/projects 0700 placek placek -"
     "d ${user_data_directory}/immich 0750 immich immich -"
+    "d ${user_data_directory}/brain 0700 placek users -"
+    "L /home/placek/Brain - - - - ${user_data_directory}/brain"
     "L /home/placek/Projects - - - - ${user_data_directory}/projects"
     "L /home/placek/Media - - - - /run/media/placek"
+    "d ${user_data_directory}/obsidian-config 0750 placek users -"
   ];
 
   ################################# NETWORK ####################################
@@ -364,4 +367,44 @@ in
   systemd.services.postgresql-setup.script = lib.mkAfter ''
     psql -tAc 'GRANT "web_anon" TO "postgrest"'
   '';
+
+  #### OBSIDIAN ####
+  virtualisation.oci-containers.backend = "docker";
+  virtualisation.oci-containers.containers.obsidian = {
+    image = "lscr.io/linuxserver/obsidian:latest";
+    autoStart = true;
+
+    environment = {
+      PUID = "1000";      # placek
+      PGID = "100";       # users
+      TZ = "Europe/Warsaw";
+      TITLE = "Brain";
+    };
+
+    # CUSTOM_USER + PASSWORD trzymamy poza configiem
+    environmentFiles = [ "${user_data_directory}/.obsidian-env" ];
+
+    volumes = [
+      "${user_data_directory}/brain:/vaults/brain"
+      "${user_data_directory}/obsidian-config:/config"
+    ];
+
+    extraOptions = [
+      "--network=${traefik_docker_network}"
+      "--shm-size=1gb"
+      "--security-opt=seccomp=unconfined"
+      "--label=traefik.enable=true"
+      "--label=traefik.docker.network=${traefik_docker_network}"
+      "--label=traefik.http.routers.brain.rule=Host(`brain.${domain}`)"
+      "--label=traefik.http.routers.brain.entrypoints=websecure"
+      "--label=traefik.http.routers.brain.tls.certresolver=letsencrypt"
+      "--label=traefik.http.services.brain.loadbalancer.server.port=3000"
+    ];
+  };
+
+  # Niech kontener startuje po Traefiku (sieć jest tworzona w jego preStart)
+  systemd.services.docker-obsidian = {
+    after = [ "traefik.service" "docker.service" ];
+    requires = [ "docker.service" ];
+  };
 }
