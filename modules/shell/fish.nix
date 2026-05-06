@@ -5,8 +5,6 @@
 }:
 {
   config = {
-    home.sessionVariables.SHELL = "fish";
-
     programs.fzf.enableFishIntegration = true;            # fuzzy finder
     programs.nix-index.enableFishIntegration = true;      # nix package search
     programs.zoxide.enableFishIntegration = true;         # directory navigation

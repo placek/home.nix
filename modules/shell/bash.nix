@@ -21,6 +21,21 @@
         ble-bind -m auto_complete -f f11 auto_complete/insert
         ble-bind -m emacs -f f11 complete
         bind '"\C-z": undo'
+        function ble/widget/clear-screen-keep-scrollback {
+          printf '\e[2J\e[H'
+          ble/textarea#invalidate
+        }
+        ble-bind -m emacs -f C-x 'clear-screen-keep-scrollback'
+        function ble/widget/fzf-cd {
+          local dir
+          dir=$(__fzf_cd__)
+          if [[ -n "$dir" ]]; then
+            ble/widget/.insert-newline
+            eval "$dir"
+          fi
+          ble/textarea#invalidate
+        }
+        ble-bind -m emacs -f C-a 'fzf-cd'
       '';
 
       shellAliases = {

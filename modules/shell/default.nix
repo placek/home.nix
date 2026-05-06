@@ -20,6 +20,8 @@
   ];
 
   config = {
+    home.sessionVariables.SHELL = "fish";
+
     programs.lsd.enable = true;
     programs.carapace.enable = true;
     programs.mcfly.enable = true;
