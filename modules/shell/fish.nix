@@ -45,8 +45,6 @@
         j = "journalctl";
         s = "systemctl";
 
-        t = "tldr";
-
         sshh = "TERM=xterm-256color ssh";
         cdt = "cd (mktemp -d)";
       };
