@@ -391,6 +391,6 @@ in
 
   # Auto-pull modelu dla ollamy z sensownym kontekstem (≥64k wymagane przez hermesa)
   services.ollama.loadModels = [
-    "gemma4:latest"
+    "qwen2.5:14b"
   ];
 }
