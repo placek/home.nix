@@ -326,6 +326,9 @@ in
   # PGADMIN
   services.pgadmin = {
     enable = true;
+    package = (import (builtins.fetchTarball {
+      url = "https://github.com/NixOS/nixpkgs/archive/29916453413845e54a65b8a1cf996842300cd299.tar.gz";
+    }) {}).pgadmin4;
     initialEmail = "placzynski.pawel@gmail.com";
     initialPasswordFile = "${user_data_directory}/.pgadmin-pass";
     port = 5050;
