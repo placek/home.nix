@@ -8,6 +8,7 @@
     ./modules/browser
     ./modules/terminal
     ./modules/shell
+    ./modules/mux
     ./modules/editor
     ./modules/vcs
     ./modules/security
