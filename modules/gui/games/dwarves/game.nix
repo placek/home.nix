@@ -12,9 +12,11 @@ let
   url = "https://www.bay12games.com/dwarves/df_47_05_linux.tar.bz2";
   hash = "sha256-rHSm27fX2WIfQwQFCAMiq1DDX2YyNS/y6pI/bcWv/KM=";
 
-  unfuck = pkgs.callPackage (pkgs.path + "/pkgs/games/dwarf-fortress/unfuck.nix") {
+  unfuck = (pkgs.callPackage (pkgs.path + "/pkgs/games/dwarf-fortress/unfuck.nix") {
     inherit dfVersion;
-  };
+  }).overrideAttrs (old: {
+    cmakeFlags = (old.cmakeFlags or []) ++ [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
+  });
 
   renderValue = v:
     if lib.isBool v then
