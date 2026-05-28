@@ -94,6 +94,13 @@ inoremap <cr> <C-G>u<cr>
 vnoremap <C-p> "pdp
 vnoremap <C-P> "pdP
 
+" XF86Copy: kitty sends \e[1337y, yank visual selection (no-op elsewhere)
+execute "set <F37>=\<Esc>[1337y"
+vnoremap <F37> y
+nnoremap <F37> <Nop>
+inoremap <F37> <Nop>
+cnoremap <F37> <Nop>
+
 " right click is an escape
 nnoremap <RightMouse> <esc>
 inoremap <RightMouse> <esc>

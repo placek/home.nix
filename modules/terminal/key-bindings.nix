@@ -25,7 +25,7 @@ in
     "kitty_mod+shift+v" = "paste_from_clipboard";
     "kitty_mod+shift+x" = "paste_from_selection";
 
-    "0x1008ff57" = "copy_to_clipboard";    # XF86Copy
+    "0x1008ff57" = "combine : copy_to_clipboard : send_text all \\x1b[1337y";    # XF86Copy
     "0x1008ff6d" = "paste_from_clipboard"; # XF86Paste
     "0x1008ff58" = "paste_from_selection"; # XF86Cut
 
