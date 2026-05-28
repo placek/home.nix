@@ -15,45 +15,8 @@
 
     programs.bash = {
       enable = true;
-      initExtra = ''
-        source ${pkgs.blesh}/share/blesh/ble.sh
-        ble-face -s auto_complete fg=240
-        ble-bind -m auto_complete -f f11 auto_complete/insert
-        ble-bind -m emacs -f f11 complete
-        bind '"\C-z": undo'
-        function ble/widget/clear-screen-keep-scrollback {
-          printf '\e[2J\e[H'
-          ble/textarea#invalidate
-        }
-        ble-bind -m emacs -f C-x 'clear-screen-keep-scrollback'
-        function ble/widget/fzf-cd {
-          local dir
-          dir=$(__fzf_cd__)
-          if [[ -n "$dir" ]]; then
-            ble/widget/.insert-newline
-            eval "$dir"
-          fi
-          ble/textarea#invalidate
-        }
-        ble-bind -m emacs -f C-a 'fzf-cd'
-      '';
 
       shellAliases = {
-        dsp = "docker system prune";
-        dspv = "docker system prune --volumes";
-        dspa = "docker system prune --volumes --all";
-
-        dcb = "docker compose build";
-        dce = "docker compose exec";
-        dca = "docker compose attach";
-        dcr = "docker compose run --rm";
-        dcu = "docker compose up --detach --remove-orphans";
-        dcl = "docker compose logs";
-        dcd = "docker compose down --remove-orphans";
-        dcdv = "docker compose down --remove-orphans --volumes";
-        dcres = "docker compose restart";
-        dcps = "docker compose ps";
-
         j = "journalctl";
         s = "systemctl";
 

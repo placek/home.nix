@@ -27,21 +27,6 @@
 
       functions.fish_greeting.body = "";
       shellAbbrs = {
-        dsp = "docker system prune";
-        dspv = "docker system prune --volumes";
-        dspa = "docker system prune --volumes --all";
-
-        dcb = "docker compose build";
-        dce = "docker compose exec";
-        dca = "docker compose attach";
-        dcr = "docker compose run --rm";
-        dcu = "docker compose up --detach --remove-orphans";
-        dcl = "docker compose logs";
-        dcd = "docker compose down --remove-orphans";
-        dcdv = "docker compose down --remove-orphans --volumes";
-        dcres = "docker compose restart";
-        dcps = "docker compose ps";
-
         j = "journalctl";
         s = "systemctl";
 
