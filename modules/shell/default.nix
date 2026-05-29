@@ -7,7 +7,7 @@
   options = with lib; {
     shellExec = mkOption {
       type = types.str;
-      default = "${pkgs.fish}/bin/fish";
+      default = "${pkgs.bashInteractive}/bin/bash";
       description = "Shell executable.";
       readOnly = true;
     };
@@ -20,7 +20,7 @@
   ];
 
   config = {
-    home.sessionVariables.SHELL = "fish";
+    home.sessionVariables.SHELL = "bash";
 
     programs.lsd.enable = true;
     programs.carapace.enable = true;

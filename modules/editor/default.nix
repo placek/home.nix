@@ -43,6 +43,7 @@ in
   config = {
     home.sessionVariables.EDITOR = "vim";
     home.packages = [ editor ];
+    programs.bash.shellAliases.e = "editor";
     programs.fish.shellAbbrs.e = "editor";
 
     programs.vim = {

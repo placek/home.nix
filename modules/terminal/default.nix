@@ -30,7 +30,9 @@
       icon = "terminal";
     };
 
+    programs.bash.shellAliases.icat = "kitty +kitten icat";
     programs.fish.shellAliases.icat = "kitty +kitten icat";
+    programs.kitty.shellIntegration.enableBashIntegration = true;
     programs.kitty.shellIntegration.enableFishIntegration = true;
 
     programs.kitty.enable = true;
