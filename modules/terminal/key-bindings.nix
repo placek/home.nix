@@ -29,12 +29,15 @@ in
     "0x1008ff6d" = "paste_from_clipboard"; # XF86Paste
     "0x1008ff58" = "paste_from_selection"; # XF86Cut
 
-    "kitty_mod+enter" = "launch --type=window --cwd=current";
-    "ctrl+q" = "launch --type=window --location=split --cwd=current fish -lc 'direnv exec . claude'";
-    "kitty_mod+backspace" = "next_layout";
+    # Pane/split bindings (ctrl+enter, ctrl+q, ctrl+backspace, ctrl+h, ctrl+l)
+    # are handled by tmux — see modules/mux/default.nix.
+    # In legacy mode kitty would emit \r for ctrl+enter and \x08 for
+    # ctrl+backspace, indistinguishable from plain Enter/BSpace. Forward
+    # them to tmux as CSI u sequences so `extended-keys always` can parse
+    # them into C-Enter / C-BSpace.
+    "ctrl+enter"     = "send_text all \\x1b[13;5u";
+    "ctrl+backspace" = "send_text all \\x1b[127;5u";
 
-    "kitty_mod+h" = "next_window";
-    "kitty_mod+l" = "previous_window";
     "kitty_mod+k" = "scroll_to_prompt -1";
     "kitty_mod+j" = "scroll_to_prompt +1";
 

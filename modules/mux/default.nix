@@ -14,56 +14,51 @@
 
     extraConfig = ''
 #       =========================================================
-#       Mouse — selection / word / line, click-to-focus, no auto-exit on drag end
+#       Status bar — vim-style: blue session, yellow active window, command on right
 #       =========================================================
-#       set -g mouse on
-#       bind-key -T copy-mode-vi MouseDragEnd1Pane  send-keys -X copy-pipe-no-clear
-#       bind-key -T copy-mode-vi DoubleClick1Pane   select-pane \; send-keys -X select-word \; send-keys -X copy-pipe-no-clear
-#       bind-key -T copy-mode-vi TripleClick1Pane   select-pane \; send-keys -X select-line \; send-keys -X copy-pipe-no-clear
-#
+        set -g status on
+        set -g status-position bottom
+        set -g status-justify left
+        set -g status-style "bg=colour0,fg=colour15"
+        set -g status-left-length 50
+        set -g status-right-length 100
+
+        set -g status-left "#[fg=colour0,bg=colour3,bold] #{?client_prefix,N,I} "
+
+        set -g window-status-current-format "#[fg=colour15,bg=colour0,bold] #W:#I:#P "
+        set -g window-status-format ""
+        set -g window-status-separator ""
+
+        set -g status-right "#[fg=colour0,bg=colour4,bold] #S "
+
 #       =========================================================
-#       Copy / paste (vi-style in copy-mode, plus prefix shortcuts)
+#       Pane borders — yellow when active, gray when inactive
 #       =========================================================
-#       bind-key -T copy-mode-vi v send-keys -X begin-selection
-#       bind-key -T copy-mode-vi y send-keys -X copy-pipe-no-clear
-#       bind-key -T copy-mode-vi Y send-keys -X copy-pipe-and-cancel
-#
-#       prefix + C / V / X  ≈ kitty_mod+shift+{c,v,x}
-#       bind-key C copy-mode
-#       bind-key V run-shell "tmux set-buffer -- \"$(wl-paste 2>/dev/null || xclip -selection clipboard -o)\"; tmux paste-buffer"
-#       bind-key X run-shell "tmux set-buffer -- \"$(wl-paste -p 2>/dev/null || xclip -selection primary   -o)\"; tmux paste-buffer"
-#
+        set -g pane-border-style "fg=colour8"
+        set -g pane-active-border-style "fg=colour3"
+
 #       =========================================================
-#       New panes / windows (kitty: new window in cwd)
+#       Extended keys — required so ctrl+enter / ctrl+backspace are distinguishable
+#       (kitty advertises the keyboard protocol; tmux opts in here)
 #       =========================================================
-#       prefix + Enter  → new pane in CWD (≈ kitty_mod+enter)
-#       bind-key Enter split-window -h -c "#{pane_current_path}"
-#
-#       Ctrl-q (no prefix) → claude in a side split via direnv (≈ your ctrl+q binding)
-#       bind-key -n C-q split-window -h -c "#{pane_current_path}" "fish -lc 'direnv exec . claude'"
-#
-#       prefix + BSpace → cycle layouts (≈ kitty_mod+backspace next_layout)
-#       bind-key BSpace next-layout
-#
+        set -s extended-keys always
+        set -as terminal-features 'xterm-kitty:extkeys'
+
 #       =========================================================
-#       Pane navigation (kitty_mod+h / kitty_mod+l → next/prev window-in-tab → tmux pane)
+#       Panes — keep the kitty chords, but tmux handles them now
 #       =========================================================
-#       bind-key h select-pane -t :.-
-#       bind-key l select-pane -t :.+
-#
-#       kitty_mod+j / kitty_mod+k → scroll_to_prompt ±1
-#       Adjust the regex below to your fish prompt glyph (default fish: '> '; starship/custom: '❯ ')
-#       bind-key k copy-mode \; send-keys -X search-backward "❯ "
-#       bind-key j if-shell -F '#{pane_in_mode}' \
-#         'send-keys -X search-forward "❯ "' \
-#         'copy-mode \; send-keys -X search-forward "❯ "'
-#
-#       =========================================================
-#       Scrollback / last command output (kitty_mod+s>s, kitty_mod+s>ctrl+s)
-#       =========================================================
-#       bind-key s copy-mode
-#       "last command output" requires OSC-133 prompt marks; fallback = jump to previous prompt:
-#       bind-key C-s copy-mode \; send-keys -X search-backward "❯ "
+        # ctrl+enter      — new full-height pane on the right (was kitty_mod+enter)
+        bind -n C-Enter   split-window -fh -c "#{pane_current_path}"
+
+        # ctrl+q          — claude in a side split via direnv (was kitty ctrl+q)
+        bind -n C-q       split-window -h -c "#{pane_current_path}" "bash -c 'direnv exec . claude'"
+
+        # ctrl+backspace  — cycle layouts (was kitty_mod+backspace)
+        bind -n C-BSpace  resize-pane -Z
+
+        # ctrl+h / ctrl+l — next / previous pane (was kitty_mod+h / kitty_mod+l)
+        bind -n C-h       select-pane -t :.+
+        bind -n C-l       select-pane -t :.-
     '';
   };
 }
