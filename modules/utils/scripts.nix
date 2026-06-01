@@ -39,26 +39,22 @@ let
     fi
   '';
 
-  psalmus = pkgs.writeShellScriptBin "psalmus" ''
-    if [ $# -eq 0 ]; then
-      today=$(date +"%Y-%m-%d")
-    else
-      today=$(date -d "$1" +"%Y-%m-%d" 2>/dev/null)
-      if [ $? -ne 0 ]; then
-        echo "invalid date format"
-        exit 1
+  tmuxify = pkgs.writeShellScriptBin "tmuxify" ''
+    if [[ -z "$TMUX" ]] && command -v tmux >/dev/null 2>&1 && [[ -t 1 ]]; then
+      session_name=$(basename "$PWD")
+      if tmux has-session -t "=$session_name" 2>/dev/null; then
+        exec tmux attach-session -t "=$session_name"
+      else
+        tmux new-session -d -s "$session_name" -c "$PWD"
+        tmux send-keys -t "$session_name" "editor" Enter
+        exec tmux attach-session -t "$session_name"
       fi
     fi
-
-    day_no=$(date -d "$today" +"%-j")
-    psalm_no=$(( (day_no * 79) % 150 + 1 ))
-
-    echo "$psalm_no"
   '';
 in
 {
   config.home.packages = [
-    psalmus
+    tmuxify
     speak
   ];
 }
