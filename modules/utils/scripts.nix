@@ -42,13 +42,11 @@ let
   tmuxify = pkgs.writeShellScriptBin "tmuxify" ''
     if [[ -z "$TMUX" ]] && command -v tmux >/dev/null 2>&1 && [[ -t 1 ]]; then
       session_name=$(basename "$PWD")
-      if tmux has-session -t "=$session_name" 2>/dev/null; then
-        exec tmux attach-session -t "=$session_name"
-      else
-        tmux new-session -d -s "$session_name" -c "$PWD"
+      if ! tmux has-session -t "=$session_name" 2>/dev/null; then
+        tmux new-session -d -s "$session_name" -c "$PWD" </dev/null >/dev/null 2>&1
         tmux send-keys -t "$session_name" "editor" Enter
-        exec tmux attach-session -t "$session_name"
       fi
+      tmux attach-session -t "=$session_name"
     fi
   '';
 in
