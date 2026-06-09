@@ -48,7 +48,7 @@
         export HISTTIMEFORMAT="%F %T "
         export HISTSIZE=100000
         export HISTFILESIZE=200000
-        export PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
+        export PROMPT_COMMAND="history -a; history -n; ''$PROMPT_COMMAND"
       '';
 
       shellAliases = {
