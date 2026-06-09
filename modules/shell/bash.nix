@@ -19,6 +19,14 @@
       initExtra = ''
         shopt -s histappend
         shopt -s cmdhist
+        shopt -s autocd
+        shopt -s cdspell
+        shopt -s dirspell
+        shopt -s globstar
+        shopt -s extglob
+        shopt -s nocaseglob
+        shopt -s dotglob
+
         export HISTIGNORE="ls:cd:pwd:exit:clear:history"
         export HISTCONTROL=ignoredups:erasedups
         export HISTTIMEFORMAT="%F %T "
