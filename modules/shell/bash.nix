@@ -14,12 +14,20 @@
     programs.starship.enableBashIntegration = true;
     programs.bash.enableCompletion = true;
 
-    home.file.".inputrc".text = ''
-      set completion-ignore-case on
-      set show-all-if-ambiguous on
-      set colored-stats on
-      set menu-complete-display-prefix on
-    '';
+    programs.readline = {
+      enable = true;
+      variables = {
+        completion-ignore-case = true;
+        show-all-if-ambiguous = true;
+        colored-stats = true;
+        menu-complete-display-prefix = true;
+        bell-style = "none";
+      };
+      bindings = {
+        "\\e[A" = "history-search-backward";
+        "\\e[B" = "history-search-forward";
+      };
+    };
 
     programs.bash = {
       enable = true;
