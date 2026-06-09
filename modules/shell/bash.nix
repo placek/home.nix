@@ -12,6 +12,14 @@
     programs.carapace.enableBashIntegration = true;
     programs.mcfly.enableBashIntegration = true;
     programs.starship.enableBashIntegration = true;
+    programs.bash.enableCompletion = true;
+
+    home.file.".inputrc".text = ''
+      set completion-ignore-case on
+      set show-all-if-ambiguous on
+      set colored-stats on
+      set menu-complete-display-prefix on
+    '';
 
     programs.bash = {
       enable = true;
