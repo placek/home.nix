@@ -31,8 +31,8 @@ switch: $(nixos-config)
 
 .PHONY: update
 update:
-	sudo sudo nix-channel --remove nixos
-	sudo sudo nix-channel --remove home-manager
+	sudo nix-channel --remove nixos
+	sudo nix-channel --remove home-manager
 	sudo nix-channel --add $(nixos-channel) nixos
 	sudo nix-channel --add $(home-manager-channel) home-manager
 	sudo nix-channel --update
