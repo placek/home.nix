@@ -31,12 +31,13 @@ in
 
     # Pane/split bindings (ctrl+enter, ctrl+q, ctrl+backspace, ctrl+h, ctrl+l)
     # are handled by tmux — see modules/mux/default.nix.
-    # In legacy mode kitty would emit \r for ctrl+enter and \x08 for
-    # ctrl+backspace, indistinguishable from plain Enter/BSpace. Forward
-    # them to tmux as CSI u sequences so `extended-keys always` can parse
-    # them into C-Enter / C-BSpace.
+    # In legacy mode kitty would emit \r for ctrl+enter, \x08 for
+    # ctrl+backspace, and \0 for ctrl+space — indistinguishable from plain
+    # Enter/BSpace/Nul. Forward them to tmux as CSI u sequences so
+    # `extended-keys always` can parse them into C-Enter / C-BSpace / C-Space.
     "ctrl+enter"     = "send_text all \\x1b[13;5u";
     "ctrl+backspace" = "send_text all \\x1b[127;5u";
+    "ctrl+space"     = "send_text all \\x1b[32;5u";
 
     "kitty_mod+k" = "scroll_to_prompt -1";
     "kitty_mod+j" = "scroll_to_prompt +1";
