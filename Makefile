@@ -19,7 +19,11 @@ all: upgrade apply gc
 
 .PHONY: $(nixos-config)
 $(nixos-config):
+ifeq ($(force),yes)
+	sudo cp --backup --link machines/$$(hostname)/configuration.nix $@
+else
 	sudo cp --backup --interactive --link machines/$$(hostname)/configuration.nix $@
+endif
 
 .PHONY: switch
 switch: $(nixos-config)
