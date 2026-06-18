@@ -79,6 +79,7 @@ in
       qimgv
       qalculate-gtk
       qFlipper
+      telegram-desktop
     ];
 
     xdg.desktopEntries =  {
