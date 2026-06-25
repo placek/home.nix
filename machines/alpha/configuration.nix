@@ -13,7 +13,6 @@ let
   traefik_proxy_directory = "/srv/proxy";
   user_data_directory = "/srv/data";
   dev_services = {
-    pga = 5050;
   };
 in
 {
@@ -323,22 +322,6 @@ in
       host    all             all             ::1/128                 scram-sha-256
     '';
   };
-
-  # PGADMIN
-  services.pgadmin = {
-    enable = true;
-    package = (import (builtins.fetchTarball {
-      url = "https://github.com/NixOS/nixpkgs/archive/29916453413845e54a65b8a1cf996842300cd299.tar.gz";
-    }) {}).pgadmin4;
-    initialEmail = "placzynski.pawel@gmail.com";
-    initialPasswordFile = "${user_data_directory}/.pgadmin-pass";
-    port = 5050;
-  };
-
-  systemd.services.pgadmin.serviceConfig.Environment = [
-    "PGADMIN_LISTEN_ADDRESS=127.0.0.1"
-    "PGADMIN_LISTEN_PORT=5050"
-  ];
 
   #### IMMICH
   services.immich = {
