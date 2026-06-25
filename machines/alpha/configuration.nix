@@ -91,6 +91,7 @@ in
   services.ollama.host = "0.0.0.0"; # Listen on all interfaces
   virtualisation.docker.autoPrune.dates = "daily";
   virtualisation.docker.enable = true;
+  virtualisation.docker.package = pkgs.docker_29;
 
   ################################### GUI ######################################
   boot.plymouth.enable = true;
@@ -288,8 +289,8 @@ in
   };
 
   systemd.services.traefik.preStart = ''
-    ${pkgs.docker}/bin/docker network inspect ${traefik_docker_network} >/dev/null 2>&1 || \
-    ${pkgs.docker}/bin/docker network create ${traefik_docker_network} || true
+    ${pkgs.docker_29}/bin/docker network inspect ${traefik_docker_network} >/dev/null 2>&1 || \
+    ${pkgs.docker_29}/bin/docker network create ${traefik_docker_network} || true
   '';
 
   # POSTGRES

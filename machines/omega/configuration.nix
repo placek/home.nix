@@ -74,6 +74,7 @@
   virtualisation.docker.autoPrune.dates = "daily";
   virtualisation.docker.enable = true;
   virtualisation.docker.logDriver = "journald";
+  virtualisation.docker.package = pkgs.docker_29;
   virtualisation.libvirtd.enable = false;
   virtualisation.virtualbox.host.enable = false;
 
