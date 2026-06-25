@@ -69,6 +69,7 @@ in
       libnotify
       xf86_input_wacom
 
+      dbeaver-bin
       gimp
       inkscape-with-extensions
       kicad
