@@ -118,8 +118,8 @@ in
             format-window-separator = "  ";
             window-rewrite-default = "  {title}";
             window-rewrite = {
-              "qutebrowser" = "  {title}";
-              "firefox" = "  {title}";
+              "qutebrowser" = "  qutebrowser";
+              "firefox" = "  firefox";
               "kitty" = "  {title}";
               "slack" = "  {title}";
               "inkscape" = "  {title}";
