@@ -23,10 +23,6 @@
         menu-complete-display-prefix = true;
         bell-style = "none";
       };
-      bindings = {
-        "\\e[A" = "history-search-backward";
-        "\\e[B" = "history-search-forward";
-      };
     };
 
     programs.bash = {
@@ -48,7 +44,7 @@
         export HISTTIMEFORMAT="%F %T "
         export HISTSIZE=100000
         export HISTFILESIZE=200000
-        export PROMPT_COMMAND="history -a; history -n; ''$PROMPT_COMMAND"
+        export PROMPT_COMMAND="history -a; history -c; history -r; ''$PROMPT_COMMAND"
       '';
 
       shellAliases = {
