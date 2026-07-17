@@ -64,6 +64,7 @@
 
         # Multimedia
         ", Print, exec, ${pkgs.hyprshot}/bin/hyprshot -m region -o ${config.downloadsDirectory} -c"
+        "SHIFT, Print, exec, ${pkgs.hyprshot}/bin/hyprshot -m window -o ${config.downloadsDirectory} -c"
         # Player
         ", XF86AudioPrev,  exec, ${pkgs.playerctl}/bin/playerctl previous"
         ", XF86AudioPlay,  exec, ${pkgs.playerctl}/bin/playerctl play-pause"
