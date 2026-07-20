@@ -11,8 +11,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "placek";
       repo = "custom-fonts";
-      rev = "2d271f1793f662f2d93ecc852abac9b180bac17b";
-      sha256 = "sha256-nPsXxEZKc7Auf+EadzVQAgdQUEIvaXu7lSxZUImGDhQ=";
+      rev = "ed1fbd20f79b7753f8974460590537d04574b7d5";
+      sha256 = "sha256-MJrp5UXYGhUhHFN3Ex8NCfX6h7teTR0+amtntRx1kuQ=";
     };
 
     dontBuild = true;
@@ -52,6 +52,16 @@ in {
       ubuntu-classic
       google-fonts
       font-awesome
+
+      # Fonts from the custom-fonts repo that have a nixpkgs equivalent.
+      # google-fonts (above) already provides: Alex Brush, Allura,
+      # Alumni Sans Pinstripe, Amatic SC, Ballet, Beau Rivage, Cookie, Nixie One.
+      nasin-nanpa           # nasin-nanpa-4.0.1.otf
+      nasin-nanpa-helvetica # nasin-nanpa-4.0.1-Helvetica.otf
+      nasin-nanpa-ucsur     # nasin-nanpa-4.0.1-UCSUR.otf
+      sitelen-seli-kiwen    # sitelenselikiwenasuki.ttf
+      fairfax-hd            # FairfaxHD.ttf
+      apl386                # apl385.ttf (APL385 Unicode font, evolved)
     ];
   };
 }
