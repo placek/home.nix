@@ -14,6 +14,50 @@ let
   user_data_directory = "/srv/data";
   dev_services = {
   };
+
+  # Bluetooth pairing persisted declaratively (see systemd.services below).
+  # NOTE: the ProtoArc info file contains the BLE long-term key (a secret);
+  # it lives in this repo and world-readably in the nix store by design.
+  bluetooth_adapter = "8C:68:AB:80:5F:F6";
+  protoarc_touchpad = "DA:2A:CE:FD:F8:0B";
+  protoarc_touchpad_info = pkgs.writeText "protoarc-t1-plus-info" ''
+    [General]
+    Name=ProtoArc T1 Plus
+    Appearance=0x03c1
+    AddressType=static
+    SupportedTechnologies=LE;
+    Trusted=true
+    Blocked=false
+    CablePairing=false
+    WakeAllowed=true
+    Services=00001800-0000-1000-8000-00805f9b34fb;00001801-0000-1000-8000-00805f9b34fb;0000180a-0000-1000-8000-00805f9b34fb;0000180f-0000-1000-8000-00805f9b34fb;00001812-0000-1000-8000-00805f9b34fb;
+
+    [PeripheralLongTermKey]
+    Key=BEE4256F797B6991A531B1E52B55AEB1
+    Authenticated=2
+    EncSize=16
+    EDiv=0
+    Rand=0
+
+    [SlaveLongTermKey]
+    Key=BEE4256F797B6991A531B1E52B55AEB1
+    Authenticated=2
+    EncSize=16
+    EDiv=0
+    Rand=0
+
+    [DeviceID]
+    Source=2
+    Vendor=1256
+    Product=28705
+    Version=293
+
+    [ConnectionParameters]
+    MinInterval=6
+    MaxInterval=6
+    Latency=66
+    Timeout=300
+  '';
 in
 {
   imports =
@@ -54,6 +98,24 @@ in
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
+
+  # Keep the ProtoArc T1 Plus touchpad always trusted and paired by writing its
+  # BlueZ pairing record before bluetoothd starts, so it survives even a wiped
+  # /var or fresh install. Runs on every boot to enforce the declarative state.
+  systemd.services.protoarc-touchpad-pairing = {
+    description = "Install declarative Bluetooth pairing for ProtoArc T1 Plus";
+    wantedBy = [ "bluetooth.service" ];
+    before = [ "bluetooth.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      dir="/var/lib/bluetooth/${bluetooth_adapter}/${protoarc_touchpad}"
+      mkdir -p "$dir"
+      install -m 0600 -o root -g root ${protoarc_touchpad_info} "$dir/info"
+    '';
+  };
   powerManagement.enable = true;
   powerManagement.cpuFreqGovernor = "performance";
 
