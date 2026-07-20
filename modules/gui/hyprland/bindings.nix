@@ -75,6 +75,21 @@
         ", XF86AudioLowerVolume,  exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
         ", XF86AudioRaiseVolume,  exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1.0"
       ];
+
+      gesture = [
+        # 4-finger swipe: reorder window in swipe direction
+        "4, left,  dispatcher, movewindow, l"
+        "4, right, dispatcher, movewindow, r"
+        "4, up,    dispatcher, movewindow, u"
+        "4, down,  dispatcher, movewindow, d"
+
+        # 3-finger swipe: grab active window and drag it (1:1)
+        "3, swipe, move"
+
+        # Pinch: resize master area
+        "2, pinchin,  dispatcher, layoutmsg, mfact -0.02"
+        "2, pinchout, dispatcher, layoutmsg, mfact +0.02"
+      ];
     };
   };
 }
