@@ -51,6 +51,9 @@ in
   ################################# HARDWARE ###################################
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.keyboard.zsa.enable = true;
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
   powerManagement.enable = true;
   powerManagement.cpuFreqGovernor = "performance";
 
