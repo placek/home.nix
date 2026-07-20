@@ -1,5 +1,5 @@
 expiration ?= 30 days
-version ?= 25.11
+version ?= 26.05
 
 nixos-channel := https://nixos.org/channels/nixos-$(version)
 home-manager-channel := https://github.com/nix-community/home-manager/archive/release-$(version).tar.gz

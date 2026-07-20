@@ -32,6 +32,7 @@ in
   config = {
     # backup browser
     programs.firefox.enable = true;
+    programs.firefox.configPath = ".mozilla/firefox";
 
     xdg.desktopEntries.qutebrowser = {
       name = "QuteBrowser";

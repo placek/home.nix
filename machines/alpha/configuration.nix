@@ -36,7 +36,7 @@ in
     ];
 
   ################################### NIX ######################################
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.05";
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   nix.gc.automatic = true;
   nix.gc.dates = "daily";
@@ -60,7 +60,16 @@ in
   ################################## BOOT ######################################
   boot.kernelModules = [ "kvm-amd" ];
   boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
-  boot.kernelParams = [ "nvidia_drm.fbdev=1" ];
+  boot.kernelParams = [
+    "nvidia-drm.modeset=1"
+    "nvidia-drm.fbdev=1"
+    # EDID reading fails on the RTX 5080 DP outputs (driver falls back to a
+    # synthesized EDID exposing only 640x480). Force a 1920x1080 EDID on both
+    # connected DisplayPorts. The blob is provided by pkgs.edid-generator via
+    # hardware.firmware below (the kernel's own built-in EDIDs were removed in
+    # Linux 6.x, so drm.edid_firmware needs a real firmware file).
+    "drm.edid_firmware=DP-1:edid/1920x1080.bin,DP-2:edid/1920x1080.bin"
+  ];
   boot.extraModulePackages = [ ];
   boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" "ahci" "sd_mod" "sdhci_pci" ];
   boot.loader.efi.canTouchEfiVariables = true;
@@ -89,7 +98,7 @@ in
   services.ollama.package = (import (builtins.fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz";
   }) { config.allowUnfree = true; }).ollama-cuda;
-  services.ollama.acceleration = "cuda"; # Use default acceleration
+#   services.ollama.acceleration = "cuda"; # Use default acceleration
   services.ollama.host = "0.0.0.0"; # Listen on all interfaces
   virtualisation.docker.autoPrune.dates = "daily";
   virtualisation.docker.enable = true;
@@ -130,6 +139,8 @@ in
   ################################## NVIDIA ####################################
   hardware.graphics.enable = true;
   hardware.graphics.enable32Bit = true;
+  # Provides edid/1920x1080.bin for the drm.edid_firmware override above.
+  hardware.firmware = [ pkgs.edid-generator ];
   hardware.nvidia.modesetting.enable = true;
   hardware.nvidia.nvidiaSettings = false;
   hardware.nvidia.open = true;
@@ -151,10 +162,10 @@ in
 
   ################################## FILES #####################################
   systemd.tmpfiles.rules = [
-    "d ${user_data_directory} 0755 placek placek -"
+    "d ${user_data_directory} 0755 placek users -"
     "d ${traefik_proxy_directory} 0755 traefik docker -"
     "f ${traefik_proxy_directory}/acme.json 0600 traefik docker -"
-    "d ${user_data_directory}/projects 0700 placek placek -"
+    "d ${user_data_directory}/projects 0700 placek users -"
     "d ${user_data_directory}/immich 0750 immich immich -"
     "d ${user_data_directory}/brain 0700 placek users -"
     "L /home/placek/Brain - - - - ${user_data_directory}/brain"
@@ -206,6 +217,12 @@ in
   services.dnsmasq.settings.interface = lan_interface;
   services.dnsmasq.settings.bind-interfaces = true;
   services.dnsmasq.settings.dhcp-range = "192.168.2.10,192.168.2.254,24h";
+
+  # bind-interfaces requires the LAN address to already be assigned at start.
+  systemd.services.dnsmasq = {
+    after = [ "network-addresses-${lan_interface}.service" ];
+    wants = [ "network-addresses-${lan_interface}.service" ];
+  };
 
   # Use NextDNS parental control via dnscrypt-proxy2
   services.dnscrypt-proxy.enable = true;
@@ -270,6 +287,12 @@ in
             entryPoints = [ "websecure" ];
             tls.certResolver = "letsencrypt";
           };
+          "psalmy" = {
+            rule = "Host(`psalmy.${domain}`)";
+            service = "psalmy";
+            entryPoints = [ "websecure" ];
+            tls.certResolver = "letsencrypt";
+          };
         };
 
         services = (lib.mapAttrs' (name: port: lib.nameValuePair name {
@@ -281,12 +304,25 @@ in
           "immich".loadBalancer.servers = [
             { url = "http://${toString config.services.immich.host}:${toString config.services.immich.port}"; }
           ];
+          "psalmy".loadBalancer.servers = [
+            { url = "http://127.0.0.1:8081"; }
+          ];
         };
 
         middlewares."dashboard-auth".basicAuth.users = [
           "placek:$2y$05$Z4H0cSxB7/eU6uYV0XFUVO64G8fBijFavJx15N.jBYL2W9U6sIkHe"
         ];
       };
+    };
+  };
+
+  ################################# PSALMY #####################################
+  services.nginx = {
+    enable = true;
+    virtualHosts."psalmy" = {
+      listen = [ { addr = "127.0.0.1"; port = 8081; } ];
+      root = "/srv/data/projects/placek/psalmy";
+      locations."/".index = "index.html";
     };
   };
 
@@ -332,7 +368,7 @@ in
     host = "127.0.0.1";
     port = 2283;
     mediaLocation = "${user_data_directory}/immich";
-    database.enableVectors = false;
+#     database.enableVectors = false;
   };
 
   #### POSTGREST (systemd service) ####
@@ -361,7 +397,7 @@ in
   # Zależności systemowe pod hermesa
   environment.systemPackages = with pkgs; [
     uv
-    python311
+    python313
     nodejs_22       # potrzebny do browser tools / serwerów MCP po npx
     git
     ripgrep

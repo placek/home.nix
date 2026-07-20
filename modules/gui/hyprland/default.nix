@@ -32,6 +32,7 @@
     # Start services/utilities on session start
     wayland.windowManager.hyprland = {
       enable = true;
+      configType = "hyprlang";
       xwayland.enable = true;
 
       settings = {
@@ -61,7 +62,7 @@
           "3, monitor:DP-2"
         ];
 
-        windowrulev2 = [ "tile, class:^(kitty)$" ];
+        windowrule = [ "tile 1, match:class ^(kitty)$" ];
 
         exec-once = [
           "${pkgs.wayvnc}/bin/wayvnc 0.0.0.0 5900"

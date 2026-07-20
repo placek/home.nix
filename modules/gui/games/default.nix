@@ -46,7 +46,7 @@ in
 
       (pkgs.prismlauncher.override { jdks = [ pkgs.temurin-bin ]; })
 
-      pkgs.wineWowPackages.stable
+      pkgs.wineWow64Packages.stable
       pkgs.steam
     ];
   };

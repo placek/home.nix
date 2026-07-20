@@ -18,14 +18,14 @@
     programs.ssh = {
       enable = true;
       enableDefaultConfig = false;
-      matchBlocks = {
+      settings = {
         "*" = {
-          controlMaster = "auto";
-          controlPersist = "10m";
+          ControlMaster = "auto";
+          ControlPersist = "10m";
         };
         dev = {
-          user = "byron";
-          hostname = "185.48.176.109";
+          User = "byron";
+          HostName = "185.48.176.109";
         };
       };
     };
