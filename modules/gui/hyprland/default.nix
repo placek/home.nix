@@ -48,6 +48,14 @@
         animations.enabled = true;
         input.follow_mouse = 1;
         input.kb_layout = "pl,us";
+        # Touchpad: no tap-to-click, slightly faster cursor (mouse unaffected)
+        device = [
+          {
+            name = "protoarc-t1-plus-touchpad";
+            tap-to-click = false;
+            sensitivity = 0.3;
+          }
+        ];
         master.new_status = "master";
         master.new_on_top = true;
         master.orientation = "left";

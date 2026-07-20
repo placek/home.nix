@@ -78,12 +78,12 @@
 
       gesture = [
         # 3-finger swipe: switch workspace in swipe direction
-        "3, left,  dispatcher, workspace, r-1"
-        "3, right, dispatcher, workspace, r+1"
+        "3, left,  dispatcher, workspace, r+1"
+        "3, right, dispatcher, workspace, r-1"
 
         # 4-finger swipe: move window to workspace in swipe direction
-        "4, left,  dispatcher, movetoworkspace, r-1"
-        "4, right, dispatcher, movetoworkspace, r+1"
+        "4, left,  dispatcher, movetoworkspace, r+1"
+        "4, right, dispatcher, movetoworkspace, r-1"
 
         # Pinch: resize master area
         "2, pinchin,  dispatcher, layoutmsg, mfact +0.1"
