@@ -7,7 +7,7 @@
   options = with lib; {
     gui.wallpaper = mkOption {
       type = types.path;
-      default = ./wallpaper.png;
+      default = ./wallpaper.jpg;
       description = "A wallpaper.";
       readOnly = true;
     };
@@ -16,7 +16,7 @@
   config = {
     home.file.background = {
       source = config.gui.wallpaper;
-      target = ".wallpaper.png";
+      target = ".wallpaper.jpg";
     };
 
     services.hyprpaper.enable = true;
@@ -25,7 +25,7 @@
       splash = false;
       wallpaper = {
         monitor = "";
-        path = "~/.wallpaper.png";
+        path = "~/.wallpaper.jpg";
       };
     };
   };
