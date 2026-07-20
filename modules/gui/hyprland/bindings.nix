@@ -68,6 +68,7 @@
         # Player
         ", XF86AudioPrev,  exec, ${pkgs.playerctl}/bin/playerctl previous"
         ", XF86AudioPlay,  exec, ${pkgs.playerctl}/bin/playerctl play-pause"
+        "$mod SHIFT, a,  exec, ${pkgs.playerctl}/bin/playerctl play-pause"
         ", XF86AudioNext,  exec, ${pkgs.playerctl}/bin/playerctl next"
         # Volume via PipeWire
         ", XF86AudioMute,         exec, ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
