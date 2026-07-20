@@ -21,10 +21,12 @@
 
     services.hyprpaper.enable = true;
     services.hyprpaper.settings = {
-      ipc = "off";
+      ipc = "on";
       splash = false;
-      preload = [ "~/.wallpaper.png" ];
-      wallpaper = [ ",~/.wallpaper.png" ];
+      wallpaper = {
+        monitor = "";
+        path = "~/.wallpaper.png";
+      };
     };
   };
 }

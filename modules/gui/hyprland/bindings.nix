@@ -78,17 +78,12 @@
 
       gesture = [
         # 4-finger swipe: reorder window in swipe direction
-        "4, left,  dispatcher, movewindow, l"
-        "4, right, dispatcher, movewindow, r"
-        "4, up,    dispatcher, movewindow, u"
-        "4, down,  dispatcher, movewindow, d"
-
-        # 3-finger swipe: grab active window and drag it (1:1)
-        "3, swipe, move"
+        "4, left,  dispatcher, workspace, r-1"
+        "4, right, dispatcher, workspace, r+1"
 
         # Pinch: resize master area
-        "2, pinchin,  dispatcher, layoutmsg, mfact -0.02"
-        "2, pinchout, dispatcher, layoutmsg, mfact +0.02"
+        "2, pinchin,  dispatcher, layoutmsg, mfact +0.1"
+        "2, pinchout, dispatcher, layoutmsg, mfact -0.1"
       ];
     };
   };
