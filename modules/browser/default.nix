@@ -25,8 +25,6 @@ in
     ./quickmarks.nix
     ./settings.nix
     ./search-engines.nix
-
-    ./scripts
   ];
 
   config = {

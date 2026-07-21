@@ -31,6 +31,19 @@ in
     content.javascript.clipboard = "access-paste";
     content.tls.certificate_errors = "block";
 
+    content.blocking.method = "both";
+    content.blocking.adblock.lists = [
+      "https://easylist.to/easylist/easylist.txt"
+      "https://easylist.to/easylist/easyprivacy.txt"
+      "https://easylist.to/easylist/fanboy-annoyance.txt"
+      "https://secure.fanboy.co.nz/fanboy-cookiemonster.txt"
+      "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances-cookies.txt"
+    ];
+
+    spellcheck.languages = [ "en-US" "pl-PL" ];
+
+    auto_save.session = true;
+
     downloads.location.directory = downloadsDirectory;
 
     editor.command = [ terminalExec "-e" editorExec "-f" "{file}" "-c" "normal" "{line}G{column0}l" ];
