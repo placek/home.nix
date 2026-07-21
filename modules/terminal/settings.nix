@@ -22,7 +22,7 @@ in
     cursor_stop_blinking_after = "15.0";
 
     # scrollback
-    scrollback_lines = "2000";
+    scrollback_lines = "10000";
     scrollback_pager = "less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER";
     scrollback_pager_history_size = "9999";
     wheel_scroll_multiplier = "5.0";
@@ -50,6 +50,8 @@ in
     window_alert_on_bell = "no";
     bell_on_tab = "no";
     command_on_bell = "none";
+    # notify (via dunst) when a long command finishes in an unfocused window
+    notify_on_cmd_finish = "unfocused 10.0";
 
     # window layout
     remember_window_size = "no";

@@ -7,7 +7,7 @@
   options = with lib; {
     terminalExec = mkOption {
       type = types.str;
-      default = "${pkgs.kitty}/bin/kitty";
+      default = "${config.programs.kitty.package}/bin/kitty";
       description = "Terminal executable.";
       readOnly = true;
     };
@@ -19,7 +19,7 @@
   ];
 
   config = {
-    home.packages = [ pkgs.kitty ];
+    # kitty itself is installed by programs.kitty.enable below.
 
     xdg.desktopEntries.kitty = {
       name = "Terminal";
