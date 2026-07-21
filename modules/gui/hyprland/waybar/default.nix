@@ -7,6 +7,7 @@ let
   gpu_status = import ./gpu_status.nix { inherit pkgs config; };
   mail_status = import ./mail_status.nix { inherit pkgs; };
   weather_status = import ./weather_status.nix { inherit pkgs config; };
+  clock_status = import ./clock_status.nix { inherit pkgs config; };
 in
 {
   config = {
@@ -44,7 +45,7 @@ in
 
           "group/here" = {
             orientation = "inherit";
-            modules = [ "clock" "custom/weather" ];
+            modules = [ "custom/clock" "custom/weather" ];
             drawer = {
               transition-duration = 500;
               transition-left-to-right = false;
@@ -190,20 +191,12 @@ in
             return-type = "json";
           };
 
-          clock = {
-            interval = 1;
-            timezone = "Europe/Warsaw";
-            format = " {:L%F %R} ";
-            format-alt = " {:L%A (%W) %d %B %Y, %H:%M %z (%Z)} ";
-            tooltip-format = "{calendar}";
-            actions.on-scroll-up = "shift_up";
-            actions.on-scroll-down = "shift_down";
-            calendar = {
-              mode = "month";
-              on-scroll = 1;
-              weeks-pos = "right";
-              format.today = "<span color=\"${config.gui.theme.base0F}\">{}</span>";
-            };
+          "custom/clock" = {
+            exec = "${clock_status}/bin/clock_status";
+            interval = 60;
+            format = " {} ";
+            tooltip = true;
+            return-type = "json";
           };
         };
       };

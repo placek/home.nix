@@ -62,14 +62,14 @@ in
   #pulseaudio,
   #custom-notmuch,
   #custom-weather,
-  #clock {
+  #custom-clock {
     padding: ${border_size}px ${border_size}px;
     margin: 0px;
     border-width: 0px;
     border-radius: 0px;
   }
 
-  #clock {
+  #custom-clock {
     color: ${hover_color};
   }
 
@@ -84,7 +84,7 @@ in
   #custom-gpu:hover,
   #custom-notmuch:hover,
   #custom-weather:hover,
-  #clock:hover {
+  #custom-clock:hover {
     background-color: ${dim_color};
     color: ${hover_color};
   }
