@@ -59,6 +59,7 @@ in
     ./tertius.nix
     ./nnn.nix
     ./scripts.nix
+    ./gcalcli.nix
   ];
 
   config = {
