@@ -48,12 +48,14 @@
         animations.enabled = true;
         input.follow_mouse = 1;
         input.kb_layout = "pl,us";
-        # Touchpad: no tap-to-click, slightly faster cursor (mouse unaffected)
+        # Touchpad: no tap-to-click, slightly faster cursor (mouse unaffected),
+        # natural (reversed) two-finger scrolling
         device = [
           {
             name = "protoarc-t1-plus-touchpad";
             tap-to-click = false;
             sensitivity = 0.3;
+            natural_scroll = true;
           }
         ];
         master.new_status = "master";
