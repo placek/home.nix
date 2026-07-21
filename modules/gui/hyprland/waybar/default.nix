@@ -8,6 +8,10 @@ let
   mail_status = import ./mail_status.nix { inherit pkgs; };
   weather_status = import ./weather_status.nix { inherit pkgs config; };
   clock_status = import ./clock_status.nix { inherit pkgs config; };
+  dunst_status = import ./dunst_status.nix { inherit pkgs; };
+  pomodoro = import ./pomodoro.nix { inherit pkgs; };
+  micIcon = builtins.fromJSON ''"\uf130"'';      # nf-fa-microphone
+  micMuteIcon = builtins.fromJSON ''"\uf131"'';  # nf-fa-microphone_slash
 in
 {
   config = {
@@ -23,7 +27,7 @@ in
 
           modules-left = [ "group/stats" ];
           modules-center = [ "hyprland/workspaces" ];
-          modules-right = [ "custom/notmuch" "battery" "group/media" "group/here" ];
+          modules-right = [ "custom/notmuch" "custom/dnd" "custom/pomodoro" "battery" "group/media" "group/here" ];
 
           "group/stats" = {
             orientation = "inherit";
@@ -36,7 +40,7 @@ in
 
           "group/media" = {
             orientation = "inherit";
-            modules = [ "pulseaudio" "mpris" ];
+            modules = [ "pulseaudio" "pulseaudio#source" "mpris" ];
             drawer = {
               transition-duration = 500;
               transition-left-to-right = false;
@@ -197,6 +201,34 @@ in
             format = " {} ";
             tooltip = true;
             return-type = "json";
+          };
+
+          "pulseaudio#source" = {
+            format = "{format_source}";
+            format-source = " ${micIcon}  {volume}% ";
+            format-source-muted = " ${micMuteIcon} ";
+            on-click = "${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle";
+            tooltip = false;
+          };
+
+          "custom/dnd" = {
+            exec = "${dunst_status}/bin/dunst_status";
+            interval = 2;
+            return-type = "json";
+            format = " {} ";
+            tooltip = true;
+            on-click = "${pkgs.dunst}/bin/dunstctl set-paused toggle";
+          };
+
+          "custom/pomodoro" = {
+            exec = "${pomodoro}/bin/pomodoro status";
+            interval = 1;
+            return-type = "json";
+            format = " {} ";
+            tooltip = true;
+            on-click = "${pomodoro}/bin/pomodoro toggle";
+            on-click-right = "${pomodoro}/bin/pomodoro reset";
+            on-click-middle = "${pomodoro}/bin/pomodoro skip";
           };
         };
       };

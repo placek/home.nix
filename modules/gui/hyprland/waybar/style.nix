@@ -62,6 +62,8 @@ in
   #pulseaudio,
   #custom-notmuch,
   #custom-weather,
+  #custom-dnd,
+  #custom-pomodoro,
   #custom-clock {
     padding: ${border_size}px ${border_size}px;
     margin: 0px;
@@ -71,6 +73,19 @@ in
 
   #custom-clock {
     color: ${hover_color};
+  }
+
+  #custom-dnd.paused {
+    color: ${config.gui.theme.base03};
+  }
+
+  #custom-pomodoro.work {
+    color: ${config.gui.theme.base09};
+  }
+
+  #custom-pomodoro.break,
+  #custom-pomodoro.long {
+    color: ${config.gui.theme.base02};
   }
 
   #network:hover,
@@ -84,6 +99,8 @@ in
   #custom-gpu:hover,
   #custom-notmuch:hover,
   #custom-weather:hover,
+  #custom-dnd:hover,
+  #custom-pomodoro:hover,
   #custom-clock:hover {
     background-color: ${dim_color};
     color: ${hover_color};
