@@ -9,9 +9,11 @@ let
   weather_status = import ./weather_status.nix { inherit pkgs config; };
   clock_status = import ./clock_status.nix { inherit pkgs config; };
   dunst_status = import ./dunst_status.nix { inherit pkgs; };
-  pomodoro = import ./pomodoro.nix { inherit pkgs; };
   micIcon = builtins.fromJSON ''"\uf130"'';      # nf-fa-microphone
   micMuteIcon = builtins.fromJSON ''"\uf131"'';  # nf-fa-microphone_slash
+  btIcon = builtins.fromJSON ''"\udb80\udcaf"'';      # nf-md-bluetooth
+  btConnIcon = builtins.fromJSON ''"\udb80\udcb1"'';  # nf-md-bluetooth_connect
+  btOffIcon = builtins.fromJSON ''"\udb80\udcb2"'';   # nf-md-bluetooth_off
 in
 {
   config = {
@@ -27,11 +29,11 @@ in
 
           modules-left = [ "group/stats" ];
           modules-center = [ "hyprland/workspaces" ];
-          modules-right = [ "custom/notmuch" "custom/dnd" "custom/pomodoro" "battery" "group/media" "group/here" ];
+          modules-right = [ "custom/notmuch" "battery" "group/media" "group/here" "custom/dnd" ];
 
           "group/stats" = {
             orientation = "inherit";
-            modules = [ "cpu" "custom/gpu" "memory" "disk" "network" ];
+            modules = [ "cpu" "custom/gpu" "memory" "disk" "network" "bluetooth" ];
             drawer = {
               transition-duration = 500;
               transition-left-to-right = true;
@@ -107,6 +109,17 @@ in
             interval = 1;
           };
 
+          bluetooth = {
+            format = " ${btIcon} ";
+            format-disabled = " ${btOffIcon} ";
+            format-off = " ${btOffIcon} ";
+            format-connected = " ${btConnIcon}  {num_connections} ";
+            tooltip-format = "{controller_alias}\t{controller_address}";
+            tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{device_enumerate}";
+            tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
+            on-click = "blueman-manager";
+          };
+
           battery = {
             states.warning = 30;
             states.critical = 15;
@@ -158,19 +171,19 @@ in
           };
 
           pulseaudio = {
-            format = "{icon} {volume}% ";
+            format = " {icon} {volume}% ";
             format-muted = " 󰖁  {volume}% ";
             format-icons = {
-              headphone = "  ";
-              hands-free = "  ";
-              headset = "  ";
-              phone = "  ";
-              portable = "  ";
-              car = "  ";
+              headphone = " ";
+              hands-free = " ";
+              headset = " ";
+              phone = " ";
+              portable = " ";
+              car = " ";
               default = [
-                " <span color=\"${config.gui.theme.base02}\"> </span>"
-                " <span color=\"${config.gui.theme.base03}\"> </span>"
-                " <span color=\"${config.gui.theme.base01}\"> </span>"
+                "<span color=\"${config.gui.theme.base02}\"> </span>"
+                "<span color=\"${config.gui.theme.base03}\"> </span>"
+                "<span color=\"${config.gui.theme.base01}\"> </span>"
               ];
             };
             tooltip = true;
@@ -218,17 +231,6 @@ in
             format = " {} ";
             tooltip = true;
             on-click = "${pkgs.dunst}/bin/dunstctl set-paused toggle";
-          };
-
-          "custom/pomodoro" = {
-            exec = "${pomodoro}/bin/pomodoro status";
-            interval = 1;
-            return-type = "json";
-            format = " {} ";
-            tooltip = true;
-            on-click = "${pomodoro}/bin/pomodoro toggle";
-            on-click-right = "${pomodoro}/bin/pomodoro reset";
-            on-click-middle = "${pomodoro}/bin/pomodoro skip";
           };
         };
       };

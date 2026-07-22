@@ -29,7 +29,7 @@ pkgs.writeScriptBin "dunst_status" ''
       else:
           icon, cls = BELL, "active"
           tip = f"{n} waiting" if n else "Do not disturb: off"
-      text = f"{icon} {n}" if n else icon
+      text = f" {icon} {n} " if n else f" {icon} "
       print(json.dumps({"text": text, "class": cls, "tooltip": tip}))
 
   if __name__ == "__main__":

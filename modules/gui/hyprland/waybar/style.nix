@@ -58,6 +58,7 @@ in
   #memory,
   #disk,
   #network,
+  #bluetooth,
   #mpris,
   #pulseaudio,
   #custom-notmuch,
@@ -90,6 +91,7 @@ in
 
   #network:hover,
   #disk:hover,
+  #bluetooth:hover,
   #battery:hover,
   #pulseaudio:hover,
   #custom-temperature:hover,
