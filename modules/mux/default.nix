@@ -19,7 +19,19 @@ let
   '';
 
   claudePopup = pkgs.writeShellScript "tmux-claude-popup" ''
-    exec direnv exec . claude --continue
+    session="claude-$1"
+    unset TMUX
+    tmux new-session -A -s "$session" "direnv exec . claude --continue"
+    tmux kill-session -t "$session" 2>/dev/null
+  '';
+
+  # display-popup does not format-expand its command argument, so the parent
+  # session name is resolved by run-shell and passed in here as positional args.
+  claudeLaunch = pkgs.writeShellScript "tmux-claude-launch" ''
+    client="$1"
+    parent="$2"
+    path="$3"
+    exec tmux display-popup -c "$client" -E -d "$path" -w 50% -h 50% -x R -y R -S "fg=colour208" "${claudePopup} $parent"
   '';
 in
 {
@@ -56,7 +68,7 @@ in
         set -g main-pane-width 60%
 
         bind -n C-Enter   split-window -h -c "#{pane_current_path}" \; select-layout main-vertical
-        bind -n C-q       display-popup -E -d "#{pane_current_path}" -w 50% -h 50% -x R -y R -S "fg=colour208" "${claudePopup}"
+        bind -n C-q       if-shell -F '#{m:claude-*,#{session_name}}' detach-client 'run-shell "${claudeLaunch} #{client_name} #{session_name} #{pane_current_path}"'
         bind -n C-BSpace  resize-pane -Z
         bind -n C-h       select-pane -t :.+
         bind -n C-l       select-pane -t :.-
