@@ -18,19 +18,8 @@ let
     tmux display-menu -T "#[align=centre]Windows / Panes" -x C -y C "''${args[@]}"
   '';
 
-  # Launch Claude in the popup, always resuming the previous conversation for
-  # this directory. Falls back to a fresh session on the first launch (when no
-  # history exists yet) so --continue never errors on an empty project.
   claudePopup = pkgs.writeShellScript "tmux-claude-popup" ''
-    p="$PWD"
-    p="''${p//\//-}"
-    p="''${p//./-}"
-    projdir="$HOME/.claude/projects/$p"
-    if compgen -G "$projdir/*.jsonl" > /dev/null 2>&1; then
-      exec direnv exec . claude --continue
-    else
-      exec direnv exec . claude
-    fi
+    exec direnv exec . claude --continue
   '';
 in
 {
@@ -67,7 +56,7 @@ in
         set -g main-pane-width 60%
 
         bind -n C-Enter   split-window -h -c "#{pane_current_path}" \; select-layout main-vertical
-        bind -n C-q       display-popup -E -d "#{pane_current_path}" -w 90% -h 90% "${claudePopup}"
+        bind -n C-q       display-popup -E -d "#{pane_current_path}" -w 50% -h 50% -x R -y R -S "fg=colour208" "${claudePopup}"
         bind -n C-BSpace  resize-pane -Z
         bind -n C-h       select-pane -t :.+
         bind -n C-l       select-pane -t :.-
