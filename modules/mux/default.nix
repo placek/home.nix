@@ -1,4 +1,38 @@
 { config, lib, pkgs, ... }:
+let
+  paneMenu = pkgs.writeShellScript "tmux-pane-menu" ''
+    args=()
+
+    # Windows in the current session
+    while IFS=$'\t' read -r idx name; do
+      args+=("#$idx: $name" "" "select-window -t $idx")
+    done < <(tmux list-windows -F "$(printf '#{window_index}\t#{window_name}')")
+
+    args+=("")
+
+    # Panes across the current session
+    while IFS=$'\t' read -r win pane cmd; do
+      args+=("$win.$pane: $cmd" "" "select-window -t $win ; select-pane -t $pane")
+    done < <(tmux list-panes -s -F "$(printf '#{window_index}\t#{pane_index}\t#{pane_current_command}')")
+
+    tmux display-menu -T "#[align=centre]Windows / Panes" -x C -y C "''${args[@]}"
+  '';
+
+  # Launch Claude in the popup, always resuming the previous conversation for
+  # this directory. Falls back to a fresh session on the first launch (when no
+  # history exists yet) so --continue never errors on an empty project.
+  claudePopup = pkgs.writeShellScript "tmux-claude-popup" ''
+    p="$PWD"
+    p="''${p//\//-}"
+    p="''${p//./-}"
+    projdir="$HOME/.claude/projects/$p"
+    if compgen -G "$projdir/*.jsonl" > /dev/null 2>&1; then
+      exec direnv exec . claude --continue
+    else
+      exec direnv exec . claude
+    fi
+  '';
+in
 {
   config.programs.tmux = {
     enable = true;
@@ -33,10 +67,12 @@
         set -g main-pane-width 60%
 
         bind -n C-Enter   split-window -h -c "#{pane_current_path}" \; select-layout main-vertical
-        bind -n C-q       split-window -h -c "#{pane_current_path}" "bash -c 'direnv exec . claude'" \; select-layout main-vertical
+        bind -n C-q       display-popup -E -d "#{pane_current_path}" -w 90% -h 90% "${claudePopup}"
         bind -n C-BSpace  resize-pane -Z
         bind -n C-h       select-pane -t :.+
         bind -n C-l       select-pane -t :.-
+        bind a            run-shell -b "${paneMenu}"
+        bind s            display-popup -E -w 60% -h 50% "tmux list-sessions -F '#{session_name}' | ${pkgs.fzf}/bin/fzf --reverse --prompt 'session> ' | xargs -r tmux switch-client -t"
     '';
   };
 }
