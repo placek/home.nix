@@ -31,7 +31,7 @@ let
     client="$1"
     parent="$2"
     path="$3"
-    exec tmux display-popup -c "$client" -E -d "$path" -w 50% -h 50% -x R -y R -S "fg=colour208" "${claudePopup} $parent"
+    exec tmux display-popup -c "$client" -E -d "$path" -w 80% -h 50% -x C -y "#{e|-:#{client_height},#{popup_height}}" -S "fg=colour208" "${claudePopup} $parent"
   '';
 
   # Runs a single make rule inside a fresh pane and blocks on a keypress so the
