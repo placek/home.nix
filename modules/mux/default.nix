@@ -33,6 +33,47 @@ let
     path="$3"
     exec tmux display-popup -c "$client" -E -d "$path" -w 50% -h 50% -x R -y R -S "fg=colour208" "${claudePopup} $parent"
   '';
+
+  # Runs a single make rule inside a fresh pane and blocks on a keypress so the
+  # output (and exit status) stays visible until dismissed.
+  makeRun = pkgs.writeShellScript "tmux-make-run" ''
+    dir="$1"
+    target="$2"
+    cd "$dir" || exit 1
+    direnv exec "$dir" make "$target"
+    status=$?
+    printf '\n[make %s exited %s] press any key to close…' "$target" "$status"
+    read -rn1 _
+  '';
+
+  # Reads the rules from the Makefile in the pane's directory and offers them as
+  # a menu; picking one splits a new pane that runs it via makeRun.
+  makeMenu = pkgs.writeShellScript "tmux-make-menu" ''
+    dir="$1"
+    [ -z "$dir" ] && dir="$PWD"
+    makefile="$dir/Makefile"
+    if [ ! -f "$makefile" ]; then
+      tmux display-message "No Makefile in $dir"
+      exit 0
+    fi
+
+    keys="123456789abcdefghijklmnopqrstuvwxyz"
+    i=0
+    args=()
+    # Ask make itself for its target database (-p) so rules pulled in from
+    # included makefiles are listed too, not just those in this Makefile.
+    # Run under direnv so the listing matches the directory's environment.
+    while IFS= read -r target; do
+      key="''${keys:$i:1}"
+      args+=("$target" "$key" "split-window -h -c \"$dir\" \"${makeRun} '$dir' '$target'\"")
+      i=$((i + 1))
+    done < <(direnv exec "$dir" make -C "$dir" -pRrq 2>/dev/null \
+      | awk -F: '/^[a-zA-Z0-9][^$#\/\t =%]*:([^=]|$)/ {print $1}' \
+      | sort -u \
+      | grep -vE '^(Makefile|GNUmakefile|.*\.mk)$')
+
+    tmux display-menu -T "#[align=centre]make" -x C -y C "''${args[@]}"
+  '';
 in
 {
   config.programs.tmux = {
@@ -73,7 +114,9 @@ in
         bind -n C-h       select-pane -t :.+
         bind -n C-l       select-pane -t :.-
         bind a            run-shell -b "${paneMenu}"
+        bind m            run-shell -b "${makeMenu} #{pane_current_path}"
         bind s            display-popup -E -w 60% -h 50% "tmux list-sessions -F '#{session_name}' | ${pkgs.fzf}/bin/fzf --reverse --prompt 'session> ' | xargs -r tmux switch-client -t"
+        bind D display-popup -w 90% -h 90% -E "gh dash"
     '';
   };
 }
