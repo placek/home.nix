@@ -230,6 +230,7 @@ in
     "d ${user_data_directory}/projects 0700 placek users -"
     "d ${user_data_directory}/immich 0750 immich immich -"
     "d ${user_data_directory}/brain 0700 placek users -"
+    "d ${user_data_directory}/llama-cpp 0700 placek users -"
     "L /home/placek/Brain - - - - ${user_data_directory}/brain"
     "L /home/placek/Projects - - - - ${user_data_directory}/projects"
     "L /home/placek/Media - - - - /run/media/placek"
@@ -477,8 +478,23 @@ in
     glib
   ];
 
-  # Auto-pull modelu dla ollamy z sensownym kontekstem (≥64k wymagane przez hermesa)
-  services.ollama.loadModels = [
-    "qwen2.5:14b"
+  services.llama-cpp.enable = true;
+  services.llama-cpp.port = 8088;
+  services.llama-cpp.package = (import (builtins.fetchTarball { url = "https://github.com/NixOS/nixpkgs/archive/4cb0af11a185472406a40c76e9212ed4acf1eace.tar.gz"; }) {}).llama-cpp-vulkan;
+  services.llama-cpp.extraFlags = [
+    "--ctx-size" "65536"
+    "--cache-type-k" "q8_0"
+    "--cache-type-v" "q4_0"
+    "--flash-attn" "on"
   ];
+  services.llama-cpp.model = "${user_data_directory}/llama-cpp/laguna-xs-2.1.gguf";
+  services.llama-cpp.modelsDir = "${user_data_directory}/llama-cpp";
+  services.llama-cpp.modelsPreset = {
+    "ggml-org/Laguna-XS-2.1-GGUF:Q8_0" = {
+      hf-repo = "ggml-org/Laguna-XS-2.1-GGUF";
+      hf-file = "laguna-xs-2.1.gguf";
+      alias = "laguna-xs";
+      jinja = "on";
+    };
+  };
 }
