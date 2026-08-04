@@ -26,7 +26,7 @@ let g:tertius_config = {
   \   { 'type': 'function', 'function': {
   \       'name': 'get_commit_message',
   \       'description': 'Get feature context from the commit with a given hash',
-  \       'parameters': { 'type': 'object', 'properties': { 'hash': { 'type': 'string' } }, 'required': ['hash'] }
+  \       'parameters': { 'type': 'object', 'properties': { 'hash': { 'type': 'string', 'description': 'The SHA of the commit' } }, 'required': ['hash'] }
   \   } }
   \ ],
   \ 'prompts': {
@@ -180,31 +180,16 @@ endfunction
 """""""""""""""""""""""""""""""""""" LLM tools """""""""""""""""""""""""""""""""""""
 " prepare the LLM settings
 function! s:_tertius_llm_init() abort
-  let l:llm_type = !empty($TERTIUS_LLM_TYPE) ? tolower($TERTIUS_LLM_TYPE) : ''
-  if l:llm_type ==# 'openai' && !empty($OPENAI_API_KEY)
-    let g:tertius_config.llmType = 'openai'
-    let g:tertius_config.llmBaseUrl = !empty($OPENAI_BASE_URL) ? $OPENAI_BASE_URL : 'https://api.openai.com/v1'
-    let g:tertius_config.llmEndpoint = '/chat/completions'
-    let g:tertius_config.llmModel = !empty($OPENAI_MODEL) ? $OPENAI_MODEL : 'gpt-4o'
-    let g:tertius_config.llmApiKey = $OPENAI_API_KEY
-  else
-    let g:tertius_config.llmType = 'ollama'
-    let g:tertius_config.llmBaseUrl = !empty($OLLAMA_BASE_URL) ? $OLLAMA_BASE_URL : 'http://localhost:11434/api'
-    let g:tertius_config.llmEndpoint = '/chat'
-    let g:tertius_config.llmModel = !empty($OLLAMA_MODEL) ? $OLLAMA_MODEL : 'qwen3.5:latest'
-  endif
+  let g:tertius_config.llmBaseUrl = !empty($LLAMA_CPP_BASE_URL) ? $LLAMA_CPP_BASE_URL : 'http://localhost:8088/v1'
+  let g:tertius_config.llmEndpoint = '/chat/completions'
 endfunction
 
 " request LLM body
 function! s:_tertius_llm_request_body(messages) abort
-  let l:body = { 'model': g:tertius_config.llmModel,
-               \ 'messages': a:messages,
+  let l:body = { 'messages': a:messages,
                \ 'tools': g:tertius_config.tools,
-               \ 'stream': v:false
+               \ 'tool_choice': 'auto'
                \ }
-  if g:tertius_config.llmType ==# 'openai'
-    let l:body.tool_choice = 'auto'
-  endif
   return json_encode(l:body)
 endfunction
 
@@ -217,9 +202,6 @@ function! s:_tertius_request(messages) abort
             \ '--data ' . shellescape(l:body) . ' ' .
             \ '"' . g:tertius_config.llmBaseUrl . g:tertius_config.llmEndpoint . '"'
 
-  if g:tertius_config.llmType == 'openai'
-    let l:cmd = l:cmd . ' --header "Authorization: Bearer ' . $OPENAI_API_KEY . '"'
-  endif
   let l:response = <sid>_tertius_curl(l:cmd)
   if empty(l:response)
     echoerr 'Tertius: empty response from LLM'
@@ -234,9 +216,10 @@ function! s:_tertius_request(messages) abort
 endfunction
 
 " call LLM tools
-function! s:_tertius_tool_caller(tool_call) abort
+function! s:_tertius_tool_caller(tool_call, previous_messages) abort
   let fname = a:tool_call.function.name
   let l:raw_args = get(a:tool_call.function, 'arguments', '')
+  
   if empty(l:raw_args)
     let args = {}
   elseif type(l:raw_args) == type('')
@@ -244,32 +227,58 @@ function! s:_tertius_tool_caller(tool_call) abort
   else
     let args = l:raw_args
   endif
-  if fname ==# 'list_commits'
+
+  " Detect if the LLM is stuck in a loop (calling the same tool with the exact same args)
+  let l:is_loop = 0
+  for msg in a:previous_messages
+    if get(msg, 'role', '') ==# 'assistant' && has_key(msg, 'tool_calls') && type(msg.tool_calls) == type([])
+      for prev_tc in msg.tool_calls
+        if type(prev_tc) == type({}) && has_key(prev_tc, 'function')
+          if prev_tc.function.name ==# fname && get(prev_tc.function, 'arguments', '') ==# l:raw_args
+            let l:is_loop = 1
+            break
+          endif
+        endif
+      endfor
+    endif
+  endfor
+
+  if l:is_loop
+    echom "Tertius: Detected tool loop for " . fname . ". Forcing continuation."
+    let result = "System notice: You already called this tool with these exact arguments. Do not call it again. Generate your final response using the context you have."
+  elseif fname ==# 'list_commits'
     echom "Tertius: listing commits on current feature branch"
     let result = <sid>_tertius_git_current_branch_commits()
   elseif fname ==# 'get_commit_message'
-    echom "Tertius: getting commit message for commit " . args.hash
-    let result = <sid>_tertius_git_commit_message(args.hash)
+    let l:hash = get(args, 'hash', '')
+    echom "Tertius: getting commit message for commit " . l:hash
+    let result = <sid>_tertius_git_commit_message(l:hash)
   else
     echoerr "Tertius: unknown tool function: " . fname
     let result = 'unknown tool'
   endif
+
   let l:content = type(result) == type([]) || type(result) == type({}) ? json_encode(result) : result
-  if g:tertius_config.llmType == 'openai'
-    return { 'role': 'tool',
-           \ 'tool_call_id': get(a:tool_call, 'id', ''),
-           \ 'content': l:content
-           \ }
-  elseif g:tertius_config.llmType == 'ollama'
-    let l:tool_message = { 'role': 'tool',
-                         \ 'tool_name': fname,
-                         \ 'content': l:content
-                         \ }
-    if has_key(a:tool_call, 'id')
-      let l:tool_message.tool_call_id = a:tool_call.id
-    endif
-    return l:tool_message
+  
+  " Prevent silent failures causing loops
+  if empty(l:content)
+    let l:content = "No output or empty result."
   endif
+
+  " OpenAI spec requires 'name' (not 'tool_name') and 'tool_call_id'
+  let l:tool_message = { 'role': 'tool',
+                       \ 'name': fname,
+                       \ 'content': l:content
+                       \ }
+                       
+  if has_key(a:tool_call, 'id')
+    let l:tool_message.tool_call_id = a:tool_call.id
+  else
+    " Fallback in case local LLM generated a tool call without an ID
+    let l:tool_message.tool_call_id = 'call_' . fname
+  endif
+
+  return l:tool_message
 endfunction
 
 function! s:_tertius_handle_response(messages, ...) abort
@@ -290,17 +299,16 @@ function! s:_tertius_handle_response(messages, ...) abort
     return
   endif
 
-  if g:tertius_config.llmType ==# 'ollama'
-    let l:message = l:response.message
-  elseif g:tertius_config.llmType ==# 'openai'
-    if !(type(l:response) == type({}) && has_key(l:response, 'choices') && len(l:response.choices) > 0)
-      echoerr 'Tertius: unexpected response (no choices)'
-      return
-    endif
-    let l:message = l:response.choices[0].message
+  " Fix: OpenAI-compatible APIs return data inside a 'choices' array.
+  if !has_key(l:response, 'choices') || empty(l:response.choices)
+    echoerr 'Tertius: invalid response format (missing choices array)'
+    return
   endif
 
-  if has_key(l:message, 'tool_calls')
+  " Extract the actual message object from the first choice
+  let l:message = l:response.choices[0].message
+
+  if has_key(l:message, 'tool_calls') && type(l:message.tool_calls) == type([]) && !empty(l:message.tool_calls)
     let l:result = deepcopy(a:messages)
     call add(l:result, l:message)
     for tool_call in l:message.tool_calls
@@ -321,18 +329,9 @@ function! Tertius(cmd, content) abort
   call <sid>_tertius_llm_init()
   let l:system = g:tertius_config.prompts[a:cmd]
   let l:user = type(a:content) == type([]) ? join(a:content, "\n") : a:content
-  if g:tertius_config.llmType ==# 'ollama'
-    let l:messages = [ { 'role': 'system', 'content': l:system },
-                     \ { 'role': 'user', 'content': l:user }
-                     \ ]
-  elseif g:tertius_config.llmType ==# 'openai'
-    let l:messages = [ { 'role': 'system', 'content': [ { 'type': 'text', 'text': l:system } ] },
-                     \ { 'role': 'user', 'content': [ { 'type': 'text', 'text': l:user } ] }
-                     \ ]
-  else
-    echoerr "Tertius: unknown LLM type: " . g:tertius_config.llmType
-    return
-  endif
+  let l:messages = [ { 'role': 'system', 'content': l:system },
+                   \ { 'role': 'user', 'content': l:user }
+                   \ ]
   call <sid>_tertius_handle_response(l:messages)
 endfunction
 
