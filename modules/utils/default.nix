@@ -60,6 +60,7 @@ in
     ./nnn.nix
     ./scripts.nix
     ./gcalcli.nix
+    ./hermes-agent.nix
   ];
 
   config = {
