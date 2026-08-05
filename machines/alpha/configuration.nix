@@ -230,7 +230,7 @@ in
     "d ${user_data_directory}/projects 0700 placek users -"
     "d ${user_data_directory}/immich 0750 immich immich -"
     "d ${user_data_directory}/brain 0700 placek users -"
-    "d ${user_data_directory}/llama-cpp 0700 placek users -"
+    "d ${user_data_directory}/llama-cpp 0755 placek users -"
     "L /home/placek/Brain - - - - ${user_data_directory}/brain"
     "L /home/placek/Projects - - - - ${user_data_directory}/projects"
     "L /home/placek/Media - - - - /run/media/placek"
