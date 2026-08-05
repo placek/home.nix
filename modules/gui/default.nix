@@ -53,6 +53,7 @@ in
   imports = [
     ./fonts.nix
 
+    ./buzz.nix
     ./clipcat.nix
     ./dunst.nix
     ./hyprland
