@@ -120,6 +120,7 @@ in
   powerManagement.cpuFreqGovernor = "performance";
 
   ################################## BOOT ######################################
+  boot.loader.systemd-boot.configurationLimit = 3;
   boot.kernelModules = [ "kvm-amd" ];
   boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
   boot.kernelParams = [
