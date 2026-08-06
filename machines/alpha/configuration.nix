@@ -481,7 +481,7 @@ in
 
   services.llama-cpp.enable = true;
   services.llama-cpp.port = 8088;
-  services.llama-cpp.package = (import (builtins.fetchTarball { url = "https://github.com/NixOS/nixpkgs/archive/4cb0af11a185472406a40c76e9212ed4acf1eace.tar.gz"; }) {}).llama-cpp-vulkan;
+  services.llama-cpp.package = (import (builtins.fetchTarball { url = "https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz"; }) {}).llama-cpp-vulkan;
   services.llama-cpp.extraFlags = [
     "--ctx-size" "65536"
     "--cache-type-k" "q8_0"
