@@ -1,11 +1,11 @@
 { pkgs, ... }:
 let
-  version = "0.5.5";
+  version = "0.5.14";
 
   # Pinned version (not "latest") for reproducibility.
   src = pkgs.fetchurl {
-    url = "https://github.com/block/buzz/releases/download/desktop-v0.5.5/Buzz_0.5.5_amd64.AppImage";
-    hash = "sha256-zFHK2mN9YZcSHpXwgyisGcu/7t0+mSIotVLPQ4k+K90=";
+    url = "https://github.com/block/buzz/releases/download/desktop-v${version}/Buzz_${version}_amd64.AppImage";
+    hash = "sha256-o5LYWRZfoi+FAKlQuiCsa4p3OFHmHeVzKp/VU11LKKg=";
   };
 
   # AppImage is stripped of infra libs and relies on the host GStreamer stack.
