@@ -516,7 +516,13 @@ in
       model = "${llama_models_directory}/gemma-4-12B-it-Q4_K_M.gguf";
       jinja = true;
       n-gpu-layers = 99;
-      ctx-size = 49152;
+      # 65536, not 49152 like its neighbours: hermes-agent refuses any model
+      # reporting under 64K ("below the minimum 64,000 required"), so at 49152
+      # this could not back a hermes profile at all. Raised here rather than
+      # overridden in hermes, so the window hermes plans against is the one the
+      # server actually allocates - claiming 64K over a 48K server makes hermes
+      # compress too late and fail server-side mid-session.
+      ctx-size = 65536;
       flash-attn = "on";
       cache-type-k = "q8_0";
       cache-type-v = "q8_0";
