@@ -12,6 +12,7 @@ let
   traefik_docker_network = "traefik-public";
   traefik_proxy_directory = "/srv/proxy";
   user_data_directory = "/srv/data";
+  llama_models_directory = "${user_data_directory}/models";
   dev_services = {
   };
 
@@ -231,7 +232,7 @@ in
     "d ${user_data_directory}/projects 0700 placek users -"
     "d ${user_data_directory}/immich 0750 immich immich -"
     "d ${user_data_directory}/brain 0700 placek users -"
-    "d ${user_data_directory}/llama-cpp 0755 placek users -"
+    "d ${llama_models_directory} 0755 placek users -"
     "L /home/placek/Brain - - - - ${user_data_directory}/brain"
     "L /home/placek/Projects - - - - ${user_data_directory}/projects"
     "L /home/placek/Media - - - - /run/media/placek"
@@ -482,20 +483,44 @@ in
   services.llama-cpp.enable = true;
   services.llama-cpp.port = 8088;
   services.llama-cpp.package = (import (builtins.fetchTarball { url = "https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz"; }) {}).llama-cpp-vulkan;
-  services.llama-cpp.extraFlags = [
-    "--ctx-size" "65536"
-    "--cache-type-k" "q8_0"
-    "--cache-type-v" "q4_0"
-    "--flash-attn" "on"
-  ];
-  services.llama-cpp.model = "${user_data_directory}/llama-cpp/laguna-xs-2.1.gguf";
-  services.llama-cpp.modelsDir = "${user_data_directory}/llama-cpp";
+  # Router mode: llama-server switches to it when no single model (-m) is set
+  # and model presets are provided. Models are loaded on demand, selected by
+  # the section name below via the OpenAI-compatible "model" request field.
+  # Only one at a time - the 5080 has 16 GiB and the MoE models need most of it.
+  services.llama-cpp.extraFlags = [ "--models-max" "1" ];
   services.llama-cpp.modelsPreset = {
-    "ggml-org/Laguna-XS-2.1-GGUF:Q8_0" = {
-      hf-repo = "ggml-org/Laguna-XS-2.1-GGUF";
-      hf-file = "laguna-xs-2.1.gguf";
-      alias = "laguna-xs";
-      jinja = "on";
+    laguna = {
+      model = "${llama_models_directory}/Laguna-XS-2.1-Q4_K_M.gguf";
+      jinja = true;
+      n-gpu-layers = 99;
+      n-cpu-moe = 20;
+      ctx-size = 49152;
+      flash-attn = "on";
+      cache-type-k = "q8_0";
+      cache-type-v = "q8_0";
+      cache-reuse = 256;
+    };
+    qwen = {
+      model = "${llama_models_directory}/Qwen3.6-35B-A3B-Q4_K_M.gguf";
+      jinja = true;
+      n-gpu-layers = 99;
+      n-cpu-moe = 22;
+      ctx-size = 49152;
+      flash-attn = "on";
+      cache-type-k = "q8_0";
+      cache-type-v = "q8_0";
+      cache-reuse = 256;
+    };
+    gemma = {
+      # Dense 12B - fits entirely in VRAM, so no expert offload (n-cpu-moe).
+      model = "${llama_models_directory}/gemma-4-12B-it-Q4_K_M.gguf";
+      jinja = true;
+      n-gpu-layers = 99;
+      ctx-size = 49152;
+      flash-attn = "on";
+      cache-type-k = "q8_0";
+      cache-type-v = "q8_0";
+      cache-reuse = 256;
     };
   };
 }
