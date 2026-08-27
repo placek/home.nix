@@ -61,6 +61,7 @@ in
     ./scripts.nix
     ./gcalcli.nix
     ./hermes-agent.nix
+    ./freetoken.nix
   ];
 
   config = {
