@@ -155,6 +155,7 @@ in
       claude-code        # Anthropic Claude CLI
       codex              # OpenAI Codex CLI
       whisper-cpp-vulkan # speech to text
+      python313Packages.huggingface-hub
     ];
   };
 }
