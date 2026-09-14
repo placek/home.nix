@@ -16,6 +16,17 @@ let
   dev_services = {
   };
 
+  # Pinned nixos-unstable snapshot, shared by every package pulled forward from
+  # unstable (immich, ollama-cuda, llama-cpp-vulkan). Pinned to a revision rather
+  # than tracking the branch head so rebuilds are reproducible and packages cannot
+  # silently jump versions between evaluations. To update: take a new revision from
+  # https://channels.nixos.org/nixos-unstable/git-revision and refresh the hash with
+  # `nix-prefetch-url --unpack <url>`.
+  unstable = import (builtins.fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/c043004d1c6985732bcc1cbc5a9c9aecbbb4e0f0.tar.gz";
+    sha256 = "061x1hflyz80rfmzs3vp4kaf29i8qdsw8pasczyyabn7dd7j61pd";
+  }) { config.allowUnfree = true; };
+
   # Bluetooth pairing persisted declaratively (see systemd.services below).
   # NOTE: the ProtoArc info file contains the BLE long-term key (a secret);
   # it lives in this repo and world-readably in the nix store by design.
@@ -159,9 +170,7 @@ in
   services.clamav.daemon.enable = true;
   services.clamav.updater.enable = true;
   services.ollama.enable = true;
-  services.ollama.package = (import (builtins.fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz";
-  }) { config.allowUnfree = true; }).ollama-cuda;
+  services.ollama.package = unstable.ollama-cuda;
 #   services.ollama.acceleration = "cuda"; # Use default acceleration
   services.ollama.host = "0.0.0.0"; # Listen on all interfaces
   virtualisation.docker.autoPrune.dates = "daily";
@@ -434,6 +443,11 @@ in
     port = 2283;
     mediaLocation = "${user_data_directory}/immich";
 #     database.enableVectors = false;
+
+    # 26.05 ships immich 2.7.5, which is EOL and flagged insecure
+    # (CVE-2026-59258, CVE-2026-82272). The 26.05 module is identical to
+    # unstable's, so the 3.x package drops straight in.
+    package = unstable.immich;
   };
 
   #### POSTGREST (systemd service) ####
@@ -480,9 +494,9 @@ in
     glib
   ];
 
-  services.llama-cpp.enable = true;
+  services.llama-cpp.enable = false; # Enable the llama-cpp service to run a local LLaMA model server
   services.llama-cpp.port = 8088;
-  services.llama-cpp.package = (import (builtins.fetchTarball { url = "https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz"; }) {}).llama-cpp-vulkan;
+  services.llama-cpp.package = unstable.llama-cpp-vulkan;
   # Router mode: llama-server switches to it when no single model (-m) is set
   # and model presets are provided. Models are loaded on demand, selected by
   # the section name below via the OpenAI-compatible "model" request field.
