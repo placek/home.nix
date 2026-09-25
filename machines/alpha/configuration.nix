@@ -17,7 +17,7 @@ let
   };
 
   # Pinned nixos-unstable snapshot, shared by every package pulled forward from
-  # unstable (immich, ollama-cuda, llama-cpp-vulkan). Pinned to a revision rather
+  # unstable (immich, ollama-cuda, llama-cpp-cuda). Pinned to a revision rather
   # than tracking the branch head so rebuilds are reproducible and packages cannot
   # silently jump versions between evaluations. To update: take a new revision from
   # https://channels.nixos.org/nixos-unstable/git-revision and refresh the hash with
@@ -169,10 +169,10 @@ in
   services.udisks2.enable = true;
   services.clamav.daemon.enable = true;
   services.clamav.updater.enable = true;
-  services.ollama.enable = true;
-  services.ollama.package = unstable.ollama-cuda;
+#   services.ollama.enable = true;
+#   services.ollama.package = unstable.ollama-cuda;
 #   services.ollama.acceleration = "cuda"; # Use default acceleration
-  services.ollama.host = "0.0.0.0"; # Listen on all interfaces
+#   services.ollama.host = "0.0.0.0"; # Listen on all interfaces
   virtualisation.docker.autoPrune.dates = "daily";
   virtualisation.docker.enable = true;
   virtualisation.docker.package = pkgs.docker_29;
@@ -436,18 +436,17 @@ in
     '';
   };
 
-  #### IMMICH
+  #### IMMICH ########################################################################
+  # Immich photo management service with security updates.
+  # - Uses unstable.immich (3.x) to fix CVE-2026-59258, CVE-2026-82272 in 2.7.5
+  # - Pinned nixos-unstable hash is defined in the let-block above (line 25-28)
   services.immich = {
     enable = true;
     host = "127.0.0.1";
     port = 2283;
     mediaLocation = "${user_data_directory}/immich";
-#     database.enableVectors = false;
-
-    # 26.05 ships immich 2.7.5, which is EOL and flagged insecure
-    # (CVE-2026-59258, CVE-2026-82272). The 26.05 module is identical to
-    # unstable's, so the 3.x package drops straight in.
     package = unstable.immich;
+#     database.enableVectors = false;
   };
 
   #### POSTGREST (systemd service) ####
@@ -494,53 +493,140 @@ in
     glib
   ];
 
-  services.llama-cpp.enable = false; # Enable the llama-cpp service to run a local LLaMA model server
+  services.llama-cpp.enable = true; # Enable the llama-cpp service to run a local LLaMA model server
   services.llama-cpp.port = 8088;
-  services.llama-cpp.package = unstable.llama-cpp-vulkan;
-  # Router mode: llama-server switches to it when no single model (-m) is set
-  # and model presets are provided. Models are loaded on demand, selected by
-  # the section name below via the OpenAI-compatible "model" request field.
-  # Only one at a time - the 5080 has 16 GiB and the MoE models need most of it.
-  services.llama-cpp.extraFlags = [ "--models-max" "1" ];
+  services.llama-cpp.package = unstable.llama-cpp-cuda;
+#   0.0.0.0, not the module default of 127.0.0.1: the hermes-agent container sits
+#   on its own docker bridge (hermes0, 172.31.0.0/24) and a loopback-bound socket
+#   is unreachable from a bridged netns - host.docker.internal resolves to the
+#   bridge gateway, where nothing is listening. openFirewall stays false, so the
+#   per-interface rule below is the only path in and the LAN still cannot reach
+#   8088. Only this port needs exposing: the router spawns each preset as a child
+#   llama-server on an ephemeral loopback port and reverse-proxies it internally.
+  services.llama-cpp.host = "0.0.0.0";
+#   Declarative intent: admit 8088 from the container bridge. NOT sufficient on
+#   its own - see the extraCommands below for why.
+  networking.firewall.interfaces.hermes0.allowedTCPPorts = [ 8088 ];
+#   trustedInterfaces (above: lan_interface, aux_interface, docker0) render as
+#   UNCONDITIONAL `-i <if> -j nixos-fw-accept` rules at the top of the nixos-fw
+#   chain, so they match before any per-port rule. While llama-cpp was bound to
+#   127.0.0.1 that was harmless; binding it to 0.0.0.0 made 8088 reachable from
+#   both docker0 (any container on the default bridge) and the LAN - verified
+#   reachable from a throwaway container on the default bridge.
+#
+#   extraCommands runs after the generated rules, so inserting at position 1
+#   places these ahead of the trustedInterfaces accepts. Each -I 1 pushes the
+#   previous down, so the resulting order is: lo, hermes0, then drop everything
+#   else - scoped to port 8088 only, leaving the LAN/docker0 trust for every
+#   other port exactly as it was.
+#
+#   lo is kept so host-side tooling (and the existing ~/.hermes config) can still
+#   use 127.0.0.1:8088. IPv6 needs no rule: 0.0.0.0 is an IPv4-only bind.
+  networking.firewall.extraCommands = ''
+    iptables -I nixos-fw 1 -p tcp --dport 8088 -j nixos-fw-refuse
+    iptables -I nixos-fw 1 -i hermes0 -p tcp --dport 8088 -j nixos-fw-accept
+    iptables -I nixos-fw 1 -i lo -p tcp --dport 8088 -j nixos-fw-accept
+  '';
+  networking.firewall.extraStopCommands = ''
+    iptables -D nixos-fw -i lo -p tcp --dport 8088 -j nixos-fw-accept 2>/dev/null || true
+    iptables -D nixos-fw -i hermes0 -p tcp --dport 8088 -j nixos-fw-accept 2>/dev/null || true
+    iptables -D nixos-fw -p tcp --dport 8088 -j nixos-fw-refuse 2>/dev/null || true
+  '';
+#   Router mode: llama-server switches to it when no single model (-m) is set
+#   and model presets are provided. Clients pick a section name below via the
+#   OpenAI-compatible "model" request field.
+#
+#   --models-max 2 (not 1) because both presets set load-on-startup: the router
+#   evicts to stay under this cap, so a cap of 1 would make the second autoload
+#   immediately unload the first and leave nothing warm.
+  services.llama-cpp.extraFlags = [ "--models-max" "2" ];
   services.llama-cpp.modelsPreset = {
-    laguna = {
-      model = "${llama_models_directory}/Laguna-XS-2.1-Q4_K_M.gguf";
-      jinja = true;
+#     [*] - defaults inherited by every preset below. Sorts first in the
+#     generated INI because "*" (0x2A) precedes letters and toINI emits
+#     attributes in Nix's (alphabetical) order.
+    "*" = {
       n-gpu-layers = 99;
-      n-cpu-moe = 20;
-      ctx-size = 49152;
       flash-attn = "on";
-      cache-type-k = "q8_0";
-      cache-type-v = "q8_0";
-      cache-reuse = 256;
-    };
-    qwen = {
-      model = "${llama_models_directory}/Qwen3.6-35B-A3B-Q4_K_M.gguf";
       jinja = true;
-      n-gpu-layers = 99;
-      n-cpu-moe = 22;
-      ctx-size = 49152;
-      flash-attn = "on";
-      cache-type-k = "q8_0";
-      cache-type-v = "q8_0";
-      cache-reuse = 256;
+#       q4_0 (0.5625 B/element) rather than q8_0 (1.0625). Measured KV geometry
+#       from the GGUFs: coder is 41 layers x 2 KV heads x 256 = 41,984
+#       elements/token; orchestrator 48 x 8 x 128 = 98,304, i.e. 2.34x more per
+#       token - context on the orchestrator is the expensive kind. Halving the
+#       element size buys double the window on both presets for +357 MiB total
+#       (coder 2788 -> 2952 MiB, orchestrator 3264 -> 3457 MiB). Viable only
+#       because flash-attn is on. q4_0 on K is the quality-sensitive half: if
+#       long-context fidelity degrades, set cache-type-k = "q8_0" and drop the
+#       ctx-sizes to 98304 / 49152, which costs +890 MiB instead.
+      cache-type-k = "q4_0";
+      cache-type-v = "q4_0";
+#       mmap, not mlock. Both presets autoload, so ~96 GB of weights (73 GB
+#       orchestrator + 23 GB coder) are live against this box's 123 GiB, most of
+#       it expert tensors held CPU-side. That does fit locked, but locked pages
+#       cannot be evicted and immich, Postgres, Docker and clamav share this
+#       RAM - so mmap, letting the kernel reclaim experts through the page cache
+#       under pressure. Costs a slower first token after a model switch; cannot
+#       OOM the host. (--mlock is deprecated in favour of --load-mode.)
+      load-mode = "mmap";
     };
-    gemma = {
-      # Dense 12B - fits entirely in VRAM, so no expert offload (n-cpu-moe).
-      model = "${llama_models_directory}/gemma-4-12B-it-Q4_K_M.gguf";
-      jinja = true;
-      n-gpu-layers = 99;
-      # 65536, not 49152 like its neighbours: hermes-agent refuses any model
-      # reporting under 64K ("below the minimum 64,000 required"), so at 49152
-      # this could not back a hermes profile at all. Raised here rather than
-      # overridden in hermes, so the window hermes plans against is the one the
-      # server actually allocates - claiming 64K over a 48K server makes hermes
-      # compress too late and fail server-side mid-session.
+    coder = {
+      model = "${llama_models_directory}/Qwen3.6-35B-A3B-MTP-UD-Q4_K_XL.gguf";
+#       35B total / 3B active MoE. Measured on this card, each layer moved off
+#       the GPU is worth ~464 MiB: 28 -> 10173 MiB, 36 -> 6459 MiB, 44 -> 4127.
+#       36 because both presets are resident and this is a desktop GPU, not a
+#       dedicated one: orchestrator needs 5927 MiB and Hyprland + Slack +
+#       Telegram + Steam already hold ~1400 MiB of the 16303 MiB card. 36 leaves
+#       ~2500 MiB of headroom for that session to grow; 28 overcommitted by
+#       ~1200 MiB and made orchestrator's KV allocation fail at startup.
+#       Lower this for a faster coder only if you also accept a tighter card.
+      n-cpu-moe = 36;
+#       131072 at q4_0 costs 2952 MiB of KV - only 164 MiB more than 65536 did at
+#       q8_0. n_ctx_train is 262144, so the ceiling here is VRAM, not the model;
+#       256k would want 5904 MiB and does not fit beside the orchestrator.
+      ctx-size = 131072;
+#       1, and hermes-agent's delegation.max_concurrent_children must match:
+#       concurrent subagents against a single-sequence server only contend.
+      parallel = 1;
+#       Speculative decoding off the model's own multi-token-prediction head -
+#       this is the MTP repo, so no separate draft model is needed.
+      spec-type = "draft-mtp";
+      spec-draft-n-max = 2;
+      temp = 1.0;
+      top-p = 0.95;
+      top-k = 20;
+      load-on-startup = true;
+    };
+    orchestrator = {
+#       Sharded quant: llama.cpp is handed shard 1 and finds 2 and 3 beside it.
+      model = "${llama_models_directory}/Laguna-S-2.1-UD-Q4_K_XL-00001-of-00003.gguf";
+#       cpu-moe (all experts) rather than n-cpu-moe (first N): at ~73 GB this
+#       only fits at all by keeping every expert tensor off the GPU, leaving
+#       VRAM for the dense/attention layers and the KV cache. Shard 1 is a
+#       3.7 MB metadata-only shard; the weights are in shards 2 and 3.
+      cpu-moe = true;
+#       65536, not 32768: hermes-agent hard-codes MINIMUM_CONTEXT_LENGTH = 64000
+#       (agent/model_metadata.py) and rejects any model below it for sessions,
+#       model switches and cron jobs - at 32768 this preset could not be used by
+#       hermes at all, never mind as the main model. 3457 MiB of KV at q4_0,
+#       +193 MiB over what 32768 cost at q8_0.
       ctx-size = 65536;
-      flash-attn = "on";
-      cache-type-k = "q8_0";
-      cache-type-v = "q8_0";
-      cache-reuse = 256;
+#       Pinned explicitly. Without it this preset came up with n_slots = 4 while
+#       coder used 1, leaving it ambiguous whether a single request gets the
+#       whole window.
+      parallel = 1;
+      load-on-startup = true;
+    };
+  };
+#   The upstream module sets CacheDirectory and LLAMA_CACHE itself. Still needed
+#   here: write access to the model directory (the router writes cached metadata
+#   beside the GGUFs), and XDG_CACHE_HOME - distinct from LLAMA_CACHE, and under
+#   the module's DynamicUser sandbox it would otherwise point at an unwritable
+#   /var/empty/.cache.
+  systemd.services.llama-cpp = {
+    serviceConfig = {
+      ReadWritePaths = [ llama_models_directory ];
+    };
+    environment = {
+      XDG_CACHE_HOME = "/var/cache/llama-cpp";
     };
   };
 }
