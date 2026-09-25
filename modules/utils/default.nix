@@ -62,6 +62,7 @@ in
     ./gcalcli.nix
     ./hermes-agent.nix
     ./freetoken.nix
+    ./graft.nix
   ];
 
   config = {
