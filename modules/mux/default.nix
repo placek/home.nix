@@ -18,20 +18,21 @@ let
     tmux display-menu -T "#[align=centre]Windows / Panes" -x C -y C "''${args[@]}"
   '';
 
-  claudePopup = pkgs.writeShellScript "tmux-claude-popup" ''
-    session="claude-$1"
-    unset TMUX
-    tmux new-session -A -s "$session" "direnv exec . claude --continue"
-    tmux kill-session -t "$session" 2>/dev/null
+  # Spawns claude command in a new pane to the right of the current one
+  claudeSpawn = pkgs.writeShellScript "tmux-claude-spawn" ''
+    claude
   '';
 
-  # display-popup does not format-expand its command argument, so the parent
-  # session name is resolved by run-shell and passed in here as positional args.
-  claudeLaunch = pkgs.writeShellScript "tmux-claude-launch" ''
-    client="$1"
-    parent="$2"
-    path="$3"
-    exec tmux display-popup -c "$client" -E -d "$path" -w 80% -h 50% -x C -y "#{e|-:#{client_height},#{popup_height}}" -S "fg=colour208" "${claudePopup} $parent"
+  # Spawns hermes command in a new pane to the right of the current one
+  hermesSpawn = pkgs.writeShellScript "tmux-hermes-spawn" ''
+    hermes
+  '';
+
+  # Menu for spawning claude or hermes in a new pane
+  spawnMenu = pkgs.writeShellScript "tmux-spawn-menu" ''
+    tmux display-menu -T "#[align=centre]Spawn" -x C -y C \
+      "claude" "" "split-window -h -c '#{pane_current_path}' '${claudeSpawn}' ; select-layout main-vertical" \
+      "hermes" "" "split-window -h -c '#{pane_current_path}' '${hermesSpawn}' ; select-layout main-vertical"
   '';
 
   # Runs a single make rule inside a fresh pane and blocks on a keypress so the
@@ -109,7 +110,7 @@ in
         set -g main-pane-width 60%
 
         bind -n C-Enter   split-window -h -c "#{pane_current_path}" \; select-layout main-vertical
-        bind -n C-q       if-shell -F '#{m:claude-*,#{session_name}}' detach-client 'run-shell "${claudeLaunch} #{client_name} #{session_name} #{pane_current_path}"'
+        bind -n C-q       run-shell -b "${spawnMenu}"
         bind -n C-BSpace  resize-pane -Z
         bind -n C-h       select-pane -t :.+
         bind -n C-l       select-pane -t :.-
