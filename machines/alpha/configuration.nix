@@ -240,6 +240,7 @@ in
     "f ${traefik_proxy_directory}/acme.json 0600 traefik docker -"
     "d ${user_data_directory}/projects 0700 placek users -"
     "d ${user_data_directory}/immich 0750 immich immich -"
+    "d ${user_data_directory}/minecraft 0750 minecraft minecraft -"
     "d ${user_data_directory}/brain 0700 placek users -"
     "d ${llama_models_directory} 0755 placek users -"
     "L /home/placek/Brain - - - - ${user_data_directory}/brain"
@@ -272,6 +273,7 @@ in
     80 # http
     443 # https
     2222 # git
+    25565 # minecraft
   ];
 
   networking.nat.enable = true;
@@ -627,6 +629,114 @@ in
     };
     environment = {
       XDG_CACHE_HOME = "/var/cache/llama-cpp";
+    };
+  };
+
+  ################################ MINECRAFT ###################################
+  # Vanilla Java Edition server, reachable from the internet at
+  # minecraft.placki.cloud. Deliberately NOT behind Traefik: the Minecraft
+  # protocol is raw TCP with no TLS and therefore no SNI, so a reverse proxy has
+  # no hostname to route on. The hostname resolves at the DNS layer instead -
+  # *.placki.cloud is a wildcard A record at home.pl pointing here - and the
+  # port is opened directly in allowedTCPPorts above. Keeping the default 25565
+  # is what lets clients type a bare "minecraft.placki.cloud" with no :port and
+  # no _minecraft._tcp SRV record.
+  services.minecraft-server = {
+    enable = true;
+    eula = true;
+
+    # Required for `whitelist` and `serverProperties` below to have ANY effect;
+    # without it the module just runs the jar against whatever is already in
+    # dataDir. The trade-off: whitelist.json and server.properties are
+    # regenerated from this file on every start, so in-game `/whitelist add` and
+    # hand-edits to server.properties are silently reverted on the next
+    # restart. Adding a player is a config edit + `make switch`.
+    declarative = true;
+
+    # Under ${user_data_directory} rather than the module default of
+    # /var/lib/minecraft, matching immich - keeps every piece of user data worth
+    # backing up (the world lives here) under one tree.
+    dataDir = "${user_data_directory}/minecraft";
+
+    # The module would happily open the port itself, but this config keeps all
+    # public ports in the single allowedTCPPorts list above so the exposed
+    # surface is readable in one place.
+    openFirewall = false;
+
+    # Xms == Xmx on purpose: a fixed heap avoids the GC churn and pause spikes
+    # that come from the JVM resizing the heap under load. 4G is ample for
+    # vanilla with a handful of players and is deliberately modest on a 123 GiB
+    # box, because llama-cpp keeps ~96 GB of model weights mmap'd - those pages
+    # are reclaimable under pressure, a committed JVM heap is not, so there is
+    # no reason to take more than the server can use. The G1 flags are the
+    # standard Aikar tuning: collect earlier and more incrementally to keep
+    # pauses off the 50 ms tick.
+    jvmOpts = lib.concatStringsSep " " [
+      "-Xms4G"
+      "-Xmx4G"
+      "-XX:+UseG1GC"
+      # MUST precede G1NewSizePercent / G1MaxNewSizePercent below: HotSpot
+      # parses argv in order and refuses an experimental flag it has not been
+      # unlocked for yet ("The unlock option must precede 'G1NewSizePercent'"),
+      # which aborts JVM startup outright. This is also why jvmOpts is a list
+      # rather than an attrset - an attrset would be emitted in Nix's
+      # alphabetical order and put the unlock after the flags it unlocks.
+      "-XX:+UnlockExperimentalVMOptions"
+      "-XX:+ParallelRefProcEnabled"
+      "-XX:MaxGCPauseMillis=200"
+      "-XX:+DisableExplicitGC"
+      "-XX:G1NewSizePercent=30"
+      "-XX:G1MaxNewSizePercent=40"
+      "-XX:G1HeapRegionSize=8M"
+      "-XX:G1ReservePercent=20"
+      "-XX:InitiatingHeapOccupancyPercent=15"
+    ];
+
+    # Minecraft usernames -> account UUIDs. The module's type is a strMatching
+    # on the UUID format, so a bare username fails at evaluation time, not at
+    # runtime. Resolve a name with:
+    #   curl -s https://api.mojang.com/users/profiles/minecraft/<name>
+    # and hyphenate the 32-char id as 8-4-4-4-12.
+    #
+    # An empty set here combined with white-list = true below means NOBODY can
+    # join - which is the safe state to leave this in, not a broken one.
+    whitelist = {
+    };
+
+    serverProperties = {
+      server-port = 25565;
+      motd = "placki.cloud";
+
+      # The pair matters. white-list gates new logins; enforce-whitelist also
+      # kicks a player who is already online when they are removed from the
+      # list (and on every reload of it). Without the second, dropping someone
+      # only takes effect the next time they reconnect.
+      white-list = true;
+      enforce-whitelist = true;
+
+      # Mojang session-server authentication. Never turn this off on a
+      # publicly-reachable server: offline-mode lets anyone connect claiming any
+      # username, which also defeats the whitelist above since it matches on
+      # exactly that name.
+      online-mode = true;
+
+      max-players = 20;
+      difficulty = "normal";
+      gamemode = "survival";
+      view-distance = 12;
+      simulation-distance = 10;
+
+      # No remote console and no query protocol: both are extra listeners on a
+      # box whose 25565 is exposed to the internet, and neither is needed. The
+      # module already wires stdin to a FIFO at /run/minecraft-server.stdin, so
+      # console commands go through:
+      #   echo "say hello" | sudo tee /run/minecraft-server.stdin
+      enable-rcon = false;
+      enable-query = false;
+
+      # Command blocks execute arbitrary server commands from inside the world;
+      # off by default and left off.
+      enable-command-block = false;
     };
   };
 }
