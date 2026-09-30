@@ -15,10 +15,6 @@ in
   config.programs.qutebrowser.settings = {
     qt.args = [
       "disable-features=PermissionElement"
-      "disable-gpu"
-      "disable-gpu-compositing"
-      "log-level=3"
-      "remote-debugging-port=9222"
     ];
     confirm_quit = [ "multiple-tabs" "downloads" ];
 
