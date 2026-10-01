@@ -392,16 +392,6 @@ in
     };
   };
 
-  ################################# PSALMY #####################################
-  services.nginx = {
-    enable = true;
-    virtualHosts."psalmy" = {
-      listen = [ { addr = "127.0.0.1"; port = 8081; } ];
-      root = "/srv/data/projects/placek/psalmy";
-      locations."/".index = "index.html";
-    };
-  };
-
   systemd.services.traefik.preStart = ''
     ${pkgs.docker_29}/bin/docker network inspect ${traefik_docker_network} >/dev/null 2>&1 || \
     ${pkgs.docker_29}/bin/docker network create ${traefik_docker_network} || true
