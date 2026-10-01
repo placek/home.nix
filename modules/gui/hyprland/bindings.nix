@@ -2,6 +2,34 @@
 , config
 , ...
 }:
+let
+  evenMfact = 0.5;
+  wideMfact = config.gui.master.mfact;
+
+  # Hyprland has no "toggle mfact" dispatcher, and the live per-workspace mfact
+  # is absent from every hyprctl query -- so keep our own state, keyed by
+  # workspace id (mfact is per-workspace; one global value would desync).
+  # State lives in XDG_RUNTIME_DIR, so a reboot returns every workspace to
+  # wideMfact, matching master.mfact in the generated config.
+  mfactToggle = pkgs.writeShellScript "hypr-mfact-toggle" ''
+    set -euo pipefail
+
+    even=${toString evenMfact}
+    wide=${toString wideMfact}
+
+    ws=$(hyprctl -j activeworkspace | ${pkgs.jq}/bin/jq -r '.id')
+    dir=''${XDG_RUNTIME_DIR:-/tmp}/hypr-mfact
+    file=$dir/$ws
+
+    current=$(cat "$file" 2>/dev/null || echo "$wide")
+    if [ "$current" = "$even" ]; then next=$wide; else next=$even; fi
+
+    hyprctl dispatch layoutmsg "mfact exact $next"
+
+    mkdir -p "$dir"
+    printf '%s' "$next" > "$file"
+  '';
+in
 {
   config = {
     wayland.windowManager.hyprland.settings = {
@@ -46,6 +74,8 @@
         "$mod, k, layoutmsg, mfact +0.02"
         "$mod, mouse_down, layoutmsg, mfact -0.02"
         "$mod, mouse_up,   layoutmsg, mfact +0.02"
+        # Toggle master area between an even 50-50 split and the wide default
+        "$mod, t, exec, ${mfactToggle}"
 
         # Close / Quit
         "$mod, q, killactive"

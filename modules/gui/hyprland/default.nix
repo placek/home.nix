@@ -24,6 +24,12 @@
       default = 6;
       description = "A border radius size.";
     };
+
+    gui.master.mfact = mkOption {
+      type = types.float;
+      default = 0.66;
+      description = "Master area ratio; the wide half of the mfact toggle.";
+    };
   };
 
   config = {
@@ -61,7 +67,7 @@
         master.new_status = "master";
         master.new_on_top = true;
         master.orientation = "left";
-        master.mfact = 0.66;
+        master.mfact = config.gui.master.mfact;
         monitor = [
           "DP-2,1920x1080@60,0x0,1"
           "DP-1,1920x1080@60,1920x0,1"
