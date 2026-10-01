@@ -25,7 +25,7 @@ let
 
   # Spawns hermes command in a new pane to the right of the current one
   hermesSpawn = pkgs.writeShellScript "tmux-hermes-spawn" ''
-    hermes
+    /home/placek/.local/bin/trismegistos
   '';
 
   # Menu for spawning claude or hermes in a new pane
