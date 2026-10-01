@@ -553,8 +553,8 @@ in
     #
     # An empty set here combined with white-list = true below means NOBODY can
     # join - which is the safe state to leave this in, not a broken one.
-    whitelist = {
-    };
+#     whitelist = {
+#     };
 
     serverProperties = {
       server-port = 25565;
@@ -564,8 +564,8 @@ in
       # kicks a player who is already online when they are removed from the
       # list (and on every reload of it). Without the second, dropping someone
       # only takes effect the next time they reconnect.
-      white-list = true;
-      enforce-whitelist = true;
+#       white-list = true;
+#       enforce-whitelist = true;
 
       # Mojang session-server authentication. Never turn this off on a
       # publicly-reachable server: offline-mode lets anyone connect claiming any
