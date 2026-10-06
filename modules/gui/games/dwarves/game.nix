@@ -33,18 +33,17 @@ let
   renderOption = option: value:
     "[" + (lib.toUpper option) + ":" + (renderValue value) + "]";
 
-  mkSettingsFile = dict:
+  # Patch tokens in the stock file rather than replacing it, so every token
+  # that isn't overridden keeps the default DF ships with.
+  mkPatchCommands = file: dict:
     lib.concatStringsSep "\n"
-      (lib.attrsets.mapAttrsToList (option: value: renderOption option value) dict);
-
-  init_file = pkgs.writeTextFile {
-    name = "init.txt";
-    text = mkSettingsFile settings;
-  };
-  colors_file = pkgs.writeTextFile {
-    name = "colors.txt";
-    text = mkSettingsFile colors;
-  };
+      (lib.attrsets.mapAttrsToList (option: value: ''
+        if grep -q '\[${lib.toUpper option}:' "${file}"; then
+          sed -i 's|\[${lib.toUpper option}:[^]]*\]|${renderOption option value}|' "${file}"
+        else
+          echo "warning: no token ${lib.toUpper option} in ${file}" >&2
+        fi
+      '') dict);
 
   game = stdenv.mkDerivation {
     pname = "dwarf-fortress-raw";
@@ -73,17 +72,22 @@ let
       mv mouse.png $out/data/art/mouse.png
       cp ${settings.font} $out/data/art/${builtins.baseNameOf (toString settings.font)}
       touch $out/data/art/mouse.png
-      cp ${init_file} $out/data/init/init.txt
-      cp ${colors_file} $out/data/init/colors.txt
+      ${mkPatchCommands "$out/data/init/init.txt" settings}
+      ${mkPatchCommands "$out/data/init/colors.txt" colors}
       runHook postInstall
     '';
   };
 in
   pkgs.writeShellScriptBin "dwarves" ''
-    mkdir -p "$XDG_DATA_HOME/dwarves"
-    if [ ! -f "$XDG_DATA_HOME/dwarves/df" ]; then
-      cp -R ${game}/* "$XDG_DATA_HOME/dwarves"
-      chmod +w -R "$XDG_DATA_HOME/dwarves"
+    dir="''${XDG_DATA_HOME:-$HOME/.local/share}/dwarves"
+    mkdir -p "$dir"
+    # Refresh the game files whenever the package changes; saves live in
+    # data/save and are never part of the package, so they are left alone.
+    if [ "$(cat "$dir/.store-path" 2>/dev/null)" != "${game}" ]; then
+      chmod -R u+w "$dir"
+      cp -RT --no-preserve=mode ${game} "$dir"
+      chmod -R u+w "$dir"
+      echo "${game}" > "$dir/.store-path"
     fi
-    "$XDG_DATA_HOME/dwarves/df" "$@"
+    exec "$dir/df" "$@"
   ''
