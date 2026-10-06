@@ -4,59 +4,109 @@
 , ...
 }:
 let
-  mkDwarfFortress = import ./game.nix { inherit pkgs; };
+  inherit (config.gui) theme;
 
-  toColor = name: hex: let
-    r = builtins.substring 1 2 hex;
-    g = builtins.substring 3 2 hex;
-    b = builtins.substring 5 2 hex;
-  in {
-    "${name}_r" = lib.fromHexString r;
-    "${name}_g" = lib.fromHexString g;
-    "${name}_b" = lib.fromHexString b;
+  renderValue = v:
+    if lib.isBool v then (if v then "YES" else "NO")
+    else if lib.isInt v then toString v
+    else if lib.isString v then v
+    else throw "dwarves: unsupported setting value ${toString v}";
+
+  # Rewrite [KEY:...] in place, failing the build if the key has disappeared
+  # rather than silently dropping the setting.
+  setKeys = file: settings:
+    lib.concatStrings (lib.mapAttrsToList (key: value: ''
+      grep -q '\[${key}:' ${file} || {
+        echo "dwarves: no setting named ${key} in ${file}" >&2
+        exit 1
+      }
+      sed -i 's|\[${key}:[^]]*\]|[${key}:${renderValue value}]|' ${file}
+    '') settings);
+
+  # colors.txt wants uppercase [NAME_R:int] triples, so turn each base16 hex
+  # into its three decimal components.
+  toColor = name: hex:
+    let
+      component = offset: lib.fromHexString (builtins.substring offset 2 hex);
+    in
+    {
+      "${name}_R" = component 1;
+      "${name}_G" = component 3;
+      "${name}_B" = component 5;
+    };
+
+  init = {
+    USE_CLASSIC_ASCII = true;
+
+    FONT = "tileset.png";
+    FULLFONT = "tileset.png";
+    BASIC_FONT = "tileset.png";
+    TEXTURE_PARAM = "NEAREST"; # no lanczos blur over 16px tiles
+
+    # The modern interface needs far more room than a classic 80x25; let the
+    # game pick a tile scale that fits its desired grid on this screen.
+    WINDOWED = false;
+    FULLSCREENX = 0;
+    FULLSCREENY = 0;
+    INTERFACE_SCALING_TO_DESIRED_GRID = true;
+    INTERFACE_SCALING_DESIRED_GRID_WIDTH = 170;
+    INTERFACE_SCALING_DESIRED_GRID_HEIGHT = 64;
+
+    SOUND = false;
+    FPS = false;
   };
+
+  colors = lib.mergeAttrsList [
+    (toColor "BLACK" theme.base00)
+    (toColor "RED" theme.base01)
+    (toColor "GREEN" theme.base02)
+    (toColor "BROWN" theme.base03)
+    (toColor "BLUE" theme.base04)
+    (toColor "MAGENTA" theme.base05)
+    (toColor "CYAN" theme.base06)
+    (toColor "LGRAY" theme.base07)
+    (toColor "DGRAY" theme.base08)
+    (toColor "LRED" theme.base09)
+    (toColor "LGREEN" theme.base0A)
+    (toColor "YELLOW" theme.base0B)
+    (toColor "LBLUE" theme.base0C)
+    (toColor "LMAGENTA" theme.base0D)
+    (toColor "LCYAN" theme.base0E)
+    (toColor "WHITE" theme.base0F)
+  ];
+
+  # Dwarf Fortress 50+ resolves data/init/* and data/art/* against
+  # SDL_GetBasePath(), which is the directory holding the real dwarfort binary.
+  # The wrapper's overlay under $XDG_DATA_HOME is never consulted for them, so
+  # its `settings` and `theme` arguments have no effect; patch the game package
+  # itself, which is what the running binary actually reads.
+  game = pkgs.dwarf-fortress-packages.dwarf-fortress-original.overrideAttrs (old: {
+    postInstall = (old.postInstall or "") + ''
+      install -m 0644 ${./tileset.png} $out/data/art/tileset.png
+      chmod +w $out/data/init/init_default.txt $out/data/init/colors.txt
+      ${setKeys "$out/data/init/init_default.txt" init}
+      ${setKeys "$out/data/init/colors.txt" colors}
+    '';
+  });
+
+  dwarf-fortress = pkgs.dwarf-fortress-packages.dwarf-fortress.override {
+    dwarf-fortress = game;
+    enableDFHack = true;
+    enableStoneSense = false; # a 3D renderer, pointless next to an ASCII grid
+
+    # The wrapper would patch data/init/init.txt, which DF 50+ no longer ships
+    # and would not read from the overlay anyway. Leave it be.
+    enableIntro = null;
+    enableSound = null;
+    enableFPS = null;
+  };
+
+  # The wrapper installs a vanilla and a DFHack launcher; keep the old command
+  # name pointed at the one that actually loads DFHack.
+  dwarves = pkgs.writeShellScriptBin "dwarves" ''
+    exec ${dwarf-fortress}/bin/dfhack "$@"
+  '';
 in
 {
-  config.home.packages = [
-    (mkDwarfFortress {
-      settings = {
-        sound = false;
-        intro = false;
-        windowed = true;
-        windowedx = 90;
-        windowedy = 30;
-        font = ./tileset.png;
-        fullfont = ./tileset.png;
-        resizable = false;
-        black_space = false;
-        graphics = false;
-        print_mode = "2D";
-        single_buffer = false;
-        truetype = false;
-        topmost = false;
-        fps = false;
-        mouse = false;
-        mouse_picture = false;
-      };
-      colors = lib.mergeAttrsList [
-        (toColor "black" config.gui.theme.base00)
-        (toColor "red" config.gui.theme.base01)
-        (toColor "green" config.gui.theme.base02)
-        { brown_r = 115; brown_g = 87; brown_b = 65; } # override brown
-#         (toColor "brown" config.gui.theme.base03)
-        (toColor "blue" config.gui.theme.base04)
-        (toColor "magenta" config.gui.theme.base05)
-        (toColor "cyan" config.gui.theme.base06)
-        (toColor "lgray" config.gui.theme.base07)
-        (toColor "dgray" config.gui.theme.base08)
-        (toColor "lred" config.gui.theme.base09)
-        (toColor "lgreen" config.gui.theme.base0A)
-        (toColor "yellow" config.gui.theme.base0B)
-        (toColor "lblue" config.gui.theme.base0C)
-        (toColor "lmagenta" config.gui.theme.base0D)
-        (toColor "lcyan" config.gui.theme.base0E)
-        (toColor "white" config.gui.theme.base0F)
-      ];
-    })
-  ];
+  config.home.packages = [ dwarf-fortress dwarves ];
 }
