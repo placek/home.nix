@@ -56,6 +56,36 @@ let
     FPS = false;
   };
 
+  # 0.47.05 keeps its settings in data/init/init.txt, which predates most of the
+  # 50-era keys: there is no USE_CLASSIC_ASCII, no BASIC_FONT and no
+  # INTERFACE_SCALING_*. setKeys aborts the build on a key it cannot find, so
+  # this list cannot silently drift away from what the game actually reads.
+  classicInit = {
+    GRAPHICS = false; # 0.47's ASCII switch, standing in for USE_CLASSIC_ASCII
+
+    FONT = "tileset.png";
+    FULLFONT = "tileset.png";
+    TEXTURE_PARAM = "NEAREST";
+
+    # Defaults to 24, meaning "hand text over to font.ttf once tiles are that
+    # tall". A 256x256 tileset stays at 16px and so never trips the threshold,
+    # but pinning it off keeps a later tileset swap from quietly replacing every
+    # glyph the interface draws.
+    TRUETYPE = false;
+
+    # 0.47 has no desired-grid scaling. The zeros take the desktop resolution
+    # and the grid simply falls out of it as resolution / 16.
+    WINDOWED = false;
+    FULLSCREENX = 0;
+    FULLSCREENY = 0;
+
+    SOUND = false;
+    INTRO = false;
+    FPS = false;
+  };
+
+  # Both game versions name these identically, down to the ordering, so one
+  # palette serves the modern and the classic build alike.
   colors = lib.mergeAttrsList [
     # Not base00. DF only paints cells that hold something and leaves the rest
     # of the window at a hardcoded black, which no init setting, art file or
@@ -109,7 +139,40 @@ let
   dwarves = pkgs.writeShellScriptBin "dwarves" ''
     exec ${dwarf-fortress}/bin/dwarf-fortress "$@"
   '';
+
+  # 0.47 does read its init files out of the overlay, so the wrapper's own
+  # settings would reach it -- but patching the package keeps both builds on one
+  # mechanism, and the nulls below stop the wrapper undoing these edits on its
+  # copy of init.txt.
+  classicGame = pkgs.dwarf-fortress-packages.dwarf-fortress_0_47_05.dwarf-fortress.overrideAttrs (old: {
+    postInstall = (old.postInstall or "") + ''
+      install -m 0644 ${./tileset.png} $out/data/art/tileset.png
+      chmod +w $out/data/init/init.txt $out/data/init/colors.txt
+      ${setKeys "$out/data/init/init.txt" classicInit}
+      ${setKeys "$out/data/init/colors.txt" colors}
+    '';
+  });
+
+  classic = pkgs.dwarf-fortress-packages.dwarf-fortress_0_47_05.override {
+    dwarf-fortress = classicGame;
+
+    enableIntro = null;
+    enableSound = null;
+    enableFPS = null;
+  };
+
+  # The wrapper derives its mutable overlay from the platform alone -- every
+  # Linux build lands on $XDG_DATA_HOME/df_linux -- so the two versions would
+  # otherwise share one directory and interleave incompatible data, raws and
+  # saves. Give the classic game a home of its own and leave df_linux to 50+.
+  dwarves-old = pkgs.writeShellScriptBin "dwarves-old" ''
+    export NIXPKGS_DF_HOME="''${XDG_DATA_HOME:-$HOME/.local/share}/df_linux_0.47.05"
+    exec ${classic}/bin/dwarf-fortress "$@"
+  '';
 in
 {
-  config.home.packages = [ dwarf-fortress dwarves ];
+  # Only the modern wrapper goes in the profile; both wrappers install
+  # bin/dwarf-fortress and would collide. The shims pin their store paths, so
+  # the classic build is retained without being on $PATH twice.
+  config.home.packages = [ dwarf-fortress dwarves dwarves-old ];
 }
