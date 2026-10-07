@@ -57,7 +57,13 @@ let
   };
 
   colors = lib.mergeAttrsList [
-    (toColor "BLACK" theme.base00)
+    # Not base00. DF only paints cells that hold something and leaves the rest
+    # of the window at a hardcoded black, which no init setting, art file or
+    # tileset reaches -- on the title screen that is ~87% of the pixels. A
+    # themed BLACK therefore only recolours the parts DF does draw, which is
+    # what makes menus look like warm panels floating on a black void. Matching
+    # the void is the only way to make the two agree.
+    (toColor "BLACK" "#000000")
     (toColor "RED" theme.base01)
     (toColor "GREEN" theme.base02)
     (toColor "BROWN" theme.base03)
@@ -91,8 +97,6 @@ let
 
   dwarf-fortress = pkgs.dwarf-fortress-packages.dwarf-fortress.override {
     dwarf-fortress = game;
-    enableDFHack = true;
-    enableStoneSense = false; # a 3D renderer, pointless next to an ASCII grid
 
     # The wrapper would patch data/init/init.txt, which DF 50+ no longer ships
     # and would not read from the overlay anyway. Leave it be.
@@ -101,10 +105,9 @@ let
     enableFPS = null;
   };
 
-  # The wrapper installs a vanilla and a DFHack launcher; keep the old command
-  # name pointed at the one that actually loads DFHack.
+  # The wrapper names its launcher after the package; keep the old command name.
   dwarves = pkgs.writeShellScriptBin "dwarves" ''
-    exec ${dwarf-fortress}/bin/dfhack "$@"
+    exec ${dwarf-fortress}/bin/dwarf-fortress "$@"
   '';
 in
 {
