@@ -14,7 +14,11 @@ in
   config.programs.qutebrowser.extraConfig = builtins.readFile ./extraConfig;
   config.programs.qutebrowser.settings = {
     qt.args = [
-      "disable-features=PermissionElement"
+     "disable-gpu"
+     "disable-gpu-compositing"
+#      "log-level=3"
+#      "remote-debugging-port=9222"
+     "disable-features=PermissionElement"
     ];
     confirm_quit = [ "multiple-tabs" "downloads" ];
 
