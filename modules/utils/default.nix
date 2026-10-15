@@ -63,6 +63,7 @@ in
     ./hermes-agent.nix
     ./freetoken.nix
     ./graft.nix
+    ./gutcheck.nix
   ];
 
   config = {
