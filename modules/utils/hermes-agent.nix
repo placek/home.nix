@@ -6,14 +6,14 @@
 let
   # Pinned rev (not a floating branch) for reproducibility.
   #
-  # main @ 2026-09-25. The binary reports "v0.0.0 (2026.9.24) - upstream
-  # 7b761da2": pyproject carries no real version and the date is just the
+  # main @ 2026-10-15. The binary reports "v0.0.0 (2026.9.24) - upstream
+  # 450ad505": pyproject carries no real version and the date is just the
   # newest tag, so this rev is the only thing that actually identifies a build.
   #
-  # Tags exist but lag badly - v2026.9.24 sits ~2150 commits behind main and is
-  # older than the rev it replaced - so bump from main rather than from a tag:
+  # Tags exist but lag badly - v2026.9.24 is still the newest and now sits
+  # ~13000 commits behind main - so bump from main rather than from a tag:
   #   gh api repos/NousResearch/hermes-agent/commits/main --jq .sha
-  rev = "7b761da2de4979e424510ca7022bf9527aa65b68";
+  rev = "450ad5055eb3c4852d96676ee99287d618bd283a";
 
   hermesFlake = builtins.getFlake "github:NousResearch/hermes-agent/${rev}";
 in
