@@ -73,9 +73,11 @@ let
     # glyph the interface draws.
     TRUETYPE = false;
 
-    # 0.47 has no desired-grid scaling. The zeros take the desktop resolution
-    # and the grid simply falls out of it as resolution / 16.
-    WINDOWED = false;
+    # 0.47 has no desired-grid scaling; the window is sized in tiles directly,
+    # so a 90x30 grid keeps the 3:1 proportions at any tile size.
+    WINDOWED = true;
+    WINDOWEDX = 90;
+    WINDOWEDY = 30;
     FULLSCREENX = 0;
     FULLSCREENY = 0;
 
